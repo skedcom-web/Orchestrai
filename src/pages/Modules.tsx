@@ -1,0 +1,335 @@
+import React, { useState } from 'react';
+import { useApp } from '../context/AppContext';
+import { Lock, Unlock, ChevronDown, ChevronUp, CheckCircle2, Award, Zap, HelpCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+export const Modules: React.FC = () => {
+  const { currentUser, systemConfig } = useApp();
+  const [expandedModule, setExpandedModule] = useState<number | null>(1);
+  const navigate = useNavigate();
+
+  // Helper values to check progress
+  const freeLimit = systemConfig.freeModulesLimit;
+  const isUserApproved = currentUser?.accountStatus === 'APPROVED';
+
+  const modulesData = [
+    {
+      id: 1,
+      title: 'Module 1: The OrchestrAI Mindset',
+      duration: '4 hours',
+      desc: 'Understand traditional engineering gaps, the orchestration paradigm shift, and the core competencies of an OrchestrAI Lead.',
+      content: (
+        <div className="space-y-6 text-sm text-[var(--text-secondary)] leading-relaxed">
+          <div>
+            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">1.1 The Problem with Traditional Development</h4>
+            <p className="mb-3">
+              Traditional software delivery models are structurally flawed. They suffer from predictable delays, ballooning budgets, and severe key-person risk.
+            </p>
+            <div className="overflow-x-auto my-4 border border-[var(--border-color)] rounded-lg">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead className="bg-slate-500/5 font-semibold text-[var(--text-primary)]">
+                  <tr className="border-b border-[var(--border-color)]">
+                    <th className="p-3">Pain Point</th>
+                    <th className="p-3">Traditional Reality</th>
+                    <th className="p-3">OrchestrAI Response</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--border-color)]">
+                  <tr>
+                    <td className="p-3 font-semibold">Cost</td>
+                    <td className="p-3">₹25–50 Lakhs for mid-complexity apps</td>
+                    <td className="p-3">70–80% savings on scope</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-semibold">Change Cost</td>
+                    <td className="p-3">Changes take 2-4 weeks to estimate</td>
+                    <td className="p-3">Implemented same day via prompt adjustments</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-semibold">Key Person Risk</td>
+                    <td className="p-3">Knowledge is stuck inside developers' heads</td>
+                    <td className="p-3">System intent lives in prompts; fully reproducible</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">1.2 The Mindset Shift</h4>
+            <p className="mb-2">
+              The primary blocker to becoming a Lead is mental. Solution architects and project managers must transition from "figuring it out myself" to "defining constraints and validating outcomes."
+            </p>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Manage intent, not development sprints.</li>
+              <li>Crystallize validation rules before the AI begins construction.</li>
+              <li>Document constraints continuously alongside source files.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">1.3 A Day in the Life of a Lead</h4>
+            <p className="mb-2">
+              An OrchestrAI Lead operates on hourly loops rather than weeks-long sprint cycles:
+            </p>
+            <div className="bg-slate-500/5 p-3 rounded-lg font-mono text-[11px] space-y-1 border border-[var(--border-color)]">
+              <div>08:30 — Review yesterday's outputs: code commits, tests, and documentation.</div>
+              <div>09:00 — Sharp 20-minute intent discussion with the domain SME.</div>
+              <div>09:20 — Translate intent into precise, structured AI prompts.</div>
+              <div>10:30 — Validate generated modules against strict acceptance checklists.</div>
+              <div>11:30 — Live screen demonstration and instant iteration review with stakeholders.</div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 2,
+      title: 'Module 2: The OrchestrAI Framework Architecture',
+      duration: '5 hours',
+      desc: 'Dive into the 6 Core Principles and map the 6-stage lifecycle loop (Intent, Orchestrate, Generate, Validate, Evolve, Deploy).',
+      content: (
+        <div className="space-y-6 text-sm text-[var(--text-secondary)] leading-relaxed">
+          <div>
+            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">2.1 The Six Core Principles</h4>
+            <p className="mb-3">
+              These six principles govern all OrchestrAI projects:
+            </p>
+            <ol className="list-decimal list-inside space-y-2.5 ml-2 font-medium">
+              <li><strong className="text-[var(--text-primary)]">AI as Primary Builder:</strong> The AI engine writes all code, schemas, and tests. The Lead never codes.</li>
+              <li><strong className="text-[var(--text-primary)]">Human as Orchestrator:</strong> Humans make all decisions, constraints, and approvals.</li>
+              <li><strong className="text-[var(--text-primary)]">Plain-English Driven:</strong> Conversational, precise specifications instead of dry architecture files.</li>
+              <li><strong className="text-[var(--text-primary)]">Continuous Delivery:</strong> Sprints are replaced by constant feature deployments.</li>
+              <li><strong className="text-[var(--text-primary)]">Instant Iteration:</strong> Gaps identified are refined in hours, not next week.</li>
+              <li><strong className="text-[var(--text-primary)]">Quality by Design:</strong> Security and logging are specified as constraints on Day 1.</li>
+            </ol>
+          </div>
+
+          <div>
+            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">2.2 The Six-Stage Lifecycle Loop</h4>
+            <div className="flex justify-center my-4 font-bold text-xs bg-slate-500/5 py-3 rounded-lg border border-[var(--border-color)]">
+              <span className="text-indigo-400">INTENT</span>
+              <span className="mx-2 text-[var(--text-secondary)]">→</span>
+              <span className="text-cyan-400">ORCHESTRATE</span>
+              <span className="mx-2 text-[var(--text-secondary)]">→</span>
+              <span className="text-purple-400">GENERATE</span>
+              <span className="mx-2 text-[var(--text-secondary)]">→</span>
+              <span className="text-emerald-400">VALIDATE</span>
+              <span className="mx-2 text-[var(--text-secondary)]">→</span>
+              <span className="text-indigo-400">EVOLVE</span>
+              <span className="mx-2 text-[var(--text-secondary)]">→</span>
+              <span className="text-cyan-400">DEPLOY</span>
+            </div>
+            <p className="mb-2">
+              The loop is continuous. After deploying, user feedback immediately re-enters as new Intent.
+            </p>
+          </div>
+
+          <div className="border border-indigo-500/20 bg-indigo-500/5 rounded-lg p-4">
+            <h4 className="text-sm font-bold text-indigo-400 mb-1 flex items-center space-x-1.5">
+              <Zap className="h-4 w-4" />
+              <span>Module 2 Knowledge Gate Challenge</span>
+            </h4>
+            <p className="text-xs mb-3 text-[var(--text-secondary)]">
+              Before moving to Modules 3-8, you must pass the Module 2 quiz with a score of 80% or higher.
+            </p>
+            <button
+              onClick={() => {
+                if (!currentUser) {
+                  alert("Please log in first to record your quiz progress!");
+                } else {
+                  navigate('/quiz');
+                }
+              }}
+              className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-650 hover:to-purple-750 text-white rounded text-xs font-bold shadow transition-all flex items-center space-x-1"
+            >
+              <HelpCircle className="h-4 w-4" />
+              <span>Launch Quiz Challenge</span>
+            </button>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 3,
+      title: 'Module 3: Intent Mastery — The Art of the Perfect Prompt',
+      duration: '6 hours',
+      desc: 'Master the 8-component intent statement structure and learn modular prompt patterns to eliminate AI hallucination.',
+      content: null
+    },
+    {
+      id: 4,
+      title: 'Module 4: Roles, Governance & Stakeholder Management',
+      duration: '4 hours',
+      desc: 'Define the 4 key roles on an engagement, interface with legacy teams, and reset client expectations.',
+      content: null
+    },
+    {
+      id: 5,
+      title: 'Module 5: Running a Live OrchestrAI Iteration',
+      duration: '6 hours',
+      desc: 'Execute real-time generation sequences and master the Escalation Decision Matrix when AI struggles.',
+      content: null
+    },
+    {
+      id: 6,
+      title: 'Module 6: Observability — Making AI Work Visible',
+      duration: '3 hours',
+      desc: 'Build detailed prompt logs, manage semantic version control commits, and log workflow-level audits.',
+      content: null
+    },
+    {
+      id: 7,
+      title: 'Module 7: Guardrails — Keeping AI Within Boundaries',
+      duration: '5 hours',
+      desc: 'Secure access controls, run OWASP validation rules, and sanitize external integrations before code execution.',
+      content: null
+    },
+    {
+      id: 8,
+      title: 'Module 8: Evaluation, KPIs & Client Leadership',
+      duration: '5 hours',
+      desc: 'Track metrics (TTFWV, alignment score, defects escape), manage pilots, and present outcomes to client CISOs.',
+      content: null
+    }
+  ];
+
+  return (
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
+      
+      {/* Page Header */}
+      <div className="flex flex-col items-center text-center mb-10">
+        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 text-xs font-semibold mb-4">
+          <Award className="h-4 w-4" />
+          <span>8 Certification Modules</span>
+        </div>
+        <h2 className="text-3xl font-extrabold tracking-tight mb-2">Training Content & Syllabus</h2>
+        <p className="text-sm text-[var(--text-secondary)] max-w-xl">
+          Expand the headers to read. Modules beyond your access level are gated by quiz score, fee payment, and admin approval.
+        </p>
+      </div>
+
+      {/* Accordion List */}
+      <div className="space-y-4">
+        {modulesData.map((mod) => {
+          // Check if this module is locked for this user
+          const isModuleLocked = mod.id > freeLimit && !isUserApproved;
+          const isExpanded = expandedModule === mod.id;
+
+          return (
+            <div 
+              key={mod.id} 
+              className={`glass-card rounded-xl overflow-hidden transition-all ${
+                isModuleLocked 
+                  ? 'opacity-75 border-slate-500/10' 
+                  : isExpanded 
+                    ? 'border-indigo-500/20 shadow-md shadow-indigo-500/5' 
+                    : 'hover:border-slate-500/20'
+              }`}
+            >
+              
+              {/* Module Accordion Header */}
+              <button
+                onClick={() => {
+                  if (isModuleLocked) {
+                    setExpandedModule(mod.id);
+                  } else {
+                    setExpandedModule(isExpanded ? null : mod.id);
+                  }
+                }}
+                className="w-full flex items-center justify-between p-5 text-left focus:outline-none"
+              >
+                <div className="flex items-center space-x-3.5 pr-4">
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${
+                    isModuleLocked 
+                      ? 'bg-slate-500/5 border-[var(--border-color)] text-[var(--text-secondary)]' 
+                      : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500'
+                  }`}>
+                    {isModuleLocked ? (
+                      <Lock className="h-4 w-4" />
+                    ) : (
+                      <Unlock className="h-4 w-4" />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold tracking-tight text-[var(--text-primary)]">{mod.title}</h3>
+                    <p className="text-[11px] text-[var(--text-secondary)] font-semibold uppercase tracking-wider">{mod.duration}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  {isModuleLocked && (
+                    <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full border border-yellow-500/20 bg-yellow-500/5 text-yellow-500 text-[10px] font-bold uppercase tracking-wider">
+                      Gated Access
+                    </span>
+                  )}
+                  {isExpanded ? <ChevronUp className="h-5 w-5 text-[var(--text-secondary)]" /> : <ChevronDown className="h-5 w-5 text-[var(--text-secondary)]" />}
+                </div>
+              </button>
+
+              {/* Module Accordion Body */}
+              {isExpanded && (
+                <div className="px-5 pb-6 pt-2 border-t border-[var(--border-color)] bg-slate-500/5">
+                  {isModuleLocked ? (
+                    /* Locked Gate Barrier UI */
+                    <div className="py-6 text-center max-w-md mx-auto">
+                      <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 mb-4 animate-bounce">
+                        <Lock className="h-5 w-5" />
+                      </div>
+                      <h4 className="text-base font-bold mb-2">Module is Locked</h4>
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6">
+                        Modules 3 to 8 are gated for certified track candidates. To unlock access, you must score at least 80% on the Module 2 knowledge check, pay the ₹99 accountability gate fee, and receive admin approval.
+                      </p>
+
+                      <div className="flex flex-col space-y-2.5">
+                        {!currentUser ? (
+                          <button
+                            onClick={() => alert("Please log in to start your candidate certification workflow!")}
+                            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-650 text-white rounded text-xs font-semibold shadow transition-all"
+                          >
+                            Sign In / Login
+                          </button>
+                        ) : !currentUser.quizPassed ? (
+                          <button
+                            onClick={() => navigate('/quiz')}
+                            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-650 text-white rounded text-xs font-semibold shadow transition-all"
+                          >
+                            Launch Knowledge Check Quiz
+                          </button>
+                        ) : currentUser.accountStatus === 'FREE_TIER' ? (
+                          <button
+                            onClick={() => navigate('/payment')}
+                            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-650 text-white rounded text-xs font-semibold shadow transition-all"
+                          >
+                            Proceed to Verify Intent (₹99)
+                          </button>
+                        ) : (
+                          <div className="border border-indigo-500/20 bg-indigo-500/5 p-3 rounded-lg text-xs font-semibold text-indigo-400">
+                            Status: PENDING_APPROVAL. Waiting for manual approval from Sithanandham R.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    /* Unlocked Module Content */
+                    mod.content || (
+                      <div className="py-8 text-center text-[var(--text-secondary)]">
+                        <CheckCircle2 className="h-8 w-8 text-emerald-400 mx-auto mb-2" />
+                        <p className="text-xs font-bold text-[var(--text-primary)]">Unlocked Gated Module Content</p>
+                        <p className="text-[11px] max-w-sm mx-auto mt-1 leading-relaxed">
+                          This is an approved certified track module. Study slides and prepare deliverables for review.
+                        </p>
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
+
+            </div>
+          );
+        })}
+      </div>
+
+    </div>
+  );
+};
