@@ -9,7 +9,8 @@ export const Payment: React.FC = () => {
     currentUser, 
     systemConfig, 
     updateUserProfile, 
-    addNotificationLog 
+    addNotificationLog,
+    addToast
   } = useApp();
   const [loading, setLoading] = useState(false);
   const [showRazorpayMock, setShowRazorpayMock] = useState(false);
@@ -33,9 +34,9 @@ export const Payment: React.FC = () => {
         </p>
         <button
           onClick={() => navigate('/quiz')}
-          className="px-4 py-2 bg-indigo-500 text-white rounded text-xs font-semibold"
+          className="px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all"
         >
-          Take Quiz
+          Go to Quiz
         </button>
       </div>
     );
@@ -137,7 +138,7 @@ export const Payment: React.FC = () => {
         navigate('/modules');
       } else {
         setLoading(false);
-        alert("Payment canceled or failed. Please try again.");
+        addToast("Payment canceled or failed. Please try again.", "error");
       }
     }, 1200);
   };
@@ -188,7 +189,7 @@ export const Payment: React.FC = () => {
           <button
             onClick={() => setShowRazorpayMock(true)}
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-650 hover:to-purple-750 text-white rounded-lg text-sm font-bold shadow-lg flex items-center justify-center space-x-2 transition-all disabled:opacity-50"
+            className="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg text-sm font-bold shadow-lg flex items-center justify-center space-x-2 transition-all disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -208,7 +209,7 @@ export const Payment: React.FC = () => {
 
       {/* RAZORPAY MOCK OVERLAY MODAL */}
       {showRazorpayMock && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--surface-overlay)] backdrop-blur-sm p-4">
           <div className="bg-[#111827] text-white border border-[#1f2937] w-full max-w-sm rounded-xl p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             {/* Razorpay Brand Header */}
             <div className="flex items-center justify-between border-b border-[#1f2937] pb-3.5 mb-4">
@@ -216,7 +217,7 @@ export const Payment: React.FC = () => {
                 <div className="h-7 w-7 rounded bg-blue-600 flex items-center justify-center font-bold text-sm text-white">R</div>
                 <div>
                   <h4 className="text-xs font-extrabold uppercase tracking-wide text-blue-400">Razorpay Secure</h4>
-                  <p className="text-[9px] text-gray-400">Test Mode Integration</p>
+                  <p className="text-[10px] text-gray-400">Test Mode Integration</p>
                 </div>
               </div>
               <span className="text-xs font-extrabold text-blue-400">₹99.00</span>
@@ -252,7 +253,7 @@ export const Payment: React.FC = () => {
             </div>
 
             <div className="mt-4 border-t border-[#1f2937] pt-3 text-center">
-              <p className="text-[8px] text-gray-500">
+              <p className="text-[10px] text-gray-500">
                 Secured by Razorpay. This is a sandbox testing module. No real money will be charged.
               </p>
             </div>

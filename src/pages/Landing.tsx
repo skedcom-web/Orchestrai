@@ -433,7 +433,7 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* ═══ FOUNDER ═════════════════════════════════════ */}
+      {/* ═══ PRODUCT OWNER ═══════════════════════════════ */}
       <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-5xl">
           <div className="glass-card rounded-2xl p-7 sm:p-10 relative overflow-hidden">
@@ -447,7 +447,7 @@ export const Landing: React.FC = () => {
                 <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-cyan-400 via-indigo-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-xl shadow-indigo-500/25">
                   SR
                 </div>
-                <div className="text-xs font-bold uppercase tracking-widest text-indigo-400">Founder</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-indigo-400">Product Owner</div>
               </div>
 
               <div>
@@ -455,13 +455,13 @@ export const Landing: React.FC = () => {
                   Sithanandham Radhakrishnan
                 </h2>
                 <p className="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-0.5">
-                  Strategic Advisor &amp; Owner — vThink Global Technologies
+                  Strategic Advisor &amp; Product Owner — vThink Global Technologies
                 </p>
                 <p className="text-sm text-[var(--text-secondary)] font-semibold mb-4">
                   Chief OrchestrAI Architect
                 </p>
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
-                  As <strong className="text-[var(--text-primary)]">Strategic Advisor &amp; Owner at vThink Global Technologies Pvt Ltd</strong>, 
+                  As <strong className="text-[var(--text-primary)]">Strategic Advisor &amp; Product Owner at vThink Global Technologies Pvt Ltd</strong>, 
                   Sithanandham conceived and built the OrchestrAI framework — bridging high-level business intent with 
                   AI-generated production code. The OrchestrAI methodology and all derivative products, including this 
                   portal, are <strong className="text-amber-400">intellectual property of vThink Global Technologies Pvt Ltd</strong>. 

@@ -75,7 +75,7 @@ const QUESTIONS: Question[] = [
 ];
 
 export const Quiz: React.FC = () => {
-  const { currentUser, updateUserProfile } = useApp();
+  const { currentUser, updateUserProfile, recordQuizScore } = useApp();
   const [answers, setAnswers] = useState<{ [key: number]: number }>({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
@@ -112,6 +112,9 @@ export const Quiz: React.FC = () => {
     const finalScore = (correctCount / QUESTIONS.length) * 100;
     setScore(finalScore);
     setSubmitted(true);
+
+    // Record the score into the XP engine (awards the pass bonus once, on first ≥80%).
+    recordQuizScore(2, finalScore);
 
     if (finalScore >= 80) {
       updateUserProfile(currentUser.uid, { quizPassed: true });
@@ -162,7 +165,7 @@ export const Quiz: React.FC = () => {
                         onClick={() => handleSelect(q.id, oIdx)}
                         className={`w-full text-left p-3.5 rounded-lg border text-xs font-medium transition-all ${
                           isSelected
-                            ? 'bg-indigo-550 border-indigo-500 text-indigo-500 ring-2 ring-indigo-500/15'
+                            ? 'bg-indigo-500/10 dark:bg-indigo-500/25 border-indigo-500 text-indigo-600 dark:text-indigo-400 ring-2 ring-indigo-500/15'
                             : 'bg-slate-500/5 border-[var(--border-color)] hover:border-slate-500/25 text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                         }`}
                       >
@@ -178,7 +181,7 @@ export const Quiz: React.FC = () => {
               <button
                 onClick={handleSubmit}
                 disabled={!isAllAnswered}
-                className="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-650 hover:to-purple-750 disabled:from-slate-500/20 disabled:to-slate-500/20 text-white rounded-lg text-sm font-bold shadow transition-all disabled:cursor-not-allowed"
+                className="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:from-slate-500/20 disabled:to-slate-500/20 text-white rounded-lg text-sm font-bold shadow transition-all disabled:cursor-not-allowed"
               >
                 Submit Answers
               </button>
@@ -238,7 +241,7 @@ export const Quiz: React.FC = () => {
               {passed ? (
                 <button
                   onClick={() => navigate('/payment')}
-                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-650 hover:to-purple-750 text-white rounded-lg text-xs font-semibold shadow transition-all flex items-center justify-center space-x-1"
+                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg text-xs font-semibold shadow transition-all flex items-center justify-center space-x-1"
                 >
                   <span>Proceed to Payment</span>
                   <ArrowRight className="h-3.5 w-3.5" />

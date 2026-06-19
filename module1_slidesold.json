@@ -1,0 +1,289 @@
+[
+  {
+    "slide_id": "slide_1",
+    "title": "Welcome: OrchestrAI Lead Certification",
+    "type": "welcome",
+    "bullets": [
+      "Module 1: The OrchestrAI Mindset",
+      "Duration: 1-Hour High-Intensity Session",
+      "Mastery: Shifting from Manual Builder to Intent Orchestrator",
+      "Outcome: Production-ready 80% baselines in 7 days"
+    ],
+    "narration": "Welcome to the OrchestrAI Lead Certification program. This condensed one-hour intensive module is designed to fundamentally rewire your professional approach, moving you away from manual code execution toward strategic intent orchestration. We will explore how to achieve exponential efficiency by leveraging autonomous systems to deliver high-quality production baselines in days rather than months. As a Lead, your value is no longer measured by your ability to write syntax, but by your precision in defining architectural boundaries."
+  },
+  {
+    "slide_id": "slide_2",
+    "title": "Structural Failures of Legacy Delivery",
+    "type": "comparison_table",
+    "table": [
+      {
+        "pain": "MVP Timeline",
+        "trad": "3–6 months for basic functionality",
+        "orch": "7 working days to production-baselined system"
+      },
+      {
+        "pain": "Delivery Cost",
+        "trad": "₹25–50 Lakhs for mid-complexity apps",
+        "orch": "70–80% savings on comparable scope"
+      },
+      {
+        "pain": "Change Management",
+        "trad": "2–4 weeks rework budget per change",
+        "orch": "Implemented same-day via plain-English intent"
+      },
+      {
+        "pain": "Documentation",
+        "trad": "Delivered weeks after code (lagging)",
+        "orch": "Real-time, living byproduct of generation"
+      },
+      {
+        "pain": "Technical Debt",
+        "trad": "Accumulates silently under pressure",
+        "orch": "Consistent best-practice enforcement by AI"
+      }
+    ],
+    "narration": "To succeed as a Lead, we must first confront the systemic collapse of traditional development models. Legacy projects are plagued by multi-month timelines and exorbitant costs because they rely on human-induced friction and manual rework cycles. OrchestrAI solves these structural failures by collapsing the development lifecycle into a 7-day sprint to a production baseline. By removing key-person risk and automating documentation, we ensure the enterprise remains agile and the architecture remains clean from day one."
+  },
+  {
+    "slide_id": "slide_3",
+    "title": "The Mindset Shift: Execution to Intent",
+    "type": "mindset_shift",
+    "table": [
+      {
+        "old": "\"I write the code / I manage the sprint\"",
+        "new": "\"I define the intent and validate the outcome\""
+      },
+      {
+        "old": "\"Requirements clarified during development\"",
+        "new": "\"Requirements must be crystallized before AI interaction\""
+      },
+      {
+        "old": "\"We'll fix quality issues in QA later\"",
+        "new": "\"Quality is baked in from the first prompt\""
+      },
+      {
+        "old": "\"Estimation based on team story points\"",
+        "new": "\"Iteration loops in hours; we prove, don't estimate\""
+      },
+      {
+        "old": "\"Backlog grooming for future quarters\"",
+        "new": "\"Plain-English implementation of changes today\""
+      }
+    ],
+    "narration": "The primary barrier to becoming an effective Lead is mental conditioning. You must transition from being a builder who writes code to a conductor who defines intent and validates outcomes. This paradigm shift requires you to crystallize requirements with absolute precision before the AI begins its work. By treating quality as an upstream prerequisite rather than a lagging QA task, you eliminate the waste associated with traditional sprint cycles and estimation guesswork."
+  },
+  {
+    "slide_id": "slide_4",
+    "title": "The Daily Cadence of the Lead",
+    "type": "day_in_life",
+    "schedule": [
+      { "time": "08:30", "task": "Audit generated artifacts: code, tests, and documentation" },
+      { "time": "09:00", "task": "Intent sharpening session with Business SME" },
+      { "time": "09:20", "task": "Translate intent into structured P.R.O.M.P.T. sets" },
+      { "time": "10:30", "task": "Validate AI outputs against acceptance criteria" },
+      { "time": "11:30", "task": "Stakeholder live demo of working screens" },
+      { "time": "14:00", "task": "Evolve session: Rapid implementation of feedback" },
+      { "time": "16:30", "task": "Structured commit of reviewed code to version control" },
+      { "time": "17:00", "task": "Final update of living documentation and decision rationale" }
+    ],
+    "narration": "An OrchestrAI Lead operates at a velocity that traditional management models cannot match. Your day is structured around rapid generation cycles and continuous validation loops, moving from raw intent to live stakeholder demos in just a few hours. This cadence demands absolute focus on validation discipline and architectural documentation. By 11:30 AM, you aren't just showing mockups; you are demonstrating live, functional screens that reflect the morning's orchestration efforts."
+  },
+  {
+    "slide_id": "slide_5",
+    "title": "How to Talk to AI: The P.R.O.M.P.T. Formula",
+    "type": "competencies",
+    "list": [
+      { "name": "P - Purpose", "desc": "What do you want to achieve? Define the end goal clearly (e.g., 'Plan a 5-day family vacation')." },
+      { "name": "R - Role", "desc": "Who should AI act as? (e.g., 'Expert Tour Planner with Asia experience')." },
+      { "name": "O - Output", "desc": "What format is required? (e.g., 'A day-by-day itinerary in a markdown table')." },
+      { "name": "M - Marker", "desc": "Set strict boundaries and constraints. (e.g., 'Budget ₹80k, Family of 4, No adventure sports')." },
+      { "name": "P - Pattern", "desc": "Define the internal structure. (e.g., 'Slots for Morning/Afternoon/Evening with hotel suggestions')." },
+      { "name": "T - Tone", "desc": "How should it communicate? (e.g., 'Friendly, professional, and kid-safe language')." }
+    ],
+    "narration": "Mastering the P.R.O.M.P.T. formula is essential for preventing 'Garbage In, Garbage Out' scenarios. By treating your instructions like a professional brief to an expert intern, you provide the AI with the necessary guardrails to ensure production-grade output. Each element—from Purpose to Tone—acts as a constraint that prevents AI drift and hallucinations. This structured methodology is the primary tool in your arsenal for ensuring that generated artifacts meet enterprise compliance and business logic standards."
+  },
+  {
+    "slide_id": "slide_6",
+    "title": "P.R.O.M.P.T. Case Study: Travel Architecture",
+    "type": "welcome",
+    "bullets": [
+      "Vague Request (Garbage In): 'Plan a trip to Bali for me.'",
+      "OrchestrAI Intent: 'Act as an expert Tour Planner (Role). I want to plan a 5-day family vacation to Bali (Purpose).'",
+      "Structured Output: 'Provide a day-by-day table (Output) with slots for Morning, Afternoon, and Evening (Pattern).'",
+      "Enterprise Constraints: 'Budget of ₹80k for 4 people, no adventure sports (Marker). Tone: Kid-friendly (Tone).'",
+      "Result: A precise, actionable itinerary that requires zero manual restructuring."
+    ],
+    "narration": "Let's examine the P.R.O.M.P.T. formula in action using the Family Vacation Planner example. A vague request results in generic, unhelpful advice that requires significant manual cleanup. However, by applying the formula, the Lead provides the AI with a 'Role' as a specialist and a 'Marker' for budget and safety. This level of detail forces the AI to generate a high-fidelity markdown table that is immediately useful. This example demonstrates how engineering the context directly determines the quality of the engineered artifact."
+  },
+  {
+    "slide_id": "slide_7",
+    "title": "Core Lead Competencies",
+    "type": "competencies",
+    "list": [
+      { "name": "Intent Articulation", "desc": "Translating complex business requirements into unambiguous, structured P.R.O.M.P.T. sets." },
+      { "name": "Constraint Definition", "desc": "Identifying edge cases and non-functional requirements before generation to prevent production drift." },
+      { "name": "Validation Discipline", "desc": "Systematic evaluation of AI outputs against acceptance criteria—the Lead is the final quality gate." },
+      { "name": "Escalation Judgment", "desc": "Recognizing when prompting cannot resolve an issue and a human architectural pivot is required." },
+      { "name": "Governance Awareness", "desc": "Operational mastery of the OGE framework—Observability, Guardrails, and Evaluation." }
+    ],
+    "narration": "Mastery as a Lead requires a combination of high-level architectural thinking and rigorous technical governance. You must be able to articulate intent so clearly that the AI cannot fail, while maintaining the validation discipline to catch subtle errors in the generated outputs. Knowing when to escalate a problem to human redesign is just as important as knowing how to prompt for a solution. These competencies ensure that enterprise AI delivery is a strategic asset rather than a technical liability."
+  },
+  {
+    "slide_id": "slide_8",
+    "title": "Module 1 Assessment: Interactive Exam Engine",
+    "type": "interactive_quiz_engine",
+    "config": {
+      "enable_scroll": true,
+      "render_mode": "split_card_view",
+      "allow_navigation": true,
+      "show_immediate_feedback": true,
+      "total_questions": 11
+    },
+    "quiz_ui_package": {
+      "multiple_choice_items": [
+        {
+          "id": "q1",
+          "label": "Question 1 of 11",
+          "text": "What is the primary operational difference between an OrchestrAI Lead and a traditional PM?",
+          "choices": [
+            {"value": "A", "text": "The Lead writes more lines of manual code than the traditional PM."},
+            {"value": "B", "text": "The Lead manages sprint velocities, while the PM manages the client relationship."},
+            {"value": "C", "text": "The Lead focuses on architectural intent articulation and outcome validation; the PM focuses on legacy milestone task tracking and estimation loops."},
+            {"value": "D", "text": "There is no functional operational difference between the two configurations."}
+          ],
+          "correct_answer": "C",
+          "explanation": "An OrchestrAI Lead acts as the absolute quality gate and architect of intent, transforming raw client requests into clear parameters for automated systems instead of tracking sprint logs and managing manual developer estimations."
+        },
+        {
+          "id": "q2",
+          "label": "Question 2 of 11",
+          "text": "Under the OrchestrAI framework, when must application engineering requirements be fully crystallized?",
+          "choices": [
+            {"value": "A", "text": "Continuously during the downstream QA and user-acceptance phases."},
+            {"value": "B", "text": "Upstream, before the AI engine executes any prompt generation commands."},
+            {"value": "C", "text": "At the tail-end of a three-month development milestone loop."},
+            {"value": "D", "text": "Incrementally as manual developers begin writing baseline backend modules."}
+          ],
+          "correct_answer": "B",
+          "explanation": "To prevent structural drift and erroneous outputs, requirements must be fully crystallized upstream before any generation session begins. Quality is engineered from the first prompt."
+        },
+        {
+          "id": "q3",
+          "label": "Question 3 of 11",
+          "text": "How does the OrchestrAI model handle application system engineering documentation?",
+          "choices": [
+            {"value": "A", "text": "It is generated automatically in real time as a living, current byproduct alongside the code structure."},
+            {"value": "B", "text": "It is compiled manually at the project's closing phase by technical writers."},
+            {"value": "C", "text": "It is skipped entirely to ensure the target MVP is deployed in 7 days."},
+            {"value": "D", "text": "It is delayed until the client explicitly submits an engine change request."}
+          ],
+          "correct_answer": "A",
+          "explanation": "OrchestrAI eliminates documentation debt by generating accurate technical docs concurrently with the application artifacts, keeping architectural specifications completely updated with production reality."
+        },
+        {
+          "id": "q4",
+          "label": "Question 4 of 11",
+          "text": "Which element of the P.R.O.M.P.T. formula directly enforces architectural guardrails, edge cases, and compliance boundaries?",
+          "choices": [
+            {"value": "A", "text": "Purpose"},
+            {"value": "B", "text": "Role"},
+            {"value": "C", "text": "Marker"},
+            {"value": "D", "text": "Pattern"}
+          ],
+          "correct_answer": "C",
+          "explanation": "The 'Marker' defines the strict constraints, budget boundaries, non-functional demands, and explicit exclusions that prevent AI engines from drifting or introducing compliance liabilities."
+        },
+        {
+          "id": "q5",
+          "label": "Question 5 of 11",
+          "text": "What is the standard MVP baseline completion timeline using the OrchestrAI framework?",
+          "choices": [
+            {"value": "A", "text": "3 to 6 months of continuous development team cycles."},
+            {"value": "B", "text": "7 working days to a production-baselined 75-80% quality system."},
+            {"value": "C", "text": "A single continuous 24-hour rapid hacking marathon session."},
+            {"value": "D", "text": "45 days including comprehensive manual QA remediation loops."}
+          ],
+          "correct_answer": "B",
+          "explanation": "OrchestrAI targets a high-fidelity baseline of 75% to 80% operational quality within its first week, bypassing standard alpha/beta bottlenecks through automated component orchestration."
+        },
+        {
+          "id": "q6",
+          "label": "Question 6 of 11",
+          "text": "What is the core definition of 'Validation Discipline' for an OrchestrAI Lead?",
+          "choices": [
+            {"value": "A", "text": "Allowing the autonomous system to deploy code directly to production without checks."},
+            {"value": "B", "text": "The human-led, systematic verification of generated AI artifacts against business acceptance criteria."},
+            {"value": "C", "text": "Delegating all evaluation metrics to an external off-shore legacy QA team."},
+            {"value": "D", "text": "Writing script automated unit tests after production code has run for a week."}
+          ],
+          "correct_answer": "B",
+          "explanation": "Autonomous engines can build rapidly, but only rigorous human inspection validates that business constraints and technical rules are fully implemented, preventing production surprises."
+        },
+        {
+          "id": "q7",
+          "label": "Question 7 of 11",
+          "text": "In the P.R.O.M.P.T. execution example, matching an input layout with a specific structure like a 'markdown table' represents which component?",
+          "choices": [
+            {"value": "A", "text": "Tone"},
+            {"value": "B", "text": "Purpose"},
+            {"value": "C", "text": "Output"},
+            {"value": "D", "text": "Role"}
+          ],
+          "correct_answer": "C",
+          "explanation": "The 'Output' parameter specifies the structural envelope required for the resulting asset, such as forcing a layout into a structured table, JSON block, or clean source code."
+        },
+        {
+          "id": "q8",
+          "label": "Question 8 of 11",
+          "text": "How are unexpected technical requirements or mid-sprint change requests managed under this paradigm?",
+          "choices": [
+            {"value": "A", "text": "They are placed in a deep backlog backlog to be estimated during the next quarter planning cycle."},
+            {"value": "B", "text": "They are rejected because automated platforms cannot process mid-stream operational changes."},
+            {"value": "C", "text": "They are expressed in precise, plain English intent descriptions and implemented into production the same day."},
+            {"value": "D", "text": "They require a complete human code refactor of all previous module releases."}
+          ],
+          "correct_answer": "C",
+          "explanation": "Because the execution layer is automated, changes described in precise plain English are injected directly into the active prompt model, dropping the implementation cost and time down to a single day."
+        },
+        {
+          "id": "q9",
+          "label": "Question 9 of 11",
+          "text": "What major enterprise software risk is fundamentally neutralized when engineering knowledge lives within the AI model rather than with a single human developer?",
+          "choices": [
+            {"value": "A", "text": "Cloud network routing latency risk."},
+            {"value": "B", "text": "Key Person Risk."},
+            {"value": "C", "text": "Choice of relational database compiler risk."},
+            {"value": "D", "text": "Client contract billing cycles risk."}
+          ],
+          "correct_answer": "B",
+          "explanation": "When system logic is defined via transparent prompt templates and living artifacts inside an AI model, the knowledge base is corporate property, preventing the project from stalling if a team member exits."
+        },
+        {
+          "id": "q10",
+          "label": "Question 10 of 11",
+          "text": "What is the systematic consequence of using generic, unconstrained instructions like 'Build an application module'?",
+          "choices": [
+            {"value": "A", "text": "The generation engine runs out of allocated cloud storage memory boundaries."},
+            {"value": "B", "text": "Immediate structural 'Garbage In, Garbage Out' failures, leading to unconstrained, hallucinated, or uncompilable artifacts."},
+            {"value": "C", "text": "Too much technical architecture documentation is written concurrently."},
+            {"value": "D", "text": "The application automatically switches language syntax to legacy platforms."}
+          ],
+          "correct_answer": "B",
+          "explanation": "Without roles, markers, structures, and precise scope definitions, AI engines drift, generating generic solutions that require significant time to clean up or alter manually."
+        }
+      ],
+      "dynamic_applied_scenario": {
+        "id": "q11",
+        "label": "Question 11 of 11 (Applied Engineering Lab)",
+        "context": "Scenario: Replace a broken Excel sheet workflow with a cloud-native backend route `/api/timesheets` to fetch hours for a specific user ID.",
+        "requirement": "Write an enterprise-grade prompt block applying the P.R.O.M.P.T. blueprint. Your criteria must enforce security mitigations neutralizing: SQL Injections, Broken Access Control, and Cross-Tenant Data Leaks.",
+        "logic_engine_validation": {
+          "regex_required_tokens": ["Purpose", "Role", "Output", "Marker", "Pattern", "Tone"],
+          "security_tokens": ["SQL injection", "access control", "cross-tenant"],
+          "remediation_handler": "Upon code submission, if token checks fail, the engine UI cards auto-scrolls to pinpoint which component of the 6 pillars or security exclusions was absent with precise instructions on how to reinforce the parameter."
+        }
+      }
+    },
+    "narration": "To fix the interface layout bugs and display issues, we have completely rebuilt the examination module. The presentation script has completely removed the legacy static slide and replaced it with a dynamic Interactive Quiz Engine data structure. This format explicitly provides separate multiple-choice option fields, full scroll accessibility, and active navigation nodes to ensure Next and Previous button states never freeze. Go through the ten clear multiple-choice cards to see immediate scoring evaluations. Finally, process the eleventh laboratory prompt entry to evaluate your ability to protect backend endpoints from data leaks."
+  }
+]

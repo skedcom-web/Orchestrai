@@ -1,0 +1,785 @@
+[
+  {
+    "slide_id": "slide_01",
+    "type": "welcome",
+    "title": "Welcome to the OrchestrAI Mindset",
+    "subtitle": "Module 1 of the OrchestrAI Lead Certification",
+    "icon": "sparkles",
+    "visual_cue": "animated_intro_burst",
+    "hero_stat": {
+      "value": "60 min",
+      "label": "to rewire how you think about software delivery",
+      "icon": "timer"
+    },
+    "opening_hook": "By the end of this hour, you will not look at your job description the same way again.",
+    "bullets": [
+      "One module. Five acts. Twenty slides.",
+      "You'll meet your AI twin, learn its anatomy, and walk away with a formula you can use Monday morning.",
+      "No filler. No theory for theory's sake. Every minute earns its place.",
+      "Pass the quiz at the end and you unlock Module 2."
+    ],
+    "closing_thread": "Let's start by looking in the mirror.",
+    "narration": "Welcome to the OrchestrAI Lead Certification. This is the first of four modules, and it is the most important one you will ever take in this program. Why? Because everything else builds on the mindset shift that happens in the next sixty minutes. We're not going to throw theory at you. We're not going to recite definitions. Instead, we're going to start somewhere unexpected — by looking at your own anatomy. Because the easiest way to understand artificial intelligence is to understand the one intelligence you already know intimately: yours. Settle in. This hour is going to change how you see your job."
+  },
+  {
+    "slide_id": "slide_02",
+    "type": "comparison_table",
+    "title": "Meet Your Twin",
+    "subtitle": "You already know how intelligence works — you live inside one.",
+    "icon": "users-2",
+    "visual_cue": "human_ai_split_with_centre_face",
+    "analogy": {
+      "title": "AI Was Built in Our Image",
+      "text": "Every capability you'll hear about — LLMs, RAG, agents, MCP, hallucinations — has a direct human equivalent. That's not a coincidence. We engineered AI by reverse-engineering ourselves. So before we talk about how to use it, let's see how familiar it actually is."
+    },
+    "table": [
+      {
+        "icon": "brain",
+        "old": "Brain — reasoning, language, prediction",
+        "new": "Large Language Model (LLM)"
+      },
+      {
+        "icon": "book-open",
+        "old": "Long-term memory — recalling facts on demand",
+        "new": "Retrieval-Augmented Generation (RAG)"
+      },
+      {
+        "icon": "git-branch",
+        "old": "Nervous system — signals between body parts",
+        "new": "Model Context Protocol (MCP)"
+      },
+      {
+        "icon": "bot",
+        "old": "Hands and feet — taking action in the world",
+        "new": "AI Agents"
+      },
+      {
+        "icon": "wand-2",
+        "old": "Creativity and imagination",
+        "new": "Generative AI"
+      },
+      {
+        "icon": "trophy",
+        "old": "Learning from mistakes — trial and error",
+        "new": "Reinforcement Learning"
+      },
+      {
+        "icon": "alert-triangle",
+        "old": "Dreams, false memories, confident mistakes",
+        "new": "AI Hallucinations"
+      }
+    ],
+    "memory_hook": "Every AI capability has a human equivalent. AI is your twin — same anatomy, different substrate.",
+    "narration": "Take a moment to study this table. On the left, the anatomy of human intelligence — things you've known since childhood. On the right, the AI equivalents — things that probably sounded foreign until thirty seconds ago. Notice how cleanly they map. The LLM is just a brain that predicts the next word, the same way you finish a friend's sentence. RAG is long-term memory you can call on. MCP is the nervous system that lets different AI parts talk to each other and to your tools. Agents are hands and feet — AI that doesn't just talk, but does. And hallucinations? Those are AI's dreams — confident, vivid, and sometimes completely wrong. Hold that last one in your mind. It's the reason the rest of this module exists."
+  },
+  {
+    "slide_id": "slide_03",
+    "type": "competencies",
+    "title": "The Intelligence Core",
+    "subtitle": "Four pieces of machinery doing the thinking",
+    "icon": "brain-circuit",
+    "analogy": {
+      "title": "The Brain Behind the Brain",
+      "text": "If the LLM is the brain, these four pieces are its lobes — each doing a job you'd recognize from your own head. None of them are magic. All of them are just specialized pattern recognition, scaled up."
+    },
+    "list": [
+      {
+        "name": "LLM — Large Language Model",
+        "icon": "brain",
+        "desc": "The brain. Predicts the next word the way you finish a friend's sentence — except it has read most of the internet to learn how."
+      },
+      {
+        "name": "Deep Learning",
+        "icon": "layers",
+        "desc": "Layered pattern recognition. The same way you recognize a face by first seeing edges, then shapes, then features — machines do it through layers of mathematical filters."
+      },
+      {
+        "name": "Transformers",
+        "icon": "network",
+        "desc": "The architecture that gave AI 'attention.' Lets it focus on what matters in a sentence — context awareness, not just word-by-word reading."
+      },
+      {
+        "name": "Reinforcement Learning",
+        "icon": "trophy",
+        "desc": "Trial and error with rewards. The same way a child learns not to touch a hot stove — but at silicon speed, across millions of attempts per second."
+      }
+    ],
+    "memory_hook": "LLM = brain. Deep Learning = how it sees patterns. Transformers = how it pays attention. RL = how it learns from mistakes.",
+    "narration": "Let's open the hood. The Large Language Model is at the center — think of it as the cerebral cortex, the part that handles language and reasoning. Deep Learning is the layered pattern-recognition machinery that lets it see structure in chaos — exactly the way your visual cortex assembles edges into shapes into faces. Transformers are the architectural breakthrough from 2017 that gave AI something it didn't have before: attention. The ability to know that in the sentence 'the trophy didn't fit in the suitcase because it was too big,' the word 'it' refers to the trophy, not the suitcase. And Reinforcement Learning is how AI gets better — it tries things, gets rewarded or punished, and adjusts. The same mechanism that taught you not to touch a hot stove, just running at a million tries per minute."
+  },
+  {
+    "slide_id": "slide_04",
+    "type": "competencies",
+    "title": "Extended Capabilities",
+    "subtitle": "What lets AI act, remember, and sometimes lie",
+    "icon": "puzzle",
+    "analogy": {
+      "title": "The Senses, Memory, and Limbs",
+      "text": "If the previous slide showed you the brain, this one shows you everything connected to it — the long-term memory, the limbs, the imagination, and yes, the dreams. The last item on this list is the most important. Watch for it."
+    },
+    "list": [
+      {
+        "name": "RAG — Retrieval-Augmented Generation",
+        "icon": "book-open",
+        "desc": "Long-term memory on demand. Lets AI look up your company's docs, policies, or codebase before answering — instead of guessing from what it was trained on."
+      },
+      {
+        "name": "Generative AI",
+        "icon": "wand-2",
+        "desc": "Creativity. Writing, drawing, coding, designing — producing something new rather than just classifying or predicting."
+      },
+      {
+        "name": "AI Agents",
+        "icon": "bot",
+        "desc": "Hands and feet. AI that doesn't just talk — it does things. Sends emails, queries databases, deploys code, opens tickets."
+      },
+      {
+        "name": "MCP — Model Context Protocol",
+        "icon": "git-branch",
+        "desc": "The nervous system. The standard that lets different AI components talk to each other and to your existing tools — without custom integration for each one."
+      },
+      {
+        "name": "Hallucination",
+        "icon": "alert-triangle",
+        "desc": "AI's dreams. Confidently wrong answers when it doesn't know. The single biggest risk in enterprise AI — and the reason we spend the next 45 minutes learning to control it."
+      }
+    ],
+    "memory_hook": "Hallucination is why P.R.O.M.P.T. exists. Hold that thought for slide 14.",
+    "visual_cue": "highlight_last_row_with_warning_pulse",
+    "narration": "Now we extend the anatomy. RAG is long-term memory — when you ask AI a question about your company, RAG lets it actually look up your documents instead of guessing. Generative AI is the creative side — the imagination that lets it write code, draft emails, generate UIs. AI Agents are the limbs — they don't just answer, they act. MCP, the Model Context Protocol, is the nervous system — the wiring that lets all these parts talk to each other and to your existing tools without custom plumbing for every integration. And finally, hallucination. Hallucination is AI's dream state — vivid, confident, and sometimes completely fabricated. When AI doesn't know the answer, it doesn't say 'I don't know.' It invents one. That single behavior is the biggest enterprise AI risk, and the entire P.R.O.M.P.T. formula we'll teach you was designed to eliminate it."
+  },
+  {
+    "slide_id": "slide_05",
+    "type": "welcome",
+    "title": "If AI Is This Capable… What Do You Do?",
+    "subtitle": "The question that built OrchestrAI",
+    "icon": "git-fork",
+    "visual_cue": "intent_execution_arrow_diagram",
+    "reflection_prompt": "Pause. If AI can already write code, query databases, and generate UIs — what is the highest-value thing a software professional can do today?",
+    "bullets": [
+      "AI has the brain. AI has the memory. AI has the hands.",
+      "It still doesn't have intent. It doesn't know what your business needs.",
+      "That gap — intent translated into execution — is the new job.",
+      "And it has a name."
+    ],
+    "closing_thread": "It's called Orchestration. And it's the rest of this hour.",
+    "narration": "Let's stop and let that question land. If AI can already write code — and it can — and AI can already query databases, design UIs, draft documentation, generate test cases — and it can — then what exactly is your job? The answer is the hinge of this entire program. AI has the brain. AI has the memory. AI has the hands. What it does not have, and will not have for the foreseeable future, is intent. It does not know what your business is trying to achieve. It does not know which trade-offs matter. It does not know which compliance rule cannot be broken. That gap — between business intent and software execution — is exactly where your role lives now. The discipline of closing that gap has a name. It's called Orchestration. And every slide from here on is teaching you how to do it."
+  },
+  {
+    "slide_id": "slide_06",
+    "type": "welcome",
+    "title": "The Old World, in Three Numbers",
+    "subtitle": "Why traditional software delivery is breaking",
+    "icon": "trending-down",
+    "hero_stat": {
+      "value": "120 days",
+      "label": "average time from kickoff to first working baseline",
+      "icon": "calendar-x"
+    },
+    "analogy": {
+      "title": "The Bus Factor",
+      "text": "Ask any PM what their bus factor is — how many people would have to be hit by a bus for the project to die. If the answer is one, you don't have a delivery model. You have a hostage situation."
+    },
+    "bullets": [
+      "120 days — average baseline build time on enterprise software projects",
+      "30 to 40 percent — proportion of effort lost to rework, requirement churn, and integration drift",
+      "1 person — the typical 'key person' whose absence stalls the entire delivery",
+      "These aren't engineering problems. They're orchestration problems."
+    ],
+    "closing_thread": "If you keep solving them with more engineers, you'll keep getting the same numbers.",
+    "narration": "Before we talk about the new world, let's be honest about the old one. Three numbers tell the story. First: 120 days. That's the average time from project kickoff to a first working baseline on enterprise software — four months before anyone can click a button. Second: 30 to 40 percent of effort is lost to rework — requirements that change mid-build, integration surprises, and documentation that never gets written. Third, and most dangerous: the bus factor of one. Every enterprise delivery has that one architect, that one senior engineer, that one tribal-knowledge holder, whose vacation could stall the project for a week. These are not engineering problems. You cannot fix them with more engineers, more sprints, or more frameworks. They are orchestration problems. And they need an orchestration answer."
+  },
+  {
+    "slide_id": "slide_07",
+    "type": "competencies",
+    "title": "The OrchestrAI Iceberg",
+    "subtitle": "What you see is days. What's underneath is years.",
+    "icon": "mountain-snow",
+    "visual_cue": "iceberg_above_below_waterline",
+    "analogy": {
+      "title": "Above and Below the Waterline",
+      "text": "What the client sees is a single visible deliverable — a QA-ready application in days, not months. What sits beneath the waterline is six layers of orchestration, refined over years of vThink engineering, that make that visible delivery possible. The visible part is small. The hidden part is what makes it small."
+    },
+    "list": [
+      {
+        "name": "Layer 1 — Intent Capture",
+        "icon": "headphones",
+        "desc": "Structured stakeholder sessions that turn vague business goals into AI-readable briefs. Powered by P.R.O.M.P.T."
+      },
+      {
+        "name": "Layer 2 — Pattern Library",
+        "icon": "library",
+        "desc": "Pre-validated architectural patterns for auth, payments, reporting, workflows. AI doesn't reinvent — it composes."
+      },
+      {
+        "name": "Layer 3 — AI Engine",
+        "icon": "cpu",
+        "desc": "The generation core. Multiple models orchestrated to produce code, schemas, UI, and tests in parallel."
+      },
+      {
+        "name": "Layer 4 — Validation Loop",
+        "icon": "shield-check",
+        "desc": "Automated test generation, compliance scans, and human-in-the-loop checkpoints. Quality engineered upstream."
+      },
+      {
+        "name": "Layer 5 — Compliance Guards",
+        "icon": "scale",
+        "desc": "Industry-specific rule sets — banking, payments, finance — applied before any artifact ships."
+      },
+      {
+        "name": "Layer 6 — Co-Working Bridge",
+        "icon": "handshake",
+        "desc": "Daily UAT collaboration with the client until 100% confidence is reached before production go-live."
+      }
+    ],
+    "memory_hook": "Days of visible delivery sit on years of invisible orchestration.",
+    "narration": "Look at an iceberg from a boat and you see a tiny floating mountain. Look at it underwater and you see eight times more mass holding it up. OrchestrAI is the same. What the client sees is a single visible deliverable — a working application in their QA region within days. What makes that possible is six layers of orchestration sitting underneath. Intent Capture takes vague business goals and turns them into precise briefs. The Pattern Library means we never write authentication or payments from scratch — we compose them from pre-validated parts. The AI Engine runs multiple models in parallel. The Validation Loop bakes quality in instead of catching it later. Compliance Guards apply industry rules — especially critical in banking and payments — before any artifact leaves the building. And the Co-Working Bridge is what we do during UAT: we sit with the client every day until they hit 100% confidence before anything goes to production. The visible part is small on purpose. The hidden part is what makes the visible part possible."
+  },
+  {
+    "slide_id": "slide_08",
+    "type": "comparison_table",
+    "title": "Old World vs OrchestrAI",
+    "subtitle": "Six dimensions. One paradigm shift.",
+    "icon": "arrow-left-right",
+    "analogy": {
+      "title": "Custom Tailor vs 3D Printer",
+      "text": "The old world is a custom tailor — skilled, slow, one suit at a time, vulnerable if the tailor calls in sick. OrchestrAI is a 3D printer with a master pattern library — same craft quality, programmable, repeatable, and the printer never takes a sick day."
+    },
+    "table": [
+      {
+        "icon": "calendar",
+        "old": "Timeline: 90–120 days to baseline",
+        "new": "Timeline: 7 days to QA PIP"
+      },
+      {
+        "icon": "shield-check",
+        "old": "Quality: caught in QA, fixed in cycles",
+        "new": "Quality: engineered upstream, validated continuously"
+      },
+      {
+        "icon": "timer",
+        "old": "Estimation: story points, hope, and padding",
+        "new": "Estimation: iteration loops in hours — prove, don't estimate"
+      },
+      {
+        "icon": "file-text",
+        "old": "Documentation: written last, if at all",
+        "new": "Documentation: auto-generated alongside delivery"
+      },
+      {
+        "icon": "repeat",
+        "old": "Change management: sprints, refinement, backlog grooming",
+        "new": "Change management: plain-English requests, implemented same-day"
+      },
+      {
+        "icon": "user-x",
+        "old": "Key person risk: high — one architect, one knowledge holder",
+        "new": "Key person risk: low — orchestration in patterns, not in heads"
+      }
+    ],
+    "visual_chart": {
+      "type": "horizontal_bar_comparison",
+      "data": [
+        { "label": "Old World", "value": 120, "unit": "days", "color": "coral" },
+        { "label": "OrchestrAI", "value": 7, "unit": "days", "color": "teal" }
+      ],
+      "title": "Time to first working baseline"
+    },
+    "memory_hook": "Same craft. Different machinery. Seventeen times faster.",
+    "narration": "Six dimensions. Read across each row and you'll see the same pattern. The old way is artisanal — skilled but slow, high-quality but fragile, valuable but trapped inside specific people's heads. The OrchestrAI way is industrial-craft — the same skill, but encoded in patterns and processes that don't depend on any one person being in the room. Look at the bar chart. 120 days versus 7 days. That isn't a small improvement. That's a seventeen-times speedup, achieved not by working faster, but by removing the work that didn't need to exist. The custom tailor and the 3D printer both make great suits. One makes one a month. The other makes one a day, in your size, every day, and never calls in sick."
+  },
+  {
+    "slide_id": "slide_09",
+    "type": "welcome",
+    "title": "What OrchestrAI Actually Delivers",
+    "subtitle": "The number that started the conversation",
+    "icon": "target",
+    "hero_stat": {
+      "value": "7 days",
+      "label": "from blank page to 80% baseline running in client QA",
+      "icon": "rocket"
+    },
+    "bullets": [
+      "Not MVP. Real, production-grade software architecture.",
+      "Not production yet. Delivered to the client's QA region — UAT co-worked together.",
+      "Not 100% on day one. 80% baseline, with the final 20% co-developed during UAT.",
+      "Production go-live happens only when the client has full confidence — not before."
+    ],
+    "closing_thread": "Everything you learn from here on is how this number gets made.",
+    "narration": "Let's be precise about the headline. Seven days. That's the time from a blank page to a working application baseline running in the client's QA region. Now, three honest caveats. First, this is not an MVP — it's real, production-grade architecture, not a throwaway prototype. Second, it's not in production yet on day seven — it's in the client's QA environment, ready for hands-on testing. Third, it's not 100% complete on day seven — it's 80% of the way there, with the final 20% co-developed during UAT alongside the client. Go-live happens only when the client says 'we have full confidence' — not when our calendar says so. Everything you learn for the rest of this module is how this number is produced. Not the magic. The method."
+  },
+  {
+    "slide_id": "slide_10",
+    "type": "mindset_shift",
+    "title": "From Soloist to Conductor",
+    "subtitle": "The single biggest mental rewire of your career",
+    "icon": "music-2",
+    "analogy": {
+      "title": "Orchestra Conductor, Not Solo Violinist",
+      "text": "A solo violinist controls one instrument with their hands, note by note. A conductor controls eighty musicians without touching a single instrument — through a score written with absolute precision before the first note is played. The conductor's skill isn't smaller, it's differently aimed. That is the exact move you're making."
+    },
+    "table": [
+      {
+        "icon": "code-2",
+        "old": "\"I write the code / I manage the sprint\"",
+        "new": "\"I define the intent and validate the outcome\""
+      },
+      {
+        "icon": "help-circle",
+        "old": "\"Requirements clarified during development\"",
+        "new": "\"Requirements crystallized before AI interaction\""
+      },
+      {
+        "icon": "shield-check",
+        "old": "\"We'll fix quality issues in QA later\"",
+        "new": "\"Quality is baked in from the first prompt\""
+      },
+      {
+        "icon": "timer",
+        "old": "\"Estimation based on team story points\"",
+        "new": "\"Iteration loops in hours — we prove, don't estimate\""
+      },
+      {
+        "icon": "list-checks",
+        "old": "\"Backlog grooming for future quarters\"",
+        "new": "\"Plain-English implementation of changes today\""
+      }
+    ],
+    "reflection_prompt": "Think of one recent project where a requirement was 'clarified during development.' What would it have cost to crystallize that requirement upfront instead?",
+    "memory_hook": "Soloist plays one instrument. Conductor commands eighty without touching one.",
+    "narration": "This is the slide that, if you take only one thing from this entire hour, you should take this one. The shift from manual builder to intent orchestrator is not a smaller job — it's a differently aimed job. A solo violinist's hands touch the instrument. A conductor's hands touch nothing, yet the conductor exercises far greater command, through a score written with total precision before the first note is played. You are making that exact move. Read the left column out loud, slowly. Those are sentences you've probably said in the last month. Now read the right column. Those are the sentences you'll be saying by the time Module 4 wraps up. The difference between them is not effort, it's direction. Stop pointing your craftsmanship at the keyboard. Start pointing it at the brief."
+  },
+  {
+    "slide_id": "slide_11",
+    "type": "competencies",
+    "title": "Your New Job Description",
+    "subtitle": "Three roles in one Lead",
+    "icon": "user-cog",
+    "analogy": {
+      "title": "Three Hats, Worn Together",
+      "text": "You don't drop the technical hat — you add two more. Strategic Advisor on top, Quality Guardian on the side, Intent Translator in the middle. Most days, you'll wear all three before lunch."
+    },
+    "list": [
+      {
+        "name": "Strategic Advisor",
+        "icon": "compass",
+        "desc": "You translate business goals into orchestration intent. You decide what gets built, why, and in what order. This is the hat the CXO sees."
+      },
+      {
+        "name": "Intent Translator",
+        "icon": "languages",
+        "desc": "You convert ambiguous requirements into precise, AI-readable briefs. P.R.O.M.P.T. is the toolkit. This is the hat the AI sees."
+      },
+      {
+        "name": "Quality Guardian",
+        "icon": "shield-check",
+        "desc": "You don't write the code, but you own its quality. You validate, escalate, and refuse to ship sloppy work. This is the hat the client sees."
+      }
+    ],
+    "memory_hook": "Advisor decides what. Translator turns it into a brief. Guardian refuses to ship the bad stuff.",
+    "narration": "Three hats, worn together. As Strategic Advisor, you sit with the business and translate ambition into orchestration intent — what should be built, why now, in what order, with what trade-offs. The CXO sees this hat. As Intent Translator, you convert that ambition into structured briefs the AI engine can act on — and P.R.O.M.P.T., which we'll get to in three slides, is the exact tool for this. The AI sees this hat. And as Quality Guardian, you own the outcome — you don't write the code, but you are the last line of defense before something ships. You validate. You escalate. You refuse to push sloppy work into the client's QA. The client sees this hat. Three hats. One Lead. Most days, you'll wear all three before lunch."
+  },
+  {
+    "slide_id": "slide_12",
+    "type": "welcome",
+    "title": "Quality Is Upstream",
+    "subtitle": "Why QA cycles are an old-world relic",
+    "icon": "arrow-up-from-line",
+    "visual_cue": "river_source_vs_filter_diagram",
+    "analogy": {
+      "title": "Don't Filter the River — Clean the Source",
+      "text": "Old-world QA is a filter at the river mouth. By the time you catch a defect, it has flowed through your whole system, picking up dependencies. OrchestrAI cleans the source. Define the brief precisely, and the defect never gets born."
+    },
+    "bullets": [
+      "In the old world, quality is detected in QA — late, expensively, by other people.",
+      "In OrchestrAI, quality is engineered in the prompt — early, cheaply, by you.",
+      "Every bug caught downstream is a brief written too vaguely upstream.",
+      "Every compliance miss in UAT is a 'Marker' that wasn't set in the prompt."
+    ],
+    "memory_hook": "Old world: filter the river. OrchestrAI: clean the source.",
+    "closing_thread": "Which means the brief you write is the most important code you produce.",
+    "narration": "Here's a model that will save you years of pain. In the old world, quality is something you detect. You build the thing, then QA finds the defects, then engineering fixes them, then QA re-runs, and the cycle continues until you ship something acceptable. In OrchestrAI, quality is something you engineer. You don't detect defects downstream — you prevent them upstream, in the brief. The mental picture I want you to carry is a river. Old-world QA puts a filter at the river mouth — by the time you're catching defects there, they've flowed through your entire system, picking up dependencies, contaminating tests, frustrating users. OrchestrAI cleans the source. Write the brief precisely, set the Markers, define the Pattern, and the defect never gets born. Which means — and this is worth underlining — the brief you write is the most important code you produce. Treat it that way."
+  },
+  {
+    "slide_id": "slide_13",
+    "type": "welcome",
+    "title": "What Your Tuesday Looks Like",
+    "subtitle": "Preview of the OrchestrAI daily cadence",
+    "icon": "calendar-clock",
+    "visual_cue": "day_timeline_preview",
+    "bullets": [
+      "9:00 AM — Intent capture with stakeholder. Output: a brief, not a sprint plan.",
+      "10:30 AM — First orchestration cycle. AI generates, you validate.",
+      "11:30 AM — Live functional screen reviewed with the business owner. Real, not a mockup.",
+      "2:00 PM — Iteration 2. Plain-English refinements based on morning feedback.",
+      "4:30 PM — Daily artifact pushed to client QA. Documentation auto-updated."
+    ],
+    "closing_thread": "We'll walk this day in detail in slide 17. First, you need the tool that makes it possible.",
+    "narration": "Before we hand you the tool, let's preview the day it produces. Nine in the morning, you're with a stakeholder, capturing intent — not gathering requirements in a 90-minute meeting, but extracting them into a structured brief. Ten-thirty, you run the first orchestration cycle — the AI generates, you validate. Eleven-thirty, you're showing the business owner a live functional screen — not a Figma mockup, not a wireframe, actual working software two and a half hours after the day started. Two o'clock, iteration two — they gave feedback at eleven-thirty, you've refined the brief, AI's regenerated. Four-thirty, the day's artifact is pushed to the client's QA region and the auto-generated documentation is updated. That's a Tuesday. Slide 17 will walk it in detail. But first — slide 14 — we hand you the tool that makes the whole rhythm possible."
+  },
+  {
+    "slide_id": "slide_14",
+    "type": "competencies",
+    "title": "How to Talk to AI: The P.R.O.M.P.T. Formula",
+    "subtitle": "Six letters that turn AI into a senior team member",
+    "icon": "message-square-text",
+    "analogy": {
+      "title": "An Architect's Brief, Not a Genie's Wish",
+      "text": "Hire a world-class architect and tell them 'make it nice.' You'll get a building — just not yours. Hand them a brief — purpose, role, output format, constraints, layout pattern, tone — and you get exactly the home you pictured. P.R.O.M.P.T. is that brief, every time."
+    },
+    "list": [
+      {
+        "name": "P — Purpose",
+        "icon": "target",
+        "desc": "What do you want to achieve? The end goal stated in one sentence. ('Plan a 5-day family vacation to Bali.')"
+      },
+      {
+        "name": "R — Role",
+        "icon": "user-cog",
+        "desc": "Who should AI act as? ('Senior payments architect with 10 years at FIS.' 'Expert tour planner with Asia experience.')"
+      },
+      {
+        "name": "O — Output",
+        "icon": "layout-template",
+        "desc": "What format do you need back? ('Markdown table.' 'JSON schema.' 'React functional component in TypeScript.')"
+      },
+      {
+        "name": "M — Marker",
+        "icon": "shield-alert",
+        "desc": "Hard constraints. ('Budget ₹80k.' 'WCAG AA compliant.' 'No external dependencies.' 'Banking regulation X applies.')"
+      },
+      {
+        "name": "P — Pattern",
+        "icon": "grid-3x3",
+        "desc": "Internal structure. ('Day-by-day with morning/afternoon/evening slots.' 'Three sections: header, form, footer.')"
+      },
+      {
+        "name": "T — Tone",
+        "icon": "smile",
+        "desc": "How should it communicate? ('Friendly and kid-safe.' 'Formal, banking-grade.' 'Concise executive summary.')"
+      }
+    ],
+    "memory_hook": "Purpose = WHY. Role = WHO. Output = SHAPE. Marker = GUARDRAILS. Pattern = STRUCTURE. Tone = VOICE.",
+    "narration": "Welcome to your primary tool. P.R.O.M.P.T. is six letters, six guardrails, and the single most important muscle you'll build in this program. The analogy is an architect's brief. If you hire a world-class architect and tell them 'make it nice,' you will get a building — just not yours. But hand that same architect a brief that specifies the purpose (a four-bedroom family home), their role (residential architect specializing in earthquake zones), the output (blueprints plus a 3D render), the hard markers (budget, plot size, local code compliance), the structural pattern (open kitchen, two wings, central courtyard), and the tone (warm, modern, family-first) — and that architect produces exactly the home you pictured. P.R.O.M.P.T. is that brief, every single time you talk to AI. Memorize the six letters. Purpose, Role, Output, Marker, Pattern, Tone. Why, who, shape, guardrails, structure, voice. The next two slides show what this looks like in practice."
+  },
+  {
+    "slide_id": "slide_15",
+    "type": "welcome",
+    "title": "P.R.O.M.P.T. in Action: The Bali Example",
+    "subtitle": "Same request. Two ways. Night-and-day output.",
+    "icon": "map",
+    "visual_cue": "before_after_split",
+    "before_after": {
+      "before": {
+        "label": "Vague Request",
+        "icon": "frown",
+        "output": "'Plan a trip to Bali for me.' → Generic blog-style answer. No budget awareness, no day-by-day structure, no family safety considerations, no hotel suggestions. Hours of manual restructuring needed before anyone can use it."
+      },
+      "after": {
+        "label": "P.R.O.M.P.T.-Engineered Intent",
+        "icon": "smile",
+        "output": "'Act as an expert tour planner with Asia experience (Role). Plan a 5-day family vacation to Bali (Purpose). Output as a day-by-day markdown table (Output). Budget ₹80k for a family of 4, no adventure sports, kid-safe activities only (Marker). Slots for morning, afternoon, and evening with hotel suggestions per day (Pattern). Friendly, family-warm tone (Tone).' → Precise, ready-to-use itinerary. On-budget, family-safe, zero rework."
+      }
+    },
+    "memory_hook": "Same AI. Same model. Different brief. Night-and-day output.",
+    "narration": "Let's see the formula land. Two screenshots, side by side, of the exact same AI model — the only thing that changed is the brief. On the left: 'Plan a trip to Bali for me.' What you get back is a generic blog post — top ten things to do in Bali, copy-pasted from a thousand travel sites. No budget awareness because you didn't say what you could spend. No day-by-day structure because you didn't ask for one. No family safety considerations because you didn't mention you have kids. You'll spend the next hour rewriting it into something usable. On the right: the same request, run through P.R.O.M.P.T. Role: expert tour planner. Purpose: 5-day family vacation. Output: day-by-day markdown table. Marker: ₹80k budget, no adventure sports, kid-safe. Pattern: morning/afternoon/evening slots with hotel suggestions. Tone: friendly. What comes back is an itinerary you can hand to a travel agent or use yourself. Zero rework. Same model. Different brief. That is the entire formula."
+  },
+  {
+    "slide_id": "slide_16",
+    "type": "welcome",
+    "title": "P.R.O.M.P.T. for Real Software",
+    "subtitle": "Not vacations — your actual day job",
+    "icon": "code-2",
+    "visual_cue": "before_after_split",
+    "before_after": {
+      "before": {
+        "label": "Vague Engineering Request",
+        "icon": "frown",
+        "output": "'Build a login screen.' → Generic React component. No auth integration, no validation rules, no error states, no accessibility considerations. Junior-developer-grade code that needs full rewrite before it ships."
+      },
+      "after": {
+        "label": "P.R.O.M.P.T.-Engineered Intent",
+        "icon": "smile",
+        "output": "'Act as a senior frontend engineer (R). Build a login screen for our finance resource planner (P). Output a React functional component with Tailwind styling, TypeScript types included (O). Must integrate with Firebase Auth, support email+password and MFA, comply with WCAG AA, no external dependencies beyond our approved list (M). Structure: branded header, form with field-level validation, footer with help link and password-reset (Pat). Professional, finance-industry tone in error messages (T).' → Production-grade component, fully integrated, accessible, zero rework."
+      }
+    },
+    "memory_hook": "The Bali example is the toy version. This is what P.R.O.M.P.T. does in your actual job.",
+    "narration": "The Bali example was the toy version, deliberately — because it's easier to feel the formula when the domain is familiar. Now let's run it on your actual day job. On the left, the vague version: 'Build a login screen.' What you get is a generic React component. It looks fine in isolation. It is not your login screen. It doesn't integrate with your auth provider, doesn't handle MFA, doesn't comply with accessibility standards, doesn't match your component library, doesn't follow your error-handling conventions. You will spend a day rewriting it. On the right, the P.R.O.M.P.T. version. Role: senior frontend engineer. Purpose: login for the finance resource planner. Output: React functional component, TypeScript, Tailwind. Marker: Firebase Auth integration, MFA support, WCAG AA compliance, approved-dependency list only. Pattern: branded header, validated form, help-link footer. Tone: professional finance-industry. What comes back is production-grade. Ships to QA the same day. That is the formula doing what it was built to do."
+  },
+  {
+    "slide_id": "slide_17",
+    "type": "day_in_life",
+    "title": "A Day in the Life of an OrchestrAI Lead",
+    "subtitle": "From 9 AM intent capture to 4:30 PM QA push",
+    "icon": "clock",
+    "analogy": {
+      "title": "NASA Mission Control",
+      "text": "Mission Control doesn't fly the rocket. They monitor instruments, give clearances, intervene when needed. Your day looks like theirs: short bursts of decision, long stretches of supervision, zero manual labor."
+    },
+    "timeline": [
+      {
+        "time": "9:00 AM",
+        "icon": "headphones",
+        "phase": "Intent Capture",
+        "desc": "Stakeholder session. You capture intent as a P.R.O.M.P.T.-structured brief, not a list of features. Output: one or two paragraphs of crystallized requirement."
+      },
+      {
+        "time": "10:30 AM",
+        "icon": "wand-2",
+        "phase": "First Generation",
+        "desc": "First orchestration cycle. AI generates code, schema, UI, and tests in parallel. You don't type a single line — you read, you validate, you flag what to refine."
+      },
+      {
+        "time": "11:30 AM",
+        "icon": "monitor-play",
+        "phase": "Live Validation",
+        "desc": "Walk-through with the business owner. Real screens, real data, real-time refinement. The 'demo' is the application itself, not slides about it."
+      },
+      {
+        "time": "2:00 PM",
+        "icon": "repeat",
+        "phase": "Iteration 2",
+        "desc": "Refinements applied in plain English. ('Change the date format to DD-MM-YYYY, add a confirm step before delete.') Output regenerated in minutes."
+      },
+      {
+        "time": "4:30 PM",
+        "icon": "git-merge",
+        "phase": "Delivery",
+        "desc": "Day's artifact pushed to client QA region. Auto-generated docs updated. Tomorrow's brief already drafted from today's findings."
+      }
+    ],
+    "visual_chart": {
+      "type": "gantt_timeline",
+      "phases": [
+        { "label": "Intent", "start": "9:00", "end": "10:30", "color": "gold" },
+        { "label": "Generation", "start": "10:30", "end": "11:30", "color": "teal" },
+        { "label": "Validation", "start": "11:30", "end": "12:30", "color": "teal" },
+        { "label": "Iteration", "start": "14:00", "end": "16:00", "color": "teal" },
+        { "label": "Delivery", "start": "16:30", "end": "17:00", "color": "gold" }
+      ]
+    },
+    "memory_hook": "Five phases. One day. Real software in client QA by 4:30 PM.",
+    "narration": "Picture NASA Mission Control. The flight director doesn't fly the rocket. They watch instruments, give clearances, intervene when something needs human judgment, and let the systems do the systems' work. Your day looks like that. Nine AM: intent capture. You're in a room with a stakeholder, but you're not taking notes for a 90-minute meeting — you're shaping their intent into a structured brief, live, while they're talking. Ten-thirty: first orchestration cycle. The AI engine produces code, database schema, UI, and test cases in parallel. You read. You validate. You flag what's off. Eleven-thirty: you walk the business owner through a working screen. Not a mockup. The thing. Two PM: iteration two. They asked for date format changes and a confirm step before delete. You don't write a ticket — you refine the brief in plain English, and the system regenerates. Four-thirty: today's artifact lands in the client's QA region. The documentation updates itself. Tomorrow's brief is already drafted from today's findings. That's not a busy day. That's a normal day."
+  },
+  {
+    "slide_id": "slide_18",
+    "type": "competencies",
+    "title": "Your Cockpit Instrument Panel",
+    "subtitle": "The five competencies of an OrchestrAI Lead",
+    "icon": "gauge",
+    "analogy": {
+      "title": "Five Instruments, All Green",
+      "text": "A pilot reads five instruments simultaneously: altitude, speed, heading, fuel, engine. You'll be reading five too — and like a pilot, your job is to keep all five in the green, not max out any single one. Strong on four and weak on one will still crash the plane."
+    },
+    "list": [
+      {
+        "name": "Intent Articulation",
+        "icon": "message-circle",
+        "desc": "Can you write a P.R.O.M.P.T. that produces production-grade output on the first try? This is the muscle you build by doing, not by reading."
+      },
+      {
+        "name": "Quality Judgment",
+        "icon": "shield-check",
+        "desc": "Can you spot a hallucination, a compliance gap, or a logic flaw before it ships? Your taste is the final filter."
+      },
+      {
+        "name": "Stakeholder Translation",
+        "icon": "handshake",
+        "desc": "Can you turn a CXO's vague ambition into an orchestrable brief in 30 minutes? Half this job is the conversation, not the keyboard."
+      },
+      {
+        "name": "Iteration Discipline",
+        "icon": "repeat",
+        "desc": "Can you run three cycles in a day without burning out the team, the client, or the AI engine? Pacing matters as much as direction."
+      },
+      {
+        "name": "Pattern Stewardship",
+        "icon": "library",
+        "desc": "Do you contribute back to the pattern library so the next project starts further along? Compound the leverage."
+      }
+    ],
+    "visual_chart": {
+      "type": "radar_skill_map",
+      "axes": [
+        "Intent Articulation",
+        "Quality Judgment",
+        "Stakeholder Translation",
+        "Iteration Discipline",
+        "Pattern Stewardship"
+      ],
+      "scale": [1, 5],
+      "instruction": "Self-rate each axis 1–5. Aim for a balanced shape, not a spike."
+    },
+    "memory_hook": "All five in the green. Spike on one, weak on another — still crash the plane.",
+    "narration": "Final instrumentation check. Five competencies define an OrchestrAI Lead, and like a cockpit instrument panel, your job is to keep all five in the green — not to max out any one of them. Intent Articulation is the P.R.O.M.P.T. muscle — built by writing briefs, not reading slides. Quality Judgment is your taste — the ability to look at AI output and feel where it's off, before it ships. Stakeholder Translation is the soft skill that turns a CXO's vague ambition into a brief — half your job is the conversation, not the keyboard. Iteration Discipline is pacing — three cycles a day without burning out the system, the client, or yourself. And Pattern Stewardship is the long game — every brief you write should make the next one easier, contributing back to the library that makes 7-day delivery possible. Rate yourself, 1 to 5, on each axis. Don't aim for spikes. Aim for a balanced pentagon. That's the shape of a strong Lead."
+  },
+  {
+    "slide_id": "slide_19",
+    "type": "welcome",
+    "title": "If You Remember Nothing Else…",
+    "subtitle": "Module 1 in five sentences",
+    "icon": "bookmark",
+    "bullets": [
+      "1. AI is your twin — same anatomy, different substrate.",
+      "2. The old world is breaking — 120 days, key-person risk, rework drag.",
+      "3. Your new job is conductor, not soloist — define intent, validate outcome.",
+      "4. P.R.O.M.P.T. is your formula — Purpose, Role, Output, Marker, Pattern, Tone.",
+      "5. Quality is upstream — engineer it in, don't filter for it later."
+    ],
+    "memory_hook": "Twin. Broken. Conductor. P.R.O.M.P.T. Upstream. Five words. That's your module.",
+    "closing_thread": "One quiz between you and Module 2. Let's go.",
+    "narration": "Sixty minutes, distilled to five sentences. If you walked out of this module having forgotten everything else, here's what I want stuck in your head. One: AI is your twin. Same anatomy as the intelligence you already live inside — different substrate. Two: the old world of software delivery is breaking under its own weight. 120 days, 30 to 40 percent rework, bus factor of one. Three: your job is no longer to play the instrument. Your job is to conduct the orchestra. Four: when you talk to AI, use P.R.O.M.P.T. Purpose, Role, Output, Marker, Pattern, Tone. Six letters, every time, no shortcuts. Five: quality is engineered upstream in the brief, never filtered downstream in QA. Five sentences. Five words to anchor them — twin, broken, conductor, P.R.O.M.P.T., upstream. Carry those five words into the next module. They're the foundation. Everything we build from here sits on them."
+  },
+  {
+    "slide_id": "slide_20",
+    "type": "interactive_quiz_engine",
+    "title": "Module 1 Knowledge Check",
+    "subtitle": "10 questions. 80% to pass. Unlimited retakes.",
+    "icon": "clipboard-check",
+    "pass_threshold": 80,
+    "questions": [
+      {
+        "id": "q1",
+        "category": "AI Anatomy",
+        "icon": "brain",
+        "question": "Which AI capability is the closest equivalent of human long-term memory?",
+        "choices": [
+          "Large Language Model (LLM)",
+          "Retrieval-Augmented Generation (RAG)",
+          "Reinforcement Learning",
+          "Transformers"
+        ],
+        "correct_answer": "Retrieval-Augmented Generation (RAG)",
+        "explanation": "RAG is AI's long-term memory — it lets the model look up specific facts (like your company's documents) at the moment of answering, rather than relying only on what it was trained on. Remember from the anatomy slide: brain = LLM, long-term memory = RAG."
+      },
+      {
+        "id": "q2",
+        "category": "AI Anatomy",
+        "icon": "alert-triangle",
+        "question": "AI hallucinations are most similar to which human phenomenon?",
+        "choices": [
+          "Conscious lying",
+          "Confident false memories or vivid dreams",
+          "Refusing to answer when uncertain",
+          "Asking a clarifying question"
+        ],
+        "correct_answer": "Confident false memories or vivid dreams",
+        "explanation": "Hallucinations are AI's dream state — vivid, confident, sometimes completely fabricated. The AI is not lying; it doesn't know what it doesn't know. That's exactly why the P.R.O.M.P.T. formula exists — to put guardrails around what AI can and can't make up."
+      },
+      {
+        "id": "q3",
+        "category": "Old World",
+        "icon": "calendar-x",
+        "question": "What is the typical baseline build time for traditional enterprise software, before OrchestrAI?",
+        "choices": [
+          "7 days",
+          "30 days",
+          "90–120 days",
+          "12 months"
+        ],
+        "correct_answer": "90–120 days",
+        "explanation": "Traditional enterprise software takes 90 to 120 days just to reach a first working baseline. OrchestrAI compresses that to 7 days to QA — a seventeen-times speedup achieved by removing the work that didn't need to exist, not by working faster."
+      },
+      {
+        "id": "q4",
+        "category": "OrchestrAI Model",
+        "icon": "rocket",
+        "question": "OrchestrAI delivers software to the client's ___ region in 7 days — not to production.",
+        "choices": [
+          "Production",
+          "QA (Quality Assurance)",
+          "Staging",
+          "Sandbox"
+        ],
+        "correct_answer": "QA (Quality Assurance)",
+        "explanation": "OrchestrAI delivers an 80% baseline to the client's QA region in 7 days. The final 20% is co-developed during UAT alongside the client. Production go-live only happens when the client says they have full confidence — not before. This distinction is important: OrchestrAI ships fast, but never recklessly."
+      },
+      {
+        "id": "q5",
+        "category": "Mindset Shift",
+        "icon": "music-2",
+        "question": "Which analogy best captures the role of an OrchestrAI Lead?",
+        "choices": [
+          "Solo violinist — total control of one instrument",
+          "Orchestra conductor — commands eighty musicians without touching one",
+          "Music critic — judges performance from the audience",
+          "Studio engineer — mixes after the recording is done"
+        ],
+        "correct_answer": "Orchestra conductor — commands eighty musicians without touching one",
+        "explanation": "The conductor analogy is the central mental model of the entire program. A solo violinist's hands touch the instrument. A conductor's hands touch nothing — yet exercises far greater command, through a score written with absolute precision before the first note is played. That's the shift: from playing the instrument to writing the score."
+      },
+      {
+        "id": "q6",
+        "category": "Quality Model",
+        "icon": "arrow-up-from-line",
+        "question": "Where is quality primarily engineered in the OrchestrAI model?",
+        "choices": [
+          "In the QA cycle, by dedicated testers",
+          "Upstream, in the prompt and brief",
+          "During UAT, by the client",
+          "In production, by monitoring"
+        ],
+        "correct_answer": "Upstream, in the prompt and brief",
+        "explanation": "Don't filter the river — clean the source. Old-world QA detects defects after they've flowed through the whole system. OrchestrAI engineers quality upstream, in the brief. Every defect caught in QA is a brief written too vaguely. Every compliance miss in UAT is a Marker that wasn't set in the prompt."
+      },
+      {
+        "id": "q7",
+        "category": "P.R.O.M.P.T.",
+        "icon": "shield-alert",
+        "question": "What does the 'M' in P.R.O.M.P.T. stand for?",
+        "choices": [
+          "Method — the steps to follow",
+          "Model — which AI model to use",
+          "Marker — hard constraints and guardrails",
+          "Mode — formal or casual"
+        ],
+        "correct_answer": "Marker — hard constraints and guardrails",
+        "explanation": "Marker = guardrails. These are the hard, non-negotiable constraints: budget limits, compliance rules, off-limits behaviors, approved-dependency lists. Without Markers, AI will happily produce output that violates your business rules — and do so confidently. This is the single most important letter for preventing hallucinations from causing real-world damage."
+      },
+      {
+        "id": "q8",
+        "category": "P.R.O.M.P.T.",
+        "icon": "user-cog",
+        "question": "If you forget to specify 'Role' in a P.R.O.M.P.T. prompt, what is the most likely result?",
+        "choices": [
+          "AI refuses to answer",
+          "AI gives a generic, non-expert response that needs heavy rework",
+          "AI asks you a clarifying question",
+          "AI defaults to the most recent role from your last session"
+        ],
+        "correct_answer": "AI gives a generic, non-expert response that needs heavy rework",
+        "explanation": "Without Role, AI defaults to its generic 'helpful assistant' voice — broad, surface-level, and not domain-specific. Telling it to 'act as a senior payments architect with 10 years at FIS' completely changes the depth, vocabulary, and assumptions of the output. Same model, same prompt — just a Role change — produces night-and-day quality difference."
+      },
+      {
+        "id": "q9",
+        "category": "P.R.O.M.P.T.",
+        "icon": "layout-template",
+        "question": "Which two P.R.O.M.P.T. elements most directly control the SHAPE of what AI returns to you?",
+        "choices": [
+          "Purpose and Tone",
+          "Output and Pattern",
+          "Role and Marker",
+          "Marker and Tone"
+        ],
+        "correct_answer": "Output and Pattern",
+        "explanation": "Output defines the format (markdown table, JSON, React component). Pattern defines the internal structure (day-by-day with morning/afternoon/evening slots; or header-form-footer). Together they shape the response so it's ready to use, not ready to rewrite. Purpose and Role tell AI what and who; Output and Pattern tell it what shape; Marker and Tone tell it what guardrails and what voice."
+      },
+      {
+        "id": "q10",
+        "category": "Daily Cadence",
+        "icon": "monitor-play",
+        "question": "In the OrchestrAI daily cadence, when does the business owner typically see the first live functional screen?",
+        "choices": [
+          "End of the first sprint, around day 10",
+          "End of the first week",
+          "Same day as intent capture — around 11:30 AM",
+          "Only after QA sign-off"
+        ],
+        "correct_answer": "Same day as intent capture — around 11:30 AM",
+        "explanation": "9 AM intent capture, 10:30 AM first generation cycle, 11:30 AM live screen with the business owner. This is the NASA Mission Control rhythm: short bursts of decision, long stretches of supervision, real working software in the morning of day one. Not a mockup. Not a wireframe. The thing itself."
+      }
+    ],
+    "memory_hook": "10 questions. 80% to pass. Pass it and Module 2 unlocks.",
+    "narration": "Final stretch. Ten questions stand between you and Module 2. Eighty percent to pass — that's eight out of ten. Unlimited retakes, so don't stress, but do take it seriously — the questions are designed to lock in the five core ideas from the recap slide. Read each one carefully. Notice that several questions reference the analogies we used — the conductor, the river, the architect's brief — because the analogies aren't decoration, they're the mental models. If you can recall the analogy, you can almost always recover the concept. Good luck. See you in Module 2."
+  }
+]

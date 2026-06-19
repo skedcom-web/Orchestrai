@@ -1,0 +1,387 @@
+[
+  {
+    "slide_id": "slide_1",
+    "title": "OrchestrAI Lead Certification",
+    "subtitle": "Module 1 · The OrchestrAI Mindset",
+    "type": "hero_welcome",
+    "icon": "rocket",
+    "tagline": "\"Stop typing code. Start commanding outcomes.\"",
+    "hero_stat": { "value": "7 Days", "label": "From blank page to production baseline", "note": "Not 7 months." },
+    "promises": [
+      { "icon": "brain", "color": "from-violet-600 to-indigo-600", "title": "Rewire", "desc": "Shift from Manual Builder to Intent Orchestrator" },
+      { "icon": "zap", "color": "from-amber-600 to-orange-600", "title": "Master", "desc": "The P.R.O.M.P.T. formula replacing manual coding" },
+      { "icon": "award", "color": "from-emerald-600 to-teal-600", "title": "Certify", "desc": "Production-grade mindset in 60 minutes" }
+    ],
+    "analogy": "Think: A 747 pilot switching on autopilot. You don't stop being responsible for the flight — you stop touching every control manually. Set the destination, the constraints — and let the system fly.",
+    "narration": "Welcome to the OrchestrAI Lead Certification. This one-hour intensive is designed to fundamentally rewire your professional approach. By the end, you will no longer think of yourself as a developer who writes code — you will think of yourself as an architect who orchestrates intent. The benchmark: seven working days from a blank page to a production-grade baseline. Not seven months. Let's begin."
+  },
+  {
+    "slide_id": "slide_2",
+    "title": "The Industry Is Structurally Broken",
+    "subtitle": "Why traditional software delivery fails — by the numbers",
+    "type": "crisis_stat",
+    "icon": "trending-down",
+    "stats": [
+      { "value": "72%", "label": "of enterprise projects exceed their original budget", "color": "red" },
+      { "value": "63%", "label": "of projects miss their committed deadlines", "color": "orange" },
+      { "value": "₹40L+", "label": "average cost overrun per mid-size project", "color": "red" },
+      { "value": "31%", "label": "of projects cancelled before anyone uses them", "color": "orange" }
+    ],
+    "insight_title": "These are not outliers.",
+    "insight_text": "These are industry averages from the Standish CHAOS Report, McKinsey, and PMI. Traditional software delivery is not a risk — it is a statistical certainty of failure. Hiring better developers does not fix a structural problem.",
+    "key_quote": "\"Every month of traditional delivery costs your client more than a full year of an OrchestrAI engagement.\"",
+    "narration": "Before we understand why OrchestrAI is necessary, we need to understand the structural collapse of the industry we operate in. Seventy-two percent of enterprise projects exceed budget. Sixty-three percent miss deadlines. Thirty-one percent are cancelled before anyone uses them. These numbers come from independent research bodies. They are not exceptions — they are norms. The model is structurally broken, and adding more sprints or better developers cannot fix a structural problem. OrchestrAI is the structural fix."
+  },
+  {
+    "slide_id": "slide_3",
+    "title": "Structural Failures of Legacy Delivery",
+    "subtitle": "Traditional vs OrchestrAI — a measurable, side-by-side comparison",
+    "type": "comparison_table",
+    "icon": "bar-chart-2",
+    "visual_chart": {
+      "chart_type": "horizontal_bar_comparison",
+      "title": "MVP Timeline",
+      "series": [
+        { "label": "Traditional Delivery", "value": 120, "display": "3–6 months avg", "color": "warning" },
+        { "label": "OrchestrAI Delivery", "value": 7, "display": "7 working days", "color": "success" }
+      ]
+    },
+    "table": [
+      { "pain": "MVP Timeline",    "icon": "clock",          "trad": "3–6 months for basic functionality",        "orch": "7 working days to production baseline" },
+      { "pain": "Delivery Cost",   "icon": "alert-triangle", "trad": "₹25–50 Lakhs for mid-complexity apps",      "orch": "70–80% savings on comparable scope" },
+      { "pain": "Change Requests", "icon": "refresh-cw",     "trad": "2–4 weeks rework budget per change",        "orch": "Implemented same-day via plain-English intent" },
+      { "pain": "Documentation",   "icon": "file-text",      "trad": "Written weeks after code (always lagging)",  "orch": "Real-time, living artifact alongside code" },
+      { "pain": "Key Person Risk", "icon": "user-x",         "trad": "Project stalls if one senior dev leaves",   "orch": "Knowledge lives in AI — always reproducible" }
+    ],
+    "narration": "Let's quantify the gap. A traditional MVP takes three to six months and costs twenty-five to fifty lakhs. OrchestrAI collapses that timeline to seven working days at seventy to eighty percent cost reduction. Change requests that cost weeks of rework are now plain-English adjustments implemented the same day. This isn't a minor efficiency gain — it's a category-level transformation."
+  },
+  {
+    "slide_id": "slide_4",
+    "title": "The Identity Shift",
+    "subtitle": "This is not about tools. It is about who you become as a professional.",
+    "type": "paradigm_identity",
+    "icon": "refresh-cw",
+    "left": {
+      "icon": "code-2",
+      "label": "Solo Violinist",
+      "desc": "Controls one instrument manually. 80 notes per minute maximum. Every note is a direct human act."
+    },
+    "right": {
+      "icon": "layers",
+      "label": "Orchestra Conductor",
+      "desc": "80 instruments simultaneously. Zero hands on instruments. Unlimited output per minute through precise intent."
+    },
+    "transformations": [
+      { "from": "I write the code",       "to": "I define the intent",     "fi": "code-2",         "ti": "target" },
+      { "from": "I manage sprints",       "to": "I validate outcomes",     "fi": "clock",          "ti": "check-circle" },
+      { "from": "I estimate timelines",   "to": "I prove in hours",        "fi": "alert-triangle", "ti": "zap" },
+      { "from": "I clarify during dev",   "to": "I crystallize upfront",   "fi": "help-circle",    "ti": "shield-alert" }
+    ],
+    "reflection": "Think of one recent project where a requirement was 'clarified during development.' What would it have cost to crystallize that upfront instead?",
+    "narration": "This module is called The OrchestrAI Mindset because the most powerful thing you will change is not what you use — it is who you are professionally. The conductor doesn't produce less music than the violinist. The conductor produces infinitely more. Your craftsmanship doesn't disappear — it moves upstream. Instead of crafting code, you craft constraints. Instead of writing syntax, you write intent."
+  },
+  {
+    "slide_id": "slide_5",
+    "title": "5 Mental Blocks You Must Break",
+    "subtitle": "These mindset traps consistently stall the transformation to OrchestrAI Lead",
+    "type": "mental_blocks",
+    "icon": "brain",
+    "blocks": [
+      { "icon": "code-2",         "color": "red",    "label": "Block 1: \"I Must Write Code to Add Value\"",              "desc": "Reality: Your value is in the precision of your intent. One perfect prompt outweighs 500 lines of manual code." },
+      { "icon": "clock",          "color": "orange", "label": "Block 2: \"Requirements Will Become Clear As We Build\"",   "desc": "Reality: Vague requirements produce vague AI output. Crystallize 100% of requirements before generation begins." },
+      { "icon": "shield-alert",   "color": "red",    "label": "Block 3: \"AI Will Handle Security Automatically\"",       "desc": "Reality: AI generates exactly what you specify. Without explicit security Markers, it will produce vulnerable code." },
+      { "icon": "alert-triangle", "color": "orange", "label": "Block 4: \"QA Will Catch What We Miss\"",                  "desc": "Reality: Quality is a first-prompt discipline, not a last-step filter. Upstream intent = downstream correctness." },
+      { "icon": "users",          "color": "indigo", "label": "Block 5: \"AI Will Replace My Team\"",                     "desc": "Reality: AI replaces manual execution, not judgment. The Lead becomes more valuable — not redundant." }
+    ],
+    "narration": "There are five mental blocks that consistently prevent experienced professionals from becoming effective OrchestrAI Leads. Each one is a belief that served you well in traditional delivery but actively sabotages you in this model. The first and most important block to break is the belief that writing code is how you add professional value."
+  },
+  {
+    "slide_id": "slide_6",
+    "title": "AI Is Your Most Capable Developer",
+    "subtitle": "The right mental model: brief it like a world-class specialist, not a vending machine",
+    "type": "ai_as_developer",
+    "icon": "brain",
+    "ai_traits": [
+      { "icon": "zap",          "color": "amber",   "trait": "Infinite Speed",    "desc": "Generates in seconds what takes humans days. No fatigue. No mood. No estimation. Pure execution." },
+      { "icon": "check-circle", "color": "emerald", "trait": "No Ego",            "desc": "Accepts any correction without resistance or morale impact. Revises infinitely without complaint." },
+      { "icon": "book-open",    "color": "blue",    "trait": "Total Recall",      "desc": "Knows every best practice, security pattern, and framework pattern — all at once, all the time." },
+      { "icon": "shield",       "color": "violet",  "trait": "Literal Obedience", "desc": "Builds exactly what you specify — no more, no less. Your precision determines the output quality." }
+    ],
+    "critical_insight": "A brilliant developer who follows instructions too literally will build exactly what you asked — and exactly what you didn't mean. The same is true of AI. Your job is to leave no room for interpretation.",
+    "narration": "The most effective mental model for working with AI is this: imagine you have just hired the most technically brilliant developer in the world. They know every language, every framework, every security pattern. They work at machine speed. They never complain. The only catch: they follow your instructions exactly as stated. If you say 'build a login,' they build A login — not the secure, scalable, business-aligned login you had in mind. Your job as the Lead is to give this developer a brief so complete that the output requires zero manual correction. That brief is your prompt."
+  },
+  {
+    "slide_id": "slide_7",
+    "title": "The P.R.O.M.P.T. Formula",
+    "subtitle": "Your professional briefing framework — six guardrails that eliminate AI drift",
+    "type": "prompt_formula",
+    "icon": "message-square-text",
+    "pillars": [
+      { "letter": "P", "name": "Purpose",  "icon": "target",          "grad": "from-violet-600 to-indigo-600", "tagline": "The WHY — what problem are you solving?",        "example": "\"Build a secure timesheet API replacing a broken Excel workflow\"" },
+      { "letter": "R", "name": "Role",     "icon": "user-cog",        "grad": "from-blue-600 to-cyan-600",    "tagline": "WHO should AI act as?",                           "example": "\"Act as a Senior Node.js security architect\"" },
+      { "letter": "O", "name": "Output",   "icon": "layout-template", "grad": "from-emerald-600 to-teal-600", "tagline": "WHAT SHAPE should the result take?",              "example": "\"Express route + OpenAPI spec + Jest tests\"" },
+      { "letter": "M", "name": "Marker",   "icon": "shield-alert",    "grad": "from-amber-600 to-orange-600", "tagline": "WHERE NOT TO GO — hard constraints & guardrails", "example": "\"Prevent SQL injection. Enforce JWT auth. No plaintext.\"" },
+      { "letter": "P", "name": "Pattern",  "icon": "layers",          "grad": "from-rose-600 to-pink-600",    "tagline": "HOW TO STRUCTURE the output internally",          "example": "\"Controller → Service → Repository pattern\"" },
+      { "letter": "T", "name": "Tone",     "icon": "smile",           "grad": "from-purple-600 to-violet-600","tagline": "HOW TO COMMUNICATE — style and register",         "example": "\"Production-ready code with JSDoc comments\"" }
+    ],
+    "memory_hook": "Six letters. Six guardrails. Miss one and the AI has room to drift. Cover all six and the output is yours by design — not by luck.",
+    "narration": "The P.R.O.M.P.T. formula is the core professional tool of every OrchestrAI Lead. It is not a suggestion — it is a non-negotiable framework that sits between your business intent and the AI generation engine. Each letter represents a specific category of constraint. Together they form a complete brief that eliminates the AI's ability to hallucinate, drift, or produce structurally incorrect output. Miss any one pillar and you have created an opening for the AI to make a decision on your behalf — and that decision may be wrong."
+  },
+  {
+    "slide_id": "slide_8",
+    "title": "Deep Dive: Purpose & Role",
+    "subtitle": "Pillars 1 & 2 — the stage-setting foundation of every AI brief",
+    "type": "prompt_deep",
+    "icon": "target",
+    "pillars": [
+      {
+        "letter": "P", "name": "Purpose", "grad": "from-violet-600 to-indigo-600",
+        "tagline": "Define the WHY with measurable precision",
+        "rules": ["State the business problem — not just the technical task", "Include scale and context (e.g., \"50,000 daily users\")", "Reference the system it integrates with"],
+        "bad": "\"Build me a login screen.\"",
+        "good": "\"Build a secure, JWT-authenticated login API for a B2B SaaS platform handling 50,000 daily enterprise users, integrating with our existing PostgreSQL user schema.\"",
+        "bad_outcome": "AI builds a generic login. No scale, security, or schema awareness.",
+        "good_outcome": "AI calibrates for scale, selects correct JWT config, respects existing schema."
+      },
+      {
+        "letter": "R", "name": "Role", "grad": "from-blue-600 to-cyan-600",
+        "tagline": "Unlock specialist capabilities — activate the right expertise",
+        "rules": ["Specify domain of expertise (e.g., \"backend security architect\")", "Include the technology stack in the role definition", "Set seniority — it calibrates the depth of response"],
+        "bad": "\"Build the API.\"",
+        "good": "\"Act as a Senior Node.js backend architect specializing in financial data APIs and OWASP security compliance.\"",
+        "bad_outcome": "AI responds as a generalist. Generic patterns, no security depth.",
+        "good_outcome": "AI responds as a specialist. Applies OWASP controls, enterprise-grade patterns."
+      }
+    ],
+    "narration": "Purpose and Role work together to set the quality ceiling for everything that follows. Purpose answers: what problem are we solving, and in what context? Role answers: who is the AI being in this conversation? A vague purpose paired with no role produces a junior-level generic response. A precise purpose paired with a domain-expert role produces a senior-level, context-aware, enterprise-grade response. In production delivery, the difference between these two outputs can mean passing or failing a security audit."
+  },
+  {
+    "slide_id": "slide_9",
+    "title": "Deep Dive: Output & Marker",
+    "subtitle": "Pillars 3 & 4 — the most underspecified and most critical pillars",
+    "type": "prompt_deep",
+    "icon": "layout-template",
+    "pillars": [
+      {
+        "letter": "O", "name": "Output", "grad": "from-emerald-600 to-teal-600",
+        "tagline": "Specify the exact form of every artifact you receive",
+        "rules": ["Define file type and structure (e.g., \"Express route file\")", "Specify what is included: route + validation + tests + docs", "State the format of any accompanying documentation"],
+        "bad": "\"Give me the API code.\"",
+        "good": "\"Output: (1) Express route with middleware chain, (2) Joi validation schema, (3) Jest unit tests with 100% coverage of happy + error paths, (4) OpenAPI 3.0 spec block.\"",
+        "bad_outcome": "AI gives one file, no tests, no docs. You write the rest manually.",
+        "good_outcome": "AI generates all four artifacts simultaneously. Zero manual follow-up."
+      },
+      {
+        "letter": "M", "name": "Marker", "grad": "from-amber-600 to-orange-600",
+        "tagline": "Set the fence lines — the AI cannot cross these constraints",
+        "rules": ["Explicitly name OWASP vulnerabilities to prevent", "State what AI must NOT do (as important as what it must do)", "Define performance, compliance, or data governance limits"],
+        "bad": "\"Make it secure.\"",
+        "good": "\"Markers: Prevent SQL injection via parameterized queries only. Enforce JWT claim validation — userId in token must match :userId param. Never return password fields. Rate-limit: 100 req/min per user.\"",
+        "bad_outcome": "AI makes its own interpretation of 'secure.' May miss critical constraints.",
+        "good_outcome": "Every stated constraint enforced. Audit-ready from day one."
+      }
+    ],
+    "narration": "Output and Marker are the two most underspecified pillars in practice, and the two most critical for enterprise delivery. Output tells the AI what to produce — not just the primary code artifact, but every supporting file, test, and documentation block. Marker is the fence line around the AI's workspace. The brutal reality: what you don't specify, the AI decides. And AI decisions about security architecture are not appropriate to leave to chance."
+  },
+  {
+    "slide_id": "slide_10",
+    "title": "Deep Dive: Pattern & Tone",
+    "subtitle": "Pillars 5 & 6 — what elevates output from \"working code\" to \"production artifact\"",
+    "type": "prompt_deep",
+    "icon": "layers",
+    "pillars": [
+      {
+        "letter": "P", "name": "Pattern", "grad": "from-rose-600 to-pink-600",
+        "tagline": "Enforce your internal architecture standard",
+        "rules": ["Specify the design pattern (MVC, Repository, Clean Architecture)", "Define folder structure expectations if relevant", "Reference existing patterns in your codebase for consistency"],
+        "bad": "\"Organize the code properly.\"",
+        "good": "\"Pattern: Strict Controller → Service → Repository separation. One function per module file. All DB access exclusively through Repository layer. Zero business logic in controllers.\"",
+        "bad_outcome": "AI chooses any pattern it prefers. Future code is inconsistent with your codebase.",
+        "good_outcome": "Every generated file slots perfectly into your existing architecture. Zero refactoring."
+      },
+      {
+        "letter": "T", "name": "Tone", "grad": "from-purple-600 to-violet-600",
+        "tagline": "Control the communication register of every output",
+        "rules": ["Specify documentation style (JSDoc, inline, README)", "Define code comment density: critical paths only vs. fully annotated", "Set client-facing communication register for any reports"],
+        "bad": "\"Add some comments.\"",
+        "good": "\"Tone: Fully annotated with JSDoc on every exported function. Professional enterprise English. Error messages must be user-safe — no stack traces or internal paths. README in markdown with setup, env vars, and API contract.\"",
+        "bad_outcome": "Random comments, no README. Error messages expose internal stack traces.",
+        "good_outcome": "Production-ready documentation. Client-deliverable from day one."
+      }
+    ],
+    "narration": "The final two pillars elevate output from 'working code' to 'production-grade, client-deliverable artifacts.' Pattern ensures every generated file plugs into your architecture without refactoring. Tone controls the communication register of everything — from code comments to error messages to client-facing documentation. An enterprise client should never see a raw stack trace in an error response. Tone is what prevents that."
+  },
+  {
+    "slide_id": "slide_11",
+    "title": "P.R.O.M.P.T. in Action: Vacation Planner",
+    "subtitle": "A beginner case study — from vague request to precision-engineered output",
+    "type": "case_study",
+    "icon": "map",
+    "scenario": "Task: Plan a 5-day family vacation to Bali for 4 people within a ₹80,000 total budget.",
+    "vague_prompt": "\"Plan a trip to Bali for me.\"",
+    "vague_result": "Generic article-style text. 3 popular beaches, no budget. No day-by-day structure. Requires 3–4 hours of manual research to make actionable.",
+    "breakdown": [
+      { "pillar": "P — Purpose",  "value": "Plan a 5-day family vacation to Bali for 4 people" },
+      { "pillar": "R — Role",     "value": "Expert Tour Planner with 10 years Asia family travel experience" },
+      { "pillar": "O — Output",   "value": "Day-by-day markdown table: Morning / Afternoon / Evening + costs" },
+      { "pillar": "M — Marker",   "value": "Total budget ₹80,000. No adventure sports. Child-safe activities only." },
+      { "pillar": "P — Pattern",  "value": "Each day: main activity + meal recommendation + estimated daily cost" },
+      { "pillar": "T — Tone",     "value": "Friendly, practical, parent-focused language" }
+    ],
+    "engineered_result": "Ready-to-use 5-day itinerary table. Budget tracked per day. All activities family-safe. Zero manual restructuring. Copy-paste ready for the client.",
+    "narration": "Let's make the framework concrete with a relatable example. A vague request — 'plan a trip to Bali' — produces a generic article-style response that requires hours of manual restructuring before it's useful. Now apply the full P.R.O.M.P.T. framework. The output is a copy-paste ready itinerary. The difference between the two approaches is the difference between a starting point and a deliverable."
+  },
+  {
+    "slide_id": "slide_12",
+    "title": "P.R.O.M.P.T. in Action: Enterprise Security API",
+    "subtitle": "The formula applied to a real backend security scenario with OWASP compliance",
+    "type": "case_study_enterprise",
+    "icon": "shield",
+    "scenario": "Task: Replace a broken Excel timesheet workflow with a secure cloud API — GET /api/timesheets/:userId",
+    "vague_prompt": "\"Build an API to get timesheet data for a user.\"",
+    "vulnerabilities": [
+      "No authentication — any caller can query any userId (Broken Access Control)",
+      "SQL built by string concatenation — SQL Injection exploitable",
+      "Returns raw DB rows — exposes internal schema and sensitive fields",
+      "No rate limiting — vulnerable to data enumeration attacks"
+    ],
+    "engineered_prompt": [
+      { "pillar": "Purpose", "value": "Fetch total hours logged by a specific employee for the current pay period via GET /api/timesheets/:userId — replacing a broken Excel export used by 200 employees." },
+      { "pillar": "Role",    "value": "Senior Node.js backend security architect with OWASP certification and financial data API experience." },
+      { "pillar": "Output",  "value": "(1) Express route file + JWT middleware, (2) Joi input validation, (3) Jest tests: auth bypass, SQL injection, valid request." },
+      { "pillar": "Marker",  "value": "JWT claim must match :userId param — prevent cross-tenant access. Parameterized Knex queries ONLY. Rate-limit: 60 req/min. Never expose raw DB errors." },
+      { "pillar": "Pattern", "value": "Controller → Service → Repository. Validation in middleware. All DB calls in Repository only." },
+      { "pillar": "Tone",    "value": "JSDoc on all exported functions. Error messages: client-safe strings. No internal paths in responses." }
+    ],
+    "narration": "Now the same task applied to an enterprise backend. With a vague prompt, you get working code with four critical security vulnerabilities — each one would fail a standard security audit. With the full P.R.O.M.P.T. framework, all four vulnerabilities are addressed before a single line of code is generated. The output is audit-ready from day one. This is the compounding value of the framework: each pillar eliminates an entire category of production risk."
+  },
+  {
+    "slide_id": "slide_13",
+    "title": "The Daily Cadence of the Lead",
+    "subtitle": "From raw intent to live client demo — in a single business day",
+    "type": "day_in_life",
+    "icon": "clock",
+    "visual_chart": {
+      "chart_type": "timeline_gantt",
+      "title": "Phase Distribution",
+      "groups": [
+        { "label": "Morning: Audit & Generate", "pct": 40, "color": "from-indigo-600 to-violet-600" },
+        { "label": "Midday: Demo & Evolve",     "pct": 45, "color": "from-violet-600 to-pink-600" },
+        { "label": "EOD: Commit & Document",    "pct": 15, "color": "from-emerald-600 to-teal-500" }
+      ]
+    },
+    "schedule": [
+      { "time": "08:30", "icon": "search",      "task": "Audit generated artifacts from overnight runs: code quality, test results, documentation accuracy" },
+      { "time": "09:00", "icon": "users",        "task": "Intent sharpening session with Business SME — crystallize requirements for today's generation sprint" },
+      { "time": "09:30", "icon": "edit-3",       "task": "Translate business intent into structured P.R.O.M.P.T. sets — one per feature or component" },
+      { "time": "10:30", "icon": "check-circle", "task": "Validate AI outputs against acceptance criteria — the Lead is the final quality gate before merge" },
+      { "time": "11:30", "icon": "presentation", "task": "Live UAT demo to client stakeholders of working functional screens — not mockups, live code" },
+      { "time": "14:00", "icon": "zap",          "task": "Evolve session: implement client feedback as refined prompt iterations — same-day turnaround" },
+      { "time": "16:30", "icon": "git-commit",   "task": "Structured commit of reviewed, validated code to version control with living documentation" },
+      { "time": "17:00", "icon": "book-open",    "task": "Update architectural decision records and living technical documentation for the client file" }
+    ],
+    "narration": "This is the operational heartbeat of the OrchestrAI Lead. Your day is structured around tight validation cycles, not open-ended coding sessions. By eleven-thirty in the morning, you are not just showing prototypes — you are demonstrating live, functional screens. By end of day, client feedback from the afternoon demo has already been implemented. This velocity is impossible in traditional delivery because it depends on manual human execution. When AI handles execution, the Lead's job becomes surgical."
+  },
+  {
+    "slide_id": "slide_14",
+    "title": "The 7-Day OrchestrAI Sprint Blueprint",
+    "subtitle": "From blank page to production-baselined system in one working week",
+    "type": "sprint_map",
+    "icon": "zap",
+    "days": [
+      { "day": 1, "theme": "Foundation",     "color": "indigo",  "icon": "layers",         "items": ["System architecture intent doc", "DB schema specification", "API contract draft"] },
+      { "day": 2, "theme": "Core Backend",   "color": "blue",    "icon": "code-2",         "items": ["Auth service", "Core data models + migrations", "CRUD APIs for primary entities"] },
+      { "day": 3, "theme": "Business Logic", "color": "cyan",    "icon": "brain",          "items": ["Business rule engine", "Validation layers", "Integration service stubs"] },
+      { "day": 4, "theme": "Frontend",       "color": "emerald", "icon": "layout-template","items": ["All primary UI flows", "API integration complete", "Error handling"] },
+      { "day": 5, "theme": "Security & QA",  "color": "amber",   "icon": "shield",         "items": ["OWASP scan pass", "Unit + integration tests", "Performance baseline"] },
+      { "day": 6, "theme": "UAT & Polish",   "color": "orange",  "icon": "users",          "items": ["Live client UAT session", "UI polish from feedback", "Docs finalized"] },
+      { "day": 7, "theme": "Baseline",       "color": "violet",  "icon": "award",          "items": ["Production deploy", "Stakeholder demo", "Handover documentation"] }
+    ],
+    "note": "75–80% production-ready baseline. Remaining 20% iterated in weekly sprints post-launch.",
+    "narration": "The seven-day sprint is not a theoretical target — it is a repeatable, documented delivery pattern. Day one establishes the intent architecture before a single feature line is written. Days two through four build the core application in layers. Day five applies security and quality validation. Day six runs a live client UAT demo and implements feedback the same day. Day seven delivers the production baseline at seventy-five to eighty percent production readiness — immediately deployable and demonstrable."
+  },
+  {
+    "slide_id": "slide_15",
+    "title": "The 5 Core Lead Competencies",
+    "subtitle": "The instrument panel every OrchestrAI Lead monitors simultaneously",
+    "type": "competencies",
+    "icon": "gauge",
+    "analogy_line": "A pilot reads five instruments simultaneously — miss one and the flight is at risk even if the other four look perfect.",
+    "list": [
+      { "name": "Intent Articulation",   "icon": "target",       "grad": "from-violet-600 to-indigo-600", "desc": "Translating raw business requirements into precise, unambiguous P.R.O.M.P.T. specifications that leave the AI no room to interpret incorrectly.", "gate": "Could this prompt be given to two AI engines and produce the same result?" },
+      { "name": "Constraint Definition", "icon": "shield-alert", "grad": "from-amber-600 to-orange-600",  "desc": "Proactively identifying all edge cases, security requirements, and non-functional constraints before generation begins — not after.", "gate": "Does every Marker explicitly name a vulnerability or constraint category?" },
+      { "name": "Validation Discipline", "icon": "check-circle", "grad": "from-emerald-600 to-teal-600",  "desc": "Systematic, criteria-based evaluation of every AI-generated artifact against business acceptance criteria. The Lead is the final quality gate.", "gate": "Has every acceptance criterion been tested against the generated output?" },
+      { "name": "Escalation Judgment",   "icon": "alert-octagon","grad": "from-rose-600 to-pink-600",     "desc": "Knowing when a problem requires a human architectural decision rather than a prompt refinement — and acting on that judgment without hesitation.", "gate": "Is this a prompt problem or a design problem?" },
+      { "name": "Governance Awareness",  "icon": "scale",        "grad": "from-purple-600 to-violet-600", "desc": "Operational command of the OGE framework: Observability (is AI behavior visible?), Guardrails (are constraints enforced?), Evaluation (are outputs measured?).","gate": "Can you audit every AI decision in the system?" }
+    ],
+    "narration": "These five competencies are not a checklist to complete — they are a panel to monitor continuously throughout every engagement. A Lead who excels at intent articulation but neglects validation discipline will ship beautifully specified but unvalidated code. Mastery means all five are operating near full capacity simultaneously."
+  },
+  {
+    "slide_id": "slide_16",
+    "title": "Anti-Patterns: The Most Costly Mistakes",
+    "subtitle": "These four patterns cause 90% of OrchestrAI engagement failures",
+    "type": "anti_patterns",
+    "icon": "alert-triangle",
+    "dont_items": [
+      { "icon": "x-circle", "title": "\"Figure it out\" prompts",          "desc": "\"Build a payment system.\" — No context, no constraints, no role. AI will hallucinate a plausible-but-wrong solution." },
+      { "icon": "x-circle", "title": "Skipping security Markers",          "desc": "Assuming AI defaults to OWASP compliance. It does not. Every vulnerability must be named explicitly in the Marker pillar." },
+      { "icon": "x-circle", "title": "Mid-generation requirement drift",   "desc": "Changing requirements after generation has started forces complete re-generation. Crystallize fully before triggering any prompt." },
+      { "icon": "x-circle", "title": "Deploying without validation",       "desc": "AI output is a first draft. Every artifact must pass acceptance criteria validation before entering the codebase." }
+    ],
+    "do_items": [
+      { "icon": "check-circle", "title": "Complete the 6-pillar brief first", "desc": "Draft all six P.R.O.M.P.T. pillars before running any generation. 20 minutes of briefing saves 2+ hours of correction." },
+      { "icon": "check-circle", "title": "Name vulnerabilities explicitly",   "desc": "List every OWASP control you need as a named Marker. SQL injection, broken access control, SSRF — name them all." },
+      { "icon": "check-circle", "title": "Crystallize before generating",     "desc": "Run a 15-minute intent validation session with your SME before every major generation sprint. Non-negotiable discipline." },
+      { "icon": "check-circle", "title": "Validate every artifact",           "desc": "Apply the same acceptance criteria discipline you would apply to any developer's pull request. AI is not exempt from code review." }
+    ],
+    "narration": "These anti-patterns are the documented root causes of OrchestrAI engagements that underperformed. The most common: vague prompts that produce plausible-but-wrong outputs requiring more time to correct than rebuilding from scratch. Every minute invested in a complete six-pillar prompt saves thirty minutes to two hours of downstream correction."
+  },
+  {
+    "slide_id": "slide_17",
+    "title": "Module 1: Key Takeaways",
+    "subtitle": "Your foundational principles as a certified OrchestrAI Lead",
+    "type": "key_takeaways",
+    "icon": "award",
+    "takeaways": [
+      { "num": "01", "color": "indigo",  "title": "Your value is in your intent",              "desc": "A precisely specified prompt is worth more than 500 lines of manually written code. Leave no room for AI interpretation." },
+      { "num": "02", "color": "violet",  "title": "P.R.O.M.P.T. is non-negotiable",            "desc": "All six pillars must be completed before any generation session begins. Incomplete briefs produce incomplete outputs." },
+      { "num": "03", "color": "emerald", "title": "Quality is upstream, not downstream",        "desc": "The Lead is the quality gate before generation, not after. Every acceptance criterion must be defined in the prompt." },
+      { "num": "04", "color": "amber",   "title": "Validation discipline is mandatory",         "desc": "Every AI-generated artifact must be validated against acceptance criteria before it enters the codebase." },
+      { "num": "05", "color": "cyan",    "title": "7 days is the standard, not the exception",  "desc": "A fully crystallized intent architecture produces a 75-80% production-ready baseline in seven working days." }
+    ],
+    "cta": "Complete the Module 1 Assessment below to validate your understanding and unlock Module 2.",
+    "narration": "Before you move to the assessment, let's consolidate the five foundational principles of Module 1. First: your professional value is now measured by the precision of your intent, not the volume of your code. Second: the P.R.O.M.P.T. formula is the structural tool that gives that intent form. Third: quality is a first-prompt discipline. Fourth: validation is mandatory. Fifth: seven working days to a production baseline is the expected standard. These five principles are the foundation of every module that follows."
+  },
+  {
+    "slide_id": "slide_18",
+    "title": "Module 1 Assessment: Interactive Exam Engine",
+    "subtitle": "Dynamic Evaluation Gate",
+    "type": "interactive_quiz_engine",
+    "icon": "clipboard-check",
+    "quiz_ui_package": {
+      "multiple_choice_items": [
+        { "id": "q1", "text": "What is the primary operational difference between an OrchestrAI Lead and a traditional PM?", "choices": [{"value": "A", "text": "The Lead writes more lines of manual code than the traditional PM."}, {"value": "B", "text": "The Lead manages sprint velocities, while the PM manages the client relationship."}, {"value": "C", "text": "The Lead focuses on architectural intent articulation and outcome validation; the PM on legacy milestone tracking."}, {"value": "D", "text": "There is no functional operational difference between the two."}], "correct_answer": "C", "explanation": "An OrchestrAI Lead acts as the absolute quality gate and architect of intent, transforming raw client requests into clear AI parameters — not tracking sprint logs." },
+        { "id": "q2", "text": "Under the OrchestrAI framework, when must application engineering requirements be fully crystallized?", "choices": [{"value": "A", "text": "Continuously during the downstream QA and user-acceptance phases."}, {"value": "B", "text": "Upstream, before the AI engine executes any prompt generation commands."}, {"value": "C", "text": "At the tail-end of a three-month development milestone loop."}, {"value": "D", "text": "Incrementally as manual developers begin writing baseline backend modules."}], "correct_answer": "B", "explanation": "Requirements must be fully crystallized upstream before any generation session begins. Quality is engineered from the first prompt — not discovered in QA." },
+        { "id": "q3", "text": "How does the OrchestrAI model handle application system engineering documentation?", "choices": [{"value": "A", "text": "Generated automatically in real time as a living byproduct alongside the code."}, {"value": "B", "text": "Compiled manually at the project's closing phase by technical writers."}, {"value": "C", "text": "Skipped entirely to ensure the MVP is deployed in 7 days."}, {"value": "D", "text": "Delayed until the client submits an engine change request."}], "correct_answer": "A", "explanation": "OrchestrAI eliminates documentation debt by generating accurate technical docs concurrently with the application artifacts." },
+        { "id": "q4", "text": "Which element of the P.R.O.M.P.T. formula directly enforces architectural guardrails, edge cases, and compliance boundaries?", "choices": [{"value": "A", "text": "Purpose"}, {"value": "B", "text": "Role"}, {"value": "C", "text": "Marker"}, {"value": "D", "text": "Pattern"}], "correct_answer": "C", "explanation": "The Marker defines strict constraints, budget boundaries, non-functional demands, and explicit exclusions that prevent AI engines from drifting." },
+        { "id": "q5", "text": "What is the standard MVP baseline completion timeline using the OrchestrAI framework?", "choices": [{"value": "A", "text": "3 to 6 months of continuous development team cycles."}, {"value": "B", "text": "7 working days to a production-baselined 75-80% quality system."}, {"value": "C", "text": "A single continuous 24-hour rapid hacking marathon."}, {"value": "D", "text": "45 days including comprehensive manual QA remediation."}], "correct_answer": "B", "explanation": "OrchestrAI targets a 75-80% operational quality baseline within its first week, bypassing standard alpha/beta bottlenecks." },
+        { "id": "q6", "text": "What is the core definition of 'Validation Discipline' for an OrchestrAI Lead?", "choices": [{"value": "A", "text": "Allowing the autonomous system to deploy code directly to production without checks."}, {"value": "B", "text": "The human-led, systematic verification of generated AI artifacts against business acceptance criteria."}, {"value": "C", "text": "Delegating all evaluation metrics to an external legacy QA team."}, {"value": "D", "text": "Writing automated unit tests after production code has run for a week."}], "correct_answer": "B", "explanation": "Only rigorous human inspection validates that business constraints and technical rules are fully implemented — the Lead is the final quality gate." },
+        { "id": "q7", "text": "Specifying 'Express route + Joi validation + Jest tests + OpenAPI spec' as requirements represents which P.R.O.M.P.T. pillar?", "choices": [{"value": "A", "text": "Tone"}, {"value": "B", "text": "Purpose"}, {"value": "C", "text": "Output"}, {"value": "D", "text": "Role"}], "correct_answer": "C", "explanation": "The Output parameter specifies the exact form of every artifact to receive — eliminating all manual follow-up generation work." },
+        { "id": "q8", "text": "How are unexpected mid-sprint change requests managed under the OrchestrAI paradigm?", "choices": [{"value": "A", "text": "Placed in a deep backlog to be estimated during next quarter planning."}, {"value": "B", "text": "Rejected because automated platforms cannot process mid-stream changes."}, {"value": "C", "text": "Expressed in precise plain-English intent and implemented into production the same day."}, {"value": "D", "text": "Require a complete human code refactor of all previous module releases."}], "correct_answer": "C", "explanation": "Changes described in precise plain English are injected directly into the active prompt model, dropping implementation cost to a single day." },
+        { "id": "q9", "text": "What major enterprise risk is neutralized when engineering knowledge lives in an AI model rather than with a single human developer?", "choices": [{"value": "A", "text": "Cloud network routing latency risk."}, {"value": "B", "text": "Key Person Risk."}, {"value": "C", "text": "Choice of relational database compiler risk."}, {"value": "D", "text": "Client contract billing cycles risk."}], "correct_answer": "B", "explanation": "When system logic is defined via transparent prompt templates in an AI model, the knowledge base is corporate property — not trapped in one human's head." },
+        { "id": "q10", "text": "What is the systematic consequence of using generic instructions like 'Build an application module'?", "choices": [{"value": "A", "text": "The generation engine runs out of allocated cloud storage boundaries."}, {"value": "B", "text": "Immediate 'Garbage In, Garbage Out' failures: unconstrained, hallucinated, or uncompilable artifacts."}, {"value": "C", "text": "Too much technical architecture documentation is written concurrently."}, {"value": "D", "text": "The application automatically switches to legacy language syntax."}], "correct_answer": "B", "explanation": "Without roles, markers, structures, and precise scope definitions, AI engines drift — generating generic solutions that require more time to correct than rebuilding from scratch." }
+      ],
+      "dynamic_applied_scenario": {
+        "id": "q11",
+        "label": "Question 11 of 11 (Applied Engineering Lab)",
+        "context": "Scenario: Replace a broken Excel sheet workflow with a cloud-native backend route `/api/timesheets` to fetch hours for a specific user ID.",
+        "requirement": "Write an enterprise-grade prompt block applying the full P.R.O.M.P.T. blueprint. Your prompt must enforce security mitigations neutralizing: SQL Injection, Broken Access Control, and Cross-Tenant Data Leaks.",
+        "logic_engine_validation": {
+          "regex_required_tokens": ["Purpose", "Role", "Output", "Marker", "Pattern", "Tone"],
+          "security_tokens": ["SQL injection", "access control", "cross-tenant"]
+        }
+      }
+    },
+    "narration": "Excellent work completing the lesson slides. The Interactive Exam Engine will now validate your understanding across ten multiple-choice questions. After the MCQ section, the Applied Engineering Lab challenges you to write a production-grade prompt that enforces enterprise security constraints. Go through each question carefully and click Submit Answers when you're ready."
+  }
+]

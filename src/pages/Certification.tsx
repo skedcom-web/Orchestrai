@@ -4,7 +4,7 @@ import { Award, Lock, FileText, Send, CheckCircle, Clock, Code } from 'lucide-re
 import emailjs from '@emailjs/browser';
 
 export const Certification: React.FC = () => {
-  const { currentUser, submissions, addSubmission, systemConfig, addNotificationLog } = useApp();
+  const { currentUser, submissions, addSubmission, systemConfig, addNotificationLog, addToast } = useApp();
   const [githubUrl, setGithubUrl] = useState('');
   const [promptUrl, setPromptUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,6 +59,7 @@ export const Certification: React.FC = () => {
           },
           config.emailjsPublicKey
         );
+
         addNotificationLog({
           type: 'Project Submission Alert',
           recipient: config.adminEmail,
@@ -88,7 +89,7 @@ export const Certification: React.FC = () => {
     setLoading(false);
     setGithubUrl('');
     setPromptUrl('');
-    alert("Project submitted successfully! Sithanandham R. will review and score your repository shortly.");
+    addToast("Project submitted successfully! Sithanandham R. will review and score your repository shortly.", "success");
   };
 
   // Syllabus details for approved candidates
@@ -168,21 +169,21 @@ export const Certification: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-2 border-y border-[var(--border-color)] py-2.5 my-4 text-left">
                   <div>
-                    <span className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] block">Score</span>
+                    <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] block">Score</span>
                     <span className="text-xs font-bold text-[var(--text-primary)]">{userSub.automatedTotal}%</span>
                   </div>
                   <div>
-                    <span className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] block">Status</span>
-                    <span className={`text-[9px] font-bold uppercase ${userSub.status === 'HIRE_ELIGIBLE' ? 'text-emerald-400' : 'text-indigo-400'}`}>
+                    <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] block">Status</span>
+                    <span className={`text-[10px] font-bold uppercase ${userSub.status === 'HIRE_ELIGIBLE' ? 'text-emerald-400' : 'text-indigo-400'}`}>
                       {userSub.status === 'HIRE_ELIGIBLE' ? 'Hire Ready' : 'Certified'}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-left text-[9px] text-[var(--text-secondary)]">
+                <div className="flex items-center justify-between text-left text-[10px] text-[var(--text-secondary)]">
                   <div>
                     <div className="font-semibold text-[var(--text-primary)] italic">Sithanandham R.</div>
-                    <div>Founder, Creator</div>
+                    <div>Product Owner, Creator</div>
                   </div>
                   <div className="text-right">
                     <div>UID: <span className="font-semibold font-mono">{currentUser.uid}</span></div>
@@ -192,7 +193,7 @@ export const Certification: React.FC = () => {
               </div>
             ) : userSub ? (
               /* Submission pending review card */
-              <div className="glass-card rounded-xl p-5 border-blue-500/20 bg-blue-550 bg-blue-500/5">
+              <div className="glass-card rounded-xl p-5 border-blue-500/20 bg-blue-500/5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10 text-blue-400 mb-3">
                   <Clock className="h-5 w-5 animate-spin" style={{ animationDuration: '6s' }} />
                 </div>
@@ -211,7 +212,7 @@ export const Certification: React.FC = () => {
                 
                 <form onSubmit={handleSubmitProject} className="space-y-4">
                   <div>
-                    <label className="block text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
                       GitHub Repository URL
                     </label>
                     <div className="relative">
@@ -228,7 +229,7 @@ export const Certification: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
                       AI Prompt Logs Document URL (Google Doc/PDF)
                     </label>
                     <div className="relative">
@@ -247,7 +248,7 @@ export const Certification: React.FC = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-650 hover:to-purple-750 text-white rounded text-xs font-bold shadow flex items-center justify-center space-x-1.5 transition-all"
+                    className="w-full py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded text-xs font-bold shadow flex items-center justify-center space-x-1.5 transition-all"
                   >
                     {loading ? 'Submitting...' : 'Submit Portfolio for Review'}
                   </button>

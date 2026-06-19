@@ -10,12 +10,56 @@ import { Quiz } from './pages/Quiz';
 import { Payment } from './pages/Payment';
 import { Admin } from './pages/Admin';
 import { Certification } from './pages/Certification';
-import { Sparkles, BookOpen, Shield, Award } from 'lucide-react';
+import { useApp } from './context/AppContext';
+import { CelebrationOverlay } from './components/CelebrationOverlay';
+import { Sparkles, BookOpen, Shield, Award, X, CheckCircle2, AlertTriangle, XCircle, Info } from 'lucide-react';
+import { getFirebaseDb } from './firebase';
+import { ref, set } from 'firebase/database';
 import './App.css';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
+  const { toasts, removeToast, activeDialog, closeDialog } = useApp();
   const isAdminRoute = location.pathname === '/admin';
+
+  React.useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      const db = getFirebaseDb();
+      if (db) {
+        const id = Math.random().toString(36).substring(2, 11);
+        const newLog = {
+          id,
+          timestamp: new Date().toISOString(),
+          type: 'WINDOW_ERROR',
+          userEmail: 'anonymous-incognito',
+          description: `Error: ${event.message} at ${event.filename}:${event.lineno}:${event.colno}. Stack: ${event.error?.stack || 'no stack'}`
+        };
+        set(ref(db, `audit_logs/${id}`), newLog).catch(() => {});
+      }
+    };
+
+    const handleRejection = (event: PromiseRejectionEvent) => {
+      const db = getFirebaseDb();
+      if (db) {
+        const id = Math.random().toString(36).substring(2, 11);
+        const newLog = {
+          id,
+          timestamp: new Date().toISOString(),
+          type: 'UNHANDLED_REJECTION',
+          userEmail: 'anonymous-incognito',
+          description: `Promise Rejection: ${event.reason?.message || event.reason || 'no reason'}. Stack: ${event.reason?.stack || 'no stack'}`
+        };
+        set(ref(db, `audit_logs/${id}`), newLog).catch(() => {});
+      }
+    };
+
+    window.addEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', handleRejection);
+    return () => {
+      window.removeEventListener('error', handleError);
+      window.removeEventListener('unhandledrejection', handleRejection);
+    };
+  }, []);
 
   // Roadmap is shown on non-admin pages, only when a user is logged in
   // (on the landing page it shows for everyone to understand the journey)
@@ -23,6 +67,126 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative">
+      {/* Centralized Toasts Container */}
+      <div className="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none">
+        {toasts.map((toast) => {
+          let ToastIcon = Info;
+          let colorClass = "border-blue-500/30 bg-blue-500/10 text-blue-400";
+          if (toast.type === "success") {
+            ToastIcon = CheckCircle2;
+            colorClass = "border-emerald-500/25 bg-emerald-500/10 text-emerald-400";
+          } else if (toast.type === "error") {
+            ToastIcon = XCircle;
+            colorClass = "border-red-500/25 bg-red-500/10 text-red-400";
+          } else if (toast.type === "warning") {
+            ToastIcon = AlertTriangle;
+            colorClass = "border-yellow-500/25 bg-yellow-500/10 text-yellow-400";
+          }
+
+          return (
+            <div
+              key={toast.id}
+              className={`glass-card p-4 rounded-xl border flex items-start gap-3 shadow-lg pointer-events-auto animate-in slide-in-from-right-5 fade-in duration-300 ${colorClass}`}
+            >
+              <ToastIcon className="h-5 w-5 shrink-0 mt-0.5" />
+              <div className="flex-grow">
+                <p className="text-xs font-semibold leading-relaxed text-[var(--text-primary)]">
+                  {toast.message}
+                </p>
+              </div>
+              <button
+                onClick={() => removeToast(toast.id)}
+                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Centralized Custom Dialog Modal */}
+      {activeDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--surface-overlay)] backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="glass-card w-full max-w-md rounded-2xl overflow-hidden p-6 shadow-2xl relative animate-in zoom-in-95 duration-250">
+            {/* Header Icon & Title */}
+            <div className="flex items-center gap-3.5 border-b border-[var(--border-color)] pb-4 mb-4">
+              {(() => {
+                let DialogIcon = Info;
+                let iconColor = "text-indigo-400";
+                if (activeDialog.iconType === "success") {
+                  DialogIcon = CheckCircle2;
+                  iconColor = "text-emerald-400";
+                } else if (activeDialog.iconType === "error") {
+                  DialogIcon = XCircle;
+                  iconColor = "text-red-400";
+                } else if (activeDialog.iconType === "warning") {
+                  DialogIcon = AlertTriangle;
+                  iconColor = "text-amber-400";
+                }
+                return (
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-500/10 ${iconColor}`}>
+                    <DialogIcon className="h-5 w-5" />
+                  </div>
+                );
+              })()}
+              <div>
+                <h3 className="text-base font-bold tracking-tight text-[var(--text-primary)]">
+                  {activeDialog.title}
+                </h3>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                  Academy System Notification
+                </span>
+              </div>
+            </div>
+
+            {/* Message Body */}
+            <div className="py-2.5">
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                {activeDialog.message}
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-6 pt-4 border-t border-[var(--border-color)] flex justify-end gap-3">
+              {activeDialog.type === "confirm" ? (
+                <>
+                  <button
+                    onClick={() => {
+                      if (activeDialog.onCancel) activeDialog.onCancel();
+                      closeDialog();
+                    }}
+                    className="px-4 py-2 border border-[var(--border-color)] bg-slate-500/5 hover:bg-slate-500/10 text-[var(--text-primary)] rounded-lg text-xs font-bold transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (activeDialog.onConfirm) activeDialog.onConfirm();
+                      closeDialog();
+                    }}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all"
+                  >
+                    Confirm Action
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    closeDialog();
+                  }}
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow transition-all"
+                >
+                  Dismiss Alert
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Gamification celebration modal (level-up / badge unlock) */}
+      <CelebrationOverlay />
+
       {/* Premium Glow Background Blobs */}
       <GlowBackground />
 
@@ -87,7 +251,7 @@ const AppContent: React.FC = () => {
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                 <strong className="text-[var(--text-primary)]">Sithanandham Radhakrishnan</strong>
                 <br />
-                <span className="text-indigo-500 font-semibold">Strategic Advisor &amp; Owner</span>
+                <span className="text-indigo-500 font-semibold">Strategic Advisor &amp; Product Owner</span>
                 <br />
                 vThink Global Technologies Pvt Ltd
                 <br />

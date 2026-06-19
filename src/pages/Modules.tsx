@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Lock, Unlock, ChevronDown, ChevronUp, CheckCircle2, Award, Zap, HelpCircle } from 'lucide-react';
+import { Lock, Unlock, ChevronDown, ChevronUp, CheckCircle2, Award, Zap, HelpCircle, Play, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { TrainingPresenter } from '../components/TrainingPresenter';
 
 export const Modules: React.FC = () => {
-  const { currentUser, systemConfig } = useApp();
+  const { currentUser, systemConfig, addToast, alertUser } = useApp();
   const [expandedModule, setExpandedModule] = useState<number | null>(1);
+  const [activeTrainingModuleId, setActiveTrainingModuleId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   // Helper values to check progress
@@ -19,67 +21,18 @@ export const Modules: React.FC = () => {
       duration: '4 hours',
       desc: 'Understand traditional engineering gaps, the orchestration paradigm shift, and the core competencies of an OrchestrAI Lead.',
       content: (
-        <div className="space-y-6 text-sm text-[var(--text-secondary)] leading-relaxed">
-          <div>
-            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">1.1 The Problem with Traditional Development</h4>
-            <p className="mb-3">
-              Traditional software delivery models are structurally flawed. They suffer from predictable delays, ballooning budgets, and severe key-person risk.
-            </p>
-            <div className="overflow-x-auto my-4 border border-[var(--border-color)] rounded-lg">
-              <table className="w-full text-left border-collapse text-xs">
-                <thead className="bg-slate-500/5 font-semibold text-[var(--text-primary)]">
-                  <tr className="border-b border-[var(--border-color)]">
-                    <th className="p-3">Pain Point</th>
-                    <th className="p-3">Traditional Reality</th>
-                    <th className="p-3">OrchestrAI Response</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--border-color)]">
-                  <tr>
-                    <td className="p-3 font-semibold">Cost</td>
-                    <td className="p-3">₹25–50 Lakhs for mid-complexity apps</td>
-                    <td className="p-3">70–80% savings on scope</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-semibold">Change Cost</td>
-                    <td className="p-3">Changes take 2-4 weeks to estimate</td>
-                    <td className="p-3">Implemented same day via prompt adjustments</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-semibold">Key Person Risk</td>
-                    <td className="p-3">Knowledge is stuck inside developers' heads</td>
-                    <td className="p-3">System intent lives in prompts; fully reproducible</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">1.2 The Mindset Shift</h4>
-            <p className="mb-2">
-              The primary blocker to becoming a Lead is mental. Solution architects and project managers must transition from "figuring it out myself" to "defining constraints and validating outcomes."
-            </p>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>Manage intent, not development sprints.</li>
-              <li>Crystallize validation rules before the AI begins construction.</li>
-              <li>Document constraints continuously alongside source files.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">1.3 A Day in the Life of a Lead</h4>
-            <p className="mb-2">
-              An OrchestrAI Lead operates on hourly loops rather than weeks-long sprint cycles:
-            </p>
-            <div className="bg-slate-500/5 p-3 rounded-lg font-mono text-[11px] space-y-1 border border-[var(--border-color)]">
-              <div>08:30 — Review yesterday's outputs: code commits, tests, and documentation.</div>
-              <div>09:00 — Sharp 20-minute intent discussion with the domain SME.</div>
-              <div>09:20 — Translate intent into precise, structured AI prompts.</div>
-              <div>10:30 — Validate generated modules against strict acceptance checklists.</div>
-              <div>11:30 — Live screen demonstration and instant iteration review with stakeholders.</div>
-            </div>
-          </div>
+        <div className="py-6 text-center max-w-xl mx-auto space-y-4">
+          <Award className="h-12 w-12 text-indigo-500 mx-auto animate-bounce" />
+          <h4 className="text-lg font-bold text-[var(--text-primary)]">Module 1: The OrchestrAI Mindset</h4>
+          <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+            Understand traditional engineering gaps, the orchestration paradigm shift, and the core competencies of an OrchestrAI Lead. This module includes an interactive web-deck with AI avatar voiceover and concludes with a Prompt Simulator lab.
+          </p>
+          <button
+            onClick={() => setActiveTrainingModuleId(1)}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-lg hover:scale-103 hover:brightness-110 transition-all"
+          >
+            <Play className="h-4 w-4" /> Launch Interactive Training (Web-Deck &amp; Lab)
+          </button>
         </div>
       )
     },
@@ -125,27 +78,50 @@ export const Modules: React.FC = () => {
             </p>
           </div>
 
-          <div className="border border-indigo-500/20 bg-indigo-500/5 rounded-lg p-4">
-            <h4 className="text-sm font-bold text-indigo-400 mb-1 flex items-center space-x-1.5">
-              <Zap className="h-4 w-4" />
-              <span>Module 2 Knowledge Gate Challenge</span>
-            </h4>
-            <p className="text-xs mb-3 text-[var(--text-secondary)]">
-              Before moving to Modules 3-8, you must pass the Module 2 quiz with a score of 80% or higher.
-            </p>
-            <button
-              onClick={() => {
-                if (!currentUser) {
-                  alert("Please log in first to record your quiz progress!");
-                } else {
-                  navigate('/quiz');
-                }
-              }}
-              className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-650 hover:to-purple-750 text-white rounded text-xs font-bold shadow transition-all flex items-center space-x-1"
-            >
-              <HelpCircle className="h-4 w-4" />
-              <span>Launch Quiz Challenge</span>
-            </button>
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="flex-grow border border-indigo-500/20 bg-indigo-500/5 rounded-lg p-4 flex flex-col justify-between">
+              <div>
+                <h4 className="text-sm font-bold text-indigo-400 mb-1 flex items-center space-x-1.5">
+                  <Play className="h-4 w-4" />
+                  <span>Module 2 Slide Training</span>
+                </h4>
+                <p className="text-xs text-[var(--text-secondary)] mb-3 leading-relaxed">
+                  Review the 6 Core Principles and understand the 6-stage lifecycle loop using the interactive web-deck.
+                </p>
+              </div>
+              <button
+                onClick={() => setActiveTrainingModuleId(2)}
+                className="w-full sm:w-auto self-start px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-bold shadow transition-all flex items-center justify-center space-x-1"
+              >
+                <Play className="h-3.5 w-3.5" />
+                <span>Launch Slide Deck</span>
+              </button>
+            </div>
+
+            <div className="flex-grow border border-indigo-500/20 bg-indigo-500/5 rounded-lg p-4 flex flex-col justify-between">
+              <div>
+                <h4 className="text-sm font-bold text-indigo-400 mb-1 flex items-center space-x-1.5">
+                  <Zap className="h-4 w-4" />
+                  <span>Module 2 Knowledge Gate Challenge</span>
+                </h4>
+                <p className="text-xs text-[var(--text-secondary)] mb-3 leading-relaxed">
+                  Before moving to Modules 3-8, you must pass the Module 2 quiz with a score of 80% or higher.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  if (!currentUser) {
+                    addToast("Please log in first to record your quiz progress!", "warning");
+                  } else {
+                    navigate('/quiz');
+                  }
+                }}
+                className="w-full sm:w-auto self-start px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded text-xs font-bold shadow transition-all flex items-center justify-center space-x-1"
+              >
+                <HelpCircle className="h-4 w-4" />
+                <span>Launch Quiz Challenge</span>
+              </button>
+            </div>
           </div>
         </div>
       )
@@ -284,22 +260,22 @@ export const Modules: React.FC = () => {
                       <div className="flex flex-col space-y-2.5">
                         {!currentUser ? (
                           <button
-                            onClick={() => alert("Please log in to start your candidate certification workflow!")}
-                            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-650 text-white rounded text-xs font-semibold shadow transition-all"
+                            onClick={() => addToast("Please log in to start your candidate certification workflow!", "warning")}
+                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all"
                           >
                             Sign In / Login
                           </button>
                         ) : !currentUser.quizPassed ? (
                           <button
                             onClick={() => navigate('/quiz')}
-                            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-650 text-white rounded text-xs font-semibold shadow transition-all"
+                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all"
                           >
                             Launch Knowledge Check Quiz
                           </button>
                         ) : currentUser.accountStatus === 'FREE_TIER' ? (
                           <button
                             onClick={() => navigate('/payment')}
-                            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-650 text-white rounded text-xs font-semibold shadow transition-all"
+                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all"
                           >
                             Proceed to Verify Intent (₹99)
                           </button>
@@ -313,12 +289,30 @@ export const Modules: React.FC = () => {
                   ) : (
                     /* Unlocked Module Content */
                     mod.content || (
-                      <div className="py-8 text-center text-[var(--text-secondary)]">
-                        <CheckCircle2 className="h-8 w-8 text-emerald-400 mx-auto mb-2" />
-                        <p className="text-xs font-bold text-[var(--text-primary)]">Unlocked Gated Module Content</p>
-                        <p className="text-[11px] max-w-sm mx-auto mt-1 leading-relaxed">
-                          This is an approved certified track module. Study slides and prepare deliverables for review.
+                      <div className="py-6 text-center max-w-xl mx-auto space-y-4">
+                        <CheckCircle2 className="h-10 w-10 text-emerald-400 mx-auto" />
+                        <h4 className="text-base font-bold text-[var(--text-primary)]">{mod.title}</h4>
+                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                          {mod.desc} Study slides, review the architecture briefing, and complete the requirements to prepare for certification.
                         </p>
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                          <button
+                            onClick={() => setActiveTrainingModuleId(mod.id)}
+                            className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-md hover:scale-102 hover:brightness-110 transition-all"
+                          >
+                            <Play className="h-3.5 w-3.5" /> Launch Interactive Training (Web-Deck &amp; Video)
+                          </button>
+                          {systemConfig.moduleMedia?.[mod.id]?.externalLink && (
+                            <a
+                              href={systemConfig.moduleMedia[mod.id].externalLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-6 py-2.5 border border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-400 rounded-xl text-xs font-extrabold shadow-sm transition-all"
+                            >
+                              <ExternalLink className="h-3.5 w-3.5" /> External Resource Link
+                            </a>
+                          )}
+                        </div>
                       </div>
                     )
                   )}
@@ -330,6 +324,21 @@ export const Modules: React.FC = () => {
         })}
       </div>
 
+      {activeTrainingModuleId !== null && (
+        <TrainingPresenter
+          moduleId={activeTrainingModuleId}
+          onClose={() => setActiveTrainingModuleId(null)}
+          onComplete={() => {
+            setActiveTrainingModuleId(null);
+            // Alert user of success using premium alert dialog
+            alertUser(
+              "Module Completed!",
+              "Congratulations! You have successfully completed Module 1! Keep pushing to unlock the rest of the syllabus.",
+              "success"
+            );
+          }}
+        />
+      )}
     </div>
   );
 };
