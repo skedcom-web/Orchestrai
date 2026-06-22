@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import type { UserProfile, Submission } from '../context/AppContext';
 import { 
-  Shield, Settings, Mail, List, FileText, CheckCircle, 
-  Trash2, Award, ExternalLink, Save, Database,
+  Shield, Settings, Mail, List, CheckCircle, 
+  Trash2, Award, ExternalLink, Save,
   BarChart2, TrendingUp, Users, Activity, Search, Filter, Clock,
   BookOpen, Upload, HelpCircle, Eye, EyeOff
 } from 'lucide-react';
@@ -32,8 +32,19 @@ export const Admin: React.FC = () => {
     clearAuditLogs
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'workflow' | 'notifications' | 'approvals' | 'submissions' | 'logs' | 'database' | 'reports' | 'audit' | 'modules'>('reports');
+  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'submissions' | 'logs' | 'reports' | 'audit' | 'modules'>('reports');
+  const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'gating' | 'verification' | 'emailjs' | 'maintenance'>('connection');
+  const [requireEmailVerifVal, setRequireEmailVerifVal] = useState(systemConfig.requireEmailVerification !== false);
+  const [requirePhoneVerifVal, setRequirePhoneVerifVal] = useState(!!systemConfig.requirePhoneVerification);
+  const [freeModulesLimitVal, setFreeModulesLimitVal] = useState(systemConfig.freeModulesLimit || 2);
+  const [approvalModeVal, setApprovalModeVal] = useState(systemConfig.approvalMode || 'MANUAL');
   const [dbUrlVal, setDbUrlVal] = useState(systemConfig.firebaseDatabaseUrl || '');
+  const [firebaseApiKeyVal, setFirebaseApiKeyVal] = useState(systemConfig.firebaseApiKey || '');
+  const [firebaseAuthDomainVal, setFirebaseAuthDomainVal] = useState(systemConfig.firebaseAuthDomain || '');
+  const [firebaseProjectIdVal, setFirebaseProjectIdVal] = useState(systemConfig.firebaseProjectId || '');
+  const [firebaseStorageBucketVal, setFirebaseStorageBucketVal] = useState(systemConfig.firebaseStorageBucket || '');
+  const [firebaseMessagingSenderIdVal, setFirebaseMessagingSenderIdVal] = useState(systemConfig.firebaseMessagingSenderId || '');
+  const [firebaseAppIdVal, setFirebaseAppIdVal] = useState(systemConfig.firebaseAppId || '');
   const [newPasswordVal, setNewPasswordVal] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [isTestingConn, setIsTestingConn] = useState(false);
@@ -93,7 +104,21 @@ export const Admin: React.FC = () => {
 
   useEffect(() => {
     setDbUrlVal(systemConfig.firebaseDatabaseUrl || '');
-  }, [systemConfig.firebaseDatabaseUrl]);
+    setFirebaseApiKeyVal(systemConfig.firebaseApiKey || '');
+    setFirebaseAuthDomainVal(systemConfig.firebaseAuthDomain || '');
+    setFirebaseProjectIdVal(systemConfig.firebaseProjectId || '');
+    setFirebaseStorageBucketVal(systemConfig.firebaseStorageBucket || '');
+    setFirebaseMessagingSenderIdVal(systemConfig.firebaseMessagingSenderId || '');
+    setFirebaseAppIdVal(systemConfig.firebaseAppId || '');
+  }, [
+    systemConfig.firebaseDatabaseUrl,
+    systemConfig.firebaseApiKey,
+    systemConfig.firebaseAuthDomain,
+    systemConfig.firebaseProjectId,
+    systemConfig.firebaseStorageBucket,
+    systemConfig.firebaseMessagingSenderId,
+    systemConfig.firebaseAppId
+  ]);
 
   // Notification configuration form states
   const [serviceId, setServiceId] = useState(systemConfig.emailjsServiceId || '');
@@ -107,11 +132,19 @@ export const Admin: React.FC = () => {
     setTemplateId(systemConfig.emailjsTemplateId || '');
     setPublicKey(systemConfig.emailjsPublicKey || '');
     setAdminEmail(systemConfig.adminEmail || '');
+    setRequireEmailVerifVal(systemConfig.requireEmailVerification !== false);
+    setRequirePhoneVerifVal(!!systemConfig.requirePhoneVerification);
+    setFreeModulesLimitVal(systemConfig.freeModulesLimit || 2);
+    setApprovalModeVal(systemConfig.approvalMode || 'MANUAL');
   }, [
     systemConfig.emailjsServiceId,
     systemConfig.emailjsTemplateId,
     systemConfig.emailjsPublicKey,
-    systemConfig.adminEmail
+    systemConfig.adminEmail,
+    systemConfig.requireEmailVerification,
+    systemConfig.requirePhoneVerification,
+    systemConfig.freeModulesLimit,
+    systemConfig.approvalMode
   ]);
 
   // Template customizer states
@@ -145,12 +178,20 @@ export const Admin: React.FC = () => {
   // Filter lists
   const pendingUsers = usersList.filter(u => u.accountStatus === 'PENDING_APPROVAL');
 
-  const handleSaveWorkflowConfig = (limit: number, mode: 'MANUAL' | 'AUTOMATED') => {
+  const handleSaveWorkflowConfig = () => {
     updateSystemConfig({
-      freeModulesLimit: limit,
-      approvalMode: mode
+      freeModulesLimit: freeModulesLimitVal,
+      approvalMode: approvalModeVal
     });
-    alert("Workflow config saved successfully!");
+    addToast("Workflow config saved successfully!", "success");
+  };
+
+  const handleSaveVerificationConfig = () => {
+    updateSystemConfig({
+      requireEmailVerification: requireEmailVerifVal,
+      requirePhoneVerification: requirePhoneVerifVal
+    });
+    addToast("Sign-Up Verification settings saved successfully!", "success");
   };
 
   const handleSaveCredentials = () => {
@@ -337,9 +378,18 @@ export const Admin: React.FC = () => {
       return;
     }
     updateSystemConfig({
-      firebaseDatabaseUrl: dbUrlVal.trim()
+      firebaseDatabaseUrl: dbUrlVal.trim(),
+      firebaseApiKey: firebaseApiKeyVal.trim(),
+      firebaseAuthDomain: firebaseAuthDomainVal.trim(),
+      firebaseProjectId: firebaseProjectIdVal.trim(),
+      firebaseStorageBucket: firebaseStorageBucketVal.trim(),
+      firebaseMessagingSenderId: firebaseMessagingSenderIdVal.trim(),
+      firebaseAppId: firebaseAppIdVal.trim()
     });
-    addToast("Database settings saved. Connecting...", "info");
+    addToast("Database settings saved. Re-initializing app...", "info");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   };
 
   const handleTestConnection = async () => {
@@ -596,18 +646,6 @@ export const Admin: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('workflow')}
-            className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'workflow'
-                ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
-            }`}
-          >
-            <Settings className="h-4 w-4" />
-            <span>Workflow Gating Settings</span>
-          </button>
-
-          <button
             onClick={() => setActiveTab('modules')}
             className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
               activeTab === 'modules'
@@ -617,18 +655,6 @@ export const Admin: React.FC = () => {
           >
             <BookOpen className="h-4 w-4" />
             <span>Manage Modules</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab('notifications')}
-            className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'notifications'
-                ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
-            }`}
-          >
-            <Mail className="h-4 w-4" />
-            <span>EmailJS Alert Config</span>
           </button>
 
           <button
@@ -694,15 +720,15 @@ export const Admin: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('database')}
+            onClick={() => setActiveTab('settings')}
             className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'database'
+              activeTab === 'settings'
                 ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
             }`}
           >
-            <Database className="h-4 w-4" />
-            <span>Database Settings</span>
+            <Settings className="h-4 w-4" />
+            <span>System Settings</span>
           </button>
         </div>
 
@@ -1356,234 +1382,575 @@ export const Admin: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 1: WORKFLOW GATING SETTINGS */}
-          {activeTab === 'workflow' && (
-            <div className="glass-card rounded-xl p-6 space-y-6">
-              <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3">
-                <Settings className="h-4 w-4 text-purple-500" />
-                <span>Workflow Gate Controls</span>
-              </h3>
-
-              <div className="space-y-6">
-                {/* Modules Limit Selector */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2">
-                    Free Modules Access Limit (Gate Boundary)
-                  </label>
-                  <select
-                    defaultValue={systemConfig.freeModulesLimit}
-                    id="freeLimitSelector"
-                    className="max-w-xs w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-sm focus:outline-none"
-                  >
-                    <option value="1">Unlock Module 1 (Gate at Module 2)</option>
-                    <option value="2">Unlock Modules 1 & 2 (Gate at Module 3)</option>
-                    <option value="3">Unlock Modules 1 - 3 (Gate at Module 4)</option>
-                    <option value="4">Unlock Modules 1 - 4 (Gate at Module 5)</option>
-                    <option value="5">Unlock Modules 1 - 5 (Gate at Module 6)</option>
-                  </select>
-                  <p className="text-[10px] text-[var(--text-secondary)] mt-1.5">
-                    * Modules beyond this index will show a lock symbol and require payment activation.
-                  </p>
-                </div>
-
-                {/* Workflow Mode selector */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2.5">
-                    Approval Mode Workflow
-                  </label>
-                  <div className="flex flex-col space-y-2 max-w-md">
-                    <label className="flex items-start space-x-3 p-3 rounded-lg border border-[var(--border-color)] bg-slate-500/5 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="approvalModeRadio"
-                        defaultChecked={systemConfig.approvalMode === 'MANUAL'}
-                        id="modeManual"
-                        className="mt-1 text-purple-500"
-                      />
-                      <div>
-                        <span className="text-xs font-bold block">Manual Review Mode</span>
-                        <span className="text-[10px] text-[var(--text-secondary)] mt-0.5 leading-relaxed block">
-                          When a student pays ₹99, their status becomes PENDING_APPROVAL. You must manually verify the transaction and click "Approve" here to unlock access.
-                        </span>
-                      </div>
-                    </label>
-
-                    <label className="flex items-start space-x-3 p-3 rounded-lg border border-[var(--border-color)] bg-slate-500/5 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="approvalModeRadio"
-                        defaultChecked={systemConfig.approvalMode === 'AUTOMATED'}
-                        id="modeAuto"
-                        className="mt-1 text-purple-500"
-                      />
-                      <div>
-                        <span className="text-xs font-bold block">Automated Instant Mode</span>
-                        <span className="text-[10px] text-[var(--text-secondary)] mt-0.5 leading-relaxed block">
-                          When a student pays ₹99, the client instantly upgrades their status to APPROVED. No manual intervention required.
-                        </span>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-[var(--border-color)]">
-                  <button
-                    onClick={() => {
-                      const limit = parseInt((document.getElementById('freeLimitSelector') as HTMLSelectElement).value);
-                      const isManual = (document.getElementById('modeManual') as HTMLInputElement).checked;
-                      handleSaveWorkflowConfig(limit, isManual ? 'MANUAL' : 'AUTOMATED');
-                    }}
-                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded text-xs font-bold flex items-center space-x-1 shadow cursor-pointer"
-                  >
-                    <Save className="h-4 w-4" />
-                    <span>Save Workflow Configurations</span>
-                  </button>
-                </div>
-
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2: EMAILJS CREDENTIALS & TEMPLATES */}
-          {activeTab === 'notifications' && (
-            <div className="space-y-6">
-              
-              {/* Credentials Configuration Card */}
-              <div className="glass-card rounded-xl p-6 space-y-6">
-                <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3">
-                  <Mail className="h-4 w-4 text-purple-500" />
-                  <span>EmailJS Integration settings</span>
+          {/* TAB 1: SYSTEM SETTINGS (CONSOLIDATED) */}
+          {activeTab === 'settings' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Header card */}
+              <div className="glass-card rounded-xl p-6 border border-[var(--border-color)]">
+                <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3 mb-4">
+                  <Settings className="h-5 w-5 text-purple-500" />
+                  <span>System Settings & Configuration</span>
                 </h3>
+                <p className="text-xs text-[var(--text-secondary)] mb-6">
+                  Manage database connectivity, custom workflow gating rules, authentication options, and EmailJS integrations from a unified workspace.
+                </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
-                      Service ID
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="service_xxxxx"
-                      value={serviceId}
-                      onChange={(e) => setServiceId(e.target.value)}
-                      className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
-                      Template ID
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="template_xxxxx"
-                      value={templateId}
-                      onChange={(e) => setTemplateId(e.target.value)}
-                      className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
-                      Public Key
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="your_public_key"
-                      value={publicKey}
-                      onChange={(e) => setPublicKey(e.target.value)}
-                      className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
-                    Notification Administrator Email
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="skedcom@gmail.com"
-                    value={adminEmail}
-                    onChange={(e) => setAdminEmail(e.target.value)}
-                    className="max-w-md w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
-                  />
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    onClick={handleSaveCredentials}
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold flex items-center space-x-1 cursor-pointer"
-                  >
-                    <Save className="h-4 w-4" />
-                    <span>Save API Config</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Template Editor Card */}
-              <div className="glass-card rounded-xl p-6 space-y-6">
-                <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3">
-                  <FileText className="h-4 w-4 text-purple-500" />
-                  <span>Customize Email templates</span>
-                </h3>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
-                      Select Email Template to Edit
-                    </label>
-                    <select
-                      value={selectedTemplateKey}
-                      onChange={(e) => handleTemplateChange(e.target.value)}
-                      className="max-w-xs w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
-                    >
-                      <option value="payment_pending">Admin Alert: Payment Pending Approval</option>
-                      <option value="account_approved">Student Alert: Account Access Approved</option>
-                      <option value="project_submitted">Admin Alert: Project Submission Received</option>
-                      <option value="certified">Student Alert: Certification Granted</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
-                      Subject Template
-                    </label>
-                    <input
-                      type="text"
-                      value={subjectTemplate}
-                      onChange={(e) => setSubjectTemplate(e.target.value)}
-                      className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
-                      Body Template
-                    </label>
-                    <textarea
-                      rows={6}
-                      value={bodyTemplate}
-                      onChange={(e) => setBodyTemplate(e.target.value)}
-                      className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs font-mono focus:outline-none leading-relaxed"
-                    />
-                  </div>
-
-                  <div className="bg-slate-500/5 p-3.5 rounded-lg border border-[var(--border-color)] text-left">
-                    <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mb-1">Supported Dynamic Placeholders</p>
-                    <p className="text-[10px] text-[var(--text-secondary)] font-mono leading-relaxed">{getTemplatePlaceholders()}</p>
-                  </div>
-
-                  <div className="pt-2">
+                {/* Sub-Tab navigation bar */}
+                <div className="flex flex-wrap gap-2 border-b border-[var(--border-color)] pb-4 mb-6">
+                  {(['connection', 'gating', 'verification', 'emailjs', 'maintenance'] as const).map((subTab) => (
                     <button
-                      onClick={handleSaveTemplate}
-                      className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold flex items-center space-x-1 cursor-pointer"
+                      key={subTab}
+                      type="button"
+                      onClick={() => setSettingsSubTab(subTab)}
+                      className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        settingsSubTab === subTab
+                          ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
+                          : 'border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+                      }`}
                     >
-                      <Save className="h-4 w-4" />
-                      <span>Save Template Layout</span>
+                      {subTab === 'connection' && '🔌 Database & Auth'}
+                      {subTab === 'gating' && '🚪 Access Gating'}
+                      {subTab === 'verification' && '🛡️ Sign-Up Verification'}
+                      {subTab === 'emailjs' && '📧 Email Config'}
+                      {subTab === 'maintenance' && '⚙️ Maintenance'}
                     </button>
-                  </div>
+                  ))}
                 </div>
 
-              </div>
+                {/* Sub-Tab content pane */}
+                <div className="space-y-6">
+                  
+                  {/* SUB-TAB: DATABASE & AUTH CONNECTION */}
+                  {settingsSubTab === 'connection' && (
+                    <div className="space-y-6 animate-in fade-in duration-200">
+                      {/* Firebase database configuration */}
+                      <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-4">
+                        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg">🔥</span>
+                            <h4 className="text-sm font-bold text-[var(--text-primary)]">Firebase Realtime Database</h4>
+                          </div>
+                          <div>
+                            {dbStatus === 'connected' ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-bold text-[10px] uppercase tracking-wider">
+                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Connected
+                              </span>
+                            ) : dbStatus === 'testing' || isTestingConn ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/25 text-blue-400 font-bold text-[10px] uppercase tracking-wider">
+                                <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                                Testing...
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/25 text-red-400 font-bold text-[10px] uppercase tracking-wider">
+                                <span className="h-1.5 w-1.5 rounded-full bg-red-400"></span>
+                                Disconnected
+                              </span>
+                            )}
+                          </div>
+                        </div>
 
+                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                          Paste your Firebase Database URL below. All task logs, leaves, and configurations sync to the cloud so your whole team shares the same data.
+                        </p>
+
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                              Firebase Database URL
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="https://your-project-default-rtdb.firebaseio.com/"
+                              value={dbUrlVal}
+                              onChange={(e) => setDbUrlVal(e.target.value)}
+                              className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                                Firebase API Key
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="AIzaSy..."
+                                value={firebaseApiKeyVal}
+                                onChange={(e) => setFirebaseApiKeyVal(e.target.value)}
+                                className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                                Firebase Auth Domain
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="your-project.firebaseapp.com"
+                                value={firebaseAuthDomainVal}
+                                onChange={(e) => setFirebaseAuthDomainVal(e.target.value)}
+                                className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                                Firebase Project ID
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="your-project-id"
+                                value={firebaseProjectIdVal}
+                                onChange={(e) => setFirebaseProjectIdVal(e.target.value)}
+                                className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                                Firebase Storage Bucket
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="your-project.firebasestorage.app"
+                                value={firebaseStorageBucketVal}
+                                onChange={(e) => setFirebaseStorageBucketVal(e.target.value)}
+                                className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                                Firebase Messaging Sender ID
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="180718842396"
+                                value={firebaseMessagingSenderIdVal}
+                                onChange={(e) => setFirebaseMessagingSenderIdVal(e.target.value)}
+                                className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              />
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                                Firebase App ID
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="1:180718842396:web:..."
+                                value={firebaseAppIdVal}
+                                onChange={(e) => setFirebaseAppIdVal(e.target.value)}
+                                className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2.5 pt-2">
+                          <button
+                            onClick={handleSaveAndConnect}
+                            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold transition-all cursor-pointer"
+                          >
+                            Save & Connect
+                          </button>
+                          <button
+                            onClick={handleTestConnection}
+                            disabled={isTestingConn}
+                            className="px-4 py-2 border border-[var(--border-color)] hover:bg-slate-500/5 text-[var(--text-primary)] rounded text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                          >
+                            Test Connection
+                          </button>
+                          <button
+                            onClick={handleDisconnect}
+                            className="px-4 py-2 border border-red-500/20 hover:border-red-500/40 text-red-400 hover:bg-red-500/10 rounded text-xs font-bold transition-all cursor-pointer"
+                          >
+                            Disconnect
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Admin Password card */}
+                      <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-4">
+                        <div className="flex items-center space-x-2 border-b border-[var(--border-color)] pb-3">
+                          <span className="text-lg">🔒</span>
+                          <h4 className="text-sm font-bold text-[var(--text-primary)]">Admin Password</h4>
+                        </div>
+
+                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                          Change the admin account password.
+                        </p>
+
+                        <div className="max-w-md space-y-3">
+                          <div className="space-y-1.5">
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                              New Admin Password
+                            </label>
+                            <div className="relative">
+                              <input
+                                type={showNewPassword ? "text" : "password"}
+                                placeholder="Enter new admin password"
+                                value={newPasswordVal}
+                                onChange={(e) => setNewPasswordVal(e.target.value)}
+                                className="w-full pl-3 pr-10 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowNewPassword(!showNewPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none"
+                              >
+                                {showNewPassword ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                          <button
+                            onClick={handleUpdatePassword}
+                            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold transition-all cursor-pointer"
+                          >
+                            Update Password
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SUB-TAB: ACCESS GATING */}
+                  {settingsSubTab === 'gating' && (
+                    <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-6 animate-in fade-in duration-200">
+                      <div className="border-b border-[var(--border-color)] pb-3">
+                        <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                          <span>🚪</span> Access Gating Settings
+                        </h4>
+                      </div>
+
+                      <div className="space-y-6">
+                        {/* Modules Limit Selector */}
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2">
+                            Free Modules Access Limit (Gate Boundary)
+                          </label>
+                          <select
+                            value={freeModulesLimitVal}
+                            onChange={(e) => setFreeModulesLimitVal(parseInt(e.target.value))}
+                            className="max-w-xs w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-sm focus:outline-none"
+                          >
+                            <option value="1">Unlock Module 1 (Gate at Module 2)</option>
+                            <option value="2">Unlock Modules 1 & 2 (Gate at Module 3)</option>
+                            <option value="3">Unlock Modules 1 - 3 (Gate at Module 4)</option>
+                            <option value="4">Unlock Modules 1 - 4 (Gate at Module 5)</option>
+                            <option value="5">Unlock Modules 1 - 5 (Gate at Module 6)</option>
+                          </select>
+                          <p className="text-[10px] text-[var(--text-secondary)] mt-1.5">
+                            * Modules beyond this index will show a lock symbol and require payment activation.
+                          </p>
+                        </div>
+
+                        {/* Workflow Mode selector */}
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2.5">
+                            Approval Mode Workflow
+                          </label>
+                          <div className="flex flex-col space-y-2 max-w-md">
+                            <label className="flex items-start space-x-3 p-3 rounded-lg border border-[var(--border-color)] bg-slate-500/5 cursor-pointer hover:bg-slate-500/10 transition-colors">
+                              <input
+                                type="radio"
+                                name="approvalModeRadio"
+                                checked={approvalModeVal === 'MANUAL'}
+                                onChange={() => setApprovalModeVal('MANUAL')}
+                                className="mt-1 text-purple-500 cursor-pointer"
+                              />
+                              <div>
+                                <span className="text-xs font-bold block">Manual Review Mode</span>
+                                <span className="text-[10px] text-[var(--text-secondary)] mt-0.5 leading-relaxed block">
+                                  When a student pays ₹99, their status becomes PENDING_APPROVAL. You must manually verify the transaction and click "Approve" here to unlock access.
+                                </span>
+                              </div>
+                            </label>
+
+                            <label className="flex items-start space-x-3 p-3 rounded-lg border border-[var(--border-color)] bg-slate-500/5 cursor-pointer hover:bg-slate-500/10 transition-colors">
+                              <input
+                                type="radio"
+                                name="approvalModeRadio"
+                                checked={approvalModeVal === 'AUTOMATED'}
+                                onChange={() => setApprovalModeVal('AUTOMATED')}
+                                className="mt-1 text-purple-500 cursor-pointer"
+                              />
+                              <div>
+                                <span className="text-xs font-bold block">Automated Instant Mode</span>
+                                <span className="text-[10px] text-[var(--text-secondary)] mt-0.5 leading-relaxed block">
+                                  When a student pays ₹99, the client instantly upgrades their status to APPROVED. No manual intervention required.
+                                </span>
+                              </div>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-[var(--border-color)]">
+                          <button
+                            onClick={handleSaveWorkflowConfig}
+                            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded text-xs font-bold flex items-center space-x-1 shadow cursor-pointer"
+                          >
+                            <Save className="h-4 w-4" />
+                            <span>Save Workflow Configurations</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SUB-TAB: TWO-LEVEL SIGN-UP VERIFICATION */}
+                  {settingsSubTab === 'verification' && (
+                    <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-6 animate-in fade-in duration-200">
+                      <div className="border-b border-[var(--border-color)] pb-3">
+                        <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                          <span>🛡️</span> Sign-Up Verification Controls
+                        </h4>
+                      </div>
+
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                        Configure the sign-up verification workflow. Bypass OTP steps to simplify user onboarding, or enable them to verify users using email and phone OTPs.
+                      </p>
+
+                      <div className="space-y-4 max-w-2xl">
+                        {/* Require Email Verification Checkbox */}
+                        <div>
+                          <label className="flex items-start space-x-3 p-4 rounded-lg border border-[var(--border-color)] bg-slate-500/5 cursor-pointer hover:bg-slate-500/10 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={requireEmailVerifVal}
+                              onChange={(e) => setRequireEmailVerifVal(e.target.checked)}
+                              className="mt-1 h-4 w-4 rounded text-purple-500 bg-transparent border-[var(--border-color)] focus:ring-purple-500/30 cursor-pointer"
+                            />
+                            <div>
+                              <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                                Require Email OTP Verification
+                                <Mail className="h-3.5 w-3.5 text-purple-400" />
+                              </span>
+                              <span className="text-[10px] text-[var(--text-secondary)] mt-0.5 leading-relaxed block">
+                                When enabled, users will receive a 6-digit OTP code to verify their email address before they can complete sign-up or log in. Email verification utilizes template parameters via EmailJS.
+                              </span>
+                            </div>
+                          </label>
+                        </div>
+
+                        {/* Require Phone Verification Checkbox */}
+                        <div>
+                          <label className="flex items-start space-x-3 p-4 rounded-lg border border-[var(--border-color)] bg-slate-500/5 cursor-pointer hover:bg-slate-500/10 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={requirePhoneVerifVal}
+                              onChange={(e) => setRequirePhoneVerifVal(e.target.checked)}
+                              className="mt-1 h-4 w-4 rounded text-purple-500 bg-transparent border-[var(--border-color)] focus:ring-purple-500/30 cursor-pointer"
+                            />
+                            <div>
+                              <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                                Require Mobile SMS OTP Verification
+                                <Shield className="h-3.5 w-3.5 text-purple-400" />
+                              </span>
+                              <span className="text-[10px] text-[var(--text-secondary)] mt-0.5 leading-relaxed block">
+                                When enabled, users will receive an SMS verification code on their mobile number to complete registration. 
+                                <strong> Note:</strong> Firebase Phone Auth is utilized. If your Firebase project is on the Spark plan, real SMS delivery might fail or throw billing errors in certain regions.
+                              </span>
+                            </div>
+                          </label>
+                        </div>
+
+                        {/* Informational Alerts */}
+                        {!requireEmailVerifVal && !requirePhoneVerifVal && (
+                          <div className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 p-3 rounded-lg leading-relaxed">
+                            ⚠️ <strong>Zero-Verification Mode Active:</strong> Users will be registered instantly with whatever credentials they provide, bypassing both Email and SMS verifications.
+                          </div>
+                        )}
+                        {requireEmailVerifVal && requirePhoneVerifVal && (
+                          <div className="text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 p-3 rounded-lg leading-relaxed">
+                            ℹ️ <strong>Sequential Two-Level Verification Active:</strong> New users must first verify their Email via OTP, followed by Mobile SMS OTP verification, before they can complete sign-up.
+                          </div>
+                        )}
+
+                        <div className="pt-4 border-t border-[var(--border-color)]">
+                          <button
+                            onClick={handleSaveVerificationConfig}
+                            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded text-xs font-bold flex items-center space-x-1 shadow cursor-pointer animate-in fade-in duration-100"
+                          >
+                            <Save className="h-4 w-4" />
+                            <span>Save Verification Settings</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SUB-TAB: EMAIL TEMPLATES & CONFIG */}
+                  {settingsSubTab === 'emailjs' && (
+                    <div className="space-y-6 animate-in fade-in duration-200">
+                      {/* Credentials Configuration Card */}
+                      <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-6">
+                        <div className="border-b border-[var(--border-color)] pb-3">
+                          <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                            <span>📧</span> EmailJS API Integration Settings
+                          </h4>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Service ID
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="service_xxxxx"
+                              value={serviceId}
+                              onChange={(e) => setServiceId(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Template ID
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="template_xxxxx"
+                              value={templateId}
+                              onChange={(e) => setTemplateId(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Public Key
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="your_public_key"
+                              value={publicKey}
+                              onChange={(e) => setPublicKey(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                            Notification Administrator Email
+                          </label>
+                          <input
+                            type="email"
+                            placeholder="skedcom@gmail.com"
+                            value={adminEmail}
+                            onChange={(e) => setAdminEmail(e.target.value)}
+                            className="max-w-md w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="pt-2">
+                          <button
+                            onClick={handleSaveCredentials}
+                            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold flex items-center space-x-1 cursor-pointer"
+                          >
+                            <Save className="h-4 w-4" />
+                            <span>Save API Config</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Template Editor Card */}
+                      <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-6">
+                        <div className="border-b border-[var(--border-color)] pb-3">
+                          <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                            <span>📄</span> Customize Notification Templates
+                          </h4>
+                        </div>
+
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Select Email Template to Edit
+                            </label>
+                            <select
+                              value={selectedTemplateKey}
+                              onChange={(e) => handleTemplateChange(e.target.value)}
+                              className="max-w-xs w-full px-3 py-2 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
+                            >
+                              <option value="payment_pending">Admin Alert: Payment Pending Approval</option>
+                              <option value="account_approved">Student Alert: Account Access Approved</option>
+                              <option value="project_submitted">Admin Alert: Project Submission Received</option>
+                              <option value="certified">Student Alert: Certification Granted</option>
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Subject Template
+                            </label>
+                            <input
+                              type="text"
+                              value={subjectTemplate}
+                              onChange={(e) => setSubjectTemplate(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Body Template
+                            </label>
+                            <textarea
+                              rows={6}
+                              value={bodyTemplate}
+                              onChange={(e) => setBodyTemplate(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs font-mono focus:outline-none leading-relaxed"
+                            />
+                          </div>
+
+                          <div className="bg-slate-500/5 p-3.5 rounded-lg border border-[var(--border-color)] text-left">
+                            <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mb-1">Supported Dynamic Placeholders</p>
+                            <p className="text-[10px] text-[var(--text-secondary)] font-mono leading-relaxed">{getTemplatePlaceholders()}</p>
+                          </div>
+
+                          <div className="pt-2">
+                            <button
+                              onClick={handleSaveTemplate}
+                              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold flex items-center space-x-1 cursor-pointer"
+                            >
+                              <Save className="h-4 w-4" />
+                              <span>Save Template Layout</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SUB-TAB: SYSTEM MAINTENANCE */}
+                  {settingsSubTab === 'maintenance' && (
+                    <div className="border border-red-500/20 rounded-xl p-5 bg-red-500/5 space-y-4 animate-in fade-in duration-200">
+                      <div className="flex items-center space-x-2 border-b border-red-500/20 pb-3">
+                        <span className="text-lg">⚠️</span>
+                        <h4 className="text-sm font-bold text-red-400">Danger Zone: Reset Database</h4>
+                      </div>
+
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                        Use this to wipe all active test data and start fresh for production. This will permanently clear all tasks, employees, user accounts (except admin), leaves, and historic logs from both your browser and your connected Firebase database.
+                      </p>
+
+                      <button
+                        onClick={handleWipeAndReset}
+                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-bold transition-all cursor-pointer animate-pulse hover:animate-none"
+                      >
+                        Wipe & Reset Database
+                      </button>
+                    </div>
+                  )}
+
+                </div>
+              </div>
             </div>
           )}
 
@@ -1775,7 +2142,14 @@ export const Admin: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
-                      {notificationLogs.map(log => (
+                      {[...notificationLogs]
+                        .sort((a, b) => {
+                          const timeA = a.createdTime || 0;
+                          const timeB = b.createdTime || 0;
+                          if (timeA !== timeB) return timeB - timeA;
+                          return (b.timestamp || '').localeCompare(a.timestamp || '');
+                        })
+                        .map(log => (
                         <tr key={log.id} className="hover:bg-slate-500/5">
                           <td className="p-3 font-semibold whitespace-nowrap">{log.timestamp}</td>
                           <td className="p-3 font-bold text-[var(--text-primary)]">{log.type}</td>
@@ -1799,149 +2173,7 @@ export const Admin: React.FC = () => {
             </div>
           )}
 
-          {activeTab === 'database' && (
-            <div className="glass-card rounded-xl p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
-              <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3">
-                <Database className="h-4 w-4 text-purple-500" />
-                <span>Database Settings</span>
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)]">
-                Connect to Firebase Realtime Database for team-wide sync.
-              </p>
 
-              {/* CARD 1: FIREBASE REALTIME DATABASE */}
-              <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-4">
-                <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg">🔥</span>
-                    <h4 className="text-sm font-bold text-[var(--text-primary)]">Firebase Realtime Database</h4>
-                  </div>
-                  <div>
-                    {dbStatus === 'connected' ? (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-bold text-[10px] uppercase tracking-wider">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Connected
-                      </span>
-                    ) : dbStatus === 'testing' || isTestingConn ? (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/25 text-blue-400 font-bold text-[10px] uppercase tracking-wider">
-                        <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse"></span>
-                        Testing...
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/25 text-red-400 font-bold text-[10px] uppercase tracking-wider">
-                        <span className="h-1.5 w-1.5 rounded-full bg-red-400"></span>
-                        Disconnected
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                  Paste your Firebase Database URL below. All task logs, leaves, and configurations sync to the cloud so your whole team shares the same data.
-                </p>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
-                    Firebase Database URL
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="https://your-project-default-rtdb.firebaseio.com/"
-                    value={dbUrlVal}
-                    onChange={(e) => setDbUrlVal(e.target.value)}
-                    className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
-                  />
-                </div>
-
-                <div className="flex flex-wrap gap-2.5 pt-2">
-                  <button
-                    onClick={handleSaveAndConnect}
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold transition-all cursor-pointer"
-                  >
-                    Save & Connect
-                  </button>
-                  <button
-                    onClick={handleTestConnection}
-                    disabled={isTestingConn}
-                    className="px-4 py-2 border border-[var(--border-color)] hover:bg-slate-500/5 text-[var(--text-primary)] rounded text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
-                  >
-                    Test Connection
-                  </button>
-                  <button
-                    onClick={handleDisconnect}
-                    className="px-4 py-2 border border-red-500/20 hover:border-red-500/40 text-red-400 hover:bg-red-500/10 rounded text-xs font-bold transition-all cursor-pointer"
-                  >
-                    Disconnect
-                  </button>
-                </div>
-              </div>
-
-              {/* CARD 2: ADMIN PASSWORD */}
-              <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-4">
-                <div className="flex items-center space-x-2 border-b border-[var(--border-color)] pb-3">
-                  <span className="text-lg">🔒</span>
-                  <h4 className="text-sm font-bold text-[var(--text-primary)]">Admin Password</h4>
-                </div>
-
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                  Change the admin account password.
-                </p>
-
-                <div className="max-w-md space-y-3">
-                  <div className="space-y-1.5">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
-                      New Admin Password
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={showNewPassword ? "text" : "password"}
-                        placeholder="Enter new admin password"
-                        value={newPasswordVal}
-                        onChange={(e) => setNewPasswordVal(e.target.value)}
-                        className="w-full pl-3 pr-10 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none"
-                      >
-                        {showNewPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleUpdatePassword}
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold transition-all cursor-pointer"
-                  >
-                    Update Password
-                  </button>
-                </div>
-              </div>
-
-              {/* CARD 3: DANGER ZONE */}
-              <div className="border border-red-500/20 rounded-xl p-5 bg-red-500/5 space-y-4">
-                <div className="flex items-center space-x-2 border-b border-red-500/20 pb-3">
-                  <span className="text-lg">⚠️</span>
-                  <h4 className="text-sm font-bold text-red-400">Danger Zone: Reset Database</h4>
-                </div>
-
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                  Use this to wipe all active test data and start fresh for production. This will permanently clear all tasks, employees, user accounts (except admin), leaves, and historic logs from both your browser and your connected Firebase database.
-                </p>
-
-                <button
-                  onClick={handleWipeAndReset}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-bold transition-all cursor-pointer animate-pulse hover:animate-none"
-                >
-                  Wipe & Reset Database
-                </button>
-              </div>
-            </div>
-          )}
 
         </div>
 

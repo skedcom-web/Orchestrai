@@ -159,6 +159,8 @@ export interface SystemConfig {
   firebaseAppId?: string;
   firebaseDatabaseUrl?: string;
   adminPassword?: string;
+  requireEmailVerification?: boolean;
+  requirePhoneVerification?: boolean;
   templates: {
     [key: string]: { subject: string; body: string };
   };
@@ -186,6 +188,7 @@ export interface SystemConfig {
 export interface NotificationLog {
   id: string;
   timestamp: string;
+  createdTime?: number;
   type: string;
   recipient: string;
   subject: string;
@@ -317,6 +320,8 @@ const DEFAULT_CONFIG: SystemConfig = {
   firebaseAppId: '1:180718842396:web:55fc55d5e2668389d065d9',
   firebaseDatabaseUrl: 'https://vthinkorchestrai-auth-default-rtdb.asia-southeast1.firebasedatabase.app',
   adminPassword: '',
+  requireEmailVerification: true,
+  requirePhoneVerification: false,
   templates: {
     payment_pending: {
       subject: "[OrchestrAI Alert] Payment Pending Manual Approval",
@@ -482,8 +487,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (snapshot.exists()) {
           const val = snapshot.val() || {};
           const logs = Object.values(val) as NotificationLog[];
-          setNotificationLogs(logs);
-          localStorage.setItem('orchestrai_db_logs', JSON.stringify(logs));
+          const sortedLogs = logs.sort((a, b) => {
+            const timeA = a.createdTime || 0;
+            const timeB = b.createdTime || 0;
+            if (timeA !== timeB) return timeB - timeA;
+            return (b.timestamp || '').localeCompare(a.timestamp || '');
+          });
+          setNotificationLogs(sortedLogs);
+          localStorage.setItem('orchestrai_db_logs', JSON.stringify(sortedLogs));
         }
       }).catch(e => console.error("Periodic logs sync failed:", e));
 
@@ -494,14 +505,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const localConfig = localConfigStr ? JSON.parse(localConfigStr) : {};
           const mergedConfig = {
             ...config,
-            firebaseDatabaseUrl: localConfig.firebaseDatabaseUrl !== undefined ? localConfig.firebaseDatabaseUrl : (DEFAULT_CONFIG.firebaseDatabaseUrl || ''),
-            firebaseApiKey: localConfig.firebaseApiKey !== undefined ? localConfig.firebaseApiKey : (DEFAULT_CONFIG.firebaseApiKey || ''),
-            firebaseAuthDomain: localConfig.firebaseAuthDomain !== undefined ? localConfig.firebaseAuthDomain : (DEFAULT_CONFIG.firebaseAuthDomain || ''),
-            firebaseProjectId: localConfig.firebaseProjectId !== undefined ? localConfig.firebaseProjectId : (DEFAULT_CONFIG.firebaseProjectId || ''),
-            firebaseStorageBucket: localConfig.firebaseStorageBucket !== undefined ? localConfig.firebaseStorageBucket : (DEFAULT_CONFIG.firebaseStorageBucket || ''),
-            firebaseMessagingSenderId: localConfig.firebaseMessagingSenderId !== undefined ? localConfig.firebaseMessagingSenderId : (DEFAULT_CONFIG.firebaseMessagingSenderId || ''),
-            firebaseAppId: localConfig.firebaseAppId !== undefined ? localConfig.firebaseAppId : (DEFAULT_CONFIG.firebaseAppId || ''),
-            adminPassword: localConfig.adminPassword !== undefined ? localConfig.adminPassword : ''
+            firebaseDatabaseUrl: config.firebaseDatabaseUrl || localConfig.firebaseDatabaseUrl || DEFAULT_CONFIG.firebaseDatabaseUrl || '',
+            firebaseApiKey: config.firebaseApiKey || localConfig.firebaseApiKey || DEFAULT_CONFIG.firebaseApiKey || '',
+            firebaseAuthDomain: config.firebaseAuthDomain || localConfig.firebaseAuthDomain || DEFAULT_CONFIG.firebaseAuthDomain || '',
+            firebaseProjectId: config.firebaseProjectId || localConfig.firebaseProjectId || DEFAULT_CONFIG.firebaseProjectId || '',
+            firebaseStorageBucket: config.firebaseStorageBucket || localConfig.firebaseStorageBucket || DEFAULT_CONFIG.firebaseStorageBucket || '',
+            firebaseMessagingSenderId: config.firebaseMessagingSenderId || localConfig.firebaseMessagingSenderId || DEFAULT_CONFIG.firebaseMessagingSenderId || '',
+            firebaseAppId: config.firebaseAppId || localConfig.firebaseAppId || DEFAULT_CONFIG.firebaseAppId || '',
+            adminPassword: localConfig.adminPassword !== undefined ? localConfig.adminPassword : '',
+            requireEmailVerification: config.requireEmailVerification !== undefined ? config.requireEmailVerification : (localConfig.requireEmailVerification !== undefined ? localConfig.requireEmailVerification : true),
+            requirePhoneVerification: config.requirePhoneVerification !== undefined ? config.requirePhoneVerification : (localConfig.requirePhoneVerification !== undefined ? localConfig.requirePhoneVerification : false)
           };
           setSystemConfig(mergedConfig);
           localStorage.setItem('orchestrai_db_config', JSON.stringify(mergedConfig));
@@ -580,8 +593,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       unsubscribeLogs = onValue(ref(db, 'logs'), (snapshot) => {
         const val = snapshot.val() || {};
         const logs = Object.values(val) as NotificationLog[];
-        setNotificationLogs(logs);
-        localStorage.setItem('orchestrai_db_logs', JSON.stringify(logs));
+        const sortedLogs = logs.sort((a, b) => {
+          const timeA = a.createdTime || 0;
+          const timeB = b.createdTime || 0;
+          if (timeA !== timeB) return timeB - timeA;
+          return (b.timestamp || '').localeCompare(a.timestamp || '');
+        });
+        setNotificationLogs(sortedLogs);
+        localStorage.setItem('orchestrai_db_logs', JSON.stringify(sortedLogs));
       });
 
       // Listen to /audit_logs
@@ -612,16 +631,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           
           const mergedConfig = {
             ...config,
-            // Enforce client-side credentials from localStorage as the absolute source of truth.
-            // Fall back to DEFAULT_CONFIG credentials so that blank local storage instances connect automatically.
-            firebaseDatabaseUrl: localConfig.firebaseDatabaseUrl !== undefined ? localConfig.firebaseDatabaseUrl : (DEFAULT_CONFIG.firebaseDatabaseUrl || ''),
-            firebaseApiKey: localConfig.firebaseApiKey !== undefined ? localConfig.firebaseApiKey : (DEFAULT_CONFIG.firebaseApiKey || ''),
-            firebaseAuthDomain: localConfig.firebaseAuthDomain !== undefined ? localConfig.firebaseAuthDomain : (DEFAULT_CONFIG.firebaseAuthDomain || ''),
-            firebaseProjectId: localConfig.firebaseProjectId !== undefined ? localConfig.firebaseProjectId : (DEFAULT_CONFIG.firebaseProjectId || ''),
-            firebaseStorageBucket: localConfig.firebaseStorageBucket !== undefined ? localConfig.firebaseStorageBucket : (DEFAULT_CONFIG.firebaseStorageBucket || ''),
-            firebaseMessagingSenderId: localConfig.firebaseMessagingSenderId !== undefined ? localConfig.firebaseMessagingSenderId : (DEFAULT_CONFIG.firebaseMessagingSenderId || ''),
-            firebaseAppId: localConfig.firebaseAppId !== undefined ? localConfig.firebaseAppId : (DEFAULT_CONFIG.firebaseAppId || ''),
-            adminPassword: localConfig.adminPassword !== undefined ? localConfig.adminPassword : ''
+            firebaseDatabaseUrl: config.firebaseDatabaseUrl || localConfig.firebaseDatabaseUrl || DEFAULT_CONFIG.firebaseDatabaseUrl || '',
+            firebaseApiKey: config.firebaseApiKey || localConfig.firebaseApiKey || DEFAULT_CONFIG.firebaseApiKey || '',
+            firebaseAuthDomain: config.firebaseAuthDomain || localConfig.firebaseAuthDomain || DEFAULT_CONFIG.firebaseAuthDomain || '',
+            firebaseProjectId: config.firebaseProjectId || localConfig.firebaseProjectId || DEFAULT_CONFIG.firebaseProjectId || '',
+            firebaseStorageBucket: config.firebaseStorageBucket || localConfig.firebaseStorageBucket || DEFAULT_CONFIG.firebaseStorageBucket || '',
+            firebaseMessagingSenderId: config.firebaseMessagingSenderId || localConfig.firebaseMessagingSenderId || DEFAULT_CONFIG.firebaseMessagingSenderId || '',
+            firebaseAppId: config.firebaseAppId || localConfig.firebaseAppId || DEFAULT_CONFIG.firebaseAppId || '',
+            adminPassword: localConfig.adminPassword !== undefined ? localConfig.adminPassword : '',
+            requireEmailVerification: config.requireEmailVerification !== undefined ? config.requireEmailVerification : (localConfig.requireEmailVerification !== undefined ? localConfig.requireEmailVerification : true),
+            requirePhoneVerification: config.requirePhoneVerification !== undefined ? config.requirePhoneVerification : (localConfig.requirePhoneVerification !== undefined ? localConfig.requirePhoneVerification : false)
           };
 
           setSystemConfig(mergedConfig);
@@ -629,18 +648,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } else {
           // Seed initial config to RTDB if it doesn't exist yet (preserving current local settings, but omitting local credentials)
           const {
-            firebaseDatabaseUrl,
             adminPassword,
-            firebaseApiKey,
-            firebaseAuthDomain,
-            firebaseProjectId,
-            firebaseStorageBucket,
-            firebaseMessagingSenderId,
-            firebaseAppId,
             ...dbConfigToSeed
           } = localConfig;
 
-          // Only seed non-credential settings to the cloud config node
+          // Seed the database configuration node
           set(ref(db, 'config'), dbConfigToSeed).catch((err) => {
             console.error("[AppContext] Failed to seed database configuration node:", err);
           });
@@ -829,7 +841,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (unsubscribeConfig) unsubscribeConfig();
       if (unsubscribeConnected) unsubscribeConnected();
     };
-  }, [systemConfig.firebaseDatabaseUrl]);
+  }, [
+    systemConfig.firebaseDatabaseUrl,
+    systemConfig.firebaseApiKey,
+    systemConfig.firebaseAuthDomain,
+    systemConfig.firebaseProjectId,
+    systemConfig.firebaseStorageBucket,
+    systemConfig.firebaseMessagingSenderId,
+    systemConfig.firebaseAppId
+  ]);
 
   // Update DB list utility
   const saveUsersList = (newUsers: UserProfile[]) => {
@@ -1264,14 +1284,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       // This is a major security benefit and ensures client connection configurations do not get overwritten
       // by the server or trigger circular sync/listener loops.
       const {
-        firebaseDatabaseUrl,
         adminPassword,
-        firebaseApiKey,
-        firebaseAuthDomain,
-        firebaseProjectId,
-        firebaseStorageBucket,
-        firebaseMessagingSenderId,
-        firebaseAppId,
         ...dbConfig
       } = updated;
 
@@ -1282,13 +1295,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // 6. Notification logs logging
-  const addNotificationLog = (log: Omit<NotificationLog, 'id' | 'timestamp'>) => {
+  const addNotificationLog = (log: Omit<NotificationLog, 'id' | 'timestamp' | 'createdTime'>) => {
     const db = getFirebaseDb();
     const id = Math.random().toString(36).substring(2, 11);
     
     const newLog: NotificationLog = {
       ...log,
       id,
+      createdTime: Date.now(),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ', ' + new Date().toLocaleDateString([], { day: '2-digit', month: 'short' })
     };
 

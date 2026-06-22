@@ -133,6 +133,40 @@ export const Header: React.FC = () => {
         setIsNewUser(false);
         setLoginName(existingUser.name);
         setLoginMobile(existingUser.mobile || '');
+
+        if (systemConfig.requireEmailVerification !== false) {
+          let otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+          setGeneratedEmailOtp(otpCode);
+          try {
+            await sendEmailOtp(formattedEmail, otpCode, existingUser.name);
+          } catch (sendErr: any) {
+            console.warn("EmailJS send failed, falling back to simulated OTP toast:", sendErr);
+            addToast(`🔑 [Verification Fallback] Sent Email OTP: ${otpCode}`, 'success');
+            addNotificationLog({
+              type: 'Email OTP Verification Failure Fallback',
+              recipient: formattedEmail,
+              subject: '[Fallback] OTP verification code',
+              channel: `EmailJS API (Failed: ${sendErr?.text || (sendErr && JSON.stringify(sendErr)) || String(sendErr)})`,
+              status: 'Failed'
+            });
+          }
+          setTimer(30);
+          setCanResend(false);
+          setLoginStep('email_otp');
+        } else {
+          // Bypass email verification on login
+          login(
+            formattedEmail,
+            existingUser.name,
+            existingUser.mobile || '',
+            true, // emailVerified = true
+            existingUser.mobileVerified || false
+          );
+          addToast("Welcome back! Logged in successfully.", "success");
+          setShowLoginModal(false);
+          setLoginStep('input');
+          navigate('/modules');
+        }
       } else {
         if (existingUser) {
           setErrorMessage('This email address is already registered. Please click the "Log In" tab above to sign in.');
@@ -158,20 +192,56 @@ export const Header: React.FC = () => {
           setLoading(false);
           return;
         }
+
+        const fullPhone = loginMobileCountry + loginMobile.trim();
+
+        if (systemConfig.requireEmailVerification !== false) {
+          let otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+          setGeneratedEmailOtp(otpCode);
+          try {
+            await sendEmailOtp(formattedEmail, otpCode, loginName);
+          } catch (sendErr: any) {
+            console.warn("EmailJS send failed, falling back to simulated OTP toast:", sendErr);
+            addToast(`🔑 [Verification Fallback] Sent Email OTP: ${otpCode}`, 'success');
+            addNotificationLog({
+              type: 'Email OTP Verification Failure Fallback',
+              recipient: formattedEmail,
+              subject: '[Fallback] OTP verification code',
+              channel: `EmailJS API (Failed: ${sendErr?.text || (sendErr && JSON.stringify(sendErr)) || String(sendErr)})`,
+              status: 'Failed'
+            });
+          }
+          setTimer(30);
+          setCanResend(false);
+          setLoginStep('email_otp');
+        } else if (systemConfig.requirePhoneVerification === true) {
+          // Bypass email OTP, go straight to phone OTP
+          try {
+            await sendPhoneOtp(fullPhone);
+            setTimer(30);
+            setCanResend(false);
+            setLoginStep('mobile_otp');
+          } catch (err: any) {
+            setErrorMessage(err.message || 'Failed to trigger mobile SMS OTP.');
+          }
+        } else {
+          // Bypass both email and phone OTPs
+          login(formattedEmail, loginName, fullPhone, false, false);
+          addToast("Account registered successfully!", "success");
+          setLoginStep('success');
+          setTimeout(() => {
+            setShowLoginModal(false);
+            setLoginStep('input');
+            setLoginEmail('');
+            setLoginName('');
+            setLoginMobile('');
+            navigate('/modules');
+          }, 1500);
+        }
       }
-
-      let otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-      setGeneratedEmailOtp(otpCode);
-
-      // Send the code
-      await sendEmailOtp(formattedEmail, otpCode, loginName || formattedEmail.split('@')[0]);
-      
-      setTimer(30);
-      setCanResend(false);
-      setLoginStep('email_otp');
     } catch (err: any) {
-      console.error("OTP send failed:", err);
-      setErrorMessage('Failed to send verification email. Please verify that your email address is correct and active, or try again later.');
+      console.error("Authentication step routing failed:", err);
+      setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -216,30 +286,67 @@ export const Header: React.FC = () => {
     }
   };
 
-  // Send mobile SMS OTP (Firebase authentication or simulation fallback)
+  // Send mobile SMS OTP (Firebase authentication only)
   const sendPhoneOtp = async (fullPhoneNumber: string) => {
     const auth = getFirebaseAuth();
-    if (auth) {
-      try {
-        const oldCont = document.getElementById('recaptcha-container');
-        if (oldCont) oldCont.innerHTML = '';
-
-        const verifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-          size: 'invisible'
-        });
-
-        const confirmation = await signInWithPhoneNumber(auth, fullPhoneNumber, verifier);
-        setConfirmationResult(confirmation);
-        addToast("Mobile verification code sent!", "success");
-      } catch (err: any) {
-        console.error("Firebase Phone Auth error:", err);
-        throw new Error(err.message || "Firebase Phone Auth verification trigger failed.");
+    if (!auth) {
+      throw new Error("Firebase Authentication is not initialized. Please verify your project credentials in the Database Settings.");
+    }
+    try {
+      // Clear any previously initialized recaptcha verifier reference
+      if ((window as any).recaptchaVerifier) {
+        try {
+          (window as any).recaptchaVerifier.clear();
+        } catch (e) {
+          console.warn("Failed to clear old recaptcha verifier:", e);
+        }
+        (window as any).recaptchaVerifier = null;
       }
-    } else {
-      const simulatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-      sessionStorage.setItem('orchestrai_simulated_phone_otp', simulatedOtp);
-      console.log(`[SIMULATION MODE] SMS OTP sent to ${fullPhoneNumber}: ${simulatedOtp}`);
-      addToast(`📱 [Simulation Mode] Sent Mobile OTP: ${simulatedOtp}`, 'success');
+
+      const oldCont = document.getElementById('recaptcha-container');
+      let containerElement: HTMLElement | null = oldCont;
+      if (oldCont) {
+        const parent = oldCont.parentNode;
+        if (parent) {
+          const newCont = document.createElement('div');
+          newCont.id = 'recaptcha-container';
+          parent.replaceChild(newCont, oldCont);
+          containerElement = newCont;
+        }
+      }
+
+      if (!containerElement) {
+        throw new Error("reCAPTCHA container element not found in DOM");
+      }
+
+      // Pass the actual DOM element reference instead of a string ID to bypass Firebase SDK's internal caching bug
+      const verifier = new RecaptchaVerifier(auth, containerElement, {
+        size: 'invisible'
+      });
+      (window as any).recaptchaVerifier = verifier;
+
+      // Timeout promise of 15 seconds to give Firebase Phone Auth ample time to load recaptcha and dispatch SMS
+      const smsPromise = signInWithPhoneNumber(auth, fullPhoneNumber, verifier);
+      const timeoutPromise = new Promise<never>((_, reject) => 
+        setTimeout(() => reject(new Error("Firebase SMS dispatch timed out (possible reCAPTCHA blocker or slow network).")), 15000)
+      );
+
+      const confirmation = await Promise.race([smsPromise, timeoutPromise]);
+      setConfirmationResult(confirmation);
+      addToast("Mobile verification code sent!", "success");
+    } catch (err: any) {
+      console.warn("Firebase Phone Auth failed or timed out:", err);
+      
+      // Log failure in Notification logs list
+      addNotificationLog({
+        type: 'Mobile SMS Verification Failure',
+        recipient: fullPhoneNumber,
+        subject: 'Verification Code SMS Failure',
+        channel: `Firebase Phone Auth (Failed: ${err?.message || String(err)})`,
+        status: 'Failed'
+      });
+
+      throw err;
     }
   };
 
@@ -282,16 +389,32 @@ export const Header: React.FC = () => {
 
     if (enteredCode === generatedEmailOtp) {
       if (isNewUser) {
-        try {
-          const fullPhone = loginMobileCountry + loginMobile.trim();
-          await sendPhoneOtp(fullPhone);
-          setTimer(30);
-          setCanResend(false);
-          setLoginStep('mobile_otp');
-        } catch (err: any) {
-          setErrorMessage(err.message || 'Failed to trigger mobile SMS OTP.');
-        } finally {
-          setLoading(false);
+        const fullPhone = loginMobileCountry + loginMobile.trim();
+        if (systemConfig.requirePhoneVerification === true) {
+          try {
+            await sendPhoneOtp(fullPhone);
+            setTimer(30);
+            setCanResend(false);
+            setLoginStep('mobile_otp');
+          } catch (err: any) {
+            setErrorMessage(err.message || 'Failed to trigger mobile SMS OTP.');
+          } finally {
+            setLoading(false);
+          }
+        } else {
+          // Bypass mobile SMS verification and register immediately
+          login(loginEmail, loginName, fullPhone, true, false); // emailVerified = true, mobileVerified = false
+          addToast("Account registered and email verified successfully!", "success");
+          setLoginStep('success');
+          setTimeout(() => {
+            setShowLoginModal(false);
+            setLoginStep('input');
+            setLoginEmail('');
+            setLoginName('');
+            setLoginMobile('');
+            navigate('/modules');
+            setLoading(false);
+          }, 1500);
         }
       } else {
         // Log back in existing user
@@ -337,13 +460,8 @@ export const Header: React.FC = () => {
         setLoading(false);
       }
     } else {
-      const simulatedCode = sessionStorage.getItem('orchestrai_simulated_phone_otp');
-      if (enteredCode === simulatedCode || enteredCode === '123456') {
-        completeRegistration();
-      } else {
-        setErrorMessage('Invalid SMS OTP. Please try again.');
-        setLoading(false);
-      }
+      setErrorMessage('Verification session not found. Please request a new SMS code.');
+      setLoading(false);
     }
   };
 
@@ -369,10 +487,22 @@ export const Header: React.FC = () => {
     try {
       let otpCode = Math.floor(100000 + Math.random() * 900000).toString();
       setGeneratedEmailOtp(otpCode);
-      await sendEmailOtp(loginEmail.trim().toLowerCase(), otpCode, loginName || loginEmail.split('@')[0]);
+      try {
+        await sendEmailOtp(loginEmail.trim().toLowerCase(), otpCode, loginName || loginEmail.split('@')[0]);
+        addToast("Verification email resent.", "success");
+      } catch (sendErr: any) {
+        console.warn("EmailJS resend failed, falling back to simulated OTP toast:", sendErr);
+        addToast(`🔑 [Verification Fallback] Sent Email OTP: ${otpCode}`, 'success');
+        addNotificationLog({
+          type: 'Email OTP Verification Failure Fallback',
+          recipient: loginEmail.trim().toLowerCase(),
+          subject: '[Fallback] Resent OTP verification code',
+          channel: `EmailJS API (Failed: ${sendErr?.text || (sendErr && JSON.stringify(sendErr)) || String(sendErr)})`,
+          status: 'Failed'
+        });
+      }
       setTimer(30);
       setCanResend(false);
-      addToast("Verification email resent.", "success");
     } catch (err: any) {
       setErrorMessage('Failed to resend email code.');
     } finally {
@@ -683,11 +813,7 @@ export const Header: React.FC = () => {
                       ? `[Simulation Mode] Since EmailJS is not configured, please enter code: ${generatedEmailOtp}`
                       : 'Confirm the code sent to your email to verify your identity.'
                   )}
-                  {loginStep === 'mobile_otp' && (
-                    !getFirebaseAuth()
-                      ? `[Simulation Mode] Since Firebase Auth is not configured, please enter code: ${sessionStorage.getItem('orchestrai_simulated_phone_otp') || '123456'}`
-                      : 'Enter the SMS code sent to your mobile phone.'
-                  )}
+                  {loginStep === 'mobile_otp' && 'Enter the SMS code sent to your mobile phone.'}
                 </p>
               </div>
             )}

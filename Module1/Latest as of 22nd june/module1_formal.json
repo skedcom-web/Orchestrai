@@ -1,0 +1,2466 @@
+{
+  "module": "Module 1 — The OrchestrAI Mindset",
+  "preset": "formal",
+  "format": "two_voice_dialogue",
+  "speakers": {
+    "Priya": {
+      "voice_key": "female_formal",
+      "gender": "female",
+      "persona": "Priya — Strategy Lead, measured and authoritative"
+    },
+    "Shiva": {
+      "voice_key": "male_formal",
+      "gender": "male",
+      "persona": "Shiva — Domain Expert, precise and grounded"
+    }
+  },
+  "tts_field_priority": [
+    "text_expressive",
+    "text_ssml",
+    "text"
+  ],
+  "tts_notes": "Use text_expressive for ElevenLabs-style engines, text_ssml for Google/Azure/Polly, text as universal fallback. Map voice keys (female_formal, male_formal) to real voices in your TTS dashboard.",
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "title": "Welcome to the OrchestrAI Mindset",
+      "subtitle": "Module 1 of the OrchestrAI Lead Certification",
+      "icon": "sparkles",
+      "visual_cue": "animated_intro_burst",
+      "hero_stat": {
+        "value": "60 min",
+        "label": "to rewire how you think about software delivery",
+        "icon": "timer"
+      },
+      "opening_hook": "By the conclusion of this session, your understanding of software delivery will be fundamentally revised.",
+      "bullets": [
+        "One module. Five sections. Twenty slides.",
+        "You will be introduced to the AI capability model and a structured intent-formulation method applicable from your next working day.",
+        "This session prioritizes operational clarity over theoretical exposition.",
+        "Successful completion of the assessment unlocks Module 2."
+      ],
+      "closing_thread": "We begin with a foundational comparison.",
+      "narration": "Welcome to the OrchestrAI Lead Certification, Module 1. I'm Priya, and I'll be guiding the strategic perspective throughout this session. And I'm Shiva. I'll be providing the technical grounding. Together, we'll walk you through what is, candidly, the most consequential hour in this entire certification program. Every subsequent module in this program is built directly on the foundation established here. We do not intend to present abstract theory disconnected from practice. Instead, we begin with a structural comparison most learners find genuinely clarifying: the relationship between human cognition and artificial intelligence. Twenty slides, organized into five sections. No extraneous content. Each section serves a specific purpose in the overall argument. Successful completion of the closing assessment unlocks Module 2. Let us begin with the foundational comparison.",
+      "estimated_duration_seconds": 78,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "composed_warm",
+          "text": "Welcome to the OrchestrAI Lead Certification, Module 1. I'm Priya, and I'll be guiding the strategic perspective throughout this session.",
+          "text_ssml": "<speak>Welcome to the OrchestrAI Lead Certification, Module 1. I'm Priya, and I'll be guiding the <emphasis level=\"moderate\">strategic perspective</emphasis> throughout this session.</speak>",
+          "text_expressive": "Welcome to the OrchestrAI Lead Certification, Module 1. I'm Priya, and I'll be guiding the strategic perspective throughout this session."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "measured",
+          "text": "And I'm Shiva. I'll be providing the technical grounding. Together, we'll walk you through what is, candidly, the most consequential hour in this entire certification program.",
+          "text_ssml": "<speak>And I'm Shiva. I'll be providing the technical grounding. Together, we'll walk you through what is, candidly, the <emphasis level=\"moderate\">most consequential hour</emphasis> in this entire certification program.</speak>",
+          "text_expressive": "And I'm Shiva. I'll be providing the technical grounding. Together, we'll walk you through what is, candidly, the most consequential hour in this entire certification program."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Every subsequent module in this program is built directly on the foundation established here. We do not intend to present abstract theory disconnected from practice.",
+          "text_ssml": "<speak>Every subsequent module in this program is built directly on the foundation established here. We do not intend to present <emphasis level=\"reduced\">abstract theory</emphasis> disconnected from practice.</speak>",
+          "text_expressive": "Every subsequent module in this program is built directly on the foundation established here. We do not intend to present abstract theory disconnected from practice."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Instead, we begin with a structural comparison most learners find genuinely clarifying: the relationship between human cognition and artificial intelligence.",
+          "text_ssml": "<speak>Instead, we begin with a structural comparison most learners find genuinely clarifying: the relationship between human cognition and artificial intelligence.</speak>",
+          "text_expressive": "Instead, we begin with a structural comparison most learners find genuinely clarifying: the relationship between human cognition and artificial intelligence."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Twenty slides, organized into five sections. No extraneous content. Each section serves a specific purpose in the overall argument.",
+          "text_ssml": "<speak>Twenty slides, organized into five sections. No extraneous content. Each section serves a specific purpose in the overall argument.</speak>",
+          "text_expressive": "Twenty slides, organized into five sections. No extraneous content. Each section serves a specific purpose in the overall argument."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Successful completion of the closing assessment unlocks Module 2. Let us begin with the foundational comparison.",
+          "text_ssml": "<speak>Successful completion of the closing assessment unlocks Module 2. Let us begin with the foundational comparison.</speak>",
+          "text_expressive": "Successful completion of the closing assessment unlocks Module 2. Let us begin with the foundational comparison."
+        }
+      ],
+      "background_music": {
+        "track_key": "intro_theme",
+        "behavior": "fade_in_then_duck_under_narration",
+        "fade_in_ms": 1500,
+        "duck_volume_percent": 15,
+        "fade_out_ms": 2000,
+        "notes": "Play a short, understated intro theme on slide load. Fade in over 1.5s, duck to 15% once narration starts, fade out as the user advances."
+      }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "comparison_table",
+      "title": "Meet Your Twin",
+      "subtitle": "You already know how intelligence works — you live inside one.",
+      "icon": "users-2",
+      "visual_cue": "human_ai_split_with_centre_face",
+      "analogy": {
+        "title": "Structural Parallels Between Human and Artificial Intelligence",
+        "text": "Each principal AI capability has a direct structural analogue in human cognition. This correspondence is not coincidental: artificial intelligence architectures were substantially informed by models of human cognitive function. Understanding this mapping provides an efficient foundation for the technical content that follows."
+      },
+      "table": [
+        {
+          "icon": "brain",
+          "old": "Brain — reasoning, language, prediction",
+          "new": "Large Language Model (LLM)"
+        },
+        {
+          "icon": "book-open",
+          "old": "Long-term memory — recalling facts on demand",
+          "new": "Retrieval-Augmented Generation (RAG)"
+        },
+        {
+          "icon": "git-branch",
+          "old": "Nervous system — signals between body parts",
+          "new": "Model Context Protocol (MCP)"
+        },
+        {
+          "icon": "bot",
+          "old": "Hands and feet — taking action in the world",
+          "new": "AI Agents"
+        },
+        {
+          "icon": "wand-2",
+          "old": "Creativity and imagination",
+          "new": "Generative AI"
+        },
+        {
+          "icon": "trophy",
+          "old": "Learning from mistakes — trial and error",
+          "new": "Reinforcement Learning"
+        },
+        {
+          "icon": "alert-triangle",
+          "old": "Dreams, false memories, confident mistakes",
+          "new": "AI Hallucinations"
+        }
+      ],
+      "memory_hook": "Each AI capability corresponds to a human cognitive function. This mapping is foundational, not incidental.",
+      "narration": "Consider the table presented here. This structural correspondence between human cognition and artificial intelligence is not incidental — it reflects how these systems were originally conceived. The Large Language Model functions analogously to the human brain — predicting linguistic continuation based on contextual pattern recognition, much as you anticipate the conclusion of a familiar sentence. Retrieval-Augmented Generation parallels long-term memory — the capacity to retrieve specific information on demand. The Model Context Protocol functions as the nervous system, enabling inter-component communication. AI Agents represent motor capability — the capacity for action rather than analysis alone. Generative AI corresponds to imagination. Reinforcement Learning corresponds to learning through iterative correction. The final correspondence warrants particular attention. Hallucination is artificial intelligence's analogue to dream states — confident, vivid, and at times entirely fabricated. Retain this point. It constitutes the principal justification for the structured methodology presented later in this module. The conclusion, then, is this: artificial intelligence is not an alien technology. It is structurally familiar — operating on a different substrate, but recognizably analogous to your own cognition.",
+      "estimated_duration_seconds": 108,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Consider the table presented here. This structural correspondence between human cognition and artificial intelligence is not incidental — it reflects how these systems were originally conceived.",
+          "text_ssml": "<speak>Consider the table presented here. This structural correspondence between human cognition and artificial intelligence is not incidental<break time=\"200ms\"/> it reflects how these systems were originally conceived.</speak>",
+          "text_expressive": "Consider the table presented here. This structural correspondence between human cognition and artificial intelligence is not incidental — it reflects how these systems were originally conceived."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "The Large Language Model functions analogously to the human brain — predicting linguistic continuation based on contextual pattern recognition, much as you anticipate the conclusion of a familiar sentence.",
+          "text_ssml": "<speak>The Large Language Model functions analogously to the human brain<break time=\"200ms\"/> predicting linguistic continuation based on contextual pattern recognition, much as you anticipate the conclusion of a familiar sentence.</speak>",
+          "text_expressive": "The Large Language Model functions analogously to the human brain — predicting linguistic continuation based on contextual pattern recognition, much as you anticipate the conclusion of a familiar sentence."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Retrieval-Augmented Generation parallels long-term memory — the capacity to retrieve specific information on demand. The Model Context Protocol functions as the nervous system, enabling inter-component communication.",
+          "text_ssml": "<speak>Retrieval-Augmented Generation parallels long-term memory<break time=\"200ms\"/> the capacity to retrieve specific information on demand. The Model Context Protocol functions as the nervous system, enabling inter-component communication.</speak>",
+          "text_expressive": "Retrieval-Augmented Generation parallels long-term memory — the capacity to retrieve specific information on demand. The Model Context Protocol functions as the nervous system, enabling inter-component communication."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "AI Agents represent motor capability — the capacity for action rather than analysis alone. Generative AI corresponds to imagination. Reinforcement Learning corresponds to learning through iterative correction.",
+          "text_ssml": "<speak>AI Agents represent motor capability<break time=\"200ms\"/> the capacity for action rather than analysis alone. Generative AI corresponds to imagination. Reinforcement Learning corresponds to learning through iterative correction.</speak>",
+          "text_expressive": "AI Agents represent motor capability — the capacity for action rather than analysis alone. Generative AI corresponds to imagination. Reinforcement Learning corresponds to learning through iterative correction."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "serious",
+          "text": "The final correspondence warrants particular attention. Hallucination is artificial intelligence's analogue to dream states — confident, vivid, and at times entirely fabricated.",
+          "text_ssml": "<speak>The final correspondence warrants particular attention. Hallucination is artificial intelligence's analogue to dream states<break time=\"200ms\"/> confident, vivid, and at times entirely fabricated.</speak>",
+          "text_expressive": "The final correspondence warrants particular attention. Hallucination is artificial intelligence's analogue to dream states — confident, vivid, and at times entirely fabricated."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "serious",
+          "text": "Retain this point. It constitutes the principal justification for the structured methodology presented later in this module.",
+          "text_ssml": "<speak>Retain this point. It constitutes the principal justification for the structured methodology presented later in this module.</speak>",
+          "text_expressive": "Retain this point. It constitutes the principal justification for the structured methodology presented later in this module."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "The conclusion, then, is this: artificial intelligence is not an alien technology. It is structurally familiar — operating on a different substrate, but recognizably analogous to your own cognition.",
+          "text_ssml": "<speak>The conclusion, then, is this: artificial intelligence is not an alien technology. It is structurally familiar<break time=\"200ms\"/> operating on a different substrate, but recognizably analogous to your own cognition.</speak>",
+          "text_expressive": "The conclusion, then, is this: artificial intelligence is not an alien technology. It is structurally familiar — operating on a different substrate, but recognizably analogous to your own cognition."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "competencies",
+      "title": "The Intelligence Core",
+      "subtitle": "Four pieces of machinery doing the thinking",
+      "icon": "brain-circuit",
+      "analogy": {
+        "title": "Component Architecture of the Reasoning System",
+        "text": "The Large Language Model comprises four constituent mechanisms, each corresponding to a distinct cognitive function. None represent emergent or unexplainable behavior; each is a well-defined computational process operating at significant scale."
+      },
+      "list": [
+        {
+          "name": "LLM — Large Language Model",
+          "icon": "brain",
+          "desc": "The core reasoning component. Predicts subsequent linguistic tokens based on extensive training corpus analysis."
+        },
+        {
+          "name": "Deep Learning",
+          "icon": "layers",
+          "desc": "A layered pattern-recognition architecture. Functionally analogous to hierarchical visual processing — initial detection of basic features (edges), progressing to composite structures (shapes, objects)."
+        },
+        {
+          "name": "Transformers",
+          "icon": "network",
+          "desc": "The architectural innovation that introduced contextual attention mechanisms, enabling the model to weight relevance among elements within a given input rather than processing sequentially without context."
+        },
+        {
+          "name": "Reinforcement Learning",
+          "icon": "trophy",
+          "desc": "An iterative trial-and-reward training methodology. Structurally comparable to operant conditioning — for instance, a child learning to avoid a heated stove through repeated experiential feedback, here executed at massive computational scale."
+        }
+      ],
+      "memory_hook": "LLM equates to the core reasoning function; Deep Learning to pattern detection; Transformers to contextual attention; Reinforcement Learning to error-correction.",
+      "narration": "We now examine the constituent architecture in greater detail. Four mechanisms comprise the reasoning core, each performing a distinct cognitive function. The Large Language Model is the primary reasoning component — predicting the next linguistic unit, having processed an extraordinarily large training corpus to develop this capability. Deep Learning provides the layered pattern-recognition substrate — structurally comparable to hierarchical visual processing, where edges resolve into shapes, and shapes into recognizable features. Transformers, introduced in 2017, represent the architectural innovation that conferred contextual attention — enabling correct resolution of referential ambiguity within language. Consider: in the sentence, 'the trophy did not fit in the suitcase because it was too large,' the model correctly resolves the pronoun to the trophy, not the suitcase. This represents genuine contextual reasoning. Finally, Reinforcement Learning constitutes the improvement mechanism — iterative trial evaluated against reward functions, structurally comparable to how a child learns not to touch a heated surface, executed at substantial computational scale. None of this constitutes emergent or unexplainable behavior. Each is a well-defined computational process, operating at scale.",
+      "estimated_duration_seconds": 102,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "We now examine the constituent architecture in greater detail. Four mechanisms comprise the reasoning core, each performing a distinct cognitive function.",
+          "text_ssml": "<speak>We now examine the constituent architecture in greater detail. Four mechanisms comprise the reasoning core, each performing a distinct cognitive function.</speak>",
+          "text_expressive": "We now examine the constituent architecture in greater detail. Four mechanisms comprise the reasoning core, each performing a distinct cognitive function."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "The Large Language Model is the primary reasoning component — predicting the next linguistic unit, having processed an extraordinarily large training corpus to develop this capability.",
+          "text_ssml": "<speak>The Large Language Model is the primary reasoning component<break time=\"200ms\"/> predicting the next linguistic unit, having processed an extraordinarily large training corpus to develop this capability.</speak>",
+          "text_expressive": "The Large Language Model is the primary reasoning component — predicting the next linguistic unit, having processed an extraordinarily large training corpus to develop this capability."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Deep Learning provides the layered pattern-recognition substrate — structurally comparable to hierarchical visual processing, where edges resolve into shapes, and shapes into recognizable features.",
+          "text_ssml": "<speak>Deep Learning provides the layered pattern-recognition substrate<break time=\"200ms\"/> structurally comparable to hierarchical visual processing, where edges resolve into shapes, and shapes into recognizable features.</speak>",
+          "text_expressive": "Deep Learning provides the layered pattern-recognition substrate — structurally comparable to hierarchical visual processing, where edges resolve into shapes, and shapes into recognizable features."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Transformers, introduced in 2017, represent the architectural innovation that conferred contextual attention — enabling correct resolution of referential ambiguity within language.",
+          "text_ssml": "<speak>Transformers, introduced in 2017, represent the architectural innovation that conferred contextual attention<break time=\"200ms\"/> enabling correct resolution of referential ambiguity within language.</speak>",
+          "text_expressive": "Transformers, introduced in 2017, represent the architectural innovation that conferred contextual attention — enabling correct resolution of referential ambiguity within language."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Consider: in the sentence, 'the trophy did not fit in the suitcase because it was too large,' the model correctly resolves the pronoun to the trophy, not the suitcase. This represents genuine contextual reasoning.",
+          "text_ssml": "<speak>Consider: in the sentence, 'the trophy did not fit in the suitcase because it was too large,' the model correctly resolves the pronoun to the trophy, not the suitcase. This represents genuine <emphasis level=\"reduced\">contextual</emphasis> reasoning.</speak>",
+          "text_expressive": "Consider: in the sentence, 'the trophy did not fit in the suitcase because it was too large,' the model correctly resolves the pronoun to the trophy, not the suitcase. This represents genuine contextual reasoning."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Finally, Reinforcement Learning constitutes the improvement mechanism — iterative trial evaluated against reward functions, structurally comparable to how a child learns not to touch a heated surface, executed at substantial computational scale.",
+          "text_ssml": "<speak>Finally, Reinforcement Learning constitutes the improvement mechanism<break time=\"200ms\"/> iterative trial evaluated against reward functions, structurally comparable to how a child learns not to touch a heated surface, executed at substantial computational scale.</speak>",
+          "text_expressive": "Finally, Reinforcement Learning constitutes the improvement mechanism — iterative trial evaluated against reward functions, structurally comparable to how a child learns not to touch a heated surface, executed at substantial computational scale."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "reassuring",
+          "text": "None of this constitutes emergent or unexplainable behavior. Each is a well-defined computational process, operating at scale.",
+          "text_ssml": "<speak>None of this constitutes <emphasis level=\"reduced\">emergent or unexplainable</emphasis> behavior. Each is a well-defined computational process, operating at scale.</speak>",
+          "text_expressive": "None of this constitutes emergent or unexplainable behavior. Each is a well-defined computational process, operating at scale."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "competencies",
+      "title": "Extended Capabilities",
+      "subtitle": "What lets AI act, remember, and sometimes lie",
+      "icon": "puzzle",
+      "analogy": {
+        "title": "Supporting Systems: Memory, Action, and Risk",
+        "text": "Having examined the reasoning core, we now consider the supporting systems: long-term memory, action capability, and creative generation. The final item warrants particular attention, as it represents the primary risk factor addressed throughout this module."
+      },
+      "list": [
+        {
+          "name": "RAG — Retrieval-Augmented Generation",
+          "icon": "book-open",
+          "desc": "An on-demand long-term memory mechanism. Enables the model to reference organizational documentation, policy, or codebase content at inference time, rather than relying exclusively on pre-training data."
+        },
+        {
+          "name": "Generative AI",
+          "icon": "wand-2",
+          "desc": "The creative output capability. Generates novel content — text, visual design, source code — rather than performing classification or prediction exclusively."
+        },
+        {
+          "name": "AI Agents",
+          "icon": "bot",
+          "desc": "The action-execution capability. Enables AI to perform tasks autonomously — transmitting communications, querying databases, deploying code — rather than producing output exclusively."
+        },
+        {
+          "name": "MCP — Model Context Protocol",
+          "icon": "git-branch",
+          "desc": "A standardized communication layer enabling interoperability between AI components and external tools, eliminating the requirement for bespoke integration per tool."
+        },
+        {
+          "name": "Hallucination",
+          "icon": "alert-triangle",
+          "desc": "Confidently presented, factually incorrect output generated when the model lacks sufficient grounding information. This represents the primary risk in enterprise AI deployment and is the central concern addressed by the structured prompting methodology presented later in this module."
+        }
+      ],
+      "memory_hook": "Hallucination is the primary risk factor that the P.R.O.M.P.T. methodology, presented in slide 14, is designed to mitigate.",
+      "visual_cue": "highlight_last_row_with_warning_pulse",
+      "narration": "Having examined the reasoning core, we now consider the supporting systems — memory, action capability, and creative generation. Retrieval-Augmented Generation provides an on-demand long-term memory mechanism, enabling reference to organizational documentation at inference time, rather than relying solely on pre-training data. Generative AI represents the creative output function — producing novel content rather than performing classification exclusively. AI Agents provide action-execution capability. And the Model Context Protocol provides standardized inter-component communication, eliminating the need for bespoke integration with each individual tool. We arrive now at the item of central importance: hallucination. This describes confidently presented, factually incorrect output, generated when the model lacks sufficient grounding information. This single behavior constitutes the foremost risk in enterprise artificial intelligence deployment. It is not a peripheral concern — it is the central one. The structured prompting methodology presented in this module — designated P.R.O.M.P.T. — was specifically designed to mitigate this risk. We will return to this in slide fourteen.",
+      "estimated_duration_seconds": 112,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Having examined the reasoning core, we now consider the supporting systems — memory, action capability, and creative generation.",
+          "text_ssml": "<speak>Having examined the reasoning core, we now consider the supporting systems<break time=\"200ms\"/> memory, action capability, and creative generation.</speak>",
+          "text_expressive": "Having examined the reasoning core, we now consider the supporting systems — memory, action capability, and creative generation."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Retrieval-Augmented Generation provides an on-demand long-term memory mechanism, enabling reference to organizational documentation at inference time, rather than relying solely on pre-training data.",
+          "text_ssml": "<speak>Retrieval-Augmented Generation provides an on-demand long-term memory mechanism, enabling reference to organizational documentation at inference time, rather than relying solely on pre-training data.</speak>",
+          "text_expressive": "Retrieval-Augmented Generation provides an on-demand long-term memory mechanism, enabling reference to organizational documentation at inference time, rather than relying solely on pre-training data."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Generative AI represents the creative output function — producing novel content rather than performing classification exclusively. AI Agents provide action-execution capability.",
+          "text_ssml": "<speak>Generative AI represents the creative output function<break time=\"200ms\"/> producing novel content rather than performing classification exclusively. AI Agents provide action-execution capability.</speak>",
+          "text_expressive": "Generative AI represents the creative output function — producing novel content rather than performing classification exclusively. AI Agents provide action-execution capability."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "And the Model Context Protocol provides standardized inter-component communication, eliminating the need for bespoke integration with each individual tool.",
+          "text_ssml": "<speak>And the Model Context Protocol provides standardized inter-component communication, eliminating the need for bespoke integration with each individual tool.</speak>",
+          "text_expressive": "And the Model Context Protocol provides standardized inter-component communication, eliminating the need for bespoke integration with each individual tool."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "serious",
+          "text": "We arrive now at the item of central importance: hallucination. This describes confidently presented, factually incorrect output, generated when the model lacks sufficient grounding information.",
+          "text_ssml": "<speak>We arrive now at the item of central importance: hallucination. This describes confidently presented, factually incorrect output, generated when the model lacks sufficient grounding information.</speak>",
+          "text_expressive": "We arrive now at the item of central importance: hallucination. This describes confidently presented, factually incorrect output, generated when the model lacks sufficient grounding information."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "emphatic",
+          "text": "This single behavior constitutes the foremost risk in enterprise artificial intelligence deployment. It is not a peripheral concern — it is the central one.",
+          "text_ssml": "<speak>This single behavior constitutes the <emphasis level=\"moderate\">foremost risk</emphasis> in enterprise artificial intelligence deployment. It is not a peripheral concern<break time=\"200ms\"/> it is the central one.</speak>",
+          "text_expressive": "This single behavior constitutes the foremost risk in enterprise artificial intelligence deployment. It is not a peripheral concern — it is the central one."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "The structured prompting methodology presented in this module — designated P.R.O.M.P.T. — was specifically designed to mitigate this risk. We will return to this in slide fourteen.",
+          "text_ssml": "<speak>The structured prompting methodology presented in this module<break time=\"200ms\"/> designated P.R.O.M.P.T.<break time=\"200ms\"/> was specifically designed to mitigate this risk. We will return to this in slide fourteen.</speak>",
+          "text_expressive": "The structured prompting methodology presented in this module — designated P.R.O.M.P.T. — was specifically designed to mitigate this risk. We will return to this in slide fourteen."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "welcome",
+      "title": "If AI Is This Capable… What Do You Do?",
+      "subtitle": "The question that built OrchestrAI",
+      "icon": "git-fork",
+      "visual_cue": "intent_execution_arrow_diagram",
+      "reflection_prompt": "Consider: given AI's current capability to generate code, query databases, and produce user interfaces, what constitutes the highest-value contribution of a software professional?",
+      "bullets": [
+        "AI possesses reasoning capability, retrieval-based memory, and action capability.",
+        "AI does not possess business intent. It cannot independently determine organizational priorities or required trade-offs.",
+        "This gap — between intent and execution — constitutes the emerging professional discipline.",
+        "This discipline has a formal designation."
+      ],
+      "closing_thread": "This discipline is designated Orchestration, and constitutes the subject of the remainder of this session.",
+      "narration": "Allow this question to be carefully considered. Artificial intelligence is presently capable of code generation, database querying, interface design, and documentation drafting. Given this, what precisely constitutes the value contribution of a software professional? This question is, in fact, foundational to the entire program. Artificial intelligence possesses reasoning capability, retrieval-based memory, and action capability. What it categorically lacks — and is unlikely to possess in the foreseeable future — is business intent. An understanding of organizational priorities, acceptable trade-offs, and inviolable constraints. This gap, between business intent and software execution, defines the precise locus of your professional role going forward. The discipline addressing this gap has a formal designation: Orchestration. The remainder of this session addresses its practice in detail.",
+      "estimated_duration_seconds": 98,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "thoughtful",
+          "text": "Allow this question to be carefully considered. Artificial intelligence is presently capable of code generation, database querying, interface design, and documentation drafting.",
+          "text_ssml": "<speak>Allow this question to be carefully considered. Artificial intelligence is presently capable of code generation, database querying, interface design, and documentation drafting.</speak>",
+          "text_expressive": "Allow this question to be carefully considered. Artificial intelligence is presently capable of code generation, database querying, interface design, and documentation drafting."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "thoughtful",
+          "text": "Given this, what precisely constitutes the value contribution of a software professional? This question is, in fact, foundational to the entire program.",
+          "text_ssml": "<speak>Given this, what precisely constitutes the value contribution of a software professional? This question is, in fact, <emphasis level=\"reduced\">foundational</emphasis> to the entire program.</speak>",
+          "text_expressive": "Given this, what precisely constitutes the value contribution of a software professional? This question is, in fact, foundational to the entire program."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Artificial intelligence possesses reasoning capability, retrieval-based memory, and action capability.",
+          "text_ssml": "<speak>Artificial intelligence possesses reasoning capability, retrieval-based memory, and action capability.</speak>",
+          "text_expressive": "Artificial intelligence possesses reasoning capability, retrieval-based memory, and action capability."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "emphatic",
+          "text": "What it categorically lacks — and is unlikely to possess in the foreseeable future — is business intent. An understanding of organizational priorities, acceptable trade-offs, and inviolable constraints.",
+          "text_ssml": "<speak>What it categorically lacks<break time=\"200ms\"/> and is unlikely to possess in the foreseeable future<break time=\"200ms\"/> is <emphasis level=\"moderate\">business intent</emphasis>. An understanding of organizational priorities, acceptable trade-offs, and inviolable constraints.</speak>",
+          "text_expressive": "What it categorically lacks — and is unlikely to possess in the foreseeable future — is business intent. An understanding of organizational priorities, acceptable trade-offs, and inviolable constraints."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "This gap, between business intent and software execution, defines the precise locus of your professional role going forward.",
+          "text_ssml": "<speak>This gap, between business intent and software execution, defines the precise locus of your professional role going forward.</speak>",
+          "text_expressive": "This gap, between business intent and software execution, defines the precise locus of your professional role going forward."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "The discipline addressing this gap has a formal designation: Orchestration. The remainder of this session addresses its practice in detail.",
+          "text_ssml": "<speak>The discipline addressing this gap has a formal designation: <emphasis level=\"moderate\">Orchestration</emphasis>. The remainder of this session addresses its practice in detail.</speak>",
+          "text_expressive": "The discipline addressing this gap has a formal designation: Orchestration. The remainder of this session addresses its practice in detail."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "welcome",
+      "title": "The Old World, in Three Numbers",
+      "subtitle": "Why traditional software delivery is breaking",
+      "icon": "trending-down",
+      "hero_stat": {
+        "value": "120 days",
+        "label": "average time from kickoff to first working baseline",
+        "icon": "calendar-x"
+      },
+      "analogy": {
+        "title": "Single Point of Failure Risk",
+        "text": "Project management methodology employs the metric 'bus factor' — the minimum number of personnel whose unavailability would result in critical project failure. A bus factor of one indicates an unacceptable concentration of organizational risk."
+      },
+      "bullets": [
+        "120 days — average baseline delivery time for enterprise software projects",
+        "30 to 40 percent — proportion of total effort attributable to rework, requirement revision, and integration issues",
+        "1 — the typical headcount of personnel whose unavailability would stall delivery entirely",
+        "These represent orchestration deficiencies, not engineering deficiencies."
+      ],
+      "closing_thread": "Adding personnel does not resolve these metrics; they require a structural solution.",
+      "narration": "Prior to introducing the proposed solution, an objective assessment of current industry conditions is warranted. Three metrics are illustrative. First: one hundred and twenty days represents the average duration from project initiation to first functional baseline in enterprise software delivery. Second: thirty to forty percent of total project effort is attributable to rework, resulting from mid-cycle requirement changes and integration complications. Third, and of greatest organizational risk: the single-point-of-failure condition. Project management methodology refers to this as the 'bus factor' — the minimum personnel count whose unavailability would result in critical delay. A bus factor of one represents an unacceptable concentration of organizational risk. One individual's unavailability should not be capable of stalling delivery. These conditions are not attributable to engineering competency deficiencies. They cannot be resolved through additional headcount or extended sprint cycles. They require a structural, orchestration-based solution.",
+      "estimated_duration_seconds": 105,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Prior to introducing the proposed solution, an objective assessment of current industry conditions is warranted. Three metrics are illustrative.",
+          "text_ssml": "<speak>Prior to introducing the proposed solution, an objective assessment of current industry conditions is warranted. Three metrics are illustrative.</speak>",
+          "text_expressive": "Prior to introducing the proposed solution, an objective assessment of current industry conditions is warranted. Three metrics are illustrative."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "First: one hundred and twenty days represents the average duration from project initiation to first functional baseline in enterprise software delivery.",
+          "text_ssml": "<speak>First: one hundred and twenty days represents the average duration from project initiation to first functional baseline in enterprise software delivery.</speak>",
+          "text_expressive": "First: one hundred and twenty days represents the average duration from project initiation to first functional baseline in enterprise software delivery."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Second: thirty to forty percent of total project effort is attributable to rework, resulting from mid-cycle requirement changes and integration complications.",
+          "text_ssml": "<speak>Second: thirty to forty percent of total project effort is attributable to rework, resulting from mid-cycle requirement changes and integration complications.</speak>",
+          "text_expressive": "Second: thirty to forty percent of total project effort is attributable to rework, resulting from mid-cycle requirement changes and integration complications."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "serious",
+          "text": "Third, and of greatest organizational risk: the single-point-of-failure condition. Project management methodology refers to this as the 'bus factor' — the minimum personnel count whose unavailability would result in critical delay.",
+          "text_ssml": "<speak>Third, and of greatest organizational risk: the single-point-of-failure condition. Project management methodology refers to this as the 'bus factor'<break time=\"200ms\"/> the minimum personnel count whose unavailability would result in critical delay.</speak>",
+          "text_expressive": "Third, and of greatest organizational risk: the single-point-of-failure condition. Project management methodology refers to this as the 'bus factor' — the minimum personnel count whose unavailability would result in critical delay."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "serious",
+          "text": "A bus factor of one represents an unacceptable concentration of organizational risk. One individual's unavailability should not be capable of stalling delivery.",
+          "text_ssml": "<speak>A bus factor of one represents an unacceptable concentration of organizational risk. One individual's unavailability should not be capable of stalling delivery.</speak>",
+          "text_expressive": "A bus factor of one represents an unacceptable concentration of organizational risk. One individual's unavailability should not be capable of stalling delivery."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "These conditions are not attributable to engineering competency deficiencies. They cannot be resolved through additional headcount or extended sprint cycles. They require a structural, orchestration-based solution.",
+          "text_ssml": "<speak>These conditions are not attributable to engineering competency deficiencies. They cannot be resolved through additional headcount or extended sprint cycles. They require a structural, orchestration-based solution.</speak>",
+          "text_expressive": "These conditions are not attributable to engineering competency deficiencies. They cannot be resolved through additional headcount or extended sprint cycles. They require a structural, orchestration-based solution."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "competencies",
+      "title": "The OrchestrAI Iceberg",
+      "subtitle": "What you see is days. What's underneath is years.",
+      "icon": "mountain-snow",
+      "visual_cue": "iceberg_above_below_waterline",
+      "analogy": {
+        "title": "Visible Deliverable vs Underlying Infrastructure",
+        "text": "The client-visible deliverable — a QA-ready application within seven days — represents a small fraction of total organizational infrastructure. Six underlying orchestration layers, developed over multiple years, enable this delivery timeline."
+      },
+      "list": [
+        {
+          "name": "Layer 1 — Intent Capture",
+          "icon": "headphones",
+          "desc": "Structured stakeholder elicitation sessions converting organizational objectives into AI-actionable specifications, employing the P.R.O.M.P.T. methodology."
+        },
+        {
+          "name": "Layer 2 — Pattern Library",
+          "icon": "library",
+          "desc": "A repository of pre-validated architectural patterns covering authentication, payments, reporting, and workflow domains, enabling compositional rather than ground-up development."
+        },
+        {
+          "name": "Layer 3 — AI Engine",
+          "icon": "cpu",
+          "desc": "The core generation system, orchestrating multiple model instances to produce code, schema, interface, and test artifacts concurrently."
+        },
+        {
+          "name": "Layer 4 — Validation Loop",
+          "icon": "shield-check",
+          "desc": "Automated test generation, compliance verification, and designated human-review checkpoints, ensuring quality is established upstream of delivery."
+        },
+        {
+          "name": "Layer 5 — Compliance Guards",
+          "icon": "scale",
+          "desc": "Industry-specific regulatory rule sets — applicable to banking, payments, and finance domains — applied prior to artifact release."
+        },
+        {
+          "name": "Layer 6 — Co-Working Bridge",
+          "icon": "handshake",
+          "desc": "Daily collaborative UAT engagement with client personnel, continuing until full confidence is established prior to production deployment."
+        }
+      ],
+      "memory_hook": "Brief visible delivery cycles are predicated on substantial, multi-year underlying orchestration infrastructure.",
+      "narration": "Observe an iceberg from a vessel, and a relatively small visible mass is apparent. Observe it from beneath the waterline, and approximately eight times the visible mass is revealed. OrchestrAI's delivery model functions analogously. The client-visible deliverable is a functional application within their quality-assurance environment, available within days. Six underlying orchestration layers enable this. Intent Capture converts ambiguous objectives into precise specifications. The Pattern Library means authentication and payment systems are composed from validated components. The AI Engine operates multiple models concurrently. The Validation Loop establishes quality upstream, rather than detecting it downstream. Compliance Guards apply industry-specific regulatory rules — particularly critical in banking and payments contexts — prior to artifact release. And the Co-Working Bridge represents daily collaborative engagement during UAT, continuing until the client confirms full confidence prior to production deployment. The visible component is intentionally minimal. The underlying infrastructure is precisely what enables that minimalism.",
+      "estimated_duration_seconds": 118,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Observe an iceberg from a vessel, and a relatively small visible mass is apparent. Observe it from beneath the waterline, and approximately eight times the visible mass is revealed.",
+          "text_ssml": "<speak>Observe an iceberg from a vessel, and a relatively small visible mass is apparent. Observe it from beneath the waterline, and approximately <emphasis level=\"moderate\">eight times</emphasis> the visible mass is revealed.</speak>",
+          "text_expressive": "Observe an iceberg from a vessel, and a relatively small visible mass is apparent. Observe it from beneath the waterline, and approximately eight times the visible mass is revealed."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "OrchestrAI's delivery model functions analogously. The client-visible deliverable is a functional application within their quality-assurance environment, available within days.",
+          "text_ssml": "<speak>OrchestrAI's delivery model functions analogously. The client-visible deliverable is a functional application within their quality-assurance environment, available within days.</speak>",
+          "text_expressive": "OrchestrAI's delivery model functions analogously. The client-visible deliverable is a functional application within their quality-assurance environment, available within days."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Six underlying orchestration layers enable this. Intent Capture converts ambiguous objectives into precise specifications. The Pattern Library means authentication and payment systems are composed from validated components.",
+          "text_ssml": "<speak>Six underlying orchestration layers enable this. Intent Capture converts ambiguous objectives into precise specifications. The Pattern Library means authentication and payment systems are composed from validated components.</speak>",
+          "text_expressive": "Six underlying orchestration layers enable this. Intent Capture converts ambiguous objectives into precise specifications. The Pattern Library means authentication and payment systems are composed from validated components."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "The AI Engine operates multiple models concurrently. The Validation Loop establishes quality upstream, rather than detecting it downstream.",
+          "text_ssml": "<speak>The AI Engine operates multiple models concurrently. The Validation Loop establishes quality upstream, rather than detecting it downstream.</speak>",
+          "text_expressive": "The AI Engine operates multiple models concurrently. The Validation Loop establishes quality upstream, rather than detecting it downstream."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Compliance Guards apply industry-specific regulatory rules — particularly critical in banking and payments contexts — prior to artifact release.",
+          "text_ssml": "<speak>Compliance Guards apply industry-specific regulatory rules<break time=\"200ms\"/> particularly critical in banking and payments contexts<break time=\"200ms\"/> prior to artifact release.</speak>",
+          "text_expressive": "Compliance Guards apply industry-specific regulatory rules — particularly critical in banking and payments contexts — prior to artifact release."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "And the Co-Working Bridge represents daily collaborative engagement during UAT, continuing until the client confirms full confidence prior to production deployment.",
+          "text_ssml": "<speak>And the Co-Working Bridge represents daily collaborative engagement during UAT, continuing until the client confirms full confidence prior to production deployment.</speak>",
+          "text_expressive": "And the Co-Working Bridge represents daily collaborative engagement during UAT, continuing until the client confirms full confidence prior to production deployment."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "The visible component is intentionally minimal. The underlying infrastructure is precisely what enables that minimalism.",
+          "text_ssml": "<speak>The visible component is intentionally minimal. The underlying infrastructure is precisely what enables that minimalism.</speak>",
+          "text_expressive": "The visible component is intentionally minimal. The underlying infrastructure is precisely what enables that minimalism."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "comparison_table",
+      "title": "Old World vs OrchestrAI",
+      "subtitle": "Six dimensions, one paradigm shift",
+      "icon": "arrow-left-right",
+      "analogy": {
+        "title": "Bespoke Production vs Scalable Replication",
+        "text": "The traditional model resembles bespoke production: highly skilled, slow, dependent upon individual practitioners, and vulnerable to personnel unavailability. OrchestrAI resembles programmable, scalable replication: equivalent craft quality, achieved repeatably and without single-practitioner dependency."
+      },
+      "table": [
+        {
+          "icon": "calendar",
+          "old": "Timeline: 90–120 days to baseline",
+          "new": "Timeline: 7 days to QA PIP"
+        },
+        {
+          "icon": "shield-check",
+          "old": "Quality: caught in QA, fixed in cycles",
+          "new": "Quality: engineered upstream, validated continuously"
+        },
+        {
+          "icon": "timer",
+          "old": "Estimation: story points, hope, and padding",
+          "new": "Estimation: iteration loops in hours — prove, don't estimate"
+        },
+        {
+          "icon": "file-text",
+          "old": "Documentation: written last, if at all",
+          "new": "Documentation: auto-generated alongside delivery"
+        },
+        {
+          "icon": "repeat",
+          "old": "Change management: sprints, refinement, backlog grooming",
+          "new": "Change management: plain-English requests, implemented same-day"
+        },
+        {
+          "icon": "user-x",
+          "old": "Key person risk: high — one architect, one knowledge holder",
+          "new": "Key person risk: low — orchestration in patterns, not in heads"
+        }
+      ],
+      "visual_chart": {
+        "type": "horizontal_bar_comparison",
+        "data": [
+          {
+            "label": "Old World",
+            "value": 120,
+            "unit": "days",
+            "color": "coral"
+          },
+          {
+            "label": "OrchestrAI",
+            "value": 7,
+            "unit": "days",
+            "color": "teal"
+          }
+        ],
+        "title": "Time to first working baseline"
+      },
+      "memory_hook": "Equivalent craft quality, restructured delivery mechanism, approximately seventeen-fold timeline reduction.",
+      "narration": "Six dimensions are presented for comparison. Reviewing each row reveals a consistent pattern. The traditional approach is artisanal in character — skilled, but slow; high-quality, but fragile; with knowledge concentrated in individual personnel. The OrchestrAI approach achieves equivalent craft outcomes through industrialized process — knowledge encoded in reusable patterns, rather than dependent upon any single individual's presence. Timeline: ninety to one hundred twenty days, compared to seven. Quality: caught in QA, compared to engineered upstream. Estimation: story points and projection, compared to iteration loops measured in hours. Documentation: produced after delivery, if at all, compared to generated concurrently. Change management: sprint-based grooming, compared to plain-English requests implemented same-day. Reviewing the comparative chart: one hundred twenty days, compared to seven. This is not an incremental improvement. This represents an approximately seventeen-fold reduction. Achieved not through increased work rate, but through elimination of process overhead that no longer serves a purpose.",
+      "estimated_duration_seconds": 112,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Six dimensions are presented for comparison. Reviewing each row reveals a consistent pattern.",
+          "text_ssml": "<speak>Six dimensions are presented for comparison. Reviewing each row reveals a consistent pattern.</speak>",
+          "text_expressive": "Six dimensions are presented for comparison. Reviewing each row reveals a consistent pattern."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "The traditional approach is artisanal in character — skilled, but slow; high-quality, but fragile; with knowledge concentrated in individual personnel.",
+          "text_ssml": "<speak>The traditional approach is artisanal in character<break time=\"200ms\"/> skilled, but slow; high-quality, but fragile; with knowledge concentrated in individual personnel.</speak>",
+          "text_expressive": "The traditional approach is artisanal in character — skilled, but slow; high-quality, but fragile; with knowledge concentrated in individual personnel."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "The OrchestrAI approach achieves equivalent craft outcomes through industrialized process — knowledge encoded in reusable patterns, rather than dependent upon any single individual's presence.",
+          "text_ssml": "<speak>The OrchestrAI approach achieves equivalent craft outcomes through industrialized process<break time=\"200ms\"/> knowledge encoded in reusable patterns, rather than dependent upon any single individual's presence.</speak>",
+          "text_expressive": "The OrchestrAI approach achieves equivalent craft outcomes through industrialized process — knowledge encoded in reusable patterns, rather than dependent upon any single individual's presence."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Timeline: ninety to one hundred twenty days, compared to seven. Quality: caught in QA, compared to engineered upstream. Estimation: story points and projection, compared to iteration loops measured in hours.",
+          "text_ssml": "<speak>Timeline: ninety to one hundred twenty days, compared to seven. Quality: caught in QA, compared to engineered upstream. Estimation: story points and projection, compared to iteration loops measured in hours.</speak>",
+          "text_expressive": "Timeline: ninety to one hundred twenty days, compared to seven. Quality: caught in QA, compared to engineered upstream. Estimation: story points and projection, compared to iteration loops measured in hours."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Documentation: produced after delivery, if at all, compared to generated concurrently. Change management: sprint-based grooming, compared to plain-English requests implemented same-day.",
+          "text_ssml": "<speak>Documentation: produced after delivery, if at all, compared to generated concurrently. Change management: sprint-based grooming, compared to plain-English requests implemented same-day.</speak>",
+          "text_expressive": "Documentation: produced after delivery, if at all, compared to generated concurrently. Change management: sprint-based grooming, compared to plain-English requests implemented same-day."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "emphatic",
+          "text": "Reviewing the comparative chart: one hundred twenty days, compared to seven. This is not an incremental improvement. This represents an approximately seventeen-fold reduction.",
+          "text_ssml": "<speak>Reviewing the comparative chart: one hundred twenty days, compared to seven. This is not an incremental improvement. This represents an approximately <emphasis level=\"moderate\">seventeen-fold</emphasis> reduction.</speak>",
+          "text_expressive": "Reviewing the comparative chart: one hundred twenty days, compared to seven. This is not an incremental improvement. This represents an approximately seventeen-fold reduction."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Achieved not through increased work rate, but through elimination of process overhead that no longer serves a purpose.",
+          "text_ssml": "<speak>Achieved not through increased work rate, but through elimination of process overhead that no longer serves a purpose.</speak>",
+          "text_expressive": "Achieved not through increased work rate, but through elimination of process overhead that no longer serves a purpose."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "welcome",
+      "title": "What OrchestrAI Actually Delivers",
+      "subtitle": "The number that started the conversation",
+      "icon": "target",
+      "hero_stat": {
+        "value": "7 days",
+        "label": "from blank page to 80% baseline running in client QA",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "Not a minimum viable product. Production-grade software architecture.",
+        "Not production deployment. Delivered to the client's designated QA environment, with collaborative UAT to follow.",
+        "Not complete at delivery. An 80 percent baseline, with the remaining 20 percent developed collaboratively during UAT.",
+        "Production deployment occurs only upon client confirmation of full confidence — not according to a predetermined schedule."
+      ],
+      "closing_thread": "The remainder of this module addresses the methodology by which this outcome is achieved.",
+      "narration": "Let us be precise regarding this headline metric. Seven days. This warrants three clarifications. First: this is not a minimum viable product. It constitutes production-grade architecture, not a disposable prototype. Second: it is not deployed to production at day seven. It resides in the client's quality-assurance environment, prepared for hands-on evaluation. Third: it is not one hundred percent complete at day seven. It represents an eighty percent baseline, with the remaining twenty percent developed collaboratively during UAT. Production deployment occurs exclusively upon client confirmation of full confidence — never according to a predetermined internal schedule. Velocity, without compromise to deployment rigor. The remainder of this session addresses the methodology, not merely the outcome.",
+      "estimated_duration_seconds": 98,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "serious_friendly",
+          "text": "Let us be precise regarding this headline metric. Seven days. This warrants three clarifications.",
+          "text_ssml": "<speak>Let us be precise regarding this headline metric. Seven days. This warrants three clarifications.</speak>",
+          "text_expressive": "Let us be precise regarding this headline metric. Seven days. This warrants three clarifications."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "First: this is not a minimum viable product. It constitutes production-grade architecture, not a disposable prototype.",
+          "text_ssml": "<speak>First: this is <emphasis level=\"moderate\">not</emphasis> a minimum viable product. It constitutes production-grade architecture, not a disposable prototype.</speak>",
+          "text_expressive": "First: this is not a minimum viable product. It constitutes production-grade architecture, not a disposable prototype."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Second: it is not deployed to production at day seven. It resides in the client's quality-assurance environment, prepared for hands-on evaluation.",
+          "text_ssml": "<speak>Second: it is not deployed to production at day seven. It resides in the client's quality-assurance environment, prepared for hands-on evaluation.</speak>",
+          "text_expressive": "Second: it is not deployed to production at day seven. It resides in the client's quality-assurance environment, prepared for hands-on evaluation."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Third: it is not one hundred percent complete at day seven. It represents an eighty percent baseline, with the remaining twenty percent developed collaboratively during UAT.",
+          "text_ssml": "<speak>Third: it is not one hundred percent complete at day seven. It represents an <emphasis level=\"moderate\">eighty percent</emphasis> baseline, with the remaining twenty percent developed collaboratively during UAT.</speak>",
+          "text_expressive": "Third: it is not one hundred percent complete at day seven. It represents an eighty percent baseline, with the remaining twenty percent developed collaboratively during UAT."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Production deployment occurs exclusively upon client confirmation of full confidence — never according to a predetermined internal schedule.",
+          "text_ssml": "<speak>Production deployment occurs exclusively upon client confirmation of full confidence<break time=\"200ms\"/> never according to a predetermined internal schedule.</speak>",
+          "text_expressive": "Production deployment occurs exclusively upon client confirmation of full confidence — never according to a predetermined internal schedule."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Velocity, without compromise to deployment rigor. The remainder of this session addresses the methodology, not merely the outcome.",
+          "text_ssml": "<speak>Velocity, without compromise to deployment rigor. The remainder of this session addresses the methodology, not merely the outcome.</speak>",
+          "text_expressive": "Velocity, without compromise to deployment rigor. The remainder of this session addresses the methodology, not merely the outcome."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "mindset_shift",
+      "title": "From Soloist to Conductor",
+      "subtitle": "The single biggest mental rewire of your career",
+      "icon": "music-2",
+      "analogy": {
+        "title": "Conductor vs Solo Performer",
+        "text": "A solo violinist exercises direct manual control over a single instrument. A conductor directs eighty musicians without manipulating any instrument directly, through a score prepared with precision in advance of performance. The conductor's expertise is not diminished — it is differently directed. This represents the precise transition under discussion."
+      },
+      "table": [
+        {
+          "icon": "code-2",
+          "old": "\"I write the code / I manage the sprint\"",
+          "new": "\"I define the intent and validate the outcome\""
+        },
+        {
+          "icon": "help-circle",
+          "old": "\"Requirements clarified during development\"",
+          "new": "\"Requirements crystallized before AI interaction\""
+        },
+        {
+          "icon": "shield-check",
+          "old": "\"We'll fix quality issues in QA later\"",
+          "new": "\"Quality is baked in from the first prompt\""
+        },
+        {
+          "icon": "timer",
+          "old": "\"Estimation based on team story points\"",
+          "new": "\"Iteration loops in hours — we prove, don't estimate\""
+        },
+        {
+          "icon": "list-checks",
+          "old": "\"Backlog grooming for future quarters\"",
+          "new": "\"Plain-English implementation of changes today\""
+        }
+      ],
+      "reflection_prompt": "Consider a recent project in which a requirement was clarified mid-development. What cost would have been avoided by crystallizing that requirement in advance?",
+      "memory_hook": "A solo performer controls one instrument; a conductor directs eighty without touching any of them.",
+      "narration": "This slide warrants particular attention. If a single concept is retained from this entire session, it should be this one. Consider a solo violinist. Their hands operate the instrument directly, note by note — total command of a single instrument. Consider, conversely, a conductor — directing eighty musicians while operating no instrument directly, through a score prepared with absolute precision in advance of performance. The conductor's expertise is not diminished. It is differently directed. This represents the precise transition you are undertaking. Review the left column. 'I write the code.' 'Requirements are clarified during development.' 'Quality issues are addressed in QA.' These are statements you have likely made within recent weeks. Now review the right column. 'I define the intent and validate the outcome.' 'Requirements are crystallized prior to AI interaction.' 'Quality is established from the first prompt.' The distinction between these two columns is not one of diminished effort. It is one of redirected focus. Redirect your professional expertise from execution toward specification. A soloist commands one instrument. A conductor commands eighty, without touching any.",
+      "estimated_duration_seconds": 118,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "earnest",
+          "text": "This slide warrants particular attention. If a single concept is retained from this entire session, it should be this one.",
+          "text_ssml": "<speak>This slide warrants particular attention. If a single concept is retained from this entire session, it should be this one.</speak>",
+          "text_expressive": "This slide warrants particular attention. If a single concept is retained from this entire session, it should be this one."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Consider a solo violinist. Their hands operate the instrument directly, note by note — total command of a single instrument.",
+          "text_ssml": "<speak>Consider a solo violinist. Their hands operate the instrument directly, note by note<break time=\"200ms\"/> total command of a single instrument.</speak>",
+          "text_expressive": "Consider a solo violinist. Their hands operate the instrument directly, note by note — total command of a single instrument."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Consider, conversely, a conductor — directing eighty musicians while operating no instrument directly, through a score prepared with absolute precision in advance of performance.",
+          "text_ssml": "<speak>Consider, conversely, a conductor<break time=\"200ms\"/> directing eighty musicians while operating no instrument directly, through a score prepared with absolute precision in advance of performance.</speak>",
+          "text_expressive": "Consider, conversely, a conductor — directing eighty musicians while operating no instrument directly, through a score prepared with absolute precision in advance of performance."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "The conductor's expertise is not diminished. It is differently directed. This represents the precise transition you are undertaking.",
+          "text_ssml": "<speak>The conductor's expertise is not diminished. It is <emphasis level=\"moderate\">differently directed</emphasis>. This represents the precise transition you are undertaking.</speak>",
+          "text_expressive": "The conductor's expertise is not diminished. It is differently directed. This represents the precise transition you are undertaking."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Review the left column. 'I write the code.' 'Requirements are clarified during development.' 'Quality issues are addressed in QA.' These are statements you have likely made within recent weeks.",
+          "text_ssml": "<speak>Review the left column. 'I write the code.' 'Requirements are clarified during development.' 'Quality issues are addressed in QA.' These are statements you have likely made within recent weeks.</speak>",
+          "text_expressive": "Review the left column. 'I write the code.' 'Requirements are clarified during development.' 'Quality issues are addressed in QA.' These are statements you have likely made within recent weeks."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Now review the right column. 'I define the intent and validate the outcome.' 'Requirements are crystallized prior to AI interaction.' 'Quality is established from the first prompt.'",
+          "text_ssml": "<speak>Now review the right column. 'I define the intent and validate the outcome.' 'Requirements are crystallized prior to AI interaction.' 'Quality is established from the first prompt.'</speak>",
+          "text_expressive": "Now review the right column. 'I define the intent and validate the outcome.' 'Requirements are crystallized prior to AI interaction.' 'Quality is established from the first prompt.'"
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "emphatic",
+          "text": "The distinction between these two columns is not one of diminished effort. It is one of redirected focus.",
+          "text_ssml": "<speak>The distinction between these two columns is not one of diminished effort. It is one of <emphasis level=\"moderate\">redirected focus</emphasis>.</speak>",
+          "text_expressive": "The distinction between these two columns is not one of diminished effort. It is one of redirected focus."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Redirect your professional expertise from execution toward specification. A soloist commands one instrument. A conductor commands eighty, without touching any.",
+          "text_ssml": "<speak>Redirect your professional expertise from execution toward specification. A soloist commands one instrument. A conductor commands eighty, without touching any.</speak>",
+          "text_expressive": "Redirect your professional expertise from execution toward specification. A soloist commands one instrument. A conductor commands eighty, without touching any."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "competencies",
+      "title": "Your New Job Description",
+      "subtitle": "Three roles in one Lead",
+      "icon": "user-cog",
+      "analogy": {
+        "title": "Three Concurrent Functional Responsibilities",
+        "text": "The technical competency requirement is not eliminated, but supplemented by two additional functional responsibilities: Strategic Advisor and Quality Guardian, with Intent Translator serving as the central connecting function."
+      },
+      "list": [
+        {
+          "name": "Strategic Advisor",
+          "icon": "compass",
+          "desc": "Translates organizational objectives into orchestration intent. Determines scope, priority, and sequencing of deliverables. This function is client-facing at the executive level."
+        },
+        {
+          "name": "Intent Translator",
+          "icon": "languages",
+          "desc": "Converts ambiguous requirements into precise, AI-actionable specifications, utilizing the P.R.O.M.P.T. methodology. This function interfaces directly with the AI engine."
+        },
+        {
+          "name": "Quality Guardian",
+          "icon": "shield-check",
+          "desc": "Assumes accountability for output quality without direct code authorship. Performs validation, escalation, and exercises authority to reject substandard deliverables. This function is client-facing at the delivery level."
+        }
+      ],
+      "memory_hook": "Advisor determines scope; Translator produces specification; Guardian enforces quality standards.",
+      "narration": "Three concurrent functional responsibilities now constitute your role, performed simultaneously rather than sequentially. As Strategic Advisor, you engage with business stakeholders, translating organizational ambition into orchestration intent — determining priority, sequencing, and acceptable trade-offs. This function is visible to executive leadership. As Intent Translator, you convert that ambition into structured specifications the AI engine can execute upon, utilizing P.R.O.M.P.T. — addressed in detail three slides ahead. This function interfaces directly with the system. As Quality Guardian, you retain accountability for the outcome. You do not author code, but you serve as the final review prior to delivery — validating, escalating, and declining to release substandard work. Your technical competency is not diminished by this shift. It is supplemented. Three functions, performed by a single role.",
+      "estimated_duration_seconds": 108,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Three concurrent functional responsibilities now constitute your role, performed simultaneously rather than sequentially.",
+          "text_ssml": "<speak>Three concurrent functional responsibilities now constitute your role, performed simultaneously rather than sequentially.</speak>",
+          "text_expressive": "Three concurrent functional responsibilities now constitute your role, performed simultaneously rather than sequentially."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "As Strategic Advisor, you engage with business stakeholders, translating organizational ambition into orchestration intent — determining priority, sequencing, and acceptable trade-offs. This function is visible to executive leadership.",
+          "text_ssml": "<speak>As Strategic Advisor, you engage with business stakeholders, translating organizational ambition into orchestration intent<break time=\"200ms\"/> determining priority, sequencing, and acceptable trade-offs. This function is visible to executive leadership.</speak>",
+          "text_expressive": "As Strategic Advisor, you engage with business stakeholders, translating organizational ambition into orchestration intent — determining priority, sequencing, and acceptable trade-offs. This function is visible to executive leadership."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "As Intent Translator, you convert that ambition into structured specifications the AI engine can execute upon, utilizing P.R.O.M.P.T. — addressed in detail three slides ahead. This function interfaces directly with the system.",
+          "text_ssml": "<speak>As Intent Translator, you convert that ambition into structured specifications the AI engine can execute upon, utilizing P.R.O.M.P.T.<break time=\"200ms\"/> addressed in detail three slides ahead. This function interfaces directly with the system.</speak>",
+          "text_expressive": "As Intent Translator, you convert that ambition into structured specifications the AI engine can execute upon, utilizing P.R.O.M.P.T. — addressed in detail three slides ahead. This function interfaces directly with the system."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "As Quality Guardian, you retain accountability for the outcome. You do not author code, but you serve as the final review prior to delivery — validating, escalating, and declining to release substandard work.",
+          "text_ssml": "<speak>As Quality Guardian, you retain accountability for the outcome. You do not author code, but you serve as the final review prior to delivery<break time=\"200ms\"/> validating, escalating, and declining to release substandard work.</speak>",
+          "text_expressive": "As Quality Guardian, you retain accountability for the outcome. You do not author code, but you serve as the final review prior to delivery — validating, escalating, and declining to release substandard work."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Your technical competency is not diminished by this shift. It is supplemented. Three functions, performed by a single role.",
+          "text_ssml": "<speak>Your technical competency is not diminished by this shift. It is supplemented. Three functions, performed by a single role.</speak>",
+          "text_expressive": "Your technical competency is not diminished by this shift. It is supplemented. Three functions, performed by a single role."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "welcome",
+      "title": "Quality Is Upstream",
+      "subtitle": "Why QA cycles are an old-world relic",
+      "icon": "arrow-up-from-line",
+      "visual_cue": "river_source_vs_filter_diagram",
+      "analogy": {
+        "title": "Source Prevention vs Downstream Detection",
+        "text": "Conventional QA functions as a downstream filtration mechanism — defects are identified following propagation through the system, having already accumulated dependencies. OrchestrAI addresses quality at the originating point: a precisely specified brief prevents defect occurrence at its source."
+      },
+      "bullets": [
+        "In the conventional model, quality is detected — at a later stage, at greater expense, by a separate function.",
+        "In the OrchestrAI model, quality is engineered — at an earlier stage, at lower expense, by the orchestrator.",
+        "Every defect identified downstream traces to an insufficiently precise upstream specification.",
+        "Every compliance gap identified during UAT traces to an unspecified Marker in the original brief."
+      ],
+      "memory_hook": "Old model: filtration at output. OrchestrAI: prevention at source.",
+      "closing_thread": "Consequently, the brief constitutes the most significant deliverable you produce.",
+      "narration": "A foundational operating principle follows, and it merits careful consideration. In the conventional model, quality is something detected. The artifact is constructed, QA identifies defects, engineering remediates, and the cycle continues until an acceptable state is reached. In the OrchestrAI model, quality is something engineered. Defects are prevented at the specification stage, rather than detected following construction. Consider a river. Conventional QA positions a filtration mechanism at the river mouth. By the point of detection, defects have propagated through the entire system, accumulating dependencies. OrchestrAI addresses water quality at the source. A precisely specified brief, with appropriately defined Markers and Pattern, prevents the defect's existence entirely. Every defect identified downstream traces to an insufficiently precise specification upstream. Every compliance gap identified during UAT traces to an unspecified Marker in the original brief. Consequently, the brief constitutes the most consequential artifact you produce. It should be treated with corresponding rigor.",
+      "estimated_duration_seconds": 108,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "A foundational operating principle follows, and it merits careful consideration.",
+          "text_ssml": "<speak>A foundational operating principle follows, and it merits careful consideration.</speak>",
+          "text_expressive": "A foundational operating principle follows, and it merits careful consideration."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "In the conventional model, quality is something detected. The artifact is constructed, QA identifies defects, engineering remediates, and the cycle continues until an acceptable state is reached.",
+          "text_ssml": "<speak>In the conventional model, quality is something <emphasis level=\"reduced\">detected</emphasis>. The artifact is constructed, QA identifies defects, engineering remediates, and the cycle continues until an acceptable state is reached.</speak>",
+          "text_expressive": "In the conventional model, quality is something detected. The artifact is constructed, QA identifies defects, engineering remediates, and the cycle continues until an acceptable state is reached."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "In the OrchestrAI model, quality is something engineered. Defects are prevented at the specification stage, rather than detected following construction.",
+          "text_ssml": "<speak>In the OrchestrAI model, quality is something <emphasis level=\"moderate\">engineered</emphasis>. Defects are prevented at the specification stage, rather than detected following construction.</speak>",
+          "text_expressive": "In the OrchestrAI model, quality is something engineered. Defects are prevented at the specification stage, rather than detected following construction."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Consider a river. Conventional QA positions a filtration mechanism at the river mouth. By the point of detection, defects have propagated through the entire system, accumulating dependencies.",
+          "text_ssml": "<speak>Consider a river. Conventional QA positions a filtration mechanism at the river mouth. By the point of detection, defects have propagated through the entire system, accumulating dependencies.</speak>",
+          "text_expressive": "Consider a river. Conventional QA positions a filtration mechanism at the river mouth. By the point of detection, defects have propagated through the entire system, accumulating dependencies."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "OrchestrAI addresses water quality at the source. A precisely specified brief, with appropriately defined Markers and Pattern, prevents the defect's existence entirely.",
+          "text_ssml": "<speak>OrchestrAI addresses water quality at the source. A precisely specified brief, with appropriately defined Markers and Pattern, prevents the defect's existence entirely.</speak>",
+          "text_expressive": "OrchestrAI addresses water quality at the source. A precisely specified brief, with appropriately defined Markers and Pattern, prevents the defect's existence entirely."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Every defect identified downstream traces to an insufficiently precise specification upstream. Every compliance gap identified during UAT traces to an unspecified Marker in the original brief.",
+          "text_ssml": "<speak>Every defect identified downstream traces to an insufficiently precise specification upstream. Every compliance gap identified during UAT traces to an unspecified Marker in the original brief.</speak>",
+          "text_expressive": "Every defect identified downstream traces to an insufficiently precise specification upstream. Every compliance gap identified during UAT traces to an unspecified Marker in the original brief."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "emphatic",
+          "text": "Consequently, the brief constitutes the most consequential artifact you produce. It should be treated with corresponding rigor.",
+          "text_ssml": "<speak>Consequently, the brief constitutes the <emphasis level=\"moderate\">most consequential artifact</emphasis> you produce. It should be treated with corresponding rigor.</speak>",
+          "text_expressive": "Consequently, the brief constitutes the most consequential artifact you produce. It should be treated with corresponding rigor."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "welcome",
+      "title": "What Your Tuesday Looks Like",
+      "subtitle": "Preview of the OrchestrAI daily cadence",
+      "icon": "calendar-clock",
+      "visual_cue": "day_timeline_preview",
+      "bullets": [
+        "9:00 AM — Intent capture session with stakeholder. Deliverable: a structured brief, not a sprint plan.",
+        "10:30 AM — Initial orchestration cycle. AI generates; you validate.",
+        "11:30 AM — Live functional review with business owner. A working artifact, not a representational mockup.",
+        "2:00 PM — Second iteration. Plain-language refinements based on morning feedback.",
+        "4:30 PM — Daily artifact submitted to client QA environment. Documentation automatically updated."
+      ],
+      "closing_thread": "Slide 17 examines this schedule in detail. First, the requisite tool is introduced.",
+      "narration": "Prior to introducing the requisite tool, allow us to preview the operational rhythm it enables. At nine o'clock, intent capture occurs with a stakeholder — not a ninety-minute requirements-gathering session, but direct extraction into a structured brief. At ten-thirty, the initial orchestration cycle executes — the AI engine generates, you validate. At eleven-thirty, a functional screen is presented to the business owner — not a representational mockup, but operational software, two and a half hours into the working day. At two o'clock, a second iteration incorporates feedback received earlier in the day, applied via natural-language refinement to the brief. And at four-thirty, the day's artifact is submitted to the client's QA environment, with documentation updated automatically. Slide seventeen examines this schedule in detail. First, the foundational tool enabling this rhythm is introduced.",
+      "estimated_duration_seconds": 100,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Prior to introducing the requisite tool, allow us to preview the operational rhythm it enables.",
+          "text_ssml": "<speak>Prior to introducing the requisite tool, allow us to preview the operational rhythm it enables.</speak>",
+          "text_expressive": "Prior to introducing the requisite tool, allow us to preview the operational rhythm it enables."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "At nine o'clock, intent capture occurs with a stakeholder — not a ninety-minute requirements-gathering session, but direct extraction into a structured brief.",
+          "text_ssml": "<speak>At nine o'clock, intent capture occurs with a stakeholder<break time=\"200ms\"/> not a ninety-minute requirements-gathering session, but direct extraction into a structured brief.</speak>",
+          "text_expressive": "At nine o'clock, intent capture occurs with a stakeholder — not a ninety-minute requirements-gathering session, but direct extraction into a structured brief."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "At ten-thirty, the initial orchestration cycle executes — the AI engine generates, you validate.",
+          "text_ssml": "<speak>At ten-thirty, the initial orchestration cycle executes<break time=\"200ms\"/> the AI engine generates, you validate.</speak>",
+          "text_expressive": "At ten-thirty, the initial orchestration cycle executes — the AI engine generates, you validate."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "At eleven-thirty, a functional screen is presented to the business owner — not a representational mockup, but operational software, two and a half hours into the working day.",
+          "text_ssml": "<speak>At eleven-thirty, a functional screen is presented to the business owner<break time=\"200ms\"/> not a representational mockup, but operational software, two and a half hours into the working day.</speak>",
+          "text_expressive": "At eleven-thirty, a functional screen is presented to the business owner — not a representational mockup, but operational software, two and a half hours into the working day."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "At two o'clock, a second iteration incorporates feedback received earlier in the day, applied via natural-language refinement to the brief.",
+          "text_ssml": "<speak>At two o'clock, a second iteration incorporates feedback received earlier in the day, applied via natural-language refinement to the brief.</speak>",
+          "text_expressive": "At two o'clock, a second iteration incorporates feedback received earlier in the day, applied via natural-language refinement to the brief."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "And at four-thirty, the day's artifact is submitted to the client's QA environment, with documentation updated automatically.",
+          "text_ssml": "<speak>And at four-thirty, the day's artifact is submitted to the client's QA environment, with documentation updated automatically.</speak>",
+          "text_expressive": "And at four-thirty, the day's artifact is submitted to the client's QA environment, with documentation updated automatically."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Slide seventeen examines this schedule in detail. First, the foundational tool enabling this rhythm is introduced.",
+          "text_ssml": "<speak>Slide seventeen examines this schedule in detail. First, the foundational tool enabling this rhythm is introduced.</speak>",
+          "text_expressive": "Slide seventeen examines this schedule in detail. First, the foundational tool enabling this rhythm is introduced."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "competencies",
+      "title": "How to Talk to AI: The P.R.O.M.P.T. Formula",
+      "subtitle": "Six letters that turn AI into a senior team member",
+      "icon": "message-square-text",
+      "analogy": {
+        "title": "A Formal Specification, Not an Open-Ended Request",
+        "text": "Engaging a skilled professional with an underspecified request ('produce a satisfactory design') yields an arbitrary outcome. Providing a complete brief — purpose, role, output specification, constraints, structural pattern, and tone — yields the precise intended outcome. P.R.O.M.P.T. constitutes that brief, applied consistently."
+      },
+      "list": [
+        {
+          "name": "P — Purpose",
+          "icon": "target",
+          "desc": "The intended objective, stated as a single clear sentence. (e.g., 'Plan a 5-day family vacation to Bali.')"
+        },
+        {
+          "name": "R — Role",
+          "icon": "user-cog",
+          "desc": "The professional persona AI should adopt. (e.g., 'Senior payments architect with 10 years at FIS.')"
+        },
+        {
+          "name": "O — Output",
+          "icon": "layout-template",
+          "desc": "The required output format. (e.g., 'Markdown table.' 'JSON schema.' 'React functional component in TypeScript.')"
+        },
+        {
+          "name": "M — Marker",
+          "icon": "shield-alert",
+          "desc": "Non-negotiable constraints. (e.g., 'Budget ₹80,000.' 'WCAG AA compliant.' 'No external dependencies.' 'Banking regulation X applies.')"
+        },
+        {
+          "name": "P — Pattern",
+          "icon": "grid-3x3",
+          "desc": "The required internal structure. (e.g., 'Day-by-day with morning/afternoon/evening slots.' 'Three sections: header, form, footer.')"
+        },
+        {
+          "name": "T — Tone",
+          "icon": "smile",
+          "desc": "The required communication register. (e.g., 'Friendly and family-appropriate.' 'Formal, banking-grade.' 'Concise executive summary.')"
+        }
+      ],
+      "memory_hook": "Purpose specifies rationale; Role specifies persona; Output specifies format; Marker specifies constraints; Pattern specifies structure; Tone specifies register.",
+      "narration": "We now introduce the primary operational tool. P.R.O.M.P.T. comprises six elements, functioning as a comprehensive specification framework — the foundational competency for this entire program. The relevant analogy is an architect's brief. Engaging an architect with the instruction 'produce something satisfactory' yields a structure, but not necessarily the intended one. Providing a complete brief — specifying purpose, professional role, output format, constraints, structural pattern, and tone — yields precisely the intended outcome. Let us examine each element. Purpose: the intended objective, stated as a single clear sentence. For example, 'Plan a five-day family vacation to Bali.' Role: the professional persona the model should adopt. 'Senior payments architect with ten years at FIS.' This single element materially alters output quality. Output: the required format. A markdown table, a JSON schema, a React functional component. Marker: non-negotiable constraints. Budget parameters, compliance requirements, prohibited behaviors. Pattern: the required internal structure. Day-by-day organization, header-form-footer arrangement. And Tone: the required communicative register. Formal, conversational, or technical, as the context demands. Commit these six elements to memory: Purpose, Role, Output, Marker, Pattern, Tone. The subsequent two slides demonstrate practical application.",
+      "estimated_duration_seconds": 132,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "We now introduce the primary operational tool. P.R.O.M.P.T. comprises six elements, functioning as a comprehensive specification framework — the foundational competency for this entire program.",
+          "text_ssml": "<speak>We now introduce the primary operational tool. P.R.O.M.P.T. comprises six elements, functioning as a comprehensive specification framework<break time=\"200ms\"/> the foundational competency for this entire program.</speak>",
+          "text_expressive": "We now introduce the primary operational tool. P.R.O.M.P.T. comprises six elements, functioning as a comprehensive specification framework — the foundational competency for this entire program."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "The relevant analogy is an architect's brief. Engaging an architect with the instruction 'produce something satisfactory' yields a structure, but not necessarily the intended one.",
+          "text_ssml": "<speak>The relevant analogy is an architect's brief. Engaging an architect with the instruction 'produce something satisfactory' yields a structure, but not necessarily the intended one.</speak>",
+          "text_expressive": "The relevant analogy is an architect's brief. Engaging an architect with the instruction 'produce something satisfactory' yields a structure, but not necessarily the intended one."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Providing a complete brief — specifying purpose, professional role, output format, constraints, structural pattern, and tone — yields precisely the intended outcome. Let us examine each element.",
+          "text_ssml": "<speak>Providing a complete brief<break time=\"200ms\"/> specifying purpose, professional role, output format, constraints, structural pattern, and tone<break time=\"200ms\"/> yields precisely the intended outcome. Let us examine each element.</speak>",
+          "text_expressive": "Providing a complete brief — specifying purpose, professional role, output format, constraints, structural pattern, and tone — yields precisely the intended outcome. Let us examine each element."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Purpose: the intended objective, stated as a single clear sentence. For example, 'Plan a five-day family vacation to Bali.'",
+          "text_ssml": "<speak>Purpose: the intended objective, stated as a single clear sentence. For example, 'Plan a five-day family vacation to Bali.'</speak>",
+          "text_expressive": "Purpose: the intended objective, stated as a single clear sentence. For example, 'Plan a five-day family vacation to Bali.'"
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Role: the professional persona the model should adopt. 'Senior payments architect with ten years at FIS.' This single element materially alters output quality.",
+          "text_ssml": "<speak>Role: the professional persona the model should adopt. 'Senior payments architect with ten years at FIS.' This single element materially alters output quality.</speak>",
+          "text_expressive": "Role: the professional persona the model should adopt. 'Senior payments architect with ten years at FIS.' This single element materially alters output quality."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Output: the required format. A markdown table, a JSON schema, a React functional component.",
+          "text_ssml": "<speak>Output: the required format. A markdown table, a JSON schema, a React functional component.</speak>",
+          "text_expressive": "Output: the required format. A markdown table, a JSON schema, a React functional component."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "emphatic",
+          "text": "Marker: non-negotiable constraints. Budget parameters, compliance requirements, prohibited behaviors.",
+          "text_ssml": "<speak>Marker: <emphasis level=\"moderate\">non-negotiable</emphasis> constraints. Budget parameters, compliance requirements, prohibited behaviors.</speak>",
+          "text_expressive": "Marker: non-negotiable constraints. Budget parameters, compliance requirements, prohibited behaviors."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Pattern: the required internal structure. Day-by-day organization, header-form-footer arrangement.",
+          "text_ssml": "<speak>Pattern: the required internal structure. Day-by-day organization, header-form-footer arrangement.</speak>",
+          "text_expressive": "Pattern: the required internal structure. Day-by-day organization, header-form-footer arrangement."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "And Tone: the required communicative register. Formal, conversational, or technical, as the context demands.",
+          "text_ssml": "<speak>And Tone: the required communicative register. Formal, conversational, or technical, as the context demands.</speak>",
+          "text_expressive": "And Tone: the required communicative register. Formal, conversational, or technical, as the context demands."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Commit these six elements to memory: Purpose, Role, Output, Marker, Pattern, Tone. The subsequent two slides demonstrate practical application.",
+          "text_ssml": "<speak>Commit these six elements to memory: Purpose, Role, Output, Marker, Pattern, Tone. The subsequent two slides demonstrate practical application.</speak>",
+          "text_expressive": "Commit these six elements to memory: Purpose, Role, Output, Marker, Pattern, Tone. The subsequent two slides demonstrate practical application."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "welcome",
+      "title": "P.R.O.M.P.T. in Action: The Bali Example",
+      "subtitle": "Same request. Two ways. Night-and-day output.",
+      "icon": "map",
+      "visual_cue": "before_after_split",
+      "before_after": {
+        "before": {
+          "label": "Underspecified Request",
+          "icon": "frown",
+          "output": "'Plan a trip to Bali for me.' Result: a generic, non-specific response. Absent budget parameters, absent structural format, absent family-safety considerations, absent accommodation recommendations. Substantial manual revision required prior to practical application."
+        },
+        "after": {
+          "label": "P.R.O.M.P.T.-Specified Intent",
+          "icon": "smile",
+          "output": "'Act as an expert tour planner with Asia experience (Role). Plan a 5-day family vacation to Bali (Purpose). Provide a day-by-day markdown table (Output). Budget ₹80,000 for a family of 4; exclude adventure sports; ensure age-appropriate activities (Marker). Structure with morning, afternoon, and evening segments per day (Pattern). Maintain a warm, family-appropriate tone (Tone).' Result: a precise, immediately actionable itinerary, within budget, family-appropriate, requiring no revision."
+        }
+      },
+      "memory_hook": "Identical model and prompt foundation; the specification alone determines output quality.",
+      "narration": "Let us examine the formula in practical application. Two outputs are presented from the identical model — the sole variable is specification quality. The first example: 'Plan a trip to Bali for me.' The resulting output is generic — comparable to aggregated travel content, absent budget awareness, absent structural organization. Substantial revision is required prior to practical use — perhaps an hour of restructuring before the output is genuinely usable. The second example applies P.R.O.M.P.T. Role specifies an expert tour planner. Purpose specifies a five-day family vacation. Output specifies a day-by-day markdown table. Marker specifies budget and activity constraints. Pattern specifies time-segment structure. Tone specifies appropriate register. The resulting output is immediately actionable — suitable for direct use or transmission to a travel coordinator, requiring no revision whatsoever. Identical model. Differentiated specification. The formula, in its entirety, demonstrated.",
+      "estimated_duration_seconds": 115,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Let us examine the formula in practical application. Two outputs are presented from the identical model — the sole variable is specification quality.",
+          "text_ssml": "<speak>Let us examine the formula in practical application. Two outputs are presented from the identical model<break time=\"200ms\"/> the sole variable is specification quality.</speak>",
+          "text_expressive": "Let us examine the formula in practical application. Two outputs are presented from the identical model — the sole variable is specification quality."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "The first example: 'Plan a trip to Bali for me.' The resulting output is generic — comparable to aggregated travel content, absent budget awareness, absent structural organization.",
+          "text_ssml": "<speak>The first example: 'Plan a trip to Bali for me.' The resulting output is generic<break time=\"200ms\"/> comparable to aggregated travel content, absent budget awareness, absent structural organization.</speak>",
+          "text_expressive": "The first example: 'Plan a trip to Bali for me.' The resulting output is generic — comparable to aggregated travel content, absent budget awareness, absent structural organization."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Substantial revision is required prior to practical use — perhaps an hour of restructuring before the output is genuinely usable.",
+          "text_ssml": "<speak>Substantial revision is required prior to practical use<break time=\"200ms\"/> perhaps an hour of restructuring before the output is genuinely usable.</speak>",
+          "text_expressive": "Substantial revision is required prior to practical use — perhaps an hour of restructuring before the output is genuinely usable."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "The second example applies P.R.O.M.P.T. Role specifies an expert tour planner. Purpose specifies a five-day family vacation. Output specifies a day-by-day markdown table.",
+          "text_ssml": "<speak>The second example applies P.R.O.M.P.T. Role specifies an expert tour planner. Purpose specifies a five-day family vacation. Output specifies a day-by-day markdown table.</speak>",
+          "text_expressive": "The second example applies P.R.O.M.P.T. Role specifies an expert tour planner. Purpose specifies a five-day family vacation. Output specifies a day-by-day markdown table."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Marker specifies budget and activity constraints. Pattern specifies time-segment structure. Tone specifies appropriate register.",
+          "text_ssml": "<speak>Marker specifies budget and activity constraints. Pattern specifies time-segment structure. Tone specifies appropriate register.</speak>",
+          "text_expressive": "Marker specifies budget and activity constraints. Pattern specifies time-segment structure. Tone specifies appropriate register."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "The resulting output is immediately actionable — suitable for direct use or transmission to a travel coordinator, requiring no revision whatsoever.",
+          "text_ssml": "<speak>The resulting output is <emphasis level=\"moderate\">immediately actionable</emphasis><break time=\"200ms\"/> suitable for direct use or transmission to a travel coordinator, requiring no revision whatsoever.</speak>",
+          "text_expressive": "The resulting output is immediately actionable — suitable for direct use or transmission to a travel coordinator, requiring no revision whatsoever."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Identical model. Differentiated specification. The formula, in its entirety, demonstrated.",
+          "text_ssml": "<speak>Identical model. Differentiated specification. The formula, in its entirety, demonstrated.</speak>",
+          "text_expressive": "Identical model. Differentiated specification. The formula, in its entirety, demonstrated."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "welcome",
+      "title": "P.R.O.M.P.T. for Real Software",
+      "subtitle": "Not vacations — your actual day job",
+      "icon": "code-2",
+      "visual_cue": "before_after_split",
+      "before_after": {
+        "before": {
+          "label": "Underspecified Engineering Request",
+          "icon": "frown",
+          "output": "'Build a login screen.' Result: a generic React component. Absent authentication integration, absent validation logic, absent error-state handling, absent accessibility considerations. Output quality comparable to junior-level work, requiring complete revision prior to deployment."
+        },
+        "after": {
+          "label": "P.R.O.M.P.T.-Specified Intent",
+          "icon": "smile",
+          "output": "'Act as a senior frontend engineer (Role). Build a login screen for our finance resource planner (Purpose). Provide a React functional component with Tailwind styling and TypeScript types (Output). Integrate with Firebase Auth; support email-and-password plus multi-factor authentication; comply with WCAG AA standards; use only approved dependencies (Marker). Structure with branded header, field-validated form, and footer containing help link and password-reset (Pattern). Maintain a professional, finance-industry-appropriate tone in error messaging (Tone).' Result: production-ready component, fully integrated, accessibility-compliant, requiring no revision."
+        }
+      },
+      "memory_hook": "The travel example illustrates the principle in a familiar domain; this example demonstrates the equivalent application within your professional function.",
+      "narration": "The preceding example was intentionally accessible, employing a familiar domain. We now apply the identical formula within a professional engineering context. The first example: 'Build a login screen.' The resulting output is a generic component — superficially functional, but disconnected from your authentication provider, lacking multi-factor support. Non-compliant with accessibility standards, inconsistent with your component library and established error-handling conventions. Substantial revision is required. The second example applies P.R.O.M.P.T. Role specifies a senior frontend engineer. Purpose specifies the finance resource planner context. Output specifies React, TypeScript, and Tailwind. Marker specifies Firebase Authentication integration, multi-factor authentication, WCAG double-A compliance, and approved-dependency constraints. Pattern specifies component structure. Tone specifies professional register. The resulting output is production-ready, deployable to QA on the same working day. This demonstrates the formula's function within your actual professional context.",
+      "estimated_duration_seconds": 115,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "The preceding example was intentionally accessible, employing a familiar domain. We now apply the identical formula within a professional engineering context.",
+          "text_ssml": "<speak>The preceding example was intentionally accessible, employing a familiar domain. We now apply the identical formula within a professional engineering context.</speak>",
+          "text_expressive": "The preceding example was intentionally accessible, employing a familiar domain. We now apply the identical formula within a professional engineering context."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "The first example: 'Build a login screen.' The resulting output is a generic component — superficially functional, but disconnected from your authentication provider, lacking multi-factor support.",
+          "text_ssml": "<speak>The first example: 'Build a login screen.' The resulting output is a generic component<break time=\"200ms\"/> superficially functional, but disconnected from your authentication provider, lacking multi-factor support.</speak>",
+          "text_expressive": "The first example: 'Build a login screen.' The resulting output is a generic component — superficially functional, but disconnected from your authentication provider, lacking multi-factor support."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Non-compliant with accessibility standards, inconsistent with your component library and established error-handling conventions. Substantial revision is required.",
+          "text_ssml": "<speak>Non-compliant with accessibility standards, inconsistent with your component library and established error-handling conventions. Substantial revision is required.</speak>",
+          "text_expressive": "Non-compliant with accessibility standards, inconsistent with your component library and established error-handling conventions. Substantial revision is required."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "The second example applies P.R.O.M.P.T. Role specifies a senior frontend engineer. Purpose specifies the finance resource planner context. Output specifies React, TypeScript, and Tailwind.",
+          "text_ssml": "<speak>The second example applies P.R.O.M.P.T. Role specifies a senior frontend engineer. Purpose specifies the finance resource planner context. Output specifies React, TypeScript, and Tailwind.</speak>",
+          "text_expressive": "The second example applies P.R.O.M.P.T. Role specifies a senior frontend engineer. Purpose specifies the finance resource planner context. Output specifies React, TypeScript, and Tailwind."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Marker specifies Firebase Authentication integration, multi-factor authentication, WCAG double-A compliance, and approved-dependency constraints. Pattern specifies component structure. Tone specifies professional register.",
+          "text_ssml": "<speak>Marker specifies Firebase Authentication integration, multi-factor authentication, WCAG double-A compliance, and approved-dependency constraints. Pattern specifies component structure. Tone specifies professional register.</speak>",
+          "text_expressive": "Marker specifies Firebase Authentication integration, multi-factor authentication, WCAG double-A compliance, and approved-dependency constraints. Pattern specifies component structure. Tone specifies professional register."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "The resulting output is production-ready, deployable to QA on the same working day. This demonstrates the formula's function within your actual professional context.",
+          "text_ssml": "<speak>The resulting output is <emphasis level=\"moderate\">production-ready</emphasis>, deployable to QA on the same working day. This demonstrates the formula's function within your actual professional context.</speak>",
+          "text_expressive": "The resulting output is production-ready, deployable to QA on the same working day. This demonstrates the formula's function within your actual professional context."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "day_in_life",
+      "title": "A Day in the Life of an OrchestrAI Lead",
+      "subtitle": "From 9 AM intent capture to 4:30 PM QA push",
+      "icon": "clock",
+      "analogy": {
+        "title": "NASA Mission Control",
+        "text": "Mission control personnel do not directly pilot the spacecraft. They monitor instrumentation, provide authorizations, and intervene as required. Your operational rhythm is structurally comparable: brief periods of decision-making, extended periods of supervision, and minimal manual execution."
+      },
+      "timeline": [
+        {
+          "time": "9:00 AM",
+          "icon": "headphones",
+          "phase": "Intent Capture",
+          "desc": "Stakeholder session. Intent is captured as a P.R.O.M.P.T.-structured brief, not as a feature list. Deliverable: one to two paragraphs of crystallized requirement."
+        },
+        {
+          "time": "10:30 AM",
+          "icon": "wand-2",
+          "phase": "First Generation",
+          "desc": "Initial orchestration cycle. AI generates code, schema, interface, and test artifacts concurrently. Manual code authorship does not occur; review and validation are performed."
+        },
+        {
+          "time": "11:30 AM",
+          "icon": "monitor-play",
+          "phase": "Live Validation",
+          "desc": "Walk-through session with business owner. Live, functional screens, populated with actual data, with real-time refinement as required. The presented artifact is the application itself, not a representational summary."
+        },
+        {
+          "time": "2:00 PM",
+          "icon": "repeat",
+          "phase": "Iteration 2",
+          "desc": "Refinements applied in natural-language form, addressing morning feedback. (e.g., date-format adjustment; pre-deletion confirmation step.) Output regenerated within minutes."
+        },
+        {
+          "time": "4:30 PM",
+          "icon": "git-merge",
+          "phase": "Delivery",
+          "desc": "Daily artifact submitted to client QA environment. Documentation updated automatically. Subsequent day's brief drafted from current-day findings."
+        }
+      ],
+      "visual_chart": {
+        "type": "gantt_timeline",
+        "phases": [
+          {
+            "label": "Intent",
+            "start": "9:00",
+            "end": "10:30",
+            "color": "gold"
+          },
+          {
+            "label": "Generation",
+            "start": "10:30",
+            "end": "11:30",
+            "color": "teal"
+          },
+          {
+            "label": "Validation",
+            "start": "11:30",
+            "end": "12:30",
+            "color": "teal"
+          },
+          {
+            "label": "Iteration",
+            "start": "14:00",
+            "end": "16:00",
+            "color": "teal"
+          },
+          {
+            "label": "Delivery",
+            "start": "16:30",
+            "end": "17:00",
+            "color": "gold"
+          }
+        ]
+      },
+      "memory_hook": "Five operational phases comprise a single working day, with functional software in client QA by 4:30 PM.",
+      "narration": "Consider NASA Mission Control. Personnel do not directly pilot the spacecraft. They monitor instrumentation, provide authorizations, and intervene as professional judgment requires. Your operational rhythm is structurally comparable. At nine o'clock, intent capture: you are present with a stakeholder, converting their objectives into a structured brief, in real time as the conversation unfolds. At ten-thirty, the initial orchestration cycle: the AI engine produces code, database schema, interface, and test cases concurrently. You review, validate, and flag deviations. At eleven-thirty, a working screen is presented to the business owner — functional, not representational. The demonstration is the application itself. At two o'clock, the second iteration incorporates requested adjustments via natural-language refinement to the brief, with automatic regeneration within minutes. At four-thirty, the day's artifact is delivered to the client's QA environment. Documentation updates automatically. The subsequent day's brief is drafted from current findings. This represents standard operational practice, not an exceptional case. Five phases. One day. Functional software in client QA by four-thirty.",
+      "estimated_duration_seconds": 132,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Consider NASA Mission Control. Personnel do not directly pilot the spacecraft. They monitor instrumentation, provide authorizations, and intervene as professional judgment requires.",
+          "text_ssml": "<speak>Consider NASA Mission Control. Personnel do not directly pilot the spacecraft. They monitor instrumentation, provide authorizations, and intervene as professional judgment requires.</speak>",
+          "text_expressive": "Consider NASA Mission Control. Personnel do not directly pilot the spacecraft. They monitor instrumentation, provide authorizations, and intervene as professional judgment requires."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Your operational rhythm is structurally comparable. At nine o'clock, intent capture: you are present with a stakeholder, converting their objectives into a structured brief, in real time as the conversation unfolds.",
+          "text_ssml": "<speak>Your operational rhythm is structurally comparable. At nine o'clock, intent capture: you are present with a stakeholder, converting their objectives into a structured brief, in real time as the conversation unfolds.</speak>",
+          "text_expressive": "Your operational rhythm is structurally comparable. At nine o'clock, intent capture: you are present with a stakeholder, converting their objectives into a structured brief, in real time as the conversation unfolds."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "At ten-thirty, the initial orchestration cycle: the AI engine produces code, database schema, interface, and test cases concurrently. You review, validate, and flag deviations.",
+          "text_ssml": "<speak>At ten-thirty, the initial orchestration cycle: the AI engine produces code, database schema, interface, and test cases concurrently. You review, validate, and flag deviations.</speak>",
+          "text_expressive": "At ten-thirty, the initial orchestration cycle: the AI engine produces code, database schema, interface, and test cases concurrently. You review, validate, and flag deviations."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "At eleven-thirty, a working screen is presented to the business owner — functional, not representational. The demonstration is the application itself.",
+          "text_ssml": "<speak>At eleven-thirty, a working screen is presented to the business owner<break time=\"200ms\"/> functional, not representational. The demonstration is the application itself.</speak>",
+          "text_expressive": "At eleven-thirty, a working screen is presented to the business owner — functional, not representational. The demonstration is the application itself."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "At two o'clock, the second iteration incorporates requested adjustments via natural-language refinement to the brief, with automatic regeneration within minutes.",
+          "text_ssml": "<speak>At two o'clock, the second iteration incorporates requested adjustments via natural-language refinement to the brief, with automatic regeneration within minutes.</speak>",
+          "text_expressive": "At two o'clock, the second iteration incorporates requested adjustments via natural-language refinement to the brief, with automatic regeneration within minutes."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "At four-thirty, the day's artifact is delivered to the client's QA environment. Documentation updates automatically. The subsequent day's brief is drafted from current findings.",
+          "text_ssml": "<speak>At four-thirty, the day's artifact is delivered to the client's QA environment. Documentation updates automatically. The subsequent day's brief is drafted from current findings.</speak>",
+          "text_expressive": "At four-thirty, the day's artifact is delivered to the client's QA environment. Documentation updates automatically. The subsequent day's brief is drafted from current findings."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "This represents standard operational practice, not an exceptional case. Five phases. One day. Functional software in client QA by four-thirty.",
+          "text_ssml": "<speak>This represents standard operational practice, not an exceptional case. Five phases. One day. Functional software in client QA by four-thirty.</speak>",
+          "text_expressive": "This represents standard operational practice, not an exceptional case. Five phases. One day. Functional software in client QA by four-thirty."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "competencies",
+      "title": "Your Cockpit Instrument Panel",
+      "subtitle": "The five competencies of an OrchestrAI Lead",
+      "icon": "gauge",
+      "analogy": {
+        "title": "Five Concurrent Performance Indicators",
+        "text": "A pilot monitors five instruments concurrently: altitude, speed, heading, fuel, and engine status. You will monitor five competencies similarly — the objective is balanced performance across all five, not maximal performance on any single dimension. Strong performance on four dimensions with deficient performance on the fifth remains operationally hazardous."
+      },
+      "list": [
+        {
+          "name": "Intent Articulation",
+          "icon": "message-circle",
+          "desc": "Capacity to produce a P.R.O.M.P.T. specification yielding production-grade output on first attempt. Developed through deliberate practice rather than passive review."
+        },
+        {
+          "name": "Quality Judgment",
+          "icon": "shield-check",
+          "desc": "Capacity to identify hallucination, compliance deficiency, or logical inconsistency prior to delivery. This represents the final qualitative filter in the delivery process."
+        },
+        {
+          "name": "Stakeholder Translation",
+          "icon": "handshake",
+          "desc": "Capacity to convert an executive's ambiguous objective into an orchestrable brief within approximately 30 minutes. A substantial proportion of this function is consultative rather than technical."
+        },
+        {
+          "name": "Iteration Discipline",
+          "icon": "repeat",
+          "desc": "Capacity to execute three orchestration cycles within a single working day without inducing fatigue in the team, client, or AI engine. Pacing is of comparable importance to directional accuracy."
+        },
+        {
+          "name": "Pattern Stewardship",
+          "icon": "library",
+          "desc": "Active contribution to the pattern library, such that subsequent projects benefit from accumulated organizational learning. This represents compounding operational leverage."
+        }
+      ],
+      "visual_chart": {
+        "type": "radar_skill_map",
+        "axes": [
+          "Intent Articulation",
+          "Quality Judgment",
+          "Stakeholder Translation",
+          "Iteration Discipline",
+          "Pattern Stewardship"
+        ],
+        "scale": [
+          1,
+          5
+        ],
+        "instruction": "Self-assess each dimension on a 1–5 scale. A balanced profile is the target, rather than a concentrated peak."
+      },
+      "memory_hook": "Optimal performance requires all five indicators within acceptable range; a single concentrated strength with corresponding weakness remains hazardous.",
+      "narration": "A final instrumentation review. Five competencies define an effective OrchestrAI Lead, comparable to a cockpit instrument panel. The objective is maintaining all five within acceptable parameters, not maximizing any individual measure at the expense of the others. Intent Articulation represents the P.R.O.M.P.T. capability, developed through practice rather than passive review. Quality Judgment represents discernment — identifying deficient output prior to delivery. Stakeholder Translation represents the consultative function — converting executive ambiguity into actionable specification within approximately thirty minutes. Iteration Discipline represents pacing — sustaining three cycles per day without inducing organizational fatigue. Pattern Stewardship represents long-term contribution. Conduct a self-assessment across all five dimensions, on a one-to-five scale. The objective is a balanced profile, not an isolated peak. This represents the operational profile of an effective Lead.",
+      "estimated_duration_seconds": 118,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "A final instrumentation review. Five competencies define an effective OrchestrAI Lead, comparable to a cockpit instrument panel.",
+          "text_ssml": "<speak>A final instrumentation review. Five competencies define an effective OrchestrAI Lead, comparable to a cockpit instrument panel.</speak>",
+          "text_expressive": "A final instrumentation review. Five competencies define an effective OrchestrAI Lead, comparable to a cockpit instrument panel."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "The objective is maintaining all five within acceptable parameters, not maximizing any individual measure at the expense of the others.",
+          "text_ssml": "<speak>The objective is maintaining all five within acceptable parameters, not maximizing any individual measure at the expense of the others.</speak>",
+          "text_expressive": "The objective is maintaining all five within acceptable parameters, not maximizing any individual measure at the expense of the others."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Intent Articulation represents the P.R.O.M.P.T. capability, developed through practice rather than passive review. Quality Judgment represents discernment — identifying deficient output prior to delivery.",
+          "text_ssml": "<speak>Intent Articulation represents the P.R.O.M.P.T. capability, developed through practice rather than passive review. Quality Judgment represents discernment<break time=\"200ms\"/> identifying deficient output prior to delivery.</speak>",
+          "text_expressive": "Intent Articulation represents the P.R.O.M.P.T. capability, developed through practice rather than passive review. Quality Judgment represents discernment — identifying deficient output prior to delivery."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Stakeholder Translation represents the consultative function — converting executive ambiguity into actionable specification within approximately thirty minutes.",
+          "text_ssml": "<speak>Stakeholder Translation represents the consultative function<break time=\"200ms\"/> converting executive ambiguity into actionable specification within approximately thirty minutes.</speak>",
+          "text_expressive": "Stakeholder Translation represents the consultative function — converting executive ambiguity into actionable specification within approximately thirty minutes."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Iteration Discipline represents pacing — sustaining three cycles per day without inducing organizational fatigue. Pattern Stewardship represents long-term contribution.",
+          "text_ssml": "<speak>Iteration Discipline represents pacing<break time=\"200ms\"/> sustaining three cycles per day without inducing organizational fatigue. Pattern Stewardship represents long-term contribution.</speak>",
+          "text_expressive": "Iteration Discipline represents pacing — sustaining three cycles per day without inducing organizational fatigue. Pattern Stewardship represents long-term contribution."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Conduct a self-assessment across all five dimensions, on a one-to-five scale. The objective is a balanced profile, not an isolated peak. This represents the operational profile of an effective Lead.",
+          "text_ssml": "<speak>Conduct a self-assessment across all five dimensions, on a one-to-five scale. The objective is a balanced profile, not an isolated peak. This represents the operational profile of an effective Lead.</speak>",
+          "text_expressive": "Conduct a self-assessment across all five dimensions, on a one-to-five scale. The objective is a balanced profile, not an isolated peak. This represents the operational profile of an effective Lead."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "welcome",
+      "title": "If You Remember Nothing Else…",
+      "subtitle": "Module 1 in five sentences",
+      "icon": "bookmark",
+      "bullets": [
+        "1. AI possesses a structural correspondence to human cognition — equivalent architecture, alternative substrate.",
+        "2. Conventional software delivery is structurally compromised — 120-day timelines, single-point-of-failure risk, substantial rework.",
+        "3. Your role is now orchestration, not direct execution — define intent, validate outcome.",
+        "4. P.R.O.M.P.T. constitutes your operational methodology — Purpose, Role, Output, Marker, Pattern, Tone.",
+        "5. Quality is established upstream — engineered into specification, not detected downstream."
+      ],
+      "memory_hook": "Five anchor concepts: structural correspondence, systemic deficiency, role redirection, methodological framework, upstream quality.",
+      "closing_thread": "Successful completion of the assessment unlocks Module 2.",
+      "narration": "Sixty minutes are now distilled into five statements, intended to serve as durable reference points. First: artificial intelligence exhibits a structural correspondence to human cognition — equivalent architecture, operating on an alternative substrate. Second: conventional software delivery is structurally compromised — one hundred twenty-day timelines, thirty-to-forty percent rework, single-point-of-failure risk. Third: your function is no longer direct execution. Your function is orchestration — defining intent, validating outcome. Fourth: when interfacing with artificial intelligence, apply P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone, applied consistently, without exception. Fifth: quality is engineered upstream, within the specification, never filtered downstream, within QA. Five statements, anchored by five terms: correspondence, deficiency, orchestration, P.R.O.M.P.T., upstream. Retain these as the foundation for subsequent modules.",
+      "estimated_duration_seconds": 100,
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Sixty minutes are now distilled into five statements, intended to serve as durable reference points.",
+          "text_ssml": "<speak>Sixty minutes are now distilled into five statements, intended to serve as durable reference points.</speak>",
+          "text_expressive": "Sixty minutes are now distilled into five statements, intended to serve as durable reference points."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "First: artificial intelligence exhibits a structural correspondence to human cognition — equivalent architecture, operating on an alternative substrate.",
+          "text_ssml": "<speak>First: artificial intelligence exhibits a structural correspondence to human cognition<break time=\"200ms\"/> equivalent architecture, operating on an alternative substrate.</speak>",
+          "text_expressive": "First: artificial intelligence exhibits a structural correspondence to human cognition — equivalent architecture, operating on an alternative substrate."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "Second: conventional software delivery is structurally compromised — one hundred twenty-day timelines, thirty-to-forty percent rework, single-point-of-failure risk.",
+          "text_ssml": "<speak>Second: conventional software delivery is structurally compromised<break time=\"200ms\"/> one hundred twenty-day timelines, thirty-to-forty percent rework, single-point-of-failure risk.</speak>",
+          "text_expressive": "Second: conventional software delivery is structurally compromised — one hundred twenty-day timelines, thirty-to-forty percent rework, single-point-of-failure risk."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Third: your function is no longer direct execution. Your function is orchestration — defining intent, validating outcome.",
+          "text_ssml": "<speak>Third: your function is no longer direct execution. Your function is orchestration<break time=\"200ms\"/> defining intent, validating outcome.</speak>",
+          "text_expressive": "Third: your function is no longer direct execution. Your function is orchestration — defining intent, validating outcome."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Fourth: when interfacing with artificial intelligence, apply P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone, applied consistently, without exception.",
+          "text_ssml": "<speak>Fourth: when interfacing with artificial intelligence, apply P.R.O.M.P.T.<break time=\"200ms\"/> Purpose, Role, Output, Marker, Pattern, Tone, applied consistently, without exception.</speak>",
+          "text_expressive": "Fourth: when interfacing with artificial intelligence, apply P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone, applied consistently, without exception."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Fifth: quality is engineered upstream, within the specification, never filtered downstream, within QA.",
+          "text_ssml": "<speak>Fifth: quality is engineered upstream, within the specification, never filtered downstream, within QA.</speak>",
+          "text_expressive": "Fifth: quality is engineered upstream, within the specification, never filtered downstream, within QA."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Five statements, anchored by five terms: correspondence, deficiency, orchestration, P.R.O.M.P.T., upstream. Retain these as the foundation for subsequent modules.",
+          "text_ssml": "<speak>Five statements, anchored by five terms: correspondence, deficiency, orchestration, P.R.O.M.P.T., upstream. Retain these as the foundation for subsequent modules.</speak>",
+          "text_expressive": "Five statements, anchored by five terms: correspondence, deficiency, orchestration, P.R.O.M.P.T., upstream. Retain these as the foundation for subsequent modules."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "interactive_quiz_engine",
+      "title": "Module 1 Knowledge Check",
+      "subtitle": "10 questions. 80% to pass. Unlimited retakes.",
+      "icon": "clipboard-check",
+      "pass_threshold": 80,
+      "questions": [
+        {
+          "id": "q1",
+          "category": "AI Anatomy",
+          "icon": "brain",
+          "question": "Which AI capability corresponds most directly to human long-term memory?",
+          "choices": [
+            "Large Language Model (LLM)",
+            "Retrieval-Augmented Generation (RAG)",
+            "Reinforcement Learning",
+            "Transformers"
+          ],
+          "correct_answer": "Retrieval-Augmented Generation (RAG)",
+          "explanation": "RAG functions as on-demand long-term memory — enabling the model to reference specific organizational data at inference time, rather than relying exclusively on pre-training information. As established in the anatomy comparison: brain corresponds to LLM, long-term memory corresponds to RAG."
+        },
+        {
+          "id": "q2",
+          "category": "AI Anatomy",
+          "icon": "alert-triangle",
+          "question": "AI hallucinations correspond most closely to which human phenomenon?",
+          "choices": [
+            "Conscious lying",
+            "Confident false memories or vivid dreams",
+            "Refusing to answer when uncertain",
+            "Asking a clarifying question"
+          ],
+          "correct_answer": "Confident false memories or vivid dreams",
+          "explanation": "Hallucinations represent AI's analogue to dream states — confidently generated, vivid, and at times entirely fabricated. This is not deliberate deception; the model lacks awareness of its own knowledge limitations. This is precisely why the P.R.O.M.P.T. methodology incorporates explicit constraints around permissible output."
+        },
+        {
+          "id": "q3",
+          "category": "Old World",
+          "icon": "calendar-x",
+          "question": "What is the typical baseline build duration for traditional enterprise software, prior to OrchestrAI implementation?",
+          "choices": [
+            "7 days",
+            "30 days",
+            "90–120 days",
+            "12 months"
+          ],
+          "correct_answer": "90–120 days",
+          "explanation": "Traditional enterprise software requires 90 to 120 days to reach an initial functional baseline. OrchestrAI reduces this to 7 days for QA delivery — an approximately seventeen-fold reduction achieved through elimination of unnecessary process overhead, not through accelerated work rate."
+        },
+        {
+          "id": "q4",
+          "category": "OrchestrAI Model",
+          "icon": "rocket",
+          "question": "OrchestrAI delivers software to the client's ___ environment within 7 days — not directly to production.",
+          "choices": [
+            "Production",
+            "QA (Quality Assurance)",
+            "Staging",
+            "Sandbox"
+          ],
+          "correct_answer": "QA (Quality Assurance)",
+          "explanation": "OrchestrAI delivers an 80 percent baseline to the client's QA environment within 7 days. The remaining 20 percent is developed collaboratively during UAT. Production deployment occurs only upon client confirmation of full confidence — never prior to that confirmation. This distinction is operationally significant: OrchestrAI prioritizes velocity without compromising deployment rigor."
+        },
+        {
+          "id": "q5",
+          "category": "Mindset Shift",
+          "icon": "music-2",
+          "question": "Which analogy most accurately characterizes the role of an OrchestrAI Lead?",
+          "choices": [
+            "Solo violinist — total control of one instrument",
+            "Orchestra conductor — commands eighty musicians without touching one",
+            "Music critic — judges performance from the audience",
+            "Studio engineer — mixes after the recording is done"
+          ],
+          "correct_answer": "Orchestra conductor — commands eighty musicians without touching one",
+          "explanation": "The conductor analogy constitutes the central conceptual model of this program. A solo violinist's hands operate the instrument directly. A conductor's hands operate nothing, yet exercises substantially greater coordinative authority, through a precisely prepared score. This represents the precise transition under discussion: from direct execution to score preparation."
+        },
+        {
+          "id": "q6",
+          "category": "Quality Model",
+          "icon": "arrow-up-from-line",
+          "question": "At what stage is quality primarily engineered within the OrchestrAI model?",
+          "choices": [
+            "In the QA cycle, by dedicated testers",
+            "Upstream, in the prompt and brief",
+            "During UAT, by the client",
+            "In production, by monitoring"
+          ],
+          "correct_answer": "Upstream, in the prompt and brief",
+          "explanation": "Quality is established at the source rather than detected downstream. Conventional QA functions as a filtration mechanism, identifying defects after systemic propagation. OrchestrAI engineers quality upstream, within the specification. Each defect identified during QA traces to an insufficiently precise brief. Each compliance gap identified during UAT traces to an unspecified Marker within the original prompt."
+        },
+        {
+          "id": "q7",
+          "category": "P.R.O.M.P.T.",
+          "icon": "shield-alert",
+          "question": "What does the letter 'M' represent within the P.R.O.M.P.T. framework?",
+          "choices": [
+            "Method — the steps to follow",
+            "Model — which AI model to use",
+            "Marker — hard constraints and guardrails",
+            "Mode — formal or casual"
+          ],
+          "correct_answer": "Marker — hard constraints and guardrails",
+          "explanation": "Marker designates non-negotiable constraints — budget parameters, compliance requirements, prohibited behaviors, approved-dependency restrictions. Absent explicit Markers, AI may produce output violating organizational policy, presented with apparent confidence. This represents the most critical safeguard against hallucination-related operational risk."
+        },
+        {
+          "id": "q8",
+          "category": "P.R.O.M.P.T.",
+          "icon": "user-cog",
+          "question": "If 'Role' is omitted from a P.R.O.M.P.T. specification, what is the most probable result?",
+          "choices": [
+            "AI refuses to answer",
+            "AI gives a generic, non-expert response that needs heavy rework",
+            "AI asks you a clarifying question",
+            "AI defaults to the most recent role from your last session"
+          ],
+          "correct_answer": "AI gives a generic, non-expert response that needs heavy rework",
+          "explanation": "Absent a specified Role, AI defaults to a general-purpose response register — broad, non-specialized, and not domain-calibrated. Specifying 'act as a senior payments architect with ten years at FIS' materially alters output depth, vocabulary, and underlying assumptions. Identical model and prompt structure, with only Role varied, produces substantially differentiated output quality."
+        },
+        {
+          "id": "q9",
+          "category": "P.R.O.M.P.T.",
+          "icon": "layout-template",
+          "question": "Which two P.R.O.M.P.T. elements most directly govern the structural shape of AI output?",
+          "choices": [
+            "Purpose and Tone",
+            "Output and Pattern",
+            "Role and Marker",
+            "Marker and Tone"
+          ],
+          "correct_answer": "Output and Pattern",
+          "explanation": "Output specifies format (markdown table, JSON, React component); Pattern specifies internal structure (day-by-day organization with defined time segments; header-form-footer arrangement). Jointly, these determine output usability without requiring revision. Purpose and Role address objective and persona; Marker and Tone address constraints and communicative register."
+        },
+        {
+          "id": "q10",
+          "category": "Daily Cadence",
+          "icon": "monitor-play",
+          "question": "Within the OrchestrAI daily cadence, at what point does the business owner typically view the first live functional screen?",
+          "choices": [
+            "End of the first sprint, around day 10",
+            "End of the first week",
+            "Same day as intent capture — around 11:30 AM",
+            "Only after QA sign-off"
+          ],
+          "correct_answer": "Same day as intent capture — around 11:30 AM",
+          "explanation": "Sequence: 9:00 AM intent capture, 10:30 AM first generation cycle, 11:30 AM live screen presentation to the business owner. This sequence reflects the Mission Control operational model: brief decision intervals, extended supervisory periods, functional software available within the morning of the initial working day. Not a representational mockup — the functional artifact itself."
+        }
+      ],
+      "memory_hook": "Ten questions; an 80 percent threshold is required to proceed. Successful completion unlocks Module 2.",
+      "narration": "A final assessment now precedes Module 2. Ten questions, requiring an eighty percent threshold — eight correct responses. Retakes are unlimited; nonetheless, careful consideration is warranted, as these questions reinforce the five core concepts presented in the recap. Several questions reference the analogies introduced earlier — the conductor, the river, the architect's brief — as these function as conceptual models rather than illustrative decoration. Recall of the analogy typically facilitates recall of the underlying concept. We wish you success, and look forward to Module 2.",
+      "estimated_duration_seconds": 80,
+      "narration_script": [
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "serious_friendly",
+          "text": "A final assessment now precedes Module 2. Ten questions, requiring an eighty percent threshold — eight correct responses.",
+          "text_ssml": "<speak>A final assessment now precedes Module 2. Ten questions, requiring an eighty percent threshold<break time=\"200ms\"/> eight correct responses.</speak>",
+          "text_expressive": "A final assessment now precedes Module 2. Ten questions, requiring an eighty percent threshold — eight correct responses."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "reassuring",
+          "text": "Retakes are unlimited; nonetheless, careful consideration is warranted, as these questions reinforce the five core concepts presented in the recap.",
+          "text_ssml": "<speak>Retakes are unlimited; nonetheless, careful consideration is warranted, as these questions reinforce the five core concepts presented in the recap.</speak>",
+          "text_expressive": "Retakes are unlimited; nonetheless, careful consideration is warranted, as these questions reinforce the five core concepts presented in the recap."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Several questions reference the analogies introduced earlier — the conductor, the river, the architect's brief — as these function as conceptual models rather than illustrative decoration.",
+          "text_ssml": "<speak>Several questions reference the analogies introduced earlier<break time=\"200ms\"/> the conductor, the river, the architect's brief<break time=\"200ms\"/> as these function as conceptual models rather than illustrative decoration.</speak>",
+          "text_expressive": "Several questions reference the analogies introduced earlier — the conductor, the river, the architect's brief — as these function as conceptual models rather than illustrative decoration."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Recall of the analogy typically facilitates recall of the underlying concept. We wish you success, and look forward to Module 2.",
+          "text_ssml": "<speak>Recall of the analogy typically facilitates recall of the underlying concept. We wish you success, and look forward to Module 2.</speak>",
+          "text_expressive": "Recall of the analogy typically facilitates recall of the underlying concept. We wish you success, and look forward to Module 2."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "prompt_lab",
+      "title": "Prompt Engineering Lab 1",
+      "subtitle": "Team Offsite Planning — Compose Your P.R.O.M.P.T., Then Compare to the Reference Specification",
+      "icon": "flask-conical",
+      "lab_number": 1,
+      "scenario": {
+        "label": "The Scenario",
+        "text": "Your manager has communicated the following: \"We require a team offsite planned for next month. Nothing elaborate — simply an effective team-building exercise.\" This constitutes the entirety of the brief received. Your task is to convert this into a properly specified P.R.O.M.P.T. prior to engaging AI for execution."
+      },
+      "task_prompt": "Apply the framework presented in slide fourteen to compose a complete P.R.O.M.P.T. specification for this scenario. All six elements should be addressed.",
+      "input_fields": [
+        {
+          "key": "purpose",
+          "label": "P — Purpose",
+          "placeholder": "State the objective in a single precise sentence."
+        },
+        {
+          "key": "role",
+          "label": "R — Role",
+          "placeholder": "Specify the professional persona the model should adopt."
+        },
+        {
+          "key": "output",
+          "label": "O — Output",
+          "placeholder": "Specify the required output format."
+        },
+        {
+          "key": "marker",
+          "label": "M — Marker",
+          "placeholder": "Specify non-negotiable constraints: budget, headcount, dates, applicable policy."
+        },
+        {
+          "key": "pattern",
+          "label": "P — Pattern",
+          "placeholder": "Specify the required structural organization."
+        },
+        {
+          "key": "tone",
+          "label": "T — Tone",
+          "placeholder": "Specify the required communicative register."
+        }
+      ],
+      "submit_button_label": "Compare to Reference Specification",
+      "model_answer": {
+        "purpose": "Plan a one-day team offsite for 12 personnel, scheduled for next month, designed to strengthen team cohesion without an artificial or mandatory atmosphere.",
+        "role": "Act as an experienced corporate event planner specializing in mid-size team offsites.",
+        "output": "A structured schedule presented as a table, organized by time segment, with brief descriptions per segment.",
+        "marker": "Budget allocation of ₹3,000 per participant. Venue must be within 90 minutes of the office. No mandatory alcohol-based activities, in consideration of participants who do not consume alcohol. A contingency plan for inclement weather is required.",
+        "pattern": "Organized into morning, afternoon, and evening segments. Include one structured team activity, one shared meal, and a period of unstructured time.",
+        "tone": "Professional but approachable — not bureaucratic or overly formal in register."
+      },
+      "comparison_report": {
+        "title": "Your Specification, Compared to the Reference",
+        "intro": "There is no singular correct response in this exercise. The purpose is to observe what a fully specified P.R.O.M.P.T. resembles, and to identify which of the six elements were addressed with precision and which may have been underspecified.",
+        "common_gaps": [
+          {
+            "element": "Marker",
+            "insight": "This element is most frequently underspecified on initial attempts. Constraints such as 'budget per participant,' 'no mandatory alcohol-based activities,' and 'weather contingency' are not peripheral details — they are precisely what separates a usable specification from one requiring substantial revision. If your Marker section was thin, this is a typical first attempt, and is exactly the gap this exercise is designed to surface."
+          },
+          {
+            "element": "Role",
+            "insight": "Observe how 'an experienced corporate event planner' produces materially different output quality compared to no specified Role. This corresponds directly to the principle established in slide fourteen."
+          },
+          {
+            "element": "Pattern",
+            "insight": "Absent a specified Pattern, the model may return unstructured prose rather than a scannable schedule. Specifying 'morning, afternoon, evening segments' converts an undifferentiated response into a usable operational document."
+          }
+        ],
+        "closing_line": "Compare your six elements against the reference specification above. Wherever your response was underspecified, that represents your area of focus for Lab Two."
+      },
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "We now move from observation to application. Lab One. You will compose your own P.R.O.M.P.T. specification for the scenario presented.",
+          "text_ssml": "<speak>We now move from observation to application. Lab One. You will compose your own P.R.O.M.P.T. specification for the scenario presented.</speak>",
+          "text_expressive": "We now move from observation to application. Lab One. You will compose your own P.R.O.M.P.T. specification for the scenario presented."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "The scenario: your manager states, 'We require a team offsite planned for next month. Nothing elaborate — simply an effective team-building exercise.' This is the complete brief as received.",
+          "text_ssml": "<speak>The scenario: your manager states, 'We require a team offsite planned for next month. Nothing elaborate<break time=\"150ms\"/> simply an effective team-building exercise.' This is the complete brief as received.</speak>",
+          "text_expressive": "The scenario: your manager states, 'We require a team offsite planned for next month. Nothing elaborate — simply an effective team-building exercise.' This is the complete brief as received."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "explaining",
+          "text": "This pattern will be familiar. Real-world requests are frequently well-intentioned, but materially incomplete.",
+          "text_ssml": "<speak>This pattern will be familiar. Real-world requests are frequently well-intentioned, but materially incomplete.</speak>",
+          "text_expressive": "This pattern will be familiar. Real-world requests are frequently well-intentioned, but materially incomplete."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Your task is to populate all six P.R.O.M.P.T. fields presented on the left panel. Respond as you would if genuinely preparing this brief for submission to AI.",
+          "text_ssml": "<speak>Your task is to populate all six P.R.O.M.P.T. fields presented on the left panel. Respond as you would if genuinely preparing this brief for submission to AI.</speak>",
+          "text_expressive": "Your task is to populate all six P.R.O.M.P.T. fields presented on the left panel. Respond as you would if genuinely preparing this brief for submission to AI."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "encouraging",
+          "text": "Upon submission, you will be presented with a reference specification for the identical scenario, displayed for direct comparison — intended to surface your own blind spots, not to evaluate performance.",
+          "text_ssml": "<speak>Upon submission, you will be presented with a reference specification for the identical scenario, displayed for direct comparison<break time=\"150ms\"/> intended to surface your own blind spots, not to evaluate performance.</speak>",
+          "text_expressive": "Upon submission, you will be presented with a reference specification for the identical scenario, displayed for direct comparison — intended to surface your own blind spots, not to evaluate performance."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Proceed when ready.",
+          "text_ssml": "<speak>Proceed when ready.</speak>",
+          "text_expressive": "Proceed when ready."
+        }
+      ],
+      "estimated_duration_seconds": 72
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "prompt_lab",
+      "title": "Prompt Engineering Lab 2",
+      "subtitle": "Customer Feedback Form Specification — Your Final Exercise Before Assessment",
+      "icon": "flask-conical",
+      "lab_number": 2,
+      "scenario": {
+        "label": "The Scenario",
+        "text": "A client has communicated the following: \"We require a mechanism for customers to submit feedback following order completion. Can this be developed?\" Note: you are not required to write code. You are functioning as Intent Translator, as established in slide eleven. Your responsibility is the specification, not the implementation."
+      },
+      "task_prompt": "Compose the P.R.O.M.P.T. specification you would submit to AI to ensure this is built correctly on the first attempt. Technical implementation knowledge is not required — precision in specifying intent is what is required.",
+      "input_fields": [
+        {
+          "key": "purpose",
+          "label": "P — Purpose",
+          "placeholder": "State the objective in a single precise sentence."
+        },
+        {
+          "key": "role",
+          "label": "R — Role",
+          "placeholder": "Specify the professional persona the model should adopt."
+        },
+        {
+          "key": "output",
+          "label": "O — Output",
+          "placeholder": "Specify the required output format."
+        },
+        {
+          "key": "marker",
+          "label": "M — Marker",
+          "placeholder": "Specify non-negotiable constraints: required fields, platform requirements, compliance considerations."
+        },
+        {
+          "key": "pattern",
+          "label": "P — Pattern",
+          "placeholder": "Specify the required structure or layout."
+        },
+        {
+          "key": "tone",
+          "label": "T — Tone",
+          "placeholder": "Specify the required tone for customer-facing text."
+        }
+      ],
+      "submit_button_label": "Compare to Reference Specification",
+      "model_answer": {
+        "purpose": "Develop a concise customer feedback form that appears immediately following order completion.",
+        "role": "Act as a senior frontend engineer experienced in lightweight, customer-facing form development.",
+        "output": "A web form component, accompanied by a brief summary of included fields and validation logic.",
+        "marker": "Completion time must not exceed sixty seconds. Required fields limited to a star rating and an optional comment field. Must function correctly on mobile devices. Must comply with existing data privacy policy — no collection of personal information beyond what already exists in the order record.",
+        "pattern": "Star rating positioned at the top, optional comment field below, single submission control. Multi-page structure is not appropriate for this use case.",
+        "tone": "Warm and appreciative — the customer should perceive that their input is genuinely valued, not that they are completing a compliance obligation."
+      },
+      "comparison_report": {
+        "title": "Your Specification, Compared to the Reference",
+        "intro": "An identical exercise, applied this time to a software requirement. Note that no coding knowledge was required to produce a specification a developer or AI system could implement directly. This is the essential function of the Intent Translator role.",
+        "common_gaps": [
+          {
+            "element": "Marker",
+            "insight": "'Completion time under sixty seconds' and 'no collection of personal information beyond the order record' may appear to be minor details, but these are precisely the constraints that prevent an overengineered, privacy-risky form from being built. This corresponds directly to the upstream-quality principle established in slide twelve — these Markers prevent defects before they exist."
+          },
+          {
+            "element": "Output",
+            "insight": "Did your specification simply state 'a feedback form'? Or did it specify what should be returned — a working component, accompanying documentation, or both? An underspecified Output element risks receiving a descriptive paragraph rather than an implementable specification."
+          },
+          {
+            "element": "Tone",
+            "insight": "This element is frequently overlooked on technical requests — yet the actual customer-facing language matters considerably. 'Warm and appreciative' versus no tone guidance whatsoever is the difference between a form that feels considered and one that feels procedural."
+          }
+        ],
+        "closing_line": "Two exercises completed. You have now produced P.R.O.M.P.T. specifications for both a people-oriented scenario and a software scenario — demonstrating that the framework generalizes. The assessment follows."
+      },
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Lab Two. Your final exercise prior to the assessment.",
+          "text_ssml": "<speak>Lab Two. Your final exercise prior to the assessment.</speak>",
+          "text_expressive": "Lab Two. Your final exercise prior to the assessment."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "A new scenario, this time involving software. A client states: 'We require a mechanism for customers to submit feedback following order completion. Can this be developed?'",
+          "text_ssml": "<speak>A new scenario, this time involving software. A client states: 'We require a mechanism for customers to submit feedback following order completion. Can this be developed?'</speak>",
+          "text_expressive": "A new scenario, this time involving software. A client states: 'We require a mechanism for customers to submit feedback following order completion. Can this be developed?'"
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "reassuring",
+          "text": "To clarify in advance: coding ability is not required for this exercise. Recall slide eleven — you are functioning as Intent Translator. Your responsibility is the specification, not the implementation.",
+          "text_ssml": "<speak>To clarify in advance: coding ability is not required for this exercise. Recall slide eleven<break time=\"150ms\"/> you are functioning as Intent Translator. Your responsibility is the specification, not the implementation.</speak>",
+          "text_expressive": "To clarify in advance: coding ability is not required for this exercise. Recall slide eleven — you are functioning as Intent Translator. Your responsibility is the specification, not the implementation."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "explaining",
+          "text": "Populate the six fields as before. Consider what genuinely matters in this context — response time, data collected, and the customer's experience of the form.",
+          "text_ssml": "<speak>Populate the six fields as before. Consider what genuinely matters in this context<break time=\"150ms\"/> response time, data collected, and the customer's experience of the form.</speak>",
+          "text_expressive": "Populate the six fields as before. Consider what genuinely matters in this context — response time, data collected, and the customer's experience of the form."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "encouraging",
+          "text": "Submit your specification, compare it against the reference, and identify what was addressed comprehensively and what may require further development.",
+          "text_ssml": "<speak>Submit your specification, compare it against the reference, and identify what was addressed comprehensively and what may require further development.</speak>",
+          "text_expressive": "Submit your specification, compare it against the reference, and identify what was addressed comprehensively and what may require further development."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Two exercises, two distinctly different scenarios — one interpersonal, one technical. The same formula, applied successfully in both instances. This is not coincidental. This is the central demonstration.",
+          "text_ssml": "<speak>Two exercises, two distinctly different scenarios<break time=\"150ms\"/> one interpersonal, one technical. The same formula, applied successfully in both instances. This is not coincidental. This is the central demonstration.</speak>",
+          "text_expressive": "Two exercises, two distinctly different scenarios — one interpersonal, one technical. The same formula, applied successfully in both instances. This is not coincidental. This is the central demonstration."
+        }
+      ],
+      "estimated_duration_seconds": 72
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "title": "Module Complete",
+      "subtitle": "Module 1 — OrchestrAI Mindset Foundation",
+      "icon": "party-popper",
+      "hero_visual": {
+        "concept": "celebratory_conductor",
+        "description": "A conductor at the podium, mid-performance, captured in measured gold light against the dark navy brand background — a direct visual reference to the central orchestration metaphor established in slide ten.",
+        "alt_text": "An illustrated conductor at the podium, gold light emphasizing the moment of command, symbolizing the completed transition to an orchestration mindset.",
+        "fallback_icon": "party-popper",
+        "animation_suggestion": "A restrained, professional entrance animation — gold light intensifying briefly, settling within one to two seconds. Understated rather than exuberant, consistent with the Formal register."
+      },
+      "score_display": {
+        "label": "Assessment Result",
+        "source_slide": "slide_20",
+        "show_percentage": true,
+        "show_fraction": true,
+        "pass_threshold": 80,
+        "pass_message": "Assessment passed. Module 2 is now available.",
+        "retry_message": "Additional review is recommended. Revisit the summary on slide nineteen, then retake the assessment. Attempts are unlimited."
+      },
+      "milestone_banner": {
+        "formal": "You have completed the foundational module of the OrchestrAI Lead Certification.",
+        "conversational": "You just finished the most important hour of this entire certification.",
+        "genz": "You just finished the most important hour in this whole certification. No cap.",
+        "beginner": "You've just completed the most important part of this certification — the foundation everything else builds on."
+      },
+      "summary_bullets": {
+        "formal": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI exhibits a structural correspondence to human cognition."
+          },
+          {
+            "icon": "trending-down",
+            "text": "Traditional software delivery carries significant structural risk; OrchestrAI addresses this through orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "Your function has shifted from direct execution to intent orchestration."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. is now a practiced skill, not just a memorized acronym."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality is engineered upstream, not detected downstream."
+          }
+        ],
+        "conversational": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI is your twin — same anatomy, different substrate."
+          },
+          {
+            "icon": "trending-down",
+            "text": "The old world of software delivery is breaking, and OrchestrAI fixes it with orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "You're a conductor now, not a soloist."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. isn't just something you memorized — you actually used it, twice."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality lives upstream, in the brief."
+          }
+        ],
+        "genz": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI's your twin — same anatomy, different hardware."
+          },
+          {
+            "icon": "trending-down",
+            "text": "Old world's broken. OrchestrAI fixes it with orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "You're the conductor now, not the soloist."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. isn't just something you memorized — you actually used it. Twice."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality lives upstream, in the brief. Always."
+          }
+        ],
+        "beginner": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI works a lot like you — similar structure, different material."
+          },
+          {
+            "icon": "trending-down",
+            "text": "The old way of building software has real problems, and OrchestrAI fixes them through better organization."
+          },
+          {
+            "icon": "music-2",
+            "text": "Your role has changed — you guide AI now, instead of doing everything by hand."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "You didn't just learn P.R.O.M.P.T. — you practiced it, twice, in real scenarios."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality starts at the beginning, not the end."
+          }
+        ]
+      },
+      "achievement_stats": {
+        "label": {
+          "formal": "Session Summary",
+          "conversational": "What You Just Did",
+          "genz": "What You Just Pulled Off",
+          "beginner": "What You Accomplished"
+        },
+        "stats": [
+          {
+            "icon": "layout-grid",
+            "value": "20",
+            "label": {
+              "formal": "Concepts Covered",
+              "conversational": "Slides Completed",
+              "genz": "Slides Crushed",
+              "beginner": "Lessons Completed"
+            }
+          },
+          {
+            "icon": "flask-conical",
+            "value": "2",
+            "label": {
+              "formal": "Applied Exercises",
+              "conversational": "Labs Completed",
+              "genz": "Labs Done",
+              "beginner": "Practice Exercises"
+            }
+          },
+          {
+            "icon": "clipboard-check",
+            "value": "10",
+            "label": {
+              "formal": "Assessment Items",
+              "conversational": "Quiz Questions",
+              "genz": "Quiz Questions",
+              "beginner": "Quiz Questions"
+            }
+          },
+          {
+            "icon": "clock",
+            "value": "60",
+            "label": {
+              "formal": "Minutes Invested",
+              "conversational": "Minutes Well Spent",
+              "genz": "Minutes, Zero Wasted",
+              "beginner": "Minutes of Learning"
+            }
+          }
+        ]
+      },
+      "closing_message": {
+        "formal": "This concludes Module 1. The foundational mindset established here — orchestration, structured intent, and upstream quality — underlies all subsequent modules. Proceed to Module 2 when ready.",
+        "conversational": "That's a wrap on Module 1. Everything else in this program builds on what you just learned — the conductor mindset, P.R.O.M.P.T., upstream quality. You're ready for Module 2 whenever you are.",
+        "genz": "And that's a wrap on Module 1. Everything else in this program builds on what you just locked in — conductor mindset, P.R.O.M.P.T., upstream quality. Module 2's whenever you're ready. Let's gooo.",
+        "beginner": "You've completed Module 1. Everything you learn next builds on what you just covered — thinking like a conductor, using P.R.O.M.P.T., and building in quality from the start. Take a moment to feel good about this. Module 2 is ready whenever you are."
+      },
+      "cta_button": {
+        "formal": "Proceed to Module 2",
+        "conversational": "Continue to Module 2",
+        "genz": "Let's Go to Module 2",
+        "beginner": "Start Module 2 When You're Ready"
+      },
+      "narration_script": [
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "confident",
+          "text": "Congratulations are warranted. Module 1 is now complete.",
+          "text_ssml": "<speak>Congratulations are warranted. Module 1 is now complete.</speak>",
+          "text_expressive": "Congratulations are warranted. Module 1 is now complete."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "proud",
+          "text": "Review your assessment result above. This outcome reflects genuine comprehension of the orchestration mindset and the P.R.O.M.P.T. methodology — not incidental performance.",
+          "text_ssml": "<speak>Review your assessment result above. This outcome reflects <emphasis level=\"moderate\">genuine comprehension</emphasis> of the orchestration mindset and the P.R.O.M.P.T. methodology<break time=\"150ms\"/> not incidental performance.</speak>",
+          "text_expressive": "Review your assessment result above. This outcome reflects genuine comprehension of the orchestration mindset and the P.R.O.M.P.T. methodology — not incidental performance."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "warm",
+          "text": "Consider your starting position relative to your current position. You have now produced two complete P.R.O.M.P.T. specifications independently, addressing genuinely distinct scenarios.",
+          "text_ssml": "<speak>Consider your starting position relative to your current position. You have now produced two complete P.R.O.M.P.T. specifications independently, addressing genuinely distinct scenarios.</speak>",
+          "text_expressive": "Consider your starting position relative to your current position. You have now produced two complete P.R.O.M.P.T. specifications independently, addressing genuinely distinct scenarios."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Correspondence. Deficiency. Orchestration. P.R.O.M.P.T. Upstream. Five anchor terms, each now substantiated by direct application.",
+          "text_ssml": "<speak>Correspondence. Deficiency. Orchestration. P.R.O.M.P.T. Upstream. Five anchor terms, each now substantiated by direct application.</speak>",
+          "text_expressive": "Correspondence. Deficiency. Orchestration. P.R.O.M.P.T. Upstream. Five anchor terms, each now substantiated by direct application."
+        },
+        {
+          "speaker": "Priya",
+          "voice": "female_formal",
+          "emotion": "warm",
+          "text": "This represents substantive progress. It merits acknowledgment.",
+          "text_ssml": "<speak>This represents substantive progress. It merits acknowledgment.</speak>",
+          "text_expressive": "This represents substantive progress. It merits acknowledgment."
+        },
+        {
+          "speaker": "Shiva",
+          "voice": "male_formal",
+          "emotion": "confident",
+          "text": "Module 2 is available when you are prepared to proceed. We look forward to continuing this work with you.",
+          "text_ssml": "<speak>Module 2 is available when you are prepared to proceed. We look forward to continuing this work with you.</speak>",
+          "text_expressive": "Module 2 is available when you are prepared to proceed. We look forward to continuing this work with you."
+        }
+      ],
+      "estimated_duration_seconds": 62,
+      "background_music": {
+        "track_key": "outro_theme",
+        "behavior": "fade_in_then_duck_under_narration",
+        "fade_in_ms": 1000,
+        "duck_volume_percent": 15,
+        "fade_out_ms": 2500,
+        "notes": "Play a measured, professional completion theme on slide load, timed with the hero_visual animation. Fade in over 1s, duck to 15% during narration, fade out over 2.5s on CTA click or slide exit."
+      }
+    }
+  ]
+}

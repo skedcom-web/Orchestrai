@@ -1,0 +1,2342 @@
+{
+  "module": "Module 1 — The OrchestrAI Mindset",
+  "preset": "conversational",
+  "format": "single_voice",
+  "speakers": {
+    "Pooja": {
+      "voice_key": "female_conversational",
+      "gender": "female",
+      "persona": "Pooja — warm, confident mentor"
+    }
+  },
+  "tts_field_priority": [
+    "text_expressive",
+    "text_ssml",
+    "text"
+  ],
+  "tts_notes": "Use text_expressive for ElevenLabs-style engines, text_ssml for Google/Azure/Polly, text as universal fallback.",
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "title": "Welcome to the OrchestrAI Mindset",
+      "subtitle": "Module 1 of the OrchestrAI Lead Certification",
+      "icon": "sparkles",
+      "visual_cue": "animated_intro_burst",
+      "hero_stat": {
+        "value": "60 min",
+        "label": "to rewire how you think about software delivery",
+        "icon": "timer"
+      },
+      "opening_hook": "By the end of this hour, you will not look at your job description the same way again.",
+      "bullets": [
+        "One module. Five acts. Twenty slides.",
+        "You'll meet your AI twin, learn its anatomy, and walk away with a formula you can use Monday morning.",
+        "No filler. No theory for theory's sake. Every minute earns its place.",
+        "Pass the quiz at the end and you unlock Module 2."
+      ],
+      "closing_thread": "Let's start by looking in the mirror.",
+      "narration": "Welcome to the OrchestrAI Lead Certification. I'm Pooja, and I'll be walking you through this first module myself. And I want to be upfront with you — this is the most important hour in the whole program. Everything else we cover later builds on what happens in the next sixty minutes. We're not going to throw theory at you, or make you memorize definitions. Instead, we're going to start somewhere a little unexpected — by looking at you. Because honestly, the easiest way to understand AI is to realize you're already walking around inside an intelligence of your own. Your brain. One module, five parts, twenty slides. Pass the quiz at the end, and Module 2 opens up. Let's get started.",
+      "estimated_duration_seconds": 75,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Welcome to the OrchestrAI Lead Certification. I'm Pooja, and I'll be walking you through this first module myself.",
+          "text_ssml": "<speak>Welcome to the OrchestrAI Lead Certification. I'm Pooja, and I'll be walking you through this first module myself.</speak>",
+          "text_expressive": "Welcome to the OrchestrAI Lead Certification. I'm Pooja, and I'll be walking you through this first module myself."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "earnest",
+          "text": "And I want to be upfront with you — this is the most important hour in the whole program. Everything else we cover later builds on what happens in the next sixty minutes.",
+          "text_ssml": "<speak>And I want to be upfront with you<break time=\"200ms\"/> this is the most important hour in the whole program. Everything else we cover later builds on what happens in the next sixty minutes.</speak>",
+          "text_expressive": "And I want to be upfront with you — this is the most important hour in the whole program. Everything else we cover later builds on what happens in the next sixty minutes."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "reassuring",
+          "text": "We're not going to throw theory at you, or make you memorize definitions. Instead, we're going to start somewhere a little unexpected — by looking at you.",
+          "text_ssml": "<speak>We're not going to throw theory at you, or make you memorize definitions. Instead, we're going to start somewhere a little unexpected<break time=\"250ms\"/> by looking at you.</speak>",
+          "text_expressive": "We're not going to throw theory at you, or make you memorize definitions. Instead, we're going to start somewhere a little unexpected — by looking at you."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Because honestly, the easiest way to understand AI is to realize you're already walking around inside an intelligence of your own. Your brain.",
+          "text_ssml": "<speak>Because honestly, the easiest way to understand AI is to realize you're already walking around inside an intelligence of your own. Your brain.</speak>",
+          "text_expressive": "Because honestly, the easiest way to understand AI is to realize you're already walking around inside an intelligence of your own. Your brain."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "One module, five parts, twenty slides. Pass the quiz at the end, and Module 2 opens up. Let's get started.",
+          "text_ssml": "<speak>One module, five parts, twenty slides. Pass the quiz at the end, and Module 2 opens up. Let's get started.</speak>",
+          "text_expressive": "One module, five parts, twenty slides. Pass the quiz at the end, and Module 2 opens up. Let's get started."
+        }
+      ],
+      "background_music": {
+        "track_key": "intro_theme",
+        "behavior": "fade_in_then_duck_under_narration",
+        "fade_in_ms": 1500,
+        "duck_volume_percent": 15,
+        "fade_out_ms": 2000,
+        "notes": "Play a short intro theme on slide load. Fade in over 1.5s, duck to 15% once narration starts, fade out as the user advances."
+      }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "comparison_table",
+      "title": "Meet Your Twin",
+      "subtitle": "You already know how intelligence works — you live inside one.",
+      "icon": "users-2",
+      "visual_cue": "human_ai_split_with_centre_face",
+      "analogy": {
+        "title": "AI Was Built in Our Image",
+        "text": "Every capability you'll hear about — LLMs, RAG, agents, MCP, hallucinations — has a direct human equivalent. That's not a coincidence. We engineered AI by reverse-engineering ourselves. So before we talk about how to use it, let's see how familiar it actually is."
+      },
+      "table": [
+        {
+          "icon": "brain",
+          "old": "Brain — reasoning, language, prediction",
+          "new": "Large Language Model (LLM)"
+        },
+        {
+          "icon": "book-open",
+          "old": "Long-term memory — recalling facts on demand",
+          "new": "Retrieval-Augmented Generation (RAG)"
+        },
+        {
+          "icon": "git-branch",
+          "old": "Nervous system — signals between body parts",
+          "new": "Model Context Protocol (MCP)"
+        },
+        {
+          "icon": "bot",
+          "old": "Hands and feet — taking action in the world",
+          "new": "AI Agents"
+        },
+        {
+          "icon": "wand-2",
+          "old": "Creativity and imagination",
+          "new": "Generative AI"
+        },
+        {
+          "icon": "trophy",
+          "old": "Learning from mistakes — trial and error",
+          "new": "Reinforcement Learning"
+        },
+        {
+          "icon": "alert-triangle",
+          "old": "Dreams, false memories, confident mistakes",
+          "new": "AI Hallucinations"
+        }
+      ],
+      "memory_hook": "Every AI capability has a human equivalent. AI is your twin — same anatomy, different substrate.",
+      "narration": "Take a moment to look at this table. On the left, the parts of your own mind and body you've known about since you were a kid. On the right, the AI terms that probably sound a lot less familiar. But watch how cleanly they line up. Your brain — the thing predicting the next word when you finish a friend's sentence — that's the Large Language Model. Your long-term memory, pulling up a fact when you need it — that's RAG. Your nervous system, carrying signals between different parts of your body — that's MCP, which lets different AI parts talk to each other. Your hands and feet, actually doing things in the world — those are AI Agents. Your imagination — that's Generative AI. And learning from your own mistakes — that's Reinforcement Learning. And then there's the last one, which I want you to pay close attention to. Hallucination — that's AI dreaming. Confident, vivid, and sometimes just... not true. Keep that in the back of your mind. It's actually the whole reason the rest of this module exists. So the big takeaway here? AI isn't some alien technology. It's your twin.",
+      "estimated_duration_seconds": 105,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Take a moment to look at this table. On the left, the parts of your own mind and body you've known about since you were a kid. On the right, the AI terms that probably sound a lot less familiar.",
+          "text_ssml": "<speak>Take a moment to look at this table. On the left, the parts of your own mind and body you've known about since you were a kid. On the right, the AI terms that probably sound a lot less familiar.</speak>",
+          "text_expressive": "Take a moment to look at this table. On the left, the parts of your own mind and body you've known about since you were a kid. On the right, the AI terms that probably sound a lot less familiar."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "But watch how cleanly they line up. Your brain — the thing predicting the next word when you finish a friend's sentence — that's the Large Language Model.",
+          "text_ssml": "<speak>But watch how cleanly they line up. Your brain<break time=\"200ms\"/> the thing predicting the next word when you finish a friend's sentence<break time=\"200ms\"/> that's the Large Language Model.</speak>",
+          "text_expressive": "But watch how cleanly they line up. Your brain — the thing predicting the next word when you finish a friend's sentence — that's the Large Language Model."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Your long-term memory, pulling up a fact when you need it — that's RAG. Your nervous system, carrying signals between different parts of your body — that's MCP, which lets different AI parts talk to each other.",
+          "text_ssml": "<speak>Your long-term memory, pulling up a fact when you need it<break time=\"200ms\"/> that's RAG. Your nervous system, carrying signals between different parts of your body<break time=\"200ms\"/> that's MCP, which lets different AI parts talk to each other.</speak>",
+          "text_expressive": "Your long-term memory, pulling up a fact when you need it — that's RAG. Your nervous system, carrying signals between different parts of your body — that's MCP, which lets different AI parts talk to each other."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Your hands and feet, actually doing things in the world — those are AI Agents. Your imagination — that's Generative AI. And learning from your own mistakes — that's Reinforcement Learning.",
+          "text_ssml": "<speak>Your hands and feet, actually doing things in the world<break time=\"200ms\"/> those are AI Agents. Your imagination<break time=\"200ms\"/> that's Generative AI. And learning from your own mistakes<break time=\"200ms\"/> that's Reinforcement Learning.</speak>",
+          "text_expressive": "Your hands and feet, actually doing things in the world — those are AI Agents. Your imagination — that's Generative AI. And learning from your own mistakes — that's Reinforcement Learning."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "intrigue",
+          "text": "And then there's the last one, which I want you to pay close attention to. Hallucination — that's AI dreaming. Confident, vivid, and sometimes just... not true.",
+          "text_ssml": "<speak>And then there's the last one, which I want you to pay close attention to. Hallucination<break time=\"200ms\"/> that's AI dreaming. Confident, vivid, and sometimes just<break time=\"300ms\"/> not true.</speak>",
+          "text_expressive": "And then there's the last one, which I want you to pay close attention to. Hallucination — that's AI dreaming. Confident, vivid, and sometimes just... not true."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "Keep that in the back of your mind. It's actually the whole reason the rest of this module exists. So the big takeaway here? AI isn't some alien technology. It's your twin.",
+          "text_ssml": "<speak>Keep that in the back of your mind. It's actually the whole reason the rest of this module exists. So the big takeaway here? AI isn't some alien technology. It's your <emphasis level=\"moderate\">twin</emphasis>.</speak>",
+          "text_expressive": "Keep that in the back of your mind. It's actually the whole reason the rest of this module exists. So the big takeaway here? AI isn't some alien technology. It's your twin."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "competencies",
+      "title": "The Intelligence Core",
+      "subtitle": "Four pieces of machinery doing the thinking",
+      "icon": "brain-circuit",
+      "analogy": {
+        "title": "The Brain Behind the Brain",
+        "text": "If the LLM is the brain, these four pieces are its lobes — each doing a job you'd recognize from your own head. None of them are magic. All of them are just specialized pattern recognition, scaled up."
+      },
+      "list": [
+        {
+          "name": "LLM — Large Language Model",
+          "icon": "brain",
+          "desc": "The brain. Predicts the next word the way you finish a friend's sentence — except it has read most of the internet to learn how."
+        },
+        {
+          "name": "Deep Learning",
+          "icon": "layers",
+          "desc": "Layered pattern recognition. The same way you recognize a face by first seeing edges, then shapes, then features — machines do it through layers of mathematical filters."
+        },
+        {
+          "name": "Transformers",
+          "icon": "network",
+          "desc": "The architecture that gave AI 'attention.' Lets it focus on what matters in a sentence — context awareness, not just word-by-word reading."
+        },
+        {
+          "name": "Reinforcement Learning",
+          "icon": "trophy",
+          "desc": "Trial and error with rewards — how a child learns not to touch a hot stove, but at silicon speed."
+        }
+      ],
+      "memory_hook": "LLM = brain. Deep Learning = how it sees patterns. Transformers = how it pays attention. RL = how it learns from mistakes.",
+      "narration": "Let's open the hood a little. There are four pieces of machinery inside that brain, and each one's doing its own job. First, the LLM itself — predicting the next word, the same way you'd finish a friend's sentence, except it's read almost the entire internet to get good at it. Second, Deep Learning — pattern recognition, but in layers. Same way you recognize a face by first noticing edges, then shapes, then features. The machine does it with layers of math instead. Third — and this is a fun one — Transformers, from 2017. This is what gave AI the ability to pay attention. To understand context, not just read word by word. So in a sentence like 'the trophy didn't fit in the suitcase because it was too big' — AI actually knows 'it' means the trophy, not the suitcase. That's a real piece of reasoning. And fourth, Reinforcement Learning — trial and error with rewards. The same way a kid learns not to touch a hot stove, except AI runs millions of attempts a minute. None of this is magic, by the way. It's just pattern recognition, done at a scale that's hard to picture.",
+      "estimated_duration_seconds": 100,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "casual",
+          "text": "Let's open the hood a little. There are four pieces of machinery inside that brain, and each one's doing its own job.",
+          "text_ssml": "<speak>Let's open the hood a little. There are four pieces of machinery inside that brain, and each one's doing its own job.</speak>",
+          "text_expressive": "Let's open the hood a little. There are four pieces of machinery inside that brain, and each one's doing its own job."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "First, the LLM itself — predicting the next word, the same way you'd finish a friend's sentence, except it's read almost the entire internet to get good at it.",
+          "text_ssml": "<speak>First, the LLM itself<break time=\"200ms\"/> predicting the next word, the same way you'd finish a friend's sentence, except it's read almost the entire internet to get good at it.</speak>",
+          "text_expressive": "First, the LLM itself — predicting the next word, the same way you'd finish a friend's sentence, except it's read almost the entire internet to get good at it."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Second, Deep Learning — pattern recognition, but in layers. Same way you recognize a face by first noticing edges, then shapes, then features. The machine does it with layers of math instead.",
+          "text_ssml": "<speak>Second, Deep Learning<break time=\"200ms\"/> pattern recognition, but in layers. Same way you recognize a face by first noticing edges, then shapes, then features. The machine does it with layers of math instead.</speak>",
+          "text_expressive": "Second, Deep Learning — pattern recognition, but in layers. Same way you recognize a face by first noticing edges, then shapes, then features. The machine does it with layers of math instead."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "excited",
+          "text": "Third — and this is a fun one — Transformers, from 2017. This is what gave AI the ability to pay attention. To understand context, not just read word by word.",
+          "text_ssml": "<speak>Third<break time=\"200ms\"/> and this is a fun one<break time=\"200ms\"/> Transformers, from 2017. This is what gave AI the ability to pay attention. To understand context, not just read word by word.</speak>",
+          "text_expressive": "Third — and this is a fun one — Transformers, from 2017. This is what gave AI the ability to pay attention. To understand context, not just read word by word."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "So in a sentence like 'the trophy didn't fit in the suitcase because it was too big' — AI actually knows 'it' means the trophy, not the suitcase. That's a real piece of reasoning.",
+          "text_ssml": "<speak>So in a sentence like 'the trophy didn't fit in the suitcase because it was too big'<break time=\"200ms\"/> AI actually knows 'it' means the trophy, not the suitcase. That's a real piece of reasoning.</speak>",
+          "text_expressive": "So in a sentence like 'the trophy didn't fit in the suitcase because it was too big' — AI actually knows 'it' means the trophy, not the suitcase. That's a real piece of reasoning."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "casual",
+          "text": "And fourth, Reinforcement Learning — trial and error with rewards. The same way a kid learns not to touch a hot stove, except AI runs millions of attempts a minute.",
+          "text_ssml": "<speak>And fourth, Reinforcement Learning<break time=\"200ms\"/> trial and error with rewards. The same way a kid learns not to touch a hot stove, except AI runs millions of attempts a minute.</speak>",
+          "text_expressive": "And fourth, Reinforcement Learning — trial and error with rewards. The same way a kid learns not to touch a hot stove, except AI runs millions of attempts a minute."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "reassuring",
+          "text": "None of this is magic, by the way. It's just pattern recognition, done at a scale that's hard to picture.",
+          "text_ssml": "<speak>None of this is magic, by the way. It's just pattern recognition, done at a scale that's hard to picture.</speak>",
+          "text_expressive": "None of this is magic, by the way. It's just pattern recognition, done at a scale that's hard to picture."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "competencies",
+      "title": "Extended Capabilities",
+      "subtitle": "What lets AI act, remember, and sometimes lie",
+      "icon": "puzzle",
+      "analogy": {
+        "title": "The Senses, Memory, and Limbs",
+        "text": "If the previous slide showed you the brain, this one shows you everything connected to it — the long-term memory, the limbs, the imagination, and yes, the dreams. The last item on this list is the most important. Watch for it."
+      },
+      "list": [
+        {
+          "name": "RAG — Retrieval-Augmented Generation",
+          "icon": "book-open",
+          "desc": "Long-term memory on demand. Lets AI look up your company's docs, policies, or codebase before answering — instead of guessing from what it was trained on."
+        },
+        {
+          "name": "Generative AI",
+          "icon": "wand-2",
+          "desc": "Creativity. Writing, drawing, coding, designing — producing something new rather than just classifying or predicting."
+        },
+        {
+          "name": "AI Agents",
+          "icon": "bot",
+          "desc": "Hands and feet. AI that doesn't just talk — it does things. Sends emails, queries databases, deploys code, opens tickets."
+        },
+        {
+          "name": "MCP — Model Context Protocol",
+          "icon": "git-branch",
+          "desc": "The nervous system. The standard that lets different AI components talk to each other and to your existing tools — without custom integration for each one."
+        },
+        {
+          "name": "Hallucination",
+          "icon": "alert-triangle",
+          "desc": "AI's dreams. Confidently wrong answers when it doesn't know. The single biggest risk in enterprise AI — and the reason we spend the next 45 minutes learning to control it."
+        }
+      ],
+      "memory_hook": "Hallucination is why P.R.O.M.P.T. exists. Hold that thought for slide 14.",
+      "visual_cue": "highlight_last_row_with_warning_pulse",
+      "narration": "If the last slide was the brain, this one is everything plugged into it — memory, limbs, imagination, and one important warning. RAG is memory on demand. Ask AI about your own company, and instead of guessing from old training data, it actually goes and looks up your real documents first. Generative AI is the creative side — writing, art, code, design. Actually making something new, not just sorting things into the right box. AI Agents are the limbs. They don't just respond — they act. Sending emails, querying a database, shipping code. And MCP, the Model Context Protocol, is the nervous system — it lets all these different pieces, and your existing tools, talk to each other without custom wiring every single time. Now — the warning. Hallucination. This is AI's dream state. Confident, vivid, and sometimes completely made up. When AI doesn't actually know an answer, it doesn't tell you that. It just invents one. And that, right there, is the single biggest risk with using AI in any real business setting. Which is exactly why the P.R.O.M.P.T. formula exists. Hang onto that thought — we'll get there in slide fourteen.",
+      "estimated_duration_seconds": 110,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "If the last slide was the brain, this one is everything plugged into it — memory, limbs, imagination, and one important warning.",
+          "text_ssml": "<speak>If the last slide was the brain, this one is everything plugged into it<break time=\"200ms\"/> memory, limbs, imagination, and one important warning.</speak>",
+          "text_expressive": "If the last slide was the brain, this one is everything plugged into it — memory, limbs, imagination, and one important warning."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "RAG is memory on demand. Ask AI about your own company, and instead of guessing from old training data, it actually goes and looks up your real documents first.",
+          "text_ssml": "<speak>RAG is memory on demand. Ask AI about your own company, and instead of guessing from old training data, it actually goes and looks up your real documents first.</speak>",
+          "text_expressive": "RAG is memory on demand. Ask AI about your own company, and instead of guessing from old training data, it actually goes and looks up your real documents first."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Generative AI is the creative side — writing, art, code, design. Actually making something new, not just sorting things into the right box.",
+          "text_ssml": "<speak>Generative AI is the creative side<break time=\"200ms\"/> writing, art, code, design. Actually making something new, not just sorting things into the right box.</speak>",
+          "text_expressive": "Generative AI is the creative side — writing, art, code, design. Actually making something new, not just sorting things into the right box."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "AI Agents are the limbs. They don't just respond — they act. Sending emails, querying a database, shipping code.",
+          "text_ssml": "<speak>AI Agents are the limbs. They don't just respond<break time=\"200ms\"/> they act. Sending emails, querying a database, shipping code.</speak>",
+          "text_expressive": "AI Agents are the limbs. They don't just respond — they act. Sending emails, querying a database, shipping code."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "And MCP, the Model Context Protocol, is the nervous system — it lets all these different pieces, and your existing tools, talk to each other without custom wiring every single time.",
+          "text_ssml": "<speak>And MCP, the Model Context Protocol, is the nervous system<break time=\"200ms\"/> it lets all these different pieces, and your existing tools, talk to each other without custom wiring every single time.</speak>",
+          "text_expressive": "And MCP, the Model Context Protocol, is the nervous system — it lets all these different pieces, and your existing tools, talk to each other without custom wiring every single time."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "serious",
+          "text": "Now — the warning. Hallucination. This is AI's dream state. Confident, vivid, and sometimes completely made up. When AI doesn't actually know an answer, it doesn't tell you that.",
+          "text_ssml": "<speak>Now<break time=\"200ms\"/> the warning. Hallucination. This is AI's dream state. Confident, vivid, and sometimes completely made up. When AI doesn't actually know an answer, it doesn't tell you that.</speak>",
+          "text_expressive": "Now — the warning. Hallucination. This is AI's dream state. Confident, vivid, and sometimes completely made up. When AI doesn't actually know an answer, it doesn't tell you that."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "emphatic",
+          "text": "It just invents one. And that, right there, is the single biggest risk with using AI in any real business setting.",
+          "text_ssml": "<speak>It just invents one. And that, right there, is the <emphasis level=\"moderate\">single biggest risk</emphasis> with using AI in any real business setting.</speak>",
+          "text_expressive": "It just invents one. And that, right there, is the single biggest risk with using AI in any real business setting."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "Which is exactly why the P.R.O.M.P.T. formula exists. Hang onto that thought — we'll get there in slide fourteen.",
+          "text_ssml": "<speak>Which is exactly why the P.R.O.M.P.T. formula exists. Hang onto that thought<break time=\"200ms\"/> we'll get there in slide fourteen.</speak>",
+          "text_expressive": "Which is exactly why the P.R.O.M.P.T. formula exists. Hang onto that thought — we'll get there in slide fourteen."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "welcome",
+      "title": "If AI Is This Capable… What Do You Do?",
+      "subtitle": "The question that built OrchestrAI",
+      "icon": "git-fork",
+      "visual_cue": "intent_execution_arrow_diagram",
+      "reflection_prompt": "Pause. If AI can already write code, query databases, and generate UIs — what is the highest-value thing a software professional can do today?",
+      "bullets": [
+        "AI has the brain. AI has the memory. AI has the hands.",
+        "It still doesn't have intent. It doesn't know what your business needs.",
+        "That gap — intent translated into execution — is the new job.",
+        "And it has a name."
+      ],
+      "closing_thread": "It's called Orchestration. And it's the rest of this hour.",
+      "narration": "Let's pause for a second on that table from before. AI can already write code. It can already query databases. It can design UIs. Today. So here's the honest question. If it can do all of that — what's actually left for you to do? That question is genuinely the hinge of this whole program. AI has the brain. It has the memory. It has the hands. What it doesn't have, and won't have anytime soon, is intent. It has no idea what your business is actually trying to achieve, or which trade-offs actually matter. That gap — between what the business needs and what actually gets built — that's your new job now. And it has a name. It's called Orchestration.",
+      "estimated_duration_seconds": 95,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "thoughtful",
+          "text": "Let's pause for a second on that table from before. AI can already write code. It can already query databases. It can design UIs. Today.",
+          "text_ssml": "<speak>Let's pause for a second on that table from before. AI can already write code. It can already query databases. It can design UIs. <emphasis level=\"moderate\">Today</emphasis>.</speak>",
+          "text_expressive": "Let's pause for a second on that table from before. AI can already write code. It can already query databases. It can design UIs. Today."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "genuine_question",
+          "text": "So here's the honest question. If it can do all of that — what's actually left for you to do?",
+          "text_ssml": "<speak>So here's the honest question. If it can do all of that<break time=\"200ms\"/> what's actually left for you to do?</speak>",
+          "text_expressive": "So here's the honest question. If it can do all of that — what's actually left for you to do?"
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "That question is genuinely the hinge of this whole program. AI has the brain. It has the memory. It has the hands.",
+          "text_ssml": "<speak>That question is genuinely the hinge of this whole program. AI has the brain. It has the memory. It has the hands.</speak>",
+          "text_expressive": "That question is genuinely the hinge of this whole program. AI has the brain. It has the memory. It has the hands."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "What it doesn't have, and won't have anytime soon, is intent. It has no idea what your business is actually trying to achieve, or which trade-offs actually matter.",
+          "text_ssml": "<speak>What it doesn't have, and won't have anytime soon, is intent. It has no idea what your business is actually trying to achieve, or which trade-offs actually matter.</speak>",
+          "text_expressive": "What it doesn't have, and won't have anytime soon, is intent. It has no idea what your business is actually trying to achieve, or which trade-offs actually matter."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "That gap — between what the business needs and what actually gets built — that's your new job now. And it has a name. It's called Orchestration.",
+          "text_ssml": "<speak>That gap<break time=\"200ms\"/> between what the business needs and what actually gets built<break time=\"200ms\"/> that's your new job now. And it has a name. It's called <emphasis level=\"moderate\">Orchestration</emphasis>.</speak>",
+          "text_expressive": "That gap — between what the business needs and what actually gets built — that's your new job now. And it has a name. It's called Orchestration."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "welcome",
+      "title": "The Old World, in Three Numbers",
+      "subtitle": "Why traditional software delivery is breaking",
+      "icon": "trending-down",
+      "hero_stat": {
+        "value": "120 days",
+        "label": "average time from kickoff to first working baseline",
+        "icon": "calendar-x"
+      },
+      "analogy": {
+        "title": "The Bus Factor",
+        "text": "Ask any PM what their bus factor is — how many people would have to be hit by a bus for the project to die. If the answer is 1, you don't have a delivery model. You have a hostage situation."
+      },
+      "bullets": [
+        "120 days — average baseline build time on enterprise projects",
+        "30–40% — proportion of effort lost to rework, requirement churn, and integration drift",
+        "1 person — the typical \"key person\" whose absence stalls the whole delivery",
+        "These aren't engineering problems. They're orchestration problems."
+      ],
+      "closing_thread": "If you keep solving them with more engineers, you'll keep getting the same numbers.",
+      "narration": "Before we get into the new way of doing things, let's be honest about the old way for a second. Three numbers tell the whole story. First: a hundred and twenty days. That's the average time just to get a working baseline on enterprise software. Four months before anyone clicks a single button. Second: thirty to forty percent of all that effort gets wasted on rework — requirements changing midway through, integration problems, documentation nobody got around to writing. And third — this one's actually a little scary — what's called the bus factor of one. It's a real term in project management. It asks: how many people would have to be unavailable for the whole project to fall apart? And if the answer is one — that's not really a delivery model. That's a risk waiting to happen. And here's the important part — none of this is about people not being skilled enough. You can't fix it by adding more engineers. It's an orchestration problem, and it needs an orchestration fix.",
+      "estimated_duration_seconds": 100,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "real_talk",
+          "text": "Before we get into the new way of doing things, let's be honest about the old way for a second. Three numbers tell the whole story.",
+          "text_ssml": "<speak>Before we get into the new way of doing things, let's be honest about the old way for a second. Three numbers tell the whole story.</speak>",
+          "text_expressive": "Before we get into the new way of doing things, let's be honest about the old way for a second. Three numbers tell the whole story."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "First: a hundred and twenty days. That's the average time just to get a working baseline on enterprise software. Four months before anyone clicks a single button.",
+          "text_ssml": "<speak>First: a hundred and twenty days. That's the average time just to get a working baseline on enterprise software. Four months before anyone clicks a single button.</speak>",
+          "text_expressive": "First: a hundred and twenty days. That's the average time just to get a working baseline on enterprise software. Four months before anyone clicks a single button."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Second: thirty to forty percent of all that effort gets wasted on rework — requirements changing midway through, integration problems, documentation nobody got around to writing.",
+          "text_ssml": "<speak>Second: thirty to forty percent of all that effort gets wasted on rework<break time=\"200ms\"/> requirements changing midway through, integration problems, documentation nobody got around to writing.</speak>",
+          "text_expressive": "Second: thirty to forty percent of all that effort gets wasted on rework — requirements changing midway through, integration problems, documentation nobody got around to writing."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "intrigue",
+          "text": "And third — this one's actually a little scary — what's called the bus factor of one. It's a real term in project management.",
+          "text_ssml": "<speak>And third<break time=\"200ms\"/> this one's actually a little scary<break time=\"200ms\"/> what's called the bus factor of one. It's a real term in project management.</speak>",
+          "text_expressive": "And third — this one's actually a little scary — what's called the bus factor of one. It's a real term in project management."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "It asks: how many people would have to be unavailable for the whole project to fall apart? And if the answer is one — that's not really a delivery model. That's a risk waiting to happen.",
+          "text_ssml": "<speak>It asks: how many people would have to be unavailable for the whole project to fall apart? And if the answer is one<break time=\"200ms\"/> that's not really a delivery model. That's a risk waiting to happen.</speak>",
+          "text_expressive": "It asks: how many people would have to be unavailable for the whole project to fall apart? And if the answer is one — that's not really a delivery model. That's a risk waiting to happen."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "And here's the important part — none of this is about people not being skilled enough. You can't fix it by adding more engineers. It's an orchestration problem, and it needs an orchestration fix.",
+          "text_ssml": "<speak>And here's the important part<break time=\"200ms\"/> none of this is about people not being skilled enough. You can't fix it by adding more engineers. It's an orchestration problem, and it needs an orchestration fix.</speak>",
+          "text_expressive": "And here's the important part — none of this is about people not being skilled enough. You can't fix it by adding more engineers. It's an orchestration problem, and it needs an orchestration fix."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "competencies",
+      "title": "The OrchestrAI Iceberg",
+      "subtitle": "What you see is days. What's underneath is years.",
+      "icon": "mountain-snow",
+      "visual_cue": "iceberg_above_below_waterline",
+      "analogy": {
+        "title": "Above and Below the Waterline",
+        "text": "What the client sees is a single visible deliverable — a QA-ready application in days, not months. What sits beneath the waterline is six layers of orchestration, refined over years of vThink engineering, that make that visible delivery possible. The visible part is small. The hidden part is what makes it small."
+      },
+      "list": [
+        {
+          "name": "Layer 1 — Intent Capture",
+          "icon": "headphones",
+          "desc": "Structured stakeholder sessions that turn vague business goals into AI-readable briefs. Powered by P.R.O.M.P.T."
+        },
+        {
+          "name": "Layer 2 — Pattern Library",
+          "icon": "library",
+          "desc": "Pre-validated architectural patterns for auth, payments, reporting, workflows. AI doesn't reinvent — it composes."
+        },
+        {
+          "name": "Layer 3 — AI Engine",
+          "icon": "cpu",
+          "desc": "The generation core. Multiple models orchestrated to produce code, schemas, UI, and tests in parallel."
+        },
+        {
+          "name": "Layer 4 — Validation Loop",
+          "icon": "shield-check",
+          "desc": "Automated test generation, compliance scans, and human-in-the-loop checkpoints. Quality engineered upstream."
+        },
+        {
+          "name": "Layer 5 — Compliance Guards",
+          "icon": "scale",
+          "desc": "Industry-specific rule sets — banking, payments, finance — applied before any artifact ships."
+        },
+        {
+          "name": "Layer 6 — Co-Working Bridge",
+          "icon": "handshake",
+          "desc": "Daily UAT collaboration with the client until 100% confidence is reached before production go-live."
+        }
+      ],
+      "memory_hook": "Days of visible delivery sit on years of invisible orchestration.",
+      "narration": "Picture an iceberg. From a boat, you see this small floating chunk of ice. But underwater, there's about eight times more mass holding the whole thing up. OrchestrAI works the same way. What the client actually sees is one thing — a working app in their testing space, ready in days. But underneath, there are six layers of orchestration making that possible. Layer one is Intent Capture — turning a vague business goal into a brief AI can actually work with. Layer two is the Pattern Library — auth and payments aren't built from scratch, they're assembled from pieces that already work. Layer three is the AI Engine, running multiple models at once. Layer four is the Validation Loop — building in quality early instead of catching problems later. Layer five is Compliance Guards — checking industry rules for banking, payments, finance before anything ships. And layer six is the Co-Working Bridge — that's us, sitting with the client every day during testing until they're fully confident. So that small visible piece on top? It's small on purpose. Everything underneath is exactly what makes it possible to be that fast.",
+      "estimated_duration_seconds": 115,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "intrigue",
+          "text": "Picture an iceberg. From a boat, you see this small floating chunk of ice. But underwater, there's about eight times more mass holding the whole thing up.",
+          "text_ssml": "<speak>Picture an iceberg. From a boat, you see this small floating chunk of ice. But underwater, there's about eight times more mass holding the whole thing up.</speak>",
+          "text_expressive": "Picture an iceberg. From a boat, you see this small floating chunk of ice. But underwater, there's about eight times more mass holding the whole thing up."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "OrchestrAI works the same way. What the client actually sees is one thing — a working app in their testing space, ready in days. But underneath, there are six layers of orchestration making that possible.",
+          "text_ssml": "<speak>OrchestrAI works the same way. What the client actually sees is one thing<break time=\"200ms\"/> a working app in their testing space, ready in days. But underneath, there are six layers of orchestration making that possible.</speak>",
+          "text_expressive": "OrchestrAI works the same way. What the client actually sees is one thing — a working app in their testing space, ready in days. But underneath, there are six layers of orchestration making that possible."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Layer one is Intent Capture — turning a vague business goal into a brief AI can actually work with. Layer two is the Pattern Library — auth and payments aren't built from scratch, they're assembled from pieces that already work.",
+          "text_ssml": "<speak>Layer one is Intent Capture<break time=\"200ms\"/> turning a vague business goal into a brief AI can actually work with. Layer two is the Pattern Library<break time=\"200ms\"/> auth and payments aren't built from scratch, they're assembled from pieces that already work.</speak>",
+          "text_expressive": "Layer one is Intent Capture — turning a vague business goal into a brief AI can actually work with. Layer two is the Pattern Library — auth and payments aren't built from scratch, they're assembled from pieces that already work."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Layer three is the AI Engine, running multiple models at once. Layer four is the Validation Loop — building in quality early instead of catching problems later.",
+          "text_ssml": "<speak>Layer three is the AI Engine, running multiple models at once. Layer four is the Validation Loop<break time=\"200ms\"/> building in quality early instead of catching problems later.</speak>",
+          "text_expressive": "Layer three is the AI Engine, running multiple models at once. Layer four is the Validation Loop — building in quality early instead of catching problems later."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Layer five is Compliance Guards — checking industry rules for banking, payments, finance before anything ships. And layer six is the Co-Working Bridge — that's us, sitting with the client every day during testing until they're fully confident.",
+          "text_ssml": "<speak>Layer five is Compliance Guards<break time=\"200ms\"/> checking industry rules for banking, payments, finance before anything ships. And layer six is the Co-Working Bridge<break time=\"200ms\"/> that's us, sitting with the client every day during testing until they're fully confident.</speak>",
+          "text_expressive": "Layer five is Compliance Guards — checking industry rules for banking, payments, finance before anything ships. And layer six is the Co-Working Bridge — that's us, sitting with the client every day during testing until they're fully confident."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "So that small visible piece on top? It's small on purpose. Everything underneath is exactly what makes it possible to be that fast.",
+          "text_ssml": "<speak>So that small visible piece on top? It's small on purpose. Everything underneath is exactly what makes it possible to be that fast.</speak>",
+          "text_expressive": "So that small visible piece on top? It's small on purpose. Everything underneath is exactly what makes it possible to be that fast."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "comparison_table",
+      "title": "Old World vs OrchestrAI",
+      "subtitle": "Six dimensions, one paradigm shift",
+      "icon": "arrow-left-right",
+      "analogy": {
+        "title": "Custom Tailor vs 3D Printer",
+        "text": "The old world is a custom tailor — skilled, slow, one suit at a time, vulnerable if the tailor calls in sick. OrchestrAI is a 3D printer with a master pattern library — same craft quality, programmable, repeatable, and the printer doesn't take sick days."
+      },
+      "table": [
+        {
+          "icon": "calendar",
+          "old": "Timeline: 90–120 days to baseline",
+          "new": "Timeline: 7 days to QA PIP"
+        },
+        {
+          "icon": "shield-check",
+          "old": "Quality: caught in QA, fixed in cycles",
+          "new": "Quality: engineered upstream, validated continuously"
+        },
+        {
+          "icon": "timer",
+          "old": "Estimation: story points, hope, and padding",
+          "new": "Estimation: iteration loops in hours — prove, don't estimate"
+        },
+        {
+          "icon": "file-text",
+          "old": "Documentation: written last, if at all",
+          "new": "Documentation: auto-generated alongside delivery"
+        },
+        {
+          "icon": "repeat",
+          "old": "Change management: sprints, refinement, backlog grooming",
+          "new": "Change management: plain-English requests, implemented same-day"
+        },
+        {
+          "icon": "user-x",
+          "old": "Key person risk: high — one architect, one knowledge holder",
+          "new": "Key person risk: low — orchestration in patterns, not in heads"
+        }
+      ],
+      "visual_chart": {
+        "type": "horizontal_bar_comparison",
+        "data": [
+          {
+            "label": "Old World",
+            "value": 120,
+            "unit": "days",
+            "color": "coral"
+          },
+          {
+            "label": "OrchestrAI",
+            "value": 7,
+            "unit": "days",
+            "color": "teal"
+          }
+        ],
+        "title": "Time to first working baseline"
+      },
+      "memory_hook": "Same craft. Different machinery. Seventeen times faster.",
+      "narration": "Six categories, side by side. Old world versus OrchestrAI. And honestly, the same pattern shows up in every single row. Think of it like a tailor versus a 3D printer. The old world is a custom tailor — skilled, but slow, one suit at a time. And if the tailor's out sick, you're stuck. OrchestrAI is the 3D printer with a master pattern file. Same quality, but programmable, repeatable, and it never calls in sick. Timeline: ninety to a hundred-twenty days versus seven. Quality: caught late in QA versus engineered upstream from the start. Estimation: story points and guesswork versus iteration loops in hours. Documentation: written last, if at all, versus auto-generated as you go. Change management: sprint planning versus plain-English requests done the same day. And look at that chart — a hundred-twenty days versus seven. That's not a small improvement. That's seventeen times faster. And it's not from working harder. It's from cutting out the work that never needed to exist in the first place.",
+      "estimated_duration_seconds": 108,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Six categories, side by side. Old world versus OrchestrAI. And honestly, the same pattern shows up in every single row.",
+          "text_ssml": "<speak>Six categories, side by side. Old world versus OrchestrAI. And honestly, the same pattern shows up in every single row.</speak>",
+          "text_expressive": "Six categories, side by side. Old world versus OrchestrAI. And honestly, the same pattern shows up in every single row."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Think of it like a tailor versus a 3D printer. The old world is a custom tailor — skilled, but slow, one suit at a time. And if the tailor's out sick, you're stuck.",
+          "text_ssml": "<speak>Think of it like a tailor versus a 3D printer. The old world is a custom tailor<break time=\"200ms\"/> skilled, but slow, one suit at a time. And if the tailor's out sick, you're stuck.</speak>",
+          "text_expressive": "Think of it like a tailor versus a 3D printer. The old world is a custom tailor — skilled, but slow, one suit at a time. And if the tailor's out sick, you're stuck."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "OrchestrAI is the 3D printer with a master pattern file. Same quality, but programmable, repeatable, and it never calls in sick.",
+          "text_ssml": "<speak>OrchestrAI is the 3D printer with a master pattern file. Same quality, but programmable, repeatable, and it never calls in sick.</speak>",
+          "text_expressive": "OrchestrAI is the 3D printer with a master pattern file. Same quality, but programmable, repeatable, and it never calls in sick."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Timeline: ninety to a hundred-twenty days versus seven. Quality: caught late in QA versus engineered upstream from the start. Estimation: story points and guesswork versus iteration loops in hours.",
+          "text_ssml": "<speak>Timeline: ninety to a hundred-twenty days versus seven. Quality: caught late in QA versus engineered upstream from the start. Estimation: story points and guesswork versus iteration loops in hours.</speak>",
+          "text_expressive": "Timeline: ninety to a hundred-twenty days versus seven. Quality: caught late in QA versus engineered upstream from the start. Estimation: story points and guesswork versus iteration loops in hours."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Documentation: written last, if at all, versus auto-generated as you go. Change management: sprint planning versus plain-English requests done the same day.",
+          "text_ssml": "<speak>Documentation: written last, if at all, versus auto-generated as you go. Change management: sprint planning versus plain-English requests done the same day.</speak>",
+          "text_expressive": "Documentation: written last, if at all, versus auto-generated as you go. Change management: sprint planning versus plain-English requests done the same day."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "amazed",
+          "text": "And look at that chart — a hundred-twenty days versus seven. That's not a small improvement. That's seventeen times faster.",
+          "text_ssml": "<speak>And look at that chart<break time=\"200ms\"/> a hundred-twenty days versus seven. That's not a small improvement. That's <emphasis level=\"moderate\">seventeen times</emphasis> faster.</speak>",
+          "text_expressive": "And look at that chart — a hundred-twenty days versus seven. That's not a small improvement. That's seventeen times faster."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "And it's not from working harder. It's from cutting out the work that never needed to exist in the first place.",
+          "text_ssml": "<speak>And it's not from working harder. It's from cutting out the work that never needed to exist in the first place.</speak>",
+          "text_expressive": "And it's not from working harder. It's from cutting out the work that never needed to exist in the first place."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "welcome",
+      "title": "What OrchestrAI Actually Delivers",
+      "subtitle": "The number that started the conversation",
+      "icon": "target",
+      "hero_stat": {
+        "value": "7 days",
+        "label": "from blank page to 80% baseline running in client QA",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "Not MVP. Real, production-grade software architecture.",
+        "Not production yet. Delivered to the client's QA region — UAT co-worked together.",
+        "Not 100% on day one. 80% baseline, with the final 20% co-developed during UAT.",
+        "Production go-live happens only when the client has full confidence — not before."
+      ],
+      "closing_thread": "Everything you learn from here on is how this number gets made.",
+      "narration": "Let's be really precise about this headline number, because it's easy to misread. Seven days. Seven days from a blank page to a working app baseline, sitting in the client's QA environment. But three honest caveats here, and they matter. One: this isn't an MVP. It's real, production-grade software, not a throwaway prototype. Two: it's not in production on day seven — it's in QA, ready for hands-on testing. And three: it's not a hundred percent finished on day seven either. It's an eighty percent baseline, and the last twenty percent gets built together with the client during testing. Going live only happens once the client says they're truly confident — never just because our calendar says it's time. Fast, but never reckless.",
+      "estimated_duration_seconds": 95,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "serious_friendly",
+          "text": "Let's be really precise about this headline number, because it's easy to misread. Seven days.",
+          "text_ssml": "<speak>Let's be really precise about this headline number, because it's easy to misread. Seven days.</speak>",
+          "text_expressive": "Let's be really precise about this headline number, because it's easy to misread. Seven days."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Seven days from a blank page to a working app baseline, sitting in the client's QA environment. But three honest caveats here, and they matter.",
+          "text_ssml": "<speak>Seven days from a blank page to a working app baseline, sitting in the client's QA environment. But three honest caveats here, and they matter.</speak>",
+          "text_expressive": "Seven days from a blank page to a working app baseline, sitting in the client's QA environment. But three honest caveats here, and they matter."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "One: this isn't an MVP. It's real, production-grade software, not a throwaway prototype. Two: it's not in production on day seven — it's in QA, ready for hands-on testing.",
+          "text_ssml": "<speak>One: this isn't an MVP. It's real, production-grade software, not a throwaway prototype. Two: it's not in production on day seven<break time=\"200ms\"/> it's in QA, ready for hands-on testing.</speak>",
+          "text_expressive": "One: this isn't an MVP. It's real, production-grade software, not a throwaway prototype. Two: it's not in production on day seven — it's in QA, ready for hands-on testing."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "And three: it's not a hundred percent finished on day seven either. It's an eighty percent baseline, and the last twenty percent gets built together with the client during testing.",
+          "text_ssml": "<speak>And three: it's not a hundred percent finished on day seven either. It's an eighty percent baseline, and the last twenty percent gets built together with the client during testing.</speak>",
+          "text_expressive": "And three: it's not a hundred percent finished on day seven either. It's an eighty percent baseline, and the last twenty percent gets built together with the client during testing."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "Going live only happens once the client says they're truly confident — never just because our calendar says it's time. Fast, but never reckless.",
+          "text_ssml": "<speak>Going live only happens once the client says they're truly confident<break time=\"200ms\"/> never just because our calendar says it's time. Fast, but never reckless.</speak>",
+          "text_expressive": "Going live only happens once the client says they're truly confident — never just because our calendar says it's time. Fast, but never reckless."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "mindset_shift",
+      "title": "From Soloist to Conductor",
+      "subtitle": "The single biggest mental rewire of your career",
+      "icon": "music-2",
+      "analogy": {
+        "title": "Orchestra Conductor, Not Solo Violinist",
+        "text": "A solo violinist controls one instrument with their hands, note by note. A conductor controls 80 musicians without touching a single instrument — through a score written with absolute precision before the first note is played. The conductor's skill isn't smaller, it's differently aimed. That is the exact move you're making."
+      },
+      "table": [
+        {
+          "icon": "code-2",
+          "old": "\"I write the code / I manage the sprint\"",
+          "new": "\"I define the intent and validate the outcome\""
+        },
+        {
+          "icon": "help-circle",
+          "old": "\"Requirements clarified during development\"",
+          "new": "\"Requirements crystallized before AI interaction\""
+        },
+        {
+          "icon": "shield-check",
+          "old": "\"We'll fix quality issues in QA later\"",
+          "new": "\"Quality is baked in from the first prompt\""
+        },
+        {
+          "icon": "timer",
+          "old": "\"Estimation based on team story points\"",
+          "new": "\"Iteration loops in hours — we prove, don't estimate\""
+        },
+        {
+          "icon": "list-checks",
+          "old": "\"Backlog grooming for future quarters\"",
+          "new": "\"Plain-English implementation of changes today\""
+        }
+      ],
+      "reflection_prompt": "Think of one recent project where a requirement was 'clarified during development.' What would it have cost to crystallize that requirement upfront instead?",
+      "memory_hook": "Soloist plays one instrument. Conductor commands eighty without touching one.",
+      "narration": "Okay, if there's just one slide you remember from this whole hour, make it this one. Picture a solo violinist. Their hands are directly on the instrument, playing note by note. Full control of one thing. Now picture a conductor. They direct eighty musicians, and they don't touch a single instrument. Just a score they wrote with total precision before the first note even plays. And here's the thing — the conductor's skill isn't smaller. It's just pointed somewhere else. And that's the exact shift you're making. Read the left column. 'I write the code.' 'Requirements get clarified during development.' 'We'll fix quality in QA later.' You've probably said all of these recently. Now look at the right column. 'I define the intent and validate the outcome.' 'Requirements are crystallized before AI touches anything.' 'Quality is built in from the first prompt.' The difference between those two columns isn't effort. It's direction. So stop pointing your skills at the keyboard, and start pointing them at the brief.",
+      "estimated_duration_seconds": 115,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "earnest",
+          "text": "Okay, if there's just one slide you remember from this whole hour, make it this one.",
+          "text_ssml": "<speak>Okay, if there's just one slide you remember from this whole hour, make it this one.</speak>",
+          "text_expressive": "Okay, if there's just one slide you remember from this whole hour, make it this one."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Picture a solo violinist. Their hands are directly on the instrument, playing note by note. Full control of one thing.",
+          "text_ssml": "<speak>Picture a solo violinist. Their hands are directly on the instrument, playing note by note. Full control of one thing.</speak>",
+          "text_expressive": "Picture a solo violinist. Their hands are directly on the instrument, playing note by note. Full control of one thing."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "amazed",
+          "text": "Now picture a conductor. They direct eighty musicians, and they don't touch a single instrument. Just a score they wrote with total precision before the first note even plays.",
+          "text_ssml": "<speak>Now picture a conductor. They direct eighty musicians, and they don't touch a single instrument. Just a score they wrote with total precision before the first note even plays.</speak>",
+          "text_expressive": "Now picture a conductor. They direct eighty musicians, and they don't touch a single instrument. Just a score they wrote with total precision before the first note even plays."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "And here's the thing — the conductor's skill isn't smaller. It's just pointed somewhere else. And that's the exact shift you're making.",
+          "text_ssml": "<speak>And here's the thing<break time=\"200ms\"/> the conductor's skill isn't smaller. It's just pointed somewhere else. And that's the exact shift you're making.</speak>",
+          "text_expressive": "And here's the thing — the conductor's skill isn't smaller. It's just pointed somewhere else. And that's the exact shift you're making."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Read the left column. 'I write the code.' 'Requirements get clarified during development.' 'We'll fix quality in QA later.' You've probably said all of these recently.",
+          "text_ssml": "<speak>Read the left column. 'I write the code.' 'Requirements get clarified during development.' 'We'll fix quality in QA later.' You've probably said all of these recently.</speak>",
+          "text_expressive": "Read the left column. 'I write the code.' 'Requirements get clarified during development.' 'We'll fix quality in QA later.' You've probably said all of these recently."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "Now look at the right column. 'I define the intent and validate the outcome.' 'Requirements are crystallized before AI touches anything.' 'Quality is built in from the first prompt.'",
+          "text_ssml": "<speak>Now look at the right column. 'I define the intent and validate the outcome.' 'Requirements are crystallized before AI touches anything.' 'Quality is built in from the first prompt.'</speak>",
+          "text_expressive": "Now look at the right column. 'I define the intent and validate the outcome.' 'Requirements are crystallized before AI touches anything.' 'Quality is built in from the first prompt.'"
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "emphatic",
+          "text": "The difference between those two columns isn't effort. It's direction. So stop pointing your skills at the keyboard, and start pointing them at the brief.",
+          "text_ssml": "<speak>The difference between those two columns isn't effort. It's <emphasis level=\"moderate\">direction</emphasis>. So stop pointing your skills at the keyboard, and start pointing them at the brief.</speak>",
+          "text_expressive": "The difference between those two columns isn't effort. It's direction. So stop pointing your skills at the keyboard, and start pointing them at the brief."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "competencies",
+      "title": "Your New Job Description",
+      "subtitle": "Three roles in one Lead",
+      "icon": "user-cog",
+      "analogy": {
+        "title": "Three Hats, Worn Together",
+        "text": "You don't drop the technical hat — you add two more. Strategic Advisor on top, Quality Guardian on the side, Intent Translator in the middle. Most days, you'll wear all three before lunch."
+      },
+      "list": [
+        {
+          "name": "Strategic Advisor",
+          "icon": "compass",
+          "desc": "You translate business goals into orchestration intent. You decide what gets built and why. This is the hat the CXO sees."
+        },
+        {
+          "name": "Intent Translator",
+          "icon": "languages",
+          "desc": "You convert ambiguous requirements into precise, AI-readable briefs. P.R.O.M.P.T. is your toolkit. This is the hat the AI sees."
+        },
+        {
+          "name": "Quality Guardian",
+          "icon": "shield-check",
+          "desc": "You don't write the code, but you own its quality. You validate, escalate, and refuse to ship sloppy work. This is the hat the client sees."
+        }
+      ],
+      "memory_hook": "Advisor decides what. Translator turns it into a brief. Guardian refuses to ship the bad stuff.",
+      "narration": "So if you're not the soloist anymore, what does your job actually look like now? It turns out, it's three roles in one — and you wear all of them, sometimes before lunch. The first is Strategic Advisor. This is when you're sitting with the business, translating what they want into orchestration intent — deciding what gets built, why, and in what order. Senior leaders see this version of you. The second is Intent Translator. This is when you convert that ambition into a structured brief the AI engine can actually act on. P.R.O.M.P.T. — three slides from now — is the exact tool for this. The AI sees this version of you. And third, Quality Guardian. You don't write the code, but you absolutely own how good it is. You validate, you escalate, and you refuse to ship sloppy work into the client's QA. The client sees this version of you. You don't lose your technical skills in any of this. You just add two more layers on top. Advisor decides what. Translator writes the brief. Guardian won't ship the bad stuff.",
+      "estimated_duration_seconds": 105,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "So if you're not the soloist anymore, what does your job actually look like now? It turns out, it's three roles in one — and you wear all of them, sometimes before lunch.",
+          "text_ssml": "<speak>So if you're not the soloist anymore, what does your job actually look like now? It turns out, it's three roles in one<break time=\"200ms\"/> and you wear all of them, sometimes before lunch.</speak>",
+          "text_expressive": "So if you're not the soloist anymore, what does your job actually look like now? It turns out, it's three roles in one — and you wear all of them, sometimes before lunch."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "The first is Strategic Advisor. This is when you're sitting with the business, translating what they want into orchestration intent — deciding what gets built, why, and in what order. Senior leaders see this version of you.",
+          "text_ssml": "<speak>The first is Strategic Advisor. This is when you're sitting with the business, translating what they want into orchestration intent<break time=\"200ms\"/> deciding what gets built, why, and in what order. Senior leaders see this version of you.</speak>",
+          "text_expressive": "The first is Strategic Advisor. This is when you're sitting with the business, translating what they want into orchestration intent — deciding what gets built, why, and in what order. Senior leaders see this version of you."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "The second is Intent Translator. This is when you convert that ambition into a structured brief the AI engine can actually act on. P.R.O.M.P.T. — three slides from now — is the exact tool for this. The AI sees this version of you.",
+          "text_ssml": "<speak>The second is Intent Translator. This is when you convert that ambition into a structured brief the AI engine can actually act on. P.R.O.M.P.T.<break time=\"200ms\"/> three slides from now<break time=\"200ms\"/> is the exact tool for this. The AI sees this version of you.</speak>",
+          "text_expressive": "The second is Intent Translator. This is when you convert that ambition into a structured brief the AI engine can actually act on. P.R.O.M.P.T. — three slides from now — is the exact tool for this. The AI sees this version of you."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "And third, Quality Guardian. You don't write the code, but you absolutely own how good it is. You validate, you escalate, and you refuse to ship sloppy work into the client's QA. The client sees this version of you.",
+          "text_ssml": "<speak>And third, Quality Guardian. You don't write the code, but you absolutely <emphasis level=\"moderate\">own</emphasis> how good it is. You validate, you escalate, and you refuse to ship sloppy work into the client's QA. The client sees this version of you.</speak>",
+          "text_expressive": "And third, Quality Guardian. You don't write the code, but you absolutely own how good it is. You validate, you escalate, and you refuse to ship sloppy work into the client's QA. The client sees this version of you."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "You don't lose your technical skills in any of this. You just add two more layers on top. Advisor decides what. Translator writes the brief. Guardian won't ship the bad stuff.",
+          "text_ssml": "<speak>You don't lose your technical skills in any of this. You just add two more layers on top. Advisor decides what. Translator writes the brief. Guardian won't ship the bad stuff.</speak>",
+          "text_expressive": "You don't lose your technical skills in any of this. You just add two more layers on top. Advisor decides what. Translator writes the brief. Guardian won't ship the bad stuff."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "welcome",
+      "title": "Quality Is Upstream",
+      "subtitle": "Why QA cycles are an old-world relic",
+      "icon": "arrow-up-from-line",
+      "visual_cue": "river_source_vs_filter_diagram",
+      "analogy": {
+        "title": "Don't Filter the River — Clean the Source",
+        "text": "Old-world QA is a filter at the river mouth — by the time you catch a defect, it has flowed through your whole system, picking up dependencies. OrchestrAI cleans the source. Define the brief precisely, and the defect never gets born."
+      },
+      "bullets": [
+        "In the old world, quality is detected in QA — late, expensively, by other people.",
+        "In OrchestrAI, quality is engineered in the prompt — early, cheaply, by you.",
+        "Every bug caught downstream is a brief written too vaguely upstream.",
+        "Every compliance miss in UAT is a 'Marker' that wasn't set in the prompt."
+      ],
+      "memory_hook": "Old world: filter the river. OrchestrAI: clean the source.",
+      "closing_thread": "Which means the brief you write is the most important code you produce.",
+      "narration": "Here's a mental model that I think is going to save you a lot of pain. The way most teams approach quality — and the way OrchestrAI approaches it — are almost opposites. In the old world, quality is something you detect. You build it, QA finds the problems, engineering fixes them, QA runs again, and you loop until it's acceptable. In OrchestrAI, quality is something you engineer. You prevent the defects upstream, in the brief itself, rather than catching them downstream after they've already caused problems. The mental picture I find useful is a river. Old-world QA puts a filter at the river mouth — but by the time you're catching things there, they've already flowed through your whole system, picking up dependencies along the way. OrchestrAI cleans the source. Write the brief precisely, set your Markers, define your Pattern — and the defect never gets born in the first place. Which means — and I really want this to land — the brief you write is the most important thing you produce. Treat it with that level of care.",
+      "estimated_duration_seconds": 105,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Here's a mental model that I think is going to save you a lot of pain. The way most teams approach quality — and the way OrchestrAI approaches it — are almost opposites.",
+          "text_ssml": "<speak>Here's a mental model that I think is going to save you a lot of pain. The way most teams approach quality<break time=\"200ms\"/> and the way OrchestrAI approaches it<break time=\"200ms\"/> are almost opposites.</speak>",
+          "text_expressive": "Here's a mental model that I think is going to save you a lot of pain. The way most teams approach quality — and the way OrchestrAI approaches it — are almost opposites."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "In the old world, quality is something you detect. You build it, QA finds the problems, engineering fixes them, QA runs again, and you loop until it's acceptable.",
+          "text_ssml": "<speak>In the old world, quality is something you <emphasis level=\"reduced\">detect</emphasis>. You build it, QA finds the problems, engineering fixes them, QA runs again, and you loop until it's acceptable.</speak>",
+          "text_expressive": "In the old world, quality is something you detect. You build it, QA finds the problems, engineering fixes them, QA runs again, and you loop until it's acceptable."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "In OrchestrAI, quality is something you engineer. You prevent the defects upstream, in the brief itself, rather than catching them downstream after they've already caused problems.",
+          "text_ssml": "<speak>In OrchestrAI, quality is something you <emphasis level=\"moderate\">engineer</emphasis>. You prevent the defects upstream, in the brief itself, rather than catching them downstream after they've already caused problems.</speak>",
+          "text_expressive": "In OrchestrAI, quality is something you engineer. You prevent the defects upstream, in the brief itself, rather than catching them downstream after they've already caused problems."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "The mental picture I find useful is a river. Old-world QA puts a filter at the river mouth — but by the time you're catching things there, they've already flowed through your whole system, picking up dependencies along the way.",
+          "text_ssml": "<speak>The mental picture I find useful is a river. Old-world QA puts a filter at the river mouth<break time=\"200ms\"/> but by the time you're catching things there, they've already flowed through your whole system, picking up dependencies along the way.</speak>",
+          "text_expressive": "The mental picture I find useful is a river. Old-world QA puts a filter at the river mouth — but by the time you're catching things there, they've already flowed through your whole system, picking up dependencies along the way."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "OrchestrAI cleans the source. Write the brief precisely, set your Markers, define your Pattern — and the defect never gets born in the first place.",
+          "text_ssml": "<speak>OrchestrAI cleans the source. Write the brief precisely, set your Markers, define your Pattern<break time=\"200ms\"/> and the defect never gets born in the first place.</speak>",
+          "text_expressive": "OrchestrAI cleans the source. Write the brief precisely, set your Markers, define your Pattern — and the defect never gets born in the first place."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "emphatic",
+          "text": "Which means — and I really want this to land — the brief you write is the most important thing you produce. Treat it with that level of care.",
+          "text_ssml": "<speak>Which means<break time=\"200ms\"/> and I really want this to land<break time=\"200ms\"/> the brief you write is the <emphasis level=\"moderate\">most important thing you produce</emphasis>. Treat it with that level of care.</speak>",
+          "text_expressive": "Which means — and I really want this to land — the brief you write is the most important thing you produce. Treat it with that level of care."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "welcome",
+      "title": "What Your Tuesday Looks Like",
+      "subtitle": "Preview of the OrchestrAI daily cadence",
+      "icon": "calendar-clock",
+      "visual_cue": "day_timeline_preview",
+      "bullets": [
+        "9:00 AM — Intent capture with stakeholder. Output: a brief, not a sprint plan.",
+        "10:30 AM — First orchestration cycle. AI generates, you validate.",
+        "11:30 AM — Live functional screen reviewed with the business owner. Real, not a mockup.",
+        "2:00 PM — Iteration 2. Plain-English refinements based on morning feedback.",
+        "4:30 PM — Daily artifact pushed to client QA. Documentation auto-updated."
+      ],
+      "closing_thread": "We'll go deep on this day in slide 17. First, you need the tool that makes it possible.",
+      "narration": "Before I hand you the main tool, let me paint a quick picture of the day it enables. Let's call it a Tuesday. Nine in the morning, you're with a stakeholder capturing intent — not a ninety-minute meeting, just shaping their request straight into a structured brief as they talk. Ten-thirty, the first orchestration cycle — AI generates, you validate. Eleven-thirty, you're showing the business owner a real, working screen. Not a mockup. The actual thing. Two in the afternoon, round two — refine the brief in plain English based on what they said at eleven-thirty, AI regenerates. Four-thirty, the day's work lands in client QA, docs auto-update. That's a Tuesday. We'll go deep on this in slide seventeen. But first — slide fourteen — let me give you the tool that makes the whole rhythm possible.",
+      "estimated_duration_seconds": 100,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Before I hand you the main tool, let me paint a quick picture of the day it enables. Let's call it a Tuesday.",
+          "text_ssml": "<speak>Before I hand you the main tool, let me paint a quick picture of the day it enables. Let's call it a Tuesday.</speak>",
+          "text_expressive": "Before I hand you the main tool, let me paint a quick picture of the day it enables. Let's call it a Tuesday."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Nine in the morning, you're with a stakeholder capturing intent — not a ninety-minute meeting, just shaping their request straight into a structured brief as they talk.",
+          "text_ssml": "<speak>Nine in the morning, you're with a stakeholder capturing intent<break time=\"200ms\"/> not a ninety-minute meeting, just shaping their request straight into a structured brief as they talk.</speak>",
+          "text_expressive": "Nine in the morning, you're with a stakeholder capturing intent — not a ninety-minute meeting, just shaping their request straight into a structured brief as they talk."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Ten-thirty, the first orchestration cycle — AI generates, you validate. Eleven-thirty, you're showing the business owner a real, working screen. Not a mockup. The actual thing.",
+          "text_ssml": "<speak>Ten-thirty, the first orchestration cycle<break time=\"200ms\"/> AI generates, you validate. Eleven-thirty, you're showing the business owner a real, working screen. Not a mockup. The actual thing.</speak>",
+          "text_expressive": "Ten-thirty, the first orchestration cycle — AI generates, you validate. Eleven-thirty, you're showing the business owner a real, working screen. Not a mockup. The actual thing."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Two in the afternoon, round two — refine the brief in plain English based on what they said at eleven-thirty, AI regenerates. Four-thirty, the day's work lands in client QA, docs auto-update.",
+          "text_ssml": "<speak>Two in the afternoon, round two<break time=\"200ms\"/> refine the brief in plain English based on what they said at eleven-thirty, AI regenerates. Four-thirty, the day's work lands in client QA, docs auto-update.</speak>",
+          "text_expressive": "Two in the afternoon, round two — refine the brief in plain English based on what they said at eleven-thirty, AI regenerates. Four-thirty, the day's work lands in client QA, docs auto-update."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "That's a Tuesday. We'll go deep on this in slide seventeen. But first — slide fourteen — let me give you the tool that makes the whole rhythm possible.",
+          "text_ssml": "<speak>That's a Tuesday. We'll go deep on this in slide seventeen. But first<break time=\"200ms\"/> slide fourteen<break time=\"200ms\"/> let me give you the tool that makes the whole rhythm possible.</speak>",
+          "text_expressive": "That's a Tuesday. We'll go deep on this in slide seventeen. But first — slide fourteen — let me give you the tool that makes the whole rhythm possible."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "competencies",
+      "title": "How to Talk to AI: The P.R.O.M.P.T. Formula",
+      "subtitle": "Six letters that turn AI into a senior team member",
+      "icon": "message-square-text",
+      "analogy": {
+        "title": "An Architect's Brief, Not a Genie's Wish",
+        "text": "Hire a world-class architect and tell them 'make it nice.' You'll get a building — just not yours. Hand them a brief — purpose, role, output format, constraints, layout pattern, tone — and you get exactly the home you pictured. P.R.O.M.P.T. is that brief, every time."
+      },
+      "list": [
+        {
+          "name": "P — Purpose",
+          "icon": "target",
+          "desc": "What do you want to achieve? The end goal in one sentence. ('Plan a 5-day family vacation to Bali.')"
+        },
+        {
+          "name": "R — Role",
+          "icon": "user-cog",
+          "desc": "Who should AI act as? ('Senior payments architect with 10 years at FIS.' 'Expert tour planner with Asia experience.')"
+        },
+        {
+          "name": "O — Output",
+          "icon": "layout-template",
+          "desc": "What format is required? ('Markdown table.' 'JSON schema.' 'React functional component in TypeScript.')"
+        },
+        {
+          "name": "M — Marker",
+          "icon": "shield-alert",
+          "desc": "Hard constraints. ('Budget ₹80k.' 'WCAG AA compliant.' 'No external dependencies.' 'Banking regulation X applies.')"
+        },
+        {
+          "name": "P — Pattern",
+          "icon": "grid-3x3",
+          "desc": "Internal structure. ('Day-by-day with morning/afternoon/evening slots.' 'Three sections: header, form, footer.')"
+        },
+        {
+          "name": "T — Tone",
+          "icon": "smile",
+          "desc": "How should it communicate? ('Friendly and kid-safe.' 'Formal, banking-grade.' 'Concise executive summary.')"
+        }
+      ],
+      "memory_hook": "Purpose = WHY. Role = WHO. Output = SHAPE. Marker = GUARDRAILS. Pattern = STRUCTURE. Tone = VOICE.",
+      "narration": "Alright — here it is. Your main tool. P.R.O.M.P.T. Six letters, six guardrails, and genuinely the most important skill you'll build in this program. Think of it as an architect's brief. If you hire a great architect and just say 'make it nice,' you'll get a building — just not yours. But hand them a real brief, and you get exactly the home you pictured. P.R.O.M.P.T. is that brief — every single time you talk to AI. P is Purpose — what's the actual goal, in one sentence. R is Role — who should AI act as. This one alone changes the quality of the output dramatically. O is Output — what format do you need back? A table, a JSON schema, a code component. M is Marker — the hard constraints, non-negotiable. Budget, compliance rules, what's off-limits. P is Pattern — how should it be organized and structured. And T is Tone — how should it sound. Memorize these six. Purpose, Role, Output, Marker, Pattern, Tone. Why, who, shape, guardrails, structure, voice. The next two slides show you exactly what that looks like in practice.",
+      "estimated_duration_seconds": 130,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Alright — here it is. Your main tool. P.R.O.M.P.T. Six letters, six guardrails, and genuinely the most important skill you'll build in this program.",
+          "text_ssml": "<speak>Alright<break time=\"200ms\"/> here it is. Your main tool. P.R.O.M.P.T. Six letters, six guardrails, and genuinely the most important skill you'll build in this program.</speak>",
+          "text_expressive": "Alright — here it is. Your main tool. P.R.O.M.P.T. Six letters, six guardrails, and genuinely the most important skill you'll build in this program."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Think of it as an architect's brief. If you hire a great architect and just say 'make it nice,' you'll get a building — just not yours. But hand them a real brief, and you get exactly the home you pictured.",
+          "text_ssml": "<speak>Think of it as an architect's brief. If you hire a great architect and just say 'make it nice,' you'll get a building<break time=\"200ms\"/> just not yours. But hand them a real brief, and you get exactly the home you pictured.</speak>",
+          "text_expressive": "Think of it as an architect's brief. If you hire a great architect and just say 'make it nice,' you'll get a building — just not yours. But hand them a real brief, and you get exactly the home you pictured."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "P.R.O.M.P.T. is that brief — every single time you talk to AI.",
+          "text_ssml": "<speak>P.R.O.M.P.T. is that brief<break time=\"200ms\"/> every single time you talk to AI.</speak>",
+          "text_expressive": "P.R.O.M.P.T. is that brief — every single time you talk to AI."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "P is Purpose — what's the actual goal, in one sentence. R is Role — who should AI act as. This one alone changes the quality of the output dramatically.",
+          "text_ssml": "<speak>P is Purpose<break time=\"150ms\"/> what's the actual goal, in one sentence. R is Role<break time=\"150ms\"/> who should AI act as. This one alone changes the quality of the output dramatically.</speak>",
+          "text_expressive": "P is Purpose — what's the actual goal, in one sentence. R is Role — who should AI act as. This one alone changes the quality of the output dramatically."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "O is Output — what format do you need back? A table, a JSON schema, a code component. M is Marker — the hard constraints, non-negotiable. Budget, compliance rules, what's off-limits.",
+          "text_ssml": "<speak>O is Output<break time=\"150ms\"/> what format do you need back? A table, a JSON schema, a code component. M is Marker<break time=\"150ms\"/> the hard constraints, non-negotiable. Budget, compliance rules, what's off-limits.</speak>",
+          "text_expressive": "O is Output — what format do you need back? A table, a JSON schema, a code component. M is Marker — the hard constraints, non-negotiable. Budget, compliance rules, what's off-limits."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "P is Pattern — how should it be organized and structured. And T is Tone — how should it sound.",
+          "text_ssml": "<speak>P is Pattern<break time=\"150ms\"/> how should it be organized and structured. And T is Tone<break time=\"150ms\"/> how should it sound.</speak>",
+          "text_expressive": "P is Pattern — how should it be organized and structured. And T is Tone — how should it sound."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Memorize these six. Purpose, Role, Output, Marker, Pattern, Tone. Why, who, shape, guardrails, structure, voice. The next two slides show you exactly what that looks like in practice.",
+          "text_ssml": "<speak>Memorize these six. Purpose, Role, Output, Marker, Pattern, Tone. Why, who, shape, guardrails, structure, voice. The next two slides show you exactly what that looks like in practice.</speak>",
+          "text_expressive": "Memorize these six. Purpose, Role, Output, Marker, Pattern, Tone. Why, who, shape, guardrails, structure, voice. The next two slides show you exactly what that looks like in practice."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "welcome",
+      "title": "P.R.O.M.P.T. in Action: The Bali Example",
+      "subtitle": "Same request. Two ways. Night-and-day output.",
+      "icon": "map",
+      "visual_cue": "before_after_split",
+      "before_after": {
+        "before": {
+          "label": "Vague Request",
+          "icon": "frown",
+          "output": "'Plan a trip to Bali for me.' → Generic blog-style answer. No budget awareness, no day-by-day structure, no family safety considerations, no hotel suggestions. Hours of manual restructuring needed before anyone can use it."
+        },
+        "after": {
+          "label": "P.R.O.M.P.T.-Engineered Intent",
+          "icon": "smile",
+          "output": "'Act as an expert tour planner with Asia experience (Role). Plan a 5-day family vacation to Bali (Purpose). Output as a day-by-day markdown table (Output). Budget ₹80k for a family of 4, no adventure sports (Marker). Slots for morning/afternoon/evening with hotel suggestions per day (Pattern). Kid-friendly tone (Tone).' → Precise, ready-to-use itinerary. On-budget, family-safe, zero rework."
+        }
+      },
+      "memory_hook": "Same AI. Same model. Different brief. Night-and-day output.",
+      "narration": "Let me show you the formula in action. Two screenshots, same AI model — the only thing different is how the request was written. On the left: 'Plan a trip to Bali for me.' What comes back is a generic travel blog. No budget awareness, no day-by-day structure, no family safety — because you never mentioned any of that. You'd spend the next hour rewriting it before it's usable. On the right, the same request run through P.R.O.M.P.T. Role: expert tour planner. Purpose: five-day family vacation. Output: day-by-day markdown table. Marker: eighty-K budget, no adventure sports, kid-safe. Pattern: morning, afternoon, evening slots with hotel suggestions. Tone: friendly. What comes back is something you could hand to a travel agent right now. Zero rework. Same model. Different brief. That's the entire formula, right there.",
+      "estimated_duration_seconds": 112,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Let me show you the formula in action. Two screenshots, same AI model — the only thing different is how the request was written.",
+          "text_ssml": "<speak>Let me show you the formula in action. Two screenshots, same AI model<break time=\"200ms\"/> the only thing different is how the request was written.</speak>",
+          "text_expressive": "Let me show you the formula in action. Two screenshots, same AI model — the only thing different is how the request was written."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "casual",
+          "text": "On the left: 'Plan a trip to Bali for me.' What comes back is a generic travel blog. No budget awareness, no day-by-day structure, no family safety — because you never mentioned any of that.",
+          "text_ssml": "<speak>On the left: 'Plan a trip to Bali for me.' What comes back is a generic travel blog. No budget awareness, no day-by-day structure, no family safety<break time=\"200ms\"/> because you never mentioned any of that.</speak>",
+          "text_expressive": "On the left: 'Plan a trip to Bali for me.' What comes back is a generic travel blog. No budget awareness, no day-by-day structure, no family safety — because you never mentioned any of that."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "You'd spend the next hour rewriting it before it's usable.",
+          "text_ssml": "<speak>You'd spend the next hour rewriting it before it's usable.</speak>",
+          "text_expressive": "You'd spend the next hour rewriting it before it's usable."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "On the right, the same request run through P.R.O.M.P.T. Role: expert tour planner. Purpose: five-day family vacation. Output: day-by-day markdown table. Marker: eighty-K budget, no adventure sports, kid-safe.",
+          "text_ssml": "<speak>On the right, the same request run through P.R.O.M.P.T. Role: expert tour planner. Purpose: five-day family vacation. Output: day-by-day markdown table. Marker: eighty-K budget, no adventure sports, kid-safe.</speak>",
+          "text_expressive": "On the right, the same request run through P.R.O.M.P.T. Role: expert tour planner. Purpose: five-day family vacation. Output: day-by-day markdown table. Marker: eighty-K budget, no adventure sports, kid-safe."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Pattern: morning, afternoon, evening slots with hotel suggestions. Tone: friendly.",
+          "text_ssml": "<speak>Pattern: morning, afternoon, evening slots with hotel suggestions. Tone: friendly.</speak>",
+          "text_expressive": "Pattern: morning, afternoon, evening slots with hotel suggestions. Tone: friendly."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "What comes back is something you could hand to a travel agent right now. Zero rework. Same model. Different brief. That's the entire formula, right there.",
+          "text_ssml": "<speak>What comes back is something you could hand to a travel agent right now. Zero rework. Same model. Different brief. That's the entire formula, right there.</speak>",
+          "text_expressive": "What comes back is something you could hand to a travel agent right now. Zero rework. Same model. Different brief. That's the entire formula, right there."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "welcome",
+      "title": "P.R.O.M.P.T. for Real Software",
+      "subtitle": "Not vacations — your actual day job",
+      "icon": "code-2",
+      "visual_cue": "before_after_split",
+      "before_after": {
+        "before": {
+          "label": "Vague Engineering Request",
+          "icon": "frown",
+          "output": "'Build a login screen.' → Generic React component. No auth integration, no validation rules, no error states, no accessibility considerations. Junior-developer-grade code that needs full rewrite before it ships."
+        },
+        "after": {
+          "label": "P.R.O.M.P.T.-Engineered Intent",
+          "icon": "smile",
+          "output": "'Act as a senior frontend engineer (R). Build a login screen for our finance resource planner (P). Output a React functional component with Tailwind styling, TypeScript types included (O). Must integrate with Firebase Auth, support email+password and MFA, comply with WCAG AA, no external dependencies beyond our approved list (M). Structure: branded header, form with field-level validation, footer with help link and password-reset (Pat). Professional, finance-industry tone in error messages (T).' → Production-grade component, fully integrated, accessible, zero rework."
+        }
+      },
+      "memory_hook": "The Bali example is the toy version. This is what P.R.O.M.P.T. does in your actual job.",
+      "narration": "The Bali example was a gentle warm-up — a familiar domain. Now let's run the same formula on your actual job. Left side, the vague version: 'Build a login screen.' What you get is a generic React component. Looks fine on its own — but it's not your login screen. It doesn't connect to your auth provider, doesn't support MFA, doesn't meet accessibility standards, doesn't match your component library. You'll spend a full day rewriting it. Right side, the P.R.O.M.P.T. version. Role: senior frontend engineer. Purpose: login for the finance resource planner. Output: React component, TypeScript, Tailwind. Marker: Firebase Auth integration, MFA support, WCAG AA compliance, approved dependencies only. Pattern: branded header, validated form, help-link footer. Tone: professional, finance-grade. What comes back is production-ready. Ships to QA the same day. Same formula. Your actual job this time.",
+      "estimated_duration_seconds": 112,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "The Bali example was a gentle warm-up — a familiar domain. Now let's run the same formula on your actual job.",
+          "text_ssml": "<speak>The Bali example was a gentle warm-up<break time=\"200ms\"/> a familiar domain. Now let's run the same formula on your actual job.</speak>",
+          "text_expressive": "The Bali example was a gentle warm-up — a familiar domain. Now let's run the same formula on your actual job."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Left side, the vague version: 'Build a login screen.' What you get is a generic React component. Looks fine on its own — but it's not your login screen.",
+          "text_ssml": "<speak>Left side, the vague version: 'Build a login screen.' What you get is a generic React component. Looks fine on its own<break time=\"200ms\"/> but it's not your login screen.</speak>",
+          "text_expressive": "Left side, the vague version: 'Build a login screen.' What you get is a generic React component. Looks fine on its own — but it's not your login screen."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "casual",
+          "text": "It doesn't connect to your auth provider, doesn't support MFA, doesn't meet accessibility standards, doesn't match your component library. You'll spend a full day rewriting it.",
+          "text_ssml": "<speak>It doesn't connect to your auth provider, doesn't support MFA, doesn't meet accessibility standards, doesn't match your component library. You'll spend a full day rewriting it.</speak>",
+          "text_expressive": "It doesn't connect to your auth provider, doesn't support MFA, doesn't meet accessibility standards, doesn't match your component library. You'll spend a full day rewriting it."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Right side, the P.R.O.M.P.T. version. Role: senior frontend engineer. Purpose: login for the finance resource planner. Output: React component, TypeScript, Tailwind.",
+          "text_ssml": "<speak>Right side, the P.R.O.M.P.T. version. Role: senior frontend engineer. Purpose: login for the finance resource planner. Output: React component, TypeScript, Tailwind.</speak>",
+          "text_expressive": "Right side, the P.R.O.M.P.T. version. Role: senior frontend engineer. Purpose: login for the finance resource planner. Output: React component, TypeScript, Tailwind."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Marker: Firebase Auth integration, MFA support, WCAG AA compliance, approved dependencies only. Pattern: branded header, validated form, help-link footer. Tone: professional, finance-grade.",
+          "text_ssml": "<speak>Marker: Firebase Auth integration, MFA support, WCAG AA compliance, approved dependencies only. Pattern: branded header, validated form, help-link footer. Tone: professional, finance-grade.</speak>",
+          "text_expressive": "Marker: Firebase Auth integration, MFA support, WCAG AA compliance, approved dependencies only. Pattern: branded header, validated form, help-link footer. Tone: professional, finance-grade."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "What comes back is production-ready. Ships to QA the same day. Same formula. Your actual job this time.",
+          "text_ssml": "<speak>What comes back is production-ready. Ships to QA the same day. Same formula. Your actual job this time.</speak>",
+          "text_expressive": "What comes back is production-ready. Ships to QA the same day. Same formula. Your actual job this time."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "day_in_life",
+      "title": "A Day in the Life of an OrchestrAI Lead",
+      "subtitle": "From 9 AM intent capture to 4:30 PM QA push",
+      "icon": "clock",
+      "analogy": {
+        "title": "NASA Mission Control",
+        "text": "Mission Control doesn't fly the rocket — they monitor instruments, give clearances, intervene when needed. Your day looks like theirs: short bursts of decision, long stretches of supervision, zero manual labor."
+      },
+      "timeline": [
+        {
+          "time": "9:00 AM",
+          "icon": "headphones",
+          "phase": "Intent Capture",
+          "desc": "Stakeholder session. You capture intent as a P.R.O.M.P.T.-structured brief, not a list of features. Output: one or two paragraphs of crystallized requirement."
+        },
+        {
+          "time": "10:30 AM",
+          "icon": "wand-2",
+          "phase": "First Generation",
+          "desc": "First orchestration cycle. AI generates code, schema, UI, and tests in parallel. You don't type a single line — you read, you validate, you flag what to refine."
+        },
+        {
+          "time": "11:30 AM",
+          "icon": "monitor-play",
+          "phase": "Live Validation",
+          "desc": "Walk-through with the business owner. Real screens, real data, real-time refinement. The 'demo' is the application itself, not slides about it."
+        },
+        {
+          "time": "2:00 PM",
+          "icon": "repeat",
+          "phase": "Iteration 2",
+          "desc": "Refinements applied in plain English. ('Change the date format to DD-MM-YYYY, add a confirm step before delete.') Output regenerated in minutes."
+        },
+        {
+          "time": "4:30 PM",
+          "icon": "git-merge",
+          "phase": "Delivery",
+          "desc": "Day's artifact pushed to client QA region. Auto-generated docs updated. Tomorrow's brief already drafted from today's findings."
+        }
+      ],
+      "visual_chart": {
+        "type": "gantt_timeline",
+        "phases": [
+          {
+            "label": "Intent",
+            "start": "9:00",
+            "end": "10:30",
+            "color": "gold"
+          },
+          {
+            "label": "Generation",
+            "start": "10:30",
+            "end": "11:30",
+            "color": "teal"
+          },
+          {
+            "label": "Validation",
+            "start": "11:30",
+            "end": "12:30",
+            "color": "teal"
+          },
+          {
+            "label": "Iteration",
+            "start": "14:00",
+            "end": "16:00",
+            "color": "teal"
+          },
+          {
+            "label": "Delivery",
+            "start": "16:30",
+            "end": "17:00",
+            "color": "gold"
+          }
+        ]
+      },
+      "memory_hook": "Five phases. One day. Real software in client QA by 4:30 PM.",
+      "narration": "Now let's walk the full day properly. I like to think of it as NASA Mission Control — they don't fly the rocket, they monitor, they authorize, they intervene only when judgment is needed. Your day looks like theirs. Nine AM — intent capture with a stakeholder. You're not note-taking for a ninety-minute meeting. You're shaping their intent into a brief, live, as they speak. Ten-thirty — first orchestration cycle. The AI engine generates code, schema, UI, and tests in parallel. You read, validate, and flag what needs refining. Not a single line of code written by you. Eleven-thirty — you walk the business owner through a live working screen. Not a mockup. Not a slideshow. The actual application, two and a half hours into the day. Two PM — iteration two. They asked for a date format change and a confirm step before delete. You update the brief in plain English and the system regenerates in minutes. Four-thirty — the day's work lands in client QA, documentation updates automatically, and tomorrow's brief is already drafted from what happened today. Five phases, one day, real software in QA by four-thirty. And this isn't an exceptional day — this is a normal Tuesday.",
+      "estimated_duration_seconds": 128,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Now let's walk the full day properly. I like to think of it as NASA Mission Control — they don't fly the rocket, they monitor, they authorize, they intervene only when judgment is needed.",
+          "text_ssml": "<speak>Now let's walk the full day properly. I like to think of it as NASA Mission Control<break time=\"200ms\"/> they don't fly the rocket, they monitor, they authorize, they intervene only when judgment is needed.</speak>",
+          "text_expressive": "Now let's walk the full day properly. I like to think of it as NASA Mission Control — they don't fly the rocket, they monitor, they authorize, they intervene only when judgment is needed."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Your day looks like theirs. Nine AM — intent capture with a stakeholder. You're not note-taking for a ninety-minute meeting. You're shaping their intent into a brief, live, as they speak.",
+          "text_ssml": "<speak>Your day looks like theirs. Nine AM<break time=\"200ms\"/> intent capture with a stakeholder. You're not note-taking for a ninety-minute meeting. You're shaping their intent into a brief, live, as they speak.</speak>",
+          "text_expressive": "Your day looks like theirs. Nine AM — intent capture with a stakeholder. You're not note-taking for a ninety-minute meeting. You're shaping their intent into a brief, live, as they speak."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Ten-thirty — first orchestration cycle. The AI engine generates code, schema, UI, and tests in parallel. You read, validate, and flag what needs refining. Not a single line of code written by you.",
+          "text_ssml": "<speak>Ten-thirty<break time=\"200ms\"/> first orchestration cycle. The AI engine generates code, schema, UI, and tests in parallel. You read, validate, and flag what needs refining. Not a single line of code written by you.</speak>",
+          "text_expressive": "Ten-thirty — first orchestration cycle. The AI engine generates code, schema, UI, and tests in parallel. You read, validate, and flag what needs refining. Not a single line of code written by you."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "amazed",
+          "text": "Eleven-thirty — you walk the business owner through a live working screen. Not a mockup. Not a slideshow. The actual application, two and a half hours into the day.",
+          "text_ssml": "<speak>Eleven-thirty<break time=\"200ms\"/> you walk the business owner through a live working screen. Not a mockup. Not a slideshow. The actual application, two and a half hours into the day.</speak>",
+          "text_expressive": "Eleven-thirty — you walk the business owner through a live working screen. Not a mockup. Not a slideshow. The actual application, two and a half hours into the day."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Two PM — iteration two. They asked for a date format change and a confirm step before delete. You update the brief in plain English and the system regenerates in minutes.",
+          "text_ssml": "<speak>Two PM<break time=\"200ms\"/> iteration two. They asked for a date format change and a confirm step before delete. You update the brief in plain English and the system regenerates in minutes.</speak>",
+          "text_expressive": "Two PM — iteration two. They asked for a date format change and a confirm step before delete. You update the brief in plain English and the system regenerates in minutes."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "Four-thirty — the day's work lands in client QA, documentation updates automatically, and tomorrow's brief is already drafted from what happened today.",
+          "text_ssml": "<speak>Four-thirty<break time=\"200ms\"/> the day's work lands in client QA, documentation updates automatically, and tomorrow's brief is already drafted from what happened today.</speak>",
+          "text_expressive": "Four-thirty — the day's work lands in client QA, documentation updates automatically, and tomorrow's brief is already drafted from what happened today."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Five phases, one day, real software in QA by four-thirty. And this isn't an exceptional day — this is a normal Tuesday.",
+          "text_ssml": "<speak>Five phases, one day, real software in QA by four-thirty. And this isn't an exceptional day<break time=\"200ms\"/> this is a normal Tuesday.</speak>",
+          "text_expressive": "Five phases, one day, real software in QA by four-thirty. And this isn't an exceptional day — this is a normal Tuesday."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "competencies",
+      "title": "Your Cockpit Instrument Panel",
+      "subtitle": "The five competencies of an OrchestrAI Lead",
+      "icon": "gauge",
+      "analogy": {
+        "title": "Five Instruments, All Green",
+        "text": "A pilot reads five instruments simultaneously: altitude, speed, heading, fuel, engine. You'll be reading five too — and like a pilot, your job is to keep all five in the green, not max out any single one. Strong on four and weak on one will still crash the plane."
+      },
+      "list": [
+        {
+          "name": "Intent Articulation",
+          "icon": "message-circle",
+          "desc": "Can you write a P.R.O.M.P.T. that produces production-grade output on the first try? This is the muscle you build by doing, not by reading."
+        },
+        {
+          "name": "Quality Judgment",
+          "icon": "shield-check",
+          "desc": "Can you spot a hallucination, a compliance gap, or a logic flaw before it ships? Your taste is the final filter."
+        },
+        {
+          "name": "Stakeholder Translation",
+          "icon": "handshake",
+          "desc": "Can you turn a CXO's vague ambition into an orchestrable brief in 30 minutes? Half this job is the conversation, not the keyboard."
+        },
+        {
+          "name": "Iteration Discipline",
+          "icon": "repeat",
+          "desc": "Can you run three cycles in a day without burning out the team, the client, or the AI engine? Pacing matters as much as direction."
+        },
+        {
+          "name": "Pattern Stewardship",
+          "icon": "library",
+          "desc": "Do you contribute back to the pattern library so the next project starts further along? Compound the leverage."
+        }
+      ],
+      "visual_chart": {
+        "type": "radar_skill_map",
+        "axes": [
+          "Intent Articulation",
+          "Quality Judgment",
+          "Stakeholder Translation",
+          "Iteration Discipline",
+          "Pattern Stewardship"
+        ],
+        "scale": [
+          1,
+          5
+        ],
+        "instruction": "Self-rate each axis 1–5. Aim for a balanced shape, not a spike."
+      },
+      "memory_hook": "All five in the green. Spike on one, weak on another — still crash the plane.",
+      "narration": "Let me leave you with a final mental model before the recap. Think of a cockpit instrument panel — five instruments, all need to be in the green. That's how I'd describe the five competencies of an OrchestrAI Lead. Intent Articulation: can you write a P.R.O.M.P.T. that gets production-grade output on the first try? This one's built by doing, not by reading slides. Quality Judgment: can you spot a hallucination or a compliance gap before it ships? Your taste is the final filter. Stakeholder Translation: can you turn a vague executive goal into an orchestrable brief in thirty minutes? Half this job is the conversation. Iteration Discipline: can you run three cycles in a day without burning out the team or the client? Pacing matters as much as direction. And Pattern Stewardship: are you contributing back to the pattern library so the next project starts further along? Rate yourself one to five on each. Don't aim for a spike — aim for balance. Strong on four, weak on one, and you'll still feel it. That balanced shape is what a strong Lead looks like.",
+      "estimated_duration_seconds": 115,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Let me leave you with a final mental model before the recap. Think of a cockpit instrument panel — five instruments, all need to be in the green. That's how I'd describe the five competencies of an OrchestrAI Lead.",
+          "text_ssml": "<speak>Let me leave you with a final mental model before the recap. Think of a cockpit instrument panel<break time=\"200ms\"/> five instruments, all need to be in the green. That's how I'd describe the five competencies of an OrchestrAI Lead.</speak>",
+          "text_expressive": "Let me leave you with a final mental model before the recap. Think of a cockpit instrument panel — five instruments, all need to be in the green. That's how I'd describe the five competencies of an OrchestrAI Lead."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Intent Articulation: can you write a P.R.O.M.P.T. that gets production-grade output on the first try? This one's built by doing, not by reading slides.",
+          "text_ssml": "<speak>Intent Articulation: can you write a P.R.O.M.P.T. that gets production-grade output on the first try? This one's built by doing, not by reading slides.</speak>",
+          "text_expressive": "Intent Articulation: can you write a P.R.O.M.P.T. that gets production-grade output on the first try? This one's built by doing, not by reading slides."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Quality Judgment: can you spot a hallucination or a compliance gap before it ships? Your taste is the final filter.",
+          "text_ssml": "<speak>Quality Judgment: can you spot a hallucination or a compliance gap before it ships? Your taste is the final filter.</speak>",
+          "text_expressive": "Quality Judgment: can you spot a hallucination or a compliance gap before it ships? Your taste is the final filter."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Stakeholder Translation: can you turn a vague executive goal into an orchestrable brief in thirty minutes? Half this job is the conversation.",
+          "text_ssml": "<speak>Stakeholder Translation: can you turn a vague executive goal into an orchestrable brief in thirty minutes? Half this job is the conversation.</speak>",
+          "text_expressive": "Stakeholder Translation: can you turn a vague executive goal into an orchestrable brief in thirty minutes? Half this job is the conversation."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Iteration Discipline: can you run three cycles in a day without burning out the team or the client? Pacing matters as much as direction.",
+          "text_ssml": "<speak>Iteration Discipline: can you run three cycles in a day without burning out the team or the client? Pacing matters as much as direction.</speak>",
+          "text_expressive": "Iteration Discipline: can you run three cycles in a day without burning out the team or the client? Pacing matters as much as direction."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "And Pattern Stewardship: are you contributing back to the pattern library so the next project starts further along?",
+          "text_ssml": "<speak>And Pattern Stewardship: are you contributing back to the pattern library so the next project starts further along?</speak>",
+          "text_expressive": "And Pattern Stewardship: are you contributing back to the pattern library so the next project starts further along?"
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Rate yourself one to five on each. Don't aim for a spike — aim for balance. Strong on four, weak on one, and you'll still feel it. That balanced shape is what a strong Lead looks like.",
+          "text_ssml": "<speak>Rate yourself one to five on each. Don't aim for a spike<break time=\"200ms\"/> aim for balance. Strong on four, weak on one, and you'll still feel it. That balanced shape is what a strong Lead looks like.</speak>",
+          "text_expressive": "Rate yourself one to five on each. Don't aim for a spike — aim for balance. Strong on four, weak on one, and you'll still feel it. That balanced shape is what a strong Lead looks like."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "welcome",
+      "title": "If You Remember Nothing Else…",
+      "subtitle": "Module 1 in five sentences",
+      "icon": "bookmark",
+      "bullets": [
+        "1. AI is your twin — same anatomy, different substrate.",
+        "2. The old world is breaking — 120 days, key-person risk, rework drag.",
+        "3. Your new job is conductor, not soloist — define intent, validate outcome.",
+        "4. P.R.O.M.P.T. is your formula — Purpose, Role, Output, Marker, Pattern, Tone.",
+        "5. Quality is upstream — engineer it in, don't filter for it later."
+      ],
+      "memory_hook": "Twin. Broken. Conductor. P.R.O.M.P.T. Upstream. Five words. That's your module.",
+      "closing_thread": "One quiz between you and Module 2. Let's go.",
+      "narration": "Sixty minutes, down to five sentences. If you walk away from this module remembering only these, you'll be in great shape. One: AI is your twin — same anatomy as the intelligence you live in every day, just different substrate. Two: the old world of software delivery is breaking — a hundred and twenty days, thirty-to-forty percent rework, and a bus factor of one. Three: your job is conductor, not soloist. Define the intent, validate the outcome. Four: when you talk to AI, use P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone. Every time, no shortcuts. Five: quality is upstream. Engineer it into the brief — don't filter for it later in QA. Twin, broken, conductor, P.R.O.M.P.T., upstream. Five words. One quiz between you and Module 2. Let's do it.",
+      "estimated_duration_seconds": 100,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Sixty minutes, down to five sentences. If you walk away from this module remembering only these, you'll be in great shape.",
+          "text_ssml": "<speak>Sixty minutes, down to five sentences. If you walk away from this module remembering only these, you'll be in great shape.</speak>",
+          "text_expressive": "Sixty minutes, down to five sentences. If you walk away from this module remembering only these, you'll be in great shape."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "One: AI is your twin — same anatomy as the intelligence you live in every day, just different substrate.",
+          "text_ssml": "<speak>One: AI is your twin<break time=\"200ms\"/> same anatomy as the intelligence you live in every day, just different substrate.</speak>",
+          "text_expressive": "One: AI is your twin — same anatomy as the intelligence you live in every day, just different substrate."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Two: the old world of software delivery is breaking — a hundred and twenty days, thirty-to-forty percent rework, and a bus factor of one.",
+          "text_ssml": "<speak>Two: the old world of software delivery is breaking<break time=\"200ms\"/> a hundred and twenty days, thirty-to-forty percent rework, and a bus factor of one.</speak>",
+          "text_expressive": "Two: the old world of software delivery is breaking — a hundred and twenty days, thirty-to-forty percent rework, and a bus factor of one."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "Three: your job is conductor, not soloist. Define the intent, validate the outcome.",
+          "text_ssml": "<speak>Three: your job is conductor, not soloist. Define the intent, validate the outcome.</speak>",
+          "text_expressive": "Three: your job is conductor, not soloist. Define the intent, validate the outcome."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Four: when you talk to AI, use P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone. Every time, no shortcuts.",
+          "text_ssml": "<speak>Four: when you talk to AI, use P.R.O.M.P.T.<break time=\"200ms\"/> Purpose, Role, Output, Marker, Pattern, Tone. Every time, no shortcuts.</speak>",
+          "text_expressive": "Four: when you talk to AI, use P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone. Every time, no shortcuts."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "Five: quality is upstream. Engineer it into the brief — don't filter for it later in QA.",
+          "text_ssml": "<speak>Five: quality is upstream. Engineer it into the brief<break time=\"200ms\"/> don't filter for it later in QA.</speak>",
+          "text_expressive": "Five: quality is upstream. Engineer it into the brief — don't filter for it later in QA."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Twin, broken, conductor, P.R.O.M.P.T., upstream. Five words. One quiz between you and Module 2. Let's do it.",
+          "text_ssml": "<speak>Twin, broken, conductor, P.R.O.M.P.T., upstream. Five words. One quiz between you and Module 2. Let's do it.</speak>",
+          "text_expressive": "Twin, broken, conductor, P.R.O.M.P.T., upstream. Five words. One quiz between you and Module 2. Let's do it."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "interactive_quiz_engine",
+      "title": "Module 1 Knowledge Check",
+      "subtitle": "10 questions. 80% to pass. Unlimited retakes.",
+      "icon": "clipboard-check",
+      "pass_threshold": 80,
+      "questions": [
+        {
+          "id": "q1",
+          "category": "AI Anatomy",
+          "icon": "brain",
+          "question": "Which AI capability is the closest equivalent of human long-term memory?",
+          "choices": [
+            "Large Language Model (LLM)",
+            "Retrieval-Augmented Generation (RAG)",
+            "Reinforcement Learning",
+            "Transformers"
+          ],
+          "correct_answer": "Retrieval-Augmented Generation (RAG)",
+          "explanation": "RAG is AI's long-term memory — it lets the model look up specific facts (like your company's documents) at the moment of answering, rather than relying only on what it was trained on. Remember from the anatomy slide: brain = LLM, long-term memory = RAG."
+        },
+        {
+          "id": "q2",
+          "category": "AI Anatomy",
+          "icon": "alert-triangle",
+          "question": "AI hallucinations are most similar to which human phenomenon?",
+          "choices": [
+            "Conscious lying",
+            "Confident false memories or vivid dreams",
+            "Refusing to answer when uncertain",
+            "Asking a clarifying question"
+          ],
+          "correct_answer": "Confident false memories or vivid dreams",
+          "explanation": "Hallucinations are AI's dream state — vivid, confident, sometimes completely fabricated. The AI is not lying; it doesn't know what it doesn't know. That's exactly why the P.R.O.M.P.T. formula exists — to put guardrails around what AI can and can't make up."
+        },
+        {
+          "id": "q3",
+          "category": "Old World",
+          "icon": "calendar-x",
+          "question": "What is the typical baseline build time for traditional enterprise software, before OrchestrAI?",
+          "choices": [
+            "7 days",
+            "30 days",
+            "90–120 days",
+            "12 months"
+          ],
+          "correct_answer": "90–120 days",
+          "explanation": "Traditional enterprise software takes 90 to 120 days just to reach a first working baseline. OrchestrAI compresses that to 7 days to QA — a seventeen-times speedup achieved by removing the work that didn't need to exist, not by working faster."
+        },
+        {
+          "id": "q4",
+          "category": "OrchestrAI Model",
+          "icon": "rocket",
+          "question": "OrchestrAI delivers software to the client's ___ region in 7 days — not to production.",
+          "choices": [
+            "Production",
+            "QA (Quality Assurance)",
+            "Staging",
+            "Sandbox"
+          ],
+          "correct_answer": "QA (Quality Assurance)",
+          "explanation": "OrchestrAI delivers an 80% baseline to the client's QA region in 7 days. The final 20% is co-developed during UAT alongside the client. Production go-live only happens when the client says they have full confidence — not before. This distinction is important: OrchestrAI ships fast, but never recklessly."
+        },
+        {
+          "id": "q5",
+          "category": "Mindset Shift",
+          "icon": "music-2",
+          "question": "Which analogy best captures the role of an OrchestrAI Lead?",
+          "choices": [
+            "Solo violinist — total control of one instrument",
+            "Orchestra conductor — commands eighty musicians without touching one",
+            "Music critic — judges performance from the audience",
+            "Studio engineer — mixes after the recording is done"
+          ],
+          "correct_answer": "Orchestra conductor — commands eighty musicians without touching one",
+          "explanation": "The conductor analogy is the central mental model of the entire program. A solo violinist's hands touch the instrument. A conductor's hands touch nothing — yet exercises far greater command, through a score written with absolute precision before the first note is played. That's the shift: from playing the instrument to writing the score."
+        },
+        {
+          "id": "q6",
+          "category": "Quality Model",
+          "icon": "arrow-up-from-line",
+          "question": "Where is quality primarily engineered in the OrchestrAI model?",
+          "choices": [
+            "In the QA cycle, by dedicated testers",
+            "Upstream, in the prompt and brief",
+            "During UAT, by the client",
+            "In production, by monitoring"
+          ],
+          "correct_answer": "Upstream, in the prompt and brief",
+          "explanation": "Don't filter the river — clean the source. Old-world QA detects defects after they've flowed through the whole system. OrchestrAI engineers quality upstream, in the brief. Every defect caught in QA is a brief written too vaguely. Every compliance miss in UAT is a Marker that wasn't set in the prompt."
+        },
+        {
+          "id": "q7",
+          "category": "P.R.O.M.P.T.",
+          "icon": "shield-alert",
+          "question": "What does the 'M' in P.R.O.M.P.T. stand for?",
+          "choices": [
+            "Method — the steps to follow",
+            "Model — which AI model to use",
+            "Marker — hard constraints and guardrails",
+            "Mode — formal or casual"
+          ],
+          "correct_answer": "Marker — hard constraints and guardrails",
+          "explanation": "Marker = guardrails. These are the hard, non-negotiable constraints: budget limits, compliance rules, off-limits behaviors, approved-dependency lists. Without Markers, AI will happily produce output that violates your business rules — and do so confidently. This is the single most important letter for preventing hallucinations from causing real-world damage."
+        },
+        {
+          "id": "q8",
+          "category": "P.R.O.M.P.T.",
+          "icon": "user-cog",
+          "question": "If you forget to specify 'Role' in a P.R.O.M.P.T. prompt, what is the most likely result?",
+          "choices": [
+            "AI refuses to answer",
+            "AI gives a generic, non-expert response that needs heavy rework",
+            "AI asks you a clarifying question",
+            "AI defaults to the most recent role from your last session"
+          ],
+          "correct_answer": "AI gives a generic, non-expert response that needs heavy rework",
+          "explanation": "Without Role, AI defaults to its generic 'helpful assistant' voice — broad, surface-level, and not domain-specific. Telling it to 'act as a senior payments architect with 10 years at FIS' completely changes the depth, vocabulary, and assumptions of the output. Same model, same prompt — just a Role change — produces night-and-day quality difference."
+        },
+        {
+          "id": "q9",
+          "category": "P.R.O.M.P.T.",
+          "icon": "layout-template",
+          "question": "Which two P.R.O.M.P.T. elements most directly control the SHAPE of what AI returns to you?",
+          "choices": [
+            "Purpose and Tone",
+            "Output and Pattern",
+            "Role and Marker",
+            "Marker and Tone"
+          ],
+          "correct_answer": "Output and Pattern",
+          "explanation": "Output defines the format (markdown table, JSON, React component). Pattern defines the internal structure (day-by-day with morning/afternoon/evening slots; or header-form-footer). Together they shape the response so it's ready to use, not ready to rewrite. Purpose and Role tell AI what and who; Output and Pattern tell it what shape; Marker and Tone tell it what guardrails and what voice."
+        },
+        {
+          "id": "q10",
+          "category": "Daily Cadence",
+          "icon": "monitor-play",
+          "question": "In the OrchestrAI daily cadence, when does the business owner typically see the first live functional screen?",
+          "choices": [
+            "End of the first sprint, around day 10",
+            "End of the first week",
+            "Same day as intent capture — around 11:30 AM",
+            "Only after QA sign-off"
+          ],
+          "correct_answer": "Same day as intent capture — around 11:30 AM",
+          "explanation": "9 AM intent capture, 10:30 AM first generation cycle, 11:30 AM live screen with the business owner. This is the NASA Mission Control rhythm: short bursts of decision, long stretches of supervision, real working software in the morning of day one. Not a mockup. Not a wireframe. The thing itself."
+        }
+      ],
+      "memory_hook": "10 questions. 80% to pass. Pass it and Module 2 unlocks.",
+      "narration": "Last thing before Module 2 — a ten-question quiz. You need eighty percent to pass, which is eight out of ten. Retakes are unlimited, so there's no pressure, just take it seriously. A few of the questions reference the analogies we used — the conductor, the river, the architect's brief. Those aren't just decoration. They're the mental models. If you remember the analogy, you'll almost always remember the answer. Good luck. I'll see you on the other side.",
+      "estimated_duration_seconds": 78,
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "encouraging",
+          "text": "Last thing before Module 2 — a ten-question quiz. You need eighty percent to pass, which is eight out of ten. Retakes are unlimited, so there's no pressure, just take it seriously.",
+          "text_ssml": "<speak>Last thing before Module 2<break time=\"200ms\"/> a ten-question quiz. You need eighty percent to pass, which is eight out of ten. Retakes are unlimited, so there's no pressure, just take it seriously.</speak>",
+          "text_expressive": "Last thing before Module 2 — a ten-question quiz. You need eighty percent to pass, which is eight out of ten. Retakes are unlimited, so there's no pressure, just take it seriously."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "A few of the questions reference the analogies we used — the conductor, the river, the architect's brief. Those aren't just decoration. They're the mental models. If you remember the analogy, you'll almost always remember the answer.",
+          "text_ssml": "<speak>A few of the questions reference the analogies we used<break time=\"200ms\"/> the conductor, the river, the architect's brief. Those aren't just decoration. They're the mental models. If you remember the analogy, you'll almost always remember the answer.</speak>",
+          "text_expressive": "A few of the questions reference the analogies we used — the conductor, the river, the architect's brief. Those aren't just decoration. They're the mental models. If you remember the analogy, you'll almost always remember the answer."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Good luck. I'll see you on the other side.",
+          "text_ssml": "<speak>Good luck. I'll see you on the other side.</speak>",
+          "text_expressive": "Good luck. I'll see you on the other side."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "prompt_lab",
+      "title": "Prompt Engineering Lab 1",
+      "subtitle": "Plan My Team Offsite — Write Your P.R.O.M.P.T., Then Compare It to AI's",
+      "icon": "flask-conical",
+      "lab_number": 1,
+      "scenario": {
+        "label": "The Scenario",
+        "text": "Your manager just messaged you: \"Can you help me plan our team offsite next month? Nothing crazy, just something fun for the team.\" That's it. That's the whole brief. Your job: turn this into a proper P.R.O.M.P.T. before you ask AI to plan it."
+      },
+      "task_prompt": "Use what you learned in slide 14 to write your own P.R.O.M.P.T. for this scenario. Fill in all six elements below.",
+      "input_fields": [
+        {
+          "key": "purpose",
+          "label": "P — Purpose",
+          "placeholder": "What's the actual goal, in one sentence?"
+        },
+        {
+          "key": "role",
+          "label": "R — Role",
+          "placeholder": "Who should AI act as?"
+        },
+        {
+          "key": "output",
+          "label": "O — Output",
+          "placeholder": "What format do you need back?"
+        },
+        {
+          "key": "marker",
+          "label": "M — Marker",
+          "placeholder": "What are the hard limits? Budget, headcount, dates, constraints..."
+        },
+        {
+          "key": "pattern",
+          "label": "P — Pattern",
+          "placeholder": "How should the answer be organized?"
+        },
+        {
+          "key": "tone",
+          "label": "T — Tone",
+          "placeholder": "What's the vibe?"
+        }
+      ],
+      "submit_button_label": "See How AI Would Write This",
+      "model_answer": {
+        "purpose": "Plan a one-day team offsite for 12 people, happening next month, that builds team connection without feeling forced.",
+        "role": "Act as an experienced corporate event planner who specializes in mid-size team offsites.",
+        "output": "A structured day-by-day-style schedule in a table, with time slots and brief descriptions.",
+        "marker": "Budget is ₹3,000 per person. Must be within 90 minutes of the office. No mandatory alcohol-based activities. Needs a rain backup option.",
+        "pattern": "Morning, afternoon, evening blocks. Include one team activity, one meal together, and unstructured downtime.",
+        "tone": "Casual and energizing, not corporate-stiff."
+      },
+      "comparison_report": {
+        "title": "Your Brief vs. The AI-Engineered Brief",
+        "intro": "There's no single correct answer here — the goal is to see what a fully-loaded P.R.O.M.P.T. looks like, and notice which elements you filled in strong, and which you might have skipped or kept thin.",
+        "common_gaps": [
+          {
+            "element": "Marker",
+            "insight": "This is the one most people skip on a first attempt. Budget per person, no alcohol-based activities, a rain backup — these aren't details, they're the difference between a usable plan and one you have to rewrite. If your Marker was thin, that's completely normal, and exactly why this lab exists."
+          },
+          {
+            "element": "Role",
+            "insight": "Notice how specifying 'an experienced corporate event planner' produces a very different quality of answer than no Role at all. This is the same principle from slide 14 — Role alone changes the depth and specificity of the output."
+          },
+          {
+            "element": "Pattern",
+            "insight": "Without a Pattern, AI might give you a paragraph instead of a scannable schedule. Asking for morning, afternoon, and evening blocks turns a wall of text into something you could actually share with your manager."
+          }
+        ],
+        "closing_line": "Compare your six fields to the AI version above. Wherever you were thin, that's your edge to sharpen before Lab 2."
+      },
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Okay — time to actually use what we've been building up to. Lab One. No more watching examples — this time you're writing your own P.R.O.M.P.T.",
+          "text_ssml": "<speak>Okay<break time=\"200ms\"/> time to actually use what we've been building up to. Lab One. No more watching examples<break time=\"200ms\"/> this time you're writing your own P.R.O.M.P.T.</speak>",
+          "text_expressive": "Okay — time to actually use what we've been building up to. Lab One. No more watching examples — this time you're writing your own P.R.O.M.P.T."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Here's the scenario. Your manager messages you: 'Can you help plan our team offsite next month? Nothing crazy, just something fun.' That's the whole brief. Sound familiar?",
+          "text_ssml": "<speak>Here's the scenario. Your manager messages you: 'Can you help plan our team offsite next month? Nothing crazy, just something fun.' That's the whole brief. Sound familiar?</speak>",
+          "text_expressive": "Here's the scenario. Your manager messages you: 'Can you help plan our team offsite next month? Nothing crazy, just something fun.' That's the whole brief. Sound familiar?"
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "casual",
+          "text": "Yeah — that's basically every real request you'll ever get. Well-intentioned, missing everything important.",
+          "text_ssml": "<speak>Yeah<break time=\"150ms\"/> that's basically every real request you'll ever get. Well-intentioned, missing everything important.</speak>",
+          "text_expressive": "Yeah — that's basically every real request you'll ever get. Well-intentioned, missing everything important."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "encouraging",
+          "text": "Fill in the six fields on the left. Don't overthink it — just write what you'd actually want AI to know before it starts. Then hit submit, and I'll show you how AI would have written the same brief.",
+          "text_ssml": "<speak>Fill in the six fields on the left. Don't overthink it<break time=\"200ms\"/> just write what you'd actually want AI to know before it starts. Then hit submit, and I'll show you how AI would have written the same brief.</speak>",
+          "text_expressive": "Fill in the six fields on the left. Don't overthink it — just write what you'd actually want AI to know before it starts. Then hit submit, and I'll show you how AI would have written the same brief."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "It's not graded. There's no judgment. It's just a comparison to help you see your own blind spots. Take your time, write it for real, and then we'll compare.",
+          "text_ssml": "<speak>It's not graded. There's no judgment. It's just a comparison to help you see your own blind spots. Take your time, write it for real, and then we'll compare.</speak>",
+          "text_expressive": "It's not graded. There's no judgment. It's just a comparison to help you see your own blind spots. Take your time, write it for real, and then we'll compare."
+        }
+      ],
+      "estimated_duration_seconds": 68
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "prompt_lab",
+      "title": "Prompt Engineering Lab 2",
+      "subtitle": "Brief AI to Build a Customer Feedback Form — Your Last Practice Before the Quiz",
+      "icon": "flask-conical",
+      "lab_number": 2,
+      "scenario": {
+        "label": "The Scenario",
+        "text": "A client tells you: \"We need a way for customers to leave feedback after their order. Can you get something built?\" Remember — you're not writing code. You're the Intent Translator from slide 11. Your job is the brief, not the build."
+      },
+      "task_prompt": "Write the P.R.O.M.P.T. you'd actually hand to AI to get this built right the first time. You don't need to know how to code — you need to know what to ask for.",
+      "input_fields": [
+        {
+          "key": "purpose",
+          "label": "P — Purpose",
+          "placeholder": "What's the actual goal, in one sentence?"
+        },
+        {
+          "key": "role",
+          "label": "R — Role",
+          "placeholder": "Who should AI act as?"
+        },
+        {
+          "key": "output",
+          "label": "O — Output",
+          "placeholder": "What format do you need back?"
+        },
+        {
+          "key": "marker",
+          "label": "M — Marker",
+          "placeholder": "What are the hard rules? Required fields, platform, compliance..."
+        },
+        {
+          "key": "pattern",
+          "label": "P — Pattern",
+          "placeholder": "How should it be structured or laid out?"
+        },
+        {
+          "key": "tone",
+          "label": "T — Tone",
+          "placeholder": "What should the customer-facing text feel like?"
+        }
+      ],
+      "submit_button_label": "See How AI Would Write This",
+      "model_answer": {
+        "purpose": "Build a short, simple customer feedback form that appears after an order is completed.",
+        "role": "Act as a senior frontend engineer experienced in building lightweight customer-facing forms.",
+        "output": "A web form component, plus a short summary of what fields and validation rules it includes.",
+        "marker": "Must take under 60 seconds to fill out. Required fields: star rating and one optional comment box. Must work on mobile. Must comply with our data privacy policy — no collecting personal info beyond what's already in the order record.",
+        "pattern": "Star rating at the top, optional comment box below, single submit button. No multi-page forms.",
+        "tone": "Warm and appreciative — make the customer feel like their feedback genuinely matters, not like they're filling out a compliance form."
+      },
+      "comparison_report": {
+        "title": "Your Brief vs. The AI-Engineered Brief",
+        "intro": "Same exercise, but software this time. And notice: you didn't need to write a line of code to produce a brief a developer or AI could build from. That's the Intent Translator role in action.",
+        "common_gaps": [
+          {
+            "element": "Marker",
+            "insight": "'Under 60 seconds' and 'no collecting personal info beyond the order record' look like small details — but they're exactly the kind of constraints that prevent a bloated, privacy-risky form from being built. This is upstream quality from slide 12 in practice."
+          },
+          {
+            "element": "Output",
+            "insight": "Did you just say 'a feedback form'? Or did you specify what comes back — a working component, documentation, both? Vague Output means you might get a description of a form instead of something buildable."
+          },
+          {
+            "element": "Tone",
+            "insight": "Easy to forget on a technical request — but the words a customer actually sees on the form matter. 'Warm and appreciative' versus nothing is the difference between a form that feels human and one that feels procedural."
+          }
+        ],
+        "closing_line": "Two labs, two different scenarios — people and software. Same formula, both times. That's the whole point. Quiz time."
+      },
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Lab Two — your last practice before the quiz. A new scenario, and this time it involves software.",
+          "text_ssml": "<speak>Lab Two<break time=\"200ms\"/> your last practice before the quiz. A new scenario, and this time it involves software.</speak>",
+          "text_expressive": "Lab Two — your last practice before the quiz. A new scenario, and this time it involves software."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "A client tells you: 'We need a way for customers to leave feedback after their order. Can you get something built?' Before you worry — no, you don't need to know how to code for this.",
+          "text_ssml": "<speak>A client tells you: 'We need a way for customers to leave feedback after their order. Can you get something built?' Before you worry<break time=\"200ms\"/> no, you don't need to know how to code for this.</speak>",
+          "text_expressive": "A client tells you: 'We need a way for customers to leave feedback after their order. Can you get something built?' Before you worry — no, you don't need to know how to code for this."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "reassuring",
+          "text": "Remember slide eleven — you're the Intent Translator. Your job is the brief, not the build.",
+          "text_ssml": "<speak>Remember slide eleven<break time=\"200ms\"/> you're the Intent Translator. Your job is the brief, not the build.</speak>",
+          "text_expressive": "Remember slide eleven — you're the Intent Translator. Your job is the brief, not the build."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Fill in the six fields again. Think about what actually matters here — how fast should it be to fill in, what information are you collecting, and how should it feel to the customer who sees it.",
+          "text_ssml": "<speak>Fill in the six fields again. Think about what actually matters here<break time=\"200ms\"/> how fast should it be to fill in, what information are you collecting, and how should it feel to the customer who sees it.</speak>",
+          "text_expressive": "Fill in the six fields again. Think about what actually matters here — how fast should it be to fill in, what information are you collecting, and how should it feel to the customer who sees it."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Submit it, compare it, see what you caught and what you missed. Two labs, two totally different scenarios — and the same formula worked in both. That's not a coincidence. That's the whole point.",
+          "text_ssml": "<speak>Submit it, compare it, see what you caught and what you missed. Two labs, two totally different scenarios<break time=\"200ms\"/> and the same formula worked in both. That's not a coincidence. That's the whole point.</speak>",
+          "text_expressive": "Submit it, compare it, see what you caught and what you missed. Two labs, two totally different scenarios — and the same formula worked in both. That's not a coincidence. That's the whole point."
+        }
+      ],
+      "estimated_duration_seconds": 68
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "title": "You Did It",
+      "subtitle": "Module 1 Complete",
+      "icon": "party-popper",
+      "hero_visual": {
+        "concept": "celebratory_conductor",
+        "description": "A conductor mid-performance, arms raised, caught in a warm gold spotlight against the dark navy brand background — tying directly back to the central conductor metaphor from slide 10.",
+        "alt_text": "An illustrated conductor standing triumphantly with arms raised, gold light radiating outward, symbolizing mastery of orchestration.",
+        "fallback_icon": "party-popper",
+        "animation_suggestion": "Gold particle burst or confetti animation on slide entry, settling after two seconds."
+      },
+      "score_display": {
+        "label": "Your Quiz Score",
+        "source_slide": "slide_20",
+        "show_percentage": true,
+        "show_fraction": true,
+        "pass_threshold": 80,
+        "pass_message": "You passed. Module 2 is unlocked.",
+        "retry_message": "You're close — review the recap on slide 19, then retake the quiz. Unlimited attempts, no penalty.",
+        "visual_treatment": "Circular progress ring in gold, animating from 0 to the final score on load."
+      },
+      "milestone_banner": {
+        "formal": "You have completed the foundational module of the OrchestrAI Lead Certification.",
+        "conversational": "You just finished the most important hour of this entire certification.",
+        "genz": "You just finished the most important hour in this whole certification. No cap.",
+        "beginner": "You've just completed the most important part of this certification — the foundation everything else builds on."
+      },
+      "summary_bullets": {
+        "formal": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI exhibits a structural correspondence to human cognition."
+          },
+          {
+            "icon": "trending-down",
+            "text": "Traditional software delivery carries significant structural risk; OrchestrAI addresses this through orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "Your function has shifted from direct execution to intent orchestration."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. is now a practiced skill, not just a memorized acronym."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality is engineered upstream, not detected downstream."
+          }
+        ],
+        "conversational": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI is your twin — same anatomy, different substrate."
+          },
+          {
+            "icon": "trending-down",
+            "text": "The old world of software delivery is breaking, and OrchestrAI fixes it with orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "You're a conductor now, not a soloist."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. isn't just something you memorized — you actually used it, twice."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality lives upstream, in the brief."
+          }
+        ],
+        "genz": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI's your twin — same anatomy, different hardware."
+          },
+          {
+            "icon": "trending-down",
+            "text": "Old world's broken. OrchestrAI fixes it with orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "You're the conductor now, not the soloist."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. isn't just something you memorized — you actually used it. Twice."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality lives upstream, in the brief. Always."
+          }
+        ],
+        "beginner": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI works a lot like you — similar structure, different material."
+          },
+          {
+            "icon": "trending-down",
+            "text": "The old way of building software has real problems, and OrchestrAI fixes them through better organization."
+          },
+          {
+            "icon": "music-2",
+            "text": "Your role has changed — you guide AI now, instead of doing everything by hand."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "You didn't just learn P.R.O.M.P.T. — you practiced it, twice, in real scenarios."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality starts at the beginning, not the end."
+          }
+        ]
+      },
+      "achievement_stats": {
+        "label": {
+          "formal": "Session Summary",
+          "conversational": "What You Just Did",
+          "genz": "What You Just Pulled Off",
+          "beginner": "What You Accomplished"
+        },
+        "stats": [
+          {
+            "icon": "layout-grid",
+            "value": "20",
+            "label": {
+              "formal": "Concepts Covered",
+              "conversational": "Slides Completed",
+              "genz": "Slides Crushed",
+              "beginner": "Lessons Completed"
+            }
+          },
+          {
+            "icon": "flask-conical",
+            "value": "2",
+            "label": {
+              "formal": "Applied Exercises",
+              "conversational": "Labs Completed",
+              "genz": "Labs Done",
+              "beginner": "Practice Exercises"
+            }
+          },
+          {
+            "icon": "clipboard-check",
+            "value": "10",
+            "label": {
+              "formal": "Assessment Items",
+              "conversational": "Quiz Questions",
+              "genz": "Quiz Questions",
+              "beginner": "Quiz Questions"
+            }
+          },
+          {
+            "icon": "clock",
+            "value": "60",
+            "label": {
+              "formal": "Minutes Invested",
+              "conversational": "Minutes Well Spent",
+              "genz": "Minutes, Zero Wasted",
+              "beginner": "Minutes of Learning"
+            }
+          }
+        ]
+      },
+      "closing_message": {
+        "formal": "This concludes Module 1. The foundational mindset established here — orchestration, structured intent, and upstream quality — underlies all subsequent modules. Proceed to Module 2 when ready.",
+        "conversational": "That's a wrap on Module 1. Everything else in this program builds on what you just learned — the conductor mindset, P.R.O.M.P.T., upstream quality. You're ready for Module 2 whenever you are.",
+        "genz": "And that's a wrap on Module 1. Everything else in this program builds on what you just locked in — conductor mindset, P.R.O.M.P.T., upstream quality. Module 2's whenever you're ready. Let's gooo.",
+        "beginner": "You've completed Module 1. Everything you learn next builds on what you just covered — thinking like a conductor, using P.R.O.M.P.T., and building in quality from the start. Take a moment to feel good about this. Module 2 is ready whenever you are."
+      },
+      "cta_button": {
+        "formal": "Proceed to Module 2",
+        "conversational": "Continue to Module 2",
+        "genz": "Let's Go to Module 2",
+        "beginner": "Start Module 2 When You're Ready"
+      },
+      "narration_script": [
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "And that's a wrap. Module 1, complete. I'm genuinely proud of you for seeing this through.",
+          "text_ssml": "<speak>And that's a wrap. Module 1, complete. I'm genuinely proud of you for seeing this through.</speak>",
+          "text_expressive": "And that's a wrap. Module 1, complete. I'm genuinely proud of you for seeing this through."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "explaining",
+          "text": "Look at your score up there. That number reflects real understanding — of the conductor mindset, the P.R.O.M.P.T. formula, upstream quality. Not luck.",
+          "text_ssml": "<speak>Look at your score up there. That number reflects real understanding<break time=\"200ms\"/> of the conductor mindset, the P.R.O.M.P.T. formula, upstream quality. Not luck.</speak>",
+          "text_expressive": "Look at your score up there. That number reflects real understanding — of the conductor mindset, the P.R.O.M.P.T. formula, upstream quality. Not luck."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Think about where you started this hour — AI feeling like some opaque, scary technology. And now you've written two P.R.O.M.P.T. briefs yourself, from scratch.",
+          "text_ssml": "<speak>Think about where you started this hour<break time=\"200ms\"/> AI feeling like some opaque, scary technology. And now you've written two P.R.O.M.P.T. briefs yourself, from scratch.</speak>",
+          "text_expressive": "Think about where you started this hour — AI feeling like some opaque, scary technology. And now you've written two P.R.O.M.P.T. briefs yourself, from scratch."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "confident",
+          "text": "Twin, broken, conductor, P.R.O.M.P.T., upstream. You know what all five of those mean now. Take a moment with that.",
+          "text_ssml": "<speak>Twin, broken, conductor, P.R.O.M.P.T., upstream. You know what all five of those mean now. Take a moment with that.</speak>",
+          "text_expressive": "Twin, broken, conductor, P.R.O.M.P.T., upstream. You know what all five of those mean now. Take a moment with that."
+        },
+        {
+          "speaker": "Pooja",
+          "voice": "female_conversational",
+          "emotion": "warm",
+          "text": "Module 2 is ready whenever you are. It was a pleasure walking this hour with you.",
+          "text_ssml": "<speak>Module 2 is ready whenever you are. It was a pleasure walking this hour with you.</speak>",
+          "text_expressive": "Module 2 is ready whenever you are. It was a pleasure walking this hour with you."
+        }
+      ],
+      "estimated_duration_seconds": 60,
+      "background_music": {
+        "track_key": "outro_theme",
+        "behavior": "fade_in_then_duck_under_narration",
+        "fade_in_ms": 1000,
+        "duck_volume_percent": 15,
+        "fade_out_ms": 2500,
+        "notes": "Play a celebratory completion theme on slide load. Fade in over 1s, duck to 15% during narration, fade out over 2.5s on CTA click."
+      }
+    }
+  ]
+}

@@ -41,16 +41,16 @@
         "Pass the quiz, unlock Module 2. Let's get it."
       ],
       "closing_thread": "First up: meet your twin.",
-      "narration": "Okay — you actually made it. Welcome to OrchestrAI Lead Certification, Module 1. I'm Sara. And I'm Arjun. And listen — I know every course says this, but this one's actually true. This hour? Most important one in the whole program. Like genuinely. Everything in Modules 2, 3, and 4 just stacks on top of what you figure out in the next sixty minutes. And we're not doing the boring thing. No textbook definitions you'll forget by lunch. We're actually gonna start somewhere kinda unexpected. We're gonna look at... you. Yeah, because here's the thing nobody tells you — the fastest way to get AI is to realize you're already walking around inside an intelligence. Your own brain. One module, five acts, twenty slides. Zero filler — we actually promise. Pass the quiz at the end, Module 2 unlocks. Buckle up. This hour hits different. First up — meet your twin.",
+      "narration": "Okay, okay — you actually made it. Welcome to OrchestrAI Lead Certification, Module 1. I'm Sara. And I'm Arjun. And listen — I know every course says this, but this one's actually true. This hour? Most important one in the whole program. Like genuinely. Everything in Modules 2, 3, and 4 just stacks on top of what you figure out in the next sixty minutes. And we're not doing the boring thing. No textbook definitions you'll forget by lunch. We're actually gonna start somewhere kinda unexpected. We're gonna look at... you. Yeah, because here's the thing nobody tells you — the fastest way to get AI is to realize you're already walking around inside an intelligence. Your own brain. One module, five acts, twenty slides. Zero filler — we actually promise. Pass the quiz at the end, Module 2 unlocks. Buckle up. This hour hits different. First up — meet your twin.",
       "estimated_duration_seconds": 78,
       "narration_script": [
         {
           "speaker": "Sara",
           "voice": "female_genz",
           "emotion": "warm_excited",
-          "text": "Okay — you actually made it. Welcome to OrchestrAI Lead Certification, Module 1. I'm Sara.",
-          "text_ssml": "<speak>Okay<break time=\"250ms\"/> you actually <emphasis level=\"moderate\">made</emphasis> it. Welcome to OrchestrAI Lead Certification, Module 1. I'm Sara.</speak>",
-          "text_expressive": "[warmly] Okay — you actually made it. Welcome to OrchestrAI Lead Certification, Module 1. I'm Sara."
+          "text": "Okay, okay — you actually made it. Welcome to OrchestrAI Lead Certification, Module 1. I'm Sara.",
+          "text_ssml": "<speak>Okay, okay<break time=\"250ms\"/> you actually <emphasis level=\"moderate\">made</emphasis> it. Welcome to OrchestrAI Lead Certification, Module 1. I'm Sara.</speak>",
+          "text_expressive": "[warmly] Okay, okay — you actually made it. Welcome to OrchestrAI Lead Certification, Module 1. I'm Sara."
         },
         {
           "speaker": "Arjun",

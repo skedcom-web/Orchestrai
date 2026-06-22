@@ -1,0 +1,2366 @@
+{
+  "module": "Module 1 — The OrchestrAI Mindset",
+  "preset": "beginner",
+  "format": "single_voice",
+  "speakers": {
+    "Sam": {
+      "voice_key": "male_beginner",
+      "gender": "male",
+      "persona": "Sam — calm, patient, encouraging teacher"
+    }
+  },
+  "tts_field_priority": [
+    "text_expressive",
+    "text_ssml",
+    "text"
+  ],
+  "tts_notes": "Use text_expressive for ElevenLabs-style engines, text_ssml for Google/Azure/Polly, text as universal fallback.",
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "title": "Welcome to the OrchestrAI Mindset",
+      "subtitle": "Module 1 of the OrchestrAI Lead Certification",
+      "icon": "sparkles",
+      "visual_cue": "animated_intro_burst",
+      "hero_stat": {
+        "value": "60 min",
+        "label": "to rewire how you think about software delivery",
+        "icon": "timer"
+      },
+      "opening_hook": "By the end of this hour, you'll understand something new about your job — and it will make sense, step by step.",
+      "bullets": [
+        "There's one module, broken into five short parts, made up of twenty slides — small, manageable steps.",
+        "You'll start by learning what AI actually is, using something familiar: your own body. Then we'll give you a simple formula you can use right away.",
+        "We won't assume you know any technical terms. Every word will be explained before we use it.",
+        "At the end, there's a short quiz. Pass it, and you move on to Module 2. You can retake it as many times as you need."
+      ],
+      "closing_thread": "Let's start with something you already know — yourself.",
+      "narration": "Hello, and welcome. I'm Sam, and I'll be guiding you through Module 1 of the OrchestrAI Lead Certification. Before we start, I want to reassure you: you don't need to be technical to follow this. We're going to take everything one step at a time, explain every term before we use it, and make sure nothing gets left behind. This module is the most important one in the whole program, because everything that comes after it builds directly on what you'll learn in the next hour. We're going to start in a way that might surprise you a little: by looking at how your own mind works. Because it turns out, the easiest way to understand artificial intelligence is to start with the one kind of intelligence you already know well — yours. Twenty slides, five sections, sixty minutes. There's a short quiz at the end — you can retake it as many times as you need. Let's take this at a comfortable pace. Ready? Let's begin.",
+      "estimated_duration_seconds": 80,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "calm_warm",
+          "text": "Hello, and welcome. I'm Sam, and I'll be guiding you through Module 1 of the OrchestrAI Lead Certification.",
+          "text_ssml": "<speak>Hello, and welcome. I'm Sam, and I'll be guiding you through Module 1 of the OrchestrAI Lead Certification.</speak>",
+          "text_expressive": "Hello, and welcome. I'm Sam, and I'll be guiding you through Module 1 of the OrchestrAI Lead Certification."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "reassuring",
+          "text": "Before we start, I want to reassure you: you don't need to be technical to follow this. We're going to take everything one step at a time, explain every term before we use it, and make sure nothing gets left behind.",
+          "text_ssml": "<speak>Before we start, I want to reassure you: you don't need to be technical to follow this. We're going to take everything one step at a time, explain every term before we use it, and make sure nothing gets left behind.</speak>",
+          "text_expressive": "Before we start, I want to reassure you: you don't need to be technical to follow this. We're going to take everything one step at a time, explain every term before we use it, and make sure nothing gets left behind."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "This module is the most important one in the whole program, because everything that comes after it builds directly on what you'll learn in the next hour.",
+          "text_ssml": "<speak>This module is the most important one in the whole program, because everything that comes after it builds directly on what you'll learn in the next hour.</speak>",
+          "text_expressive": "This module is the most important one in the whole program, because everything that comes after it builds directly on what you'll learn in the next hour."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "We're going to start in a way that might surprise you a little: by looking at how your own mind works. Because it turns out, the easiest way to understand artificial intelligence is to start with the one kind of intelligence you already know well — yours.",
+          "text_ssml": "<speak>We're going to start in a way that might surprise you a little: by looking at how your own mind works. Because it turns out, the easiest way to understand artificial intelligence is to start with the one kind of intelligence you already know well<break time=\"200ms\"/> yours.</speak>",
+          "text_expressive": "We're going to start in a way that might surprise you a little: by looking at how your own mind works. Because it turns out, the easiest way to understand artificial intelligence is to start with the one kind of intelligence you already know well — yours."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "Twenty slides, five sections, sixty minutes. There's a short quiz at the end — you can retake it as many times as you need. Let's take this at a comfortable pace. Ready? Let's begin.",
+          "text_ssml": "<speak>Twenty slides, five sections, sixty minutes. There's a short quiz at the end<break time=\"200ms\"/> you can retake it as many times as you need. Let's take this at a comfortable pace. Ready? Let's begin.</speak>",
+          "text_expressive": "Twenty slides, five sections, sixty minutes. There's a short quiz at the end — you can retake it as many times as you need. Let's take this at a comfortable pace. Ready? Let's begin."
+        }
+      ],
+      "background_music": {
+        "track_key": "intro_theme",
+        "behavior": "fade_in_then_duck_under_narration",
+        "fade_in_ms": 1500,
+        "duck_volume_percent": 15,
+        "fade_out_ms": 2000,
+        "notes": "Play a short intro theme on slide load. Fade in over 1.5s, duck to 15% once narration starts, fade out as the user advances."
+      }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "comparison_table",
+      "title": "Meet Your Twin",
+      "subtitle": "You already know how intelligence works — you live inside one.",
+      "icon": "users-2",
+      "visual_cue": "human_ai_split_with_centre_face",
+      "analogy": {
+        "title": "AI Copies How You Already Think",
+        "text": "Here's the good news: every piece of AI technology has something in your own body that works almost the same way. That's not an accident — the people who built AI looked at how humans think and tried to copy it. So before any of this feels confusing, let's just look at the comparison."
+      },
+      "table": [
+        {
+          "icon": "brain",
+          "old": "Brain — reasoning, language, prediction",
+          "new": "Large Language Model (LLM)"
+        },
+        {
+          "icon": "book-open",
+          "old": "Long-term memory — recalling facts on demand",
+          "new": "Retrieval-Augmented Generation (RAG)"
+        },
+        {
+          "icon": "git-branch",
+          "old": "Nervous system — signals between body parts",
+          "new": "Model Context Protocol (MCP)"
+        },
+        {
+          "icon": "bot",
+          "old": "Hands and feet — taking action in the world",
+          "new": "AI Agents"
+        },
+        {
+          "icon": "wand-2",
+          "old": "Creativity and imagination",
+          "new": "Generative AI"
+        },
+        {
+          "icon": "trophy",
+          "old": "Learning from mistakes — trial and error",
+          "new": "Reinforcement Learning"
+        },
+        {
+          "icon": "alert-triangle",
+          "old": "Dreams, false memories, confident mistakes",
+          "new": "AI Hallucinations"
+        }
+      ],
+      "memory_hook": "Remember this: for every AI term, there's a matching part of you. If you forget the AI word, just think of the human one first.",
+      "narration": "Let's look at this table together. On the left side, you'll see things about your own body and mind — things you've understood for years. On the right side, you'll see the AI terms that match each one. Your brain predicts what word comes next when someone is speaking — kind of like how you can often finish someone's sentence. AI has something that does the same job, called a Large Language Model, or LLM. Your long-term memory lets you look up facts when you need them. AI has something similar called RAG — it lets AI check real documents instead of just guessing. Your nervous system carries signals between different parts of your body. AI has something called MCP that does the same thing — it lets different AI tools communicate with each other. Your hands and feet let you take action. AI Agents are the equivalent — they don't just answer questions, they actually do things like send emails or check databases. And there's one last item I want you to pay careful attention to: hallucinations. This is when AI gives a confident answer that isn't actually true — a bit like a very vivid dream that feels real. This is the most important risk with AI, and we'll explain exactly how to prevent it later in this module. The important thing to remember is this: AI isn't mysterious or alien. It was built by copying how people think. It's your twin.",
+      "estimated_duration_seconds": 115,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Let's look at this table together. On the left side, you'll see things about your own body and mind — things you've understood for years. On the right side, you'll see the AI terms that match each one.",
+          "text_ssml": "<speak>Let's look at this table together. On the left side, you'll see things about your own body and mind<break time=\"200ms\"/> things you've understood for years. On the right side, you'll see the AI terms that match each one.</speak>",
+          "text_expressive": "Let's look at this table together. On the left side, you'll see things about your own body and mind — things you've understood for years. On the right side, you'll see the AI terms that match each one."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Your brain predicts what word comes next when someone is speaking — kind of like how you can often finish someone's sentence. AI has something that does the same job, called a Large Language Model, or LLM.",
+          "text_ssml": "<speak>Your brain predicts what word comes next when someone is speaking<break time=\"200ms\"/> kind of like how you can often finish someone's sentence. AI has something that does the same job, called a Large Language Model, or LLM.</speak>",
+          "text_expressive": "Your brain predicts what word comes next when someone is speaking — kind of like how you can often finish someone's sentence. AI has something that does the same job, called a Large Language Model, or LLM."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Your long-term memory lets you look up facts when you need them. AI has something similar called RAG — it lets AI check real documents instead of just guessing.",
+          "text_ssml": "<speak>Your long-term memory lets you look up facts when you need them. AI has something similar called RAG<break time=\"200ms\"/> it lets AI check real documents instead of just guessing.</speak>",
+          "text_expressive": "Your long-term memory lets you look up facts when you need them. AI has something similar called RAG — it lets AI check real documents instead of just guessing."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Your nervous system carries signals between different parts of your body. AI has something called MCP that does the same thing — it lets different AI tools communicate with each other.",
+          "text_ssml": "<speak>Your nervous system carries signals between different parts of your body. AI has something called MCP that does the same thing<break time=\"200ms\"/> it lets different AI tools communicate with each other.</speak>",
+          "text_expressive": "Your nervous system carries signals between different parts of your body. AI has something called MCP that does the same thing — it lets different AI tools communicate with each other."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Your hands and feet let you take action. AI Agents are the equivalent — they don't just answer questions, they actually do things like send emails or check databases.",
+          "text_ssml": "<speak>Your hands and feet let you take action. AI Agents are the equivalent<break time=\"200ms\"/> they don't just answer questions, they actually do things like send emails or check databases.</speak>",
+          "text_expressive": "Your hands and feet let you take action. AI Agents are the equivalent — they don't just answer questions, they actually do things like send emails or check databases."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "serious",
+          "text": "And there's one last item I want you to pay careful attention to: hallucinations. This is when AI gives a confident answer that isn't actually true — a bit like a very vivid dream that feels real. This is the most important risk with AI, and we'll explain exactly how to prevent it later in this module.",
+          "text_ssml": "<speak>And there's one last item I want you to pay careful attention to: hallucinations. This is when AI gives a confident answer that isn't actually true<break time=\"200ms\"/> a bit like a very vivid dream that feels real. This is the most important risk with AI, and we'll explain exactly how to prevent it later in this module.</speak>",
+          "text_expressive": "And there's one last item I want you to pay careful attention to: hallucinations. This is when AI gives a confident answer that isn't actually true — a bit like a very vivid dream that feels real. This is the most important risk with AI, and we'll explain exactly how to prevent it later in this module."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "The important thing to remember is this: AI isn't mysterious or alien. It was built by copying how people think. It's your twin.",
+          "text_ssml": "<speak>The important thing to remember is this: AI isn't mysterious or alien. It was built by copying how people think. It's your twin.</speak>",
+          "text_expressive": "The important thing to remember is this: AI isn't mysterious or alien. It was built by copying how people think. It's your twin."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "competencies",
+      "title": "The Intelligence Core",
+      "subtitle": "Four pieces of machinery doing the thinking",
+      "icon": "brain-circuit",
+      "analogy": {
+        "title": "The Four Parts That Make AI 'Think'",
+        "text": "Think of the LLM as a brain. These four things are like different parts of that brain, each doing a specific job — just like different parts of your own brain handle different tasks. None of this is magic. It's just very fast pattern-spotting."
+      },
+      "list": [
+        {
+          "name": "LLM — Large Language Model",
+          "icon": "brain",
+          "desc": "This is the 'thinking' part. It predicts what word should come next — similar to how you can often guess how someone's sentence will end. It learned to do this by reading an enormous amount of text."
+        },
+        {
+          "name": "Deep Learning",
+          "icon": "layers",
+          "desc": "This is how AI recognizes patterns, step by step. It's similar to how you recognize a friend's face — first you notice basic shapes, then more detail, until you know who it is. AI does this in layers too."
+        },
+        {
+          "name": "Transformers",
+          "icon": "network",
+          "desc": "This is a breakthrough idea that lets AI pay attention to the right words in a sentence — understanding context, not just reading one word at a time with no memory of what came before."
+        },
+        {
+          "name": "Reinforcement Learning",
+          "icon": "trophy",
+          "desc": "This is how AI improves by trying things and getting feedback — much like how a child learns not to touch something hot after trying it once. AI does this same kind of learning, just an enormous number of times, very quickly."
+        }
+      ],
+      "memory_hook": "Four simple ideas: LLM is the brain. Deep Learning is how it spots patterns. Transformers is how it pays attention. Reinforcement Learning is how it learns from mistakes.",
+      "narration": "Let's look inside the brain of AI. There are four main pieces, and each one has a simple job that you can understand by thinking about how you learn and think. The first is the LLM — the main thinking part. It learned to predict the next word by reading an enormous amount of text. Think of it as a very well-read brain that's gotten very good at completing sentences. The second is Deep Learning, which is how AI recognizes patterns. When you recognize a face, your brain goes from noticing edges, to shapes, to the whole face. Deep Learning works the same way, in layers. The third is called Transformers — this is what lets AI pay attention to the right parts of a sentence. For example, if I say 'the trophy didn't fit in the suitcase because it was too big,' Transformers help AI understand that 'it' refers to the trophy, not the suitcase. And the fourth is Reinforcement Learning — AI learning from its mistakes. It's similar to how a child learns not to touch something hot: try, learn from the result, and adjust. AI does this same process, just millions of times very quickly. None of this is magic or unexplainable. These are all understandable ideas — just running very, very fast.",
+      "estimated_duration_seconds": 108,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Let's look inside the brain of AI. There are four main pieces, and each one has a simple job that you can understand by thinking about how you learn and think.",
+          "text_ssml": "<speak>Let's look inside the brain of AI. There are four main pieces, and each one has a simple job that you can understand by thinking about how you learn and think.</speak>",
+          "text_expressive": "Let's look inside the brain of AI. There are four main pieces, and each one has a simple job that you can understand by thinking about how you learn and think."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The first is the LLM — the main thinking part. It learned to predict the next word by reading an enormous amount of text. Think of it as a very well-read brain that's gotten very good at completing sentences.",
+          "text_ssml": "<speak>The first is the LLM<break time=\"200ms\"/> the main thinking part. It learned to predict the next word by reading an enormous amount of text. Think of it as a very well-read brain that's gotten very good at completing sentences.</speak>",
+          "text_expressive": "The first is the LLM — the main thinking part. It learned to predict the next word by reading an enormous amount of text. Think of it as a very well-read brain that's gotten very good at completing sentences."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The second is Deep Learning, which is how AI recognizes patterns. When you recognize a face, your brain goes from noticing edges, to shapes, to the whole face. Deep Learning works the same way, in layers.",
+          "text_ssml": "<speak>The second is Deep Learning, which is how AI recognizes patterns. When you recognize a face, your brain goes from noticing edges, to shapes, to the whole face. Deep Learning works the same way, in layers.</speak>",
+          "text_expressive": "The second is Deep Learning, which is how AI recognizes patterns. When you recognize a face, your brain goes from noticing edges, to shapes, to the whole face. Deep Learning works the same way, in layers."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The third is called Transformers — this is what lets AI pay attention to the right parts of a sentence. For example, if I say 'the trophy didn't fit in the suitcase because it was too big,' Transformers help AI understand that 'it' refers to the trophy, not the suitcase.",
+          "text_ssml": "<speak>The third is called Transformers<break time=\"200ms\"/> this is what lets AI pay attention to the right parts of a sentence. For example, if I say 'the trophy didn't fit in the suitcase because it was too big,' Transformers help AI understand that 'it' refers to the trophy, not the suitcase.</speak>",
+          "text_expressive": "The third is called Transformers — this is what lets AI pay attention to the right parts of a sentence. For example, if I say 'the trophy didn't fit in the suitcase because it was too big,' Transformers help AI understand that 'it' refers to the trophy, not the suitcase."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And the fourth is Reinforcement Learning — AI learning from its mistakes. It's similar to how a child learns not to touch something hot: try, learn from the result, and adjust. AI does this same process, just millions of times very quickly.",
+          "text_ssml": "<speak>And the fourth is Reinforcement Learning<break time=\"200ms\"/> AI learning from its mistakes. It's similar to how a child learns not to touch something hot: try, learn from the result, and adjust. AI does this same process, just millions of times very quickly.</speak>",
+          "text_expressive": "And the fourth is Reinforcement Learning — AI learning from its mistakes. It's similar to how a child learns not to touch something hot: try, learn from the result, and adjust. AI does this same process, just millions of times very quickly."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "None of this is magic or unexplainable. These are all understandable ideas — just running very, very fast.",
+          "text_ssml": "<speak>None of this is magic or unexplainable. These are all understandable ideas<break time=\"200ms\"/> just running very, very fast.</speak>",
+          "text_expressive": "None of this is magic or unexplainable. These are all understandable ideas — just running very, very fast."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "competencies",
+      "title": "Extended Capabilities",
+      "subtitle": "What lets AI act, remember, and sometimes lie",
+      "icon": "puzzle",
+      "analogy": {
+        "title": "The Extra Parts — and One Important Warning",
+        "text": "The last slide showed you the 'brain' part of AI. This slide shows you everything connected to that brain — its memory, its hands, its imagination, and one important risk you need to know about. Pay close attention to the last item."
+      },
+      "list": [
+        {
+          "name": "RAG — Retrieval-Augmented Generation",
+          "icon": "book-open",
+          "desc": "This lets AI look up real information — like your company's documents — before answering, instead of just guessing based on what it learned a long time ago."
+        },
+        {
+          "name": "Generative AI",
+          "icon": "wand-2",
+          "desc": "This is the part that creates new things — writing, pictures, computer code — rather than just sorting or guessing."
+        },
+        {
+          "name": "AI Agents",
+          "icon": "bot",
+          "desc": "These are AI's 'hands.' Instead of just talking, an AI Agent can actually do things — like sending an email, checking a database, or making a change in software."
+        },
+        {
+          "name": "MCP — Model Context Protocol",
+          "icon": "git-branch",
+          "desc": "This is like the wiring in your nervous system — it lets different AI tools talk to each other, and to your existing software, without needing custom setup every single time."
+        },
+        {
+          "name": "Hallucination",
+          "icon": "alert-triangle",
+          "desc": "This is when AI gives you a wrong answer, but says it confidently — almost like a dream that feels completely real. This is the biggest risk with AI, and it's exactly why we'll spend the rest of this module teaching you how to prevent it."
+        }
+      ],
+      "memory_hook": "Remember this: hallucination is the problem, and there's a tool coming up (in slide 14) that's specifically designed to fix it.",
+      "visual_cue": "highlight_last_row_with_warning_pulse",
+      "narration": "The last slide showed us the 'brain' part of AI. Now let's look at everything connected to that brain — memory, hands, imagination, and one very important warning. RAG is like memory on demand. If you ask AI about your company's policies, it can look them up in your real documents first, instead of guessing based on things it learned a long time ago. Generative AI is the creative part — it can write text, draw pictures, or create computer code. It makes new things rather than just sorting existing ones. AI Agents are the 'hands' — they can take real actions, like sending an email, looking up a database, or running a process. They don't just talk, they do. And MCP is the wiring — it lets all these different pieces connect to each other and to your existing tools, without needing complicated custom setup each time. Now — the important warning I mentioned. Hallucinations. When AI doesn't know the answer to something, it doesn't say 'I'm not sure.' Instead, it gives a confident answer that might be completely wrong. This is the biggest risk when using AI in real business situations. And it's exactly why we'll spend time later teaching you a formula that helps prevent it.",
+      "estimated_duration_seconds": 115,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The last slide showed us the 'brain' part of AI. Now let's look at everything connected to that brain — memory, hands, imagination, and one very important warning.",
+          "text_ssml": "<speak>The last slide showed us the 'brain' part of AI. Now let's look at everything connected to that brain<break time=\"200ms\"/> memory, hands, imagination, and one very important warning.</speak>",
+          "text_expressive": "The last slide showed us the 'brain' part of AI. Now let's look at everything connected to that brain — memory, hands, imagination, and one very important warning."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "RAG is like memory on demand. If you ask AI about your company's policies, it can look them up in your real documents first, instead of guessing based on things it learned a long time ago.",
+          "text_ssml": "<speak>RAG is like memory on demand. If you ask AI about your company's policies, it can look them up in your real documents first, instead of guessing based on things it learned a long time ago.</speak>",
+          "text_expressive": "RAG is like memory on demand. If you ask AI about your company's policies, it can look them up in your real documents first, instead of guessing based on things it learned a long time ago."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Generative AI is the creative part — it can write text, draw pictures, or create computer code. It makes new things rather than just sorting existing ones.",
+          "text_ssml": "<speak>Generative AI is the creative part<break time=\"200ms\"/> it can write text, draw pictures, or create computer code. It makes new things rather than just sorting existing ones.</speak>",
+          "text_expressive": "Generative AI is the creative part — it can write text, draw pictures, or create computer code. It makes new things rather than just sorting existing ones."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "AI Agents are the 'hands' — they can take real actions, like sending an email, looking up a database, or running a process. They don't just talk, they do.",
+          "text_ssml": "<speak>AI Agents are the 'hands'<break time=\"200ms\"/> they can take real actions, like sending an email, looking up a database, or running a process. They don't just talk, they do.</speak>",
+          "text_expressive": "AI Agents are the 'hands' — they can take real actions, like sending an email, looking up a database, or running a process. They don't just talk, they do."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And MCP is the wiring — it lets all these different pieces connect to each other and to your existing tools, without needing complicated custom setup each time.",
+          "text_ssml": "<speak>And MCP is the wiring<break time=\"200ms\"/> it lets all these different pieces connect to each other and to your existing tools, without needing complicated custom setup each time.</speak>",
+          "text_expressive": "And MCP is the wiring — it lets all these different pieces connect to each other and to your existing tools, without needing complicated custom setup each time."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "serious",
+          "text": "Now — the important warning I mentioned. Hallucinations. When AI doesn't know the answer to something, it doesn't say 'I'm not sure.' Instead, it gives a confident answer that might be completely wrong.",
+          "text_ssml": "<speak>Now<break time=\"200ms\"/> the important warning I mentioned. Hallucinations. When AI doesn't know the answer to something, it doesn't say 'I'm not sure.' Instead, it gives a confident answer that might be completely wrong.</speak>",
+          "text_expressive": "Now — the important warning I mentioned. Hallucinations. When AI doesn't know the answer to something, it doesn't say 'I'm not sure.' Instead, it gives a confident answer that might be completely wrong."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "This is the biggest risk when using AI in real business situations. And it's exactly why we'll spend time later teaching you a formula that helps prevent it.",
+          "text_ssml": "<speak>This is the biggest risk when using AI in real business situations. And it's exactly why we'll spend time later teaching you a formula that helps prevent it.</speak>",
+          "text_expressive": "This is the biggest risk when using AI in real business situations. And it's exactly why we'll spend time later teaching you a formula that helps prevent it."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "welcome",
+      "title": "If AI Is This Capable… What Do You Do?",
+      "subtitle": "The question that built OrchestrAI",
+      "icon": "git-fork",
+      "visual_cue": "intent_execution_arrow_diagram",
+      "reflection_prompt": "Take a moment to think about this: if AI can already write code and build screens, what's left for a person to do? Think about your own answer before reading on.",
+      "bullets": [
+        "AI has something like a brain. It has memory. It can take action.",
+        "But AI doesn't know what your business actually wants or needs — that's something only you can figure out.",
+        "That gap, between knowing what's needed and getting AI to build it, is now the most important job.",
+        "And that job has a name."
+      ],
+      "closing_thread": "It's called Orchestration — and that's what the rest of this hour will teach you.",
+      "narration": "Let's take a moment to think about something together. Looking at everything we just covered — AI can already write computer code, search databases, and build screens. So what's left for a person to do? Think about your own answer for a moment before I continue. Here's the key insight: AI has something like a brain, memory, and hands. But what it doesn't have — and can't have — is intent. It doesn't understand what your business is actually trying to achieve. It doesn't know which rules are most important. It doesn't know which decisions require careful human judgment. That's the gap — and that gap is your new job. Your new role is to be the bridge between what the business needs and what AI can build. This is called Orchestration. And everything from here on explains how to do it well.",
+      "estimated_duration_seconds": 100,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "thoughtful",
+          "text": "Let's take a moment to think about something together. Looking at everything we just covered — AI can already write computer code, search databases, and build screens.",
+          "text_ssml": "<speak>Let's take a moment to think about something together. Looking at everything we just covered<break time=\"200ms\"/> AI can already write computer code, search databases, and build screens.</speak>",
+          "text_expressive": "Let's take a moment to think about something together. Looking at everything we just covered — AI can already write computer code, search databases, and build screens."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "So what's left for a person to do? Think about your own answer for a moment before I continue.",
+          "text_ssml": "<speak>So what's left for a person to do? Think about your own answer for a moment before I continue.</speak>",
+          "text_expressive": "So what's left for a person to do? Think about your own answer for a moment before I continue."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Here's the key insight: AI has something like a brain, memory, and hands. But what it doesn't have — and can't have — is intent. It doesn't understand what your business is actually trying to achieve.",
+          "text_ssml": "<speak>Here's the key insight: AI has something like a brain, memory, and hands. But what it doesn't have<break time=\"200ms\"/> and can't have<break time=\"200ms\"/> is intent. It doesn't understand what your business is actually trying to achieve.</speak>",
+          "text_expressive": "Here's the key insight: AI has something like a brain, memory, and hands. But what it doesn't have — and can't have — is intent. It doesn't understand what your business is actually trying to achieve."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "It doesn't know which rules are most important. It doesn't know which decisions require careful human judgment. That's the gap — and that gap is your new job.",
+          "text_ssml": "<speak>It doesn't know which rules are most important. It doesn't know which decisions require careful human judgment. That's the gap<break time=\"200ms\"/> and that gap is your new job.</speak>",
+          "text_expressive": "It doesn't know which rules are most important. It doesn't know which decisions require careful human judgment. That's the gap — and that gap is your new job."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "confident",
+          "text": "Your new role is to be the bridge between what the business needs and what AI can build. This is called Orchestration. And everything from here on explains how to do it well.",
+          "text_ssml": "<speak>Your new role is to be the bridge between what the business needs and what AI can build. This is called <emphasis level=\"moderate\">Orchestration</emphasis>. And everything from here on explains how to do it well.</speak>",
+          "text_expressive": "Your new role is to be the bridge between what the business needs and what AI can build. This is called Orchestration. And everything from here on explains how to do it well."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "welcome",
+      "title": "The Old World, in Three Numbers",
+      "subtitle": "Why traditional software delivery is breaking",
+      "icon": "trending-down",
+      "hero_stat": {
+        "value": "120 days",
+        "label": "average time from kickoff to first working baseline",
+        "icon": "calendar-x"
+      },
+      "analogy": {
+        "title": "What Happens If One Person Is Out Sick?",
+        "text": "There's a term in project management called the 'bus factor' — it asks: how many key people would need to be unavailable before the whole project falls apart? If the answer is just one person, that's a serious risk."
+      },
+      "bullets": [
+        "120 days — that's how long it usually takes, on average, just to get a basic working version of enterprise software",
+        "30 to 40 percent of the work — gets wasted on fixing mistakes and dealing with changing requirements",
+        "1 person — often, just one key person knows enough to keep the whole project moving",
+        "These problems aren't really about coding skill. They're about how the work is organized."
+      ],
+      "closing_thread": "Adding more people to the team usually doesn't fix these problems — a different approach is needed.",
+      "narration": "Before we look at the new approach, let's be honest about the old one. Three numbers that show why things need to change. First: one hundred and twenty days. That's the average amount of time it takes, from starting a software project, to having a first working version. That's four months before anyone can even click a button. Second: thirty to forty percent of all the work gets wasted. Requirements change halfway through, things need to be rebuilt, documentation doesn't get written. Third: there's usually just one person who truly understands the whole project. If that person is on holiday, the whole team slows down. This is sometimes called the 'bus factor.' And importantly — these problems aren't caused by people not working hard enough. Adding more people to the team doesn't fix them either. They're caused by the way the work is organized. A different approach is what's needed.",
+      "estimated_duration_seconds": 108,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Before we look at the new approach, let's be honest about the old one. Three numbers that show why things need to change.",
+          "text_ssml": "<speak>Before we look at the new approach, let's be honest about the old one. Three numbers that show why things need to change.</speak>",
+          "text_expressive": "Before we look at the new approach, let's be honest about the old one. Three numbers that show why things need to change."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "First: one hundred and twenty days. That's the average amount of time it takes, from starting a software project, to having a first working version. That's four months before anyone can even click a button.",
+          "text_ssml": "<speak>First: one hundred and twenty days. That's the average amount of time it takes, from starting a software project, to having a first working version. That's four months before anyone can even click a button.</speak>",
+          "text_expressive": "First: one hundred and twenty days. That's the average amount of time it takes, from starting a software project, to having a first working version. That's four months before anyone can even click a button."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Second: thirty to forty percent of all the work gets wasted. Requirements change halfway through, things need to be rebuilt, documentation doesn't get written.",
+          "text_ssml": "<speak>Second: thirty to forty percent of all the work gets wasted. Requirements change halfway through, things need to be rebuilt, documentation doesn't get written.</speak>",
+          "text_expressive": "Second: thirty to forty percent of all the work gets wasted. Requirements change halfway through, things need to be rebuilt, documentation doesn't get written."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Third: there's usually just one person who truly understands the whole project. If that person is on holiday, the whole team slows down. This is sometimes called the 'bus factor.'",
+          "text_ssml": "<speak>Third: there's usually just one person who truly understands the whole project. If that person is on holiday, the whole team slows down. This is sometimes called the 'bus factor.'</speak>",
+          "text_expressive": "Third: there's usually just one person who truly understands the whole project. If that person is on holiday, the whole team slows down. This is sometimes called the 'bus factor.'"
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And importantly — these problems aren't caused by people not working hard enough. Adding more people to the team doesn't fix them either. They're caused by the way the work is organized. A different approach is what's needed.",
+          "text_ssml": "<speak>And importantly<break time=\"200ms\"/> these problems aren't caused by people not working hard enough. Adding more people to the team doesn't fix them either. They're caused by the way the work is organized. A different approach is what's needed.</speak>",
+          "text_expressive": "And importantly — these problems aren't caused by people not working hard enough. Adding more people to the team doesn't fix them either. They're caused by the way the work is organized. A different approach is what's needed."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "competencies",
+      "title": "The OrchestrAI Iceberg",
+      "subtitle": "What you see is days. What's underneath is years.",
+      "icon": "mountain-snow",
+      "visual_cue": "iceberg_above_below_waterline",
+      "analogy": {
+        "title": "What You See vs What's Really Happening",
+        "text": "What a client sees is just one thing — a working app ready in days. What they don't see are six layers of careful preparation, built up over years, that make that speed possible. The part you see is small because of everything happening behind the scenes."
+      },
+      "list": [
+        {
+          "name": "Layer 1 — Intent Capture",
+          "icon": "headphones",
+          "desc": "Meetings where we turn a business goal — even a vague one — into clear instructions AI can follow. We use the P.R.O.M.P.T. formula for this."
+        },
+        {
+          "name": "Layer 2 — Pattern Library",
+          "icon": "library",
+          "desc": "A collection of building blocks that have already been tested — for things like logins, payments, and reports — so AI doesn't have to build everything completely from scratch."
+        },
+        {
+          "name": "Layer 3 — AI Engine",
+          "icon": "cpu",
+          "desc": "The actual engine that creates things — code, the structure of data, the visual screens, and tests — all happening at the same time."
+        },
+        {
+          "name": "Layer 4 — Validation Loop",
+          "icon": "shield-check",
+          "desc": "Automatic checks that test the work, look for compliance issues, and bring in a real person to review at key moments — so quality is built in early, not fixed later."
+        },
+        {
+          "name": "Layer 5 — Compliance Guards",
+          "icon": "scale",
+          "desc": "Special rules for industries like banking and finance, automatically checked before anything is delivered, to make sure nothing breaks the law or company policy."
+        },
+        {
+          "name": "Layer 6 — Co-Working Bridge",
+          "icon": "handshake",
+          "desc": "Working closely with the client every day, testing things together, until they feel fully confident — only then does it go live for real."
+        }
+      ],
+      "memory_hook": "What takes a few days to deliver took years of work to set up behind the scenes.",
+      "narration": "Let me share a helpful picture to understand how OrchestrAI works. Imagine an iceberg. When you look at one from a boat, you only see the small part above the water. But underwater, there's about eight times more ice supporting it. OrchestrAI works the same way. What a client sees is one thing: a working app in their testing area, ready in days. Underneath, there are six layers of careful preparation making that speed possible. Let me walk through each one slowly. Layer one: Intent Capture. This is about taking a vague request and turning it into clear instructions AI can follow. Layer two: the Pattern Library. This means common parts like logins and payments don't need to be built from scratch every time. Layer three: the AI Engine, which creates code and designs at the same time. Layer four: the Validation Loop, which checks quality early rather than at the very end. Layer five: Compliance Guards, which make sure important rules — especially in industries like banking and finance — are followed before anything is delivered. And layer six: the Co-Working Bridge. This is working closely with the client every day during testing, until they feel completely confident before anything goes live. The small visible result is only possible because of all that invisible preparation underneath.",
+      "estimated_duration_seconds": 118,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Let me share a helpful picture to understand how OrchestrAI works. Imagine an iceberg. When you look at one from a boat, you only see the small part above the water.",
+          "text_ssml": "<speak>Let me share a helpful picture to understand how OrchestrAI works. Imagine an iceberg. When you look at one from a boat, you only see the small part above the water.</speak>",
+          "text_expressive": "Let me share a helpful picture to understand how OrchestrAI works. Imagine an iceberg. When you look at one from a boat, you only see the small part above the water."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "But underwater, there's about eight times more ice supporting it. OrchestrAI works the same way. What a client sees is one thing: a working app in their testing area, ready in days.",
+          "text_ssml": "<speak>But underwater, there's about eight times more ice supporting it. OrchestrAI works the same way. What a client sees is one thing: a working app in their testing area, ready in days.</speak>",
+          "text_expressive": "But underwater, there's about eight times more ice supporting it. OrchestrAI works the same way. What a client sees is one thing: a working app in their testing area, ready in days."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Underneath, there are six layers of careful preparation making that speed possible. Let me walk through each one slowly.",
+          "text_ssml": "<speak>Underneath, there are six layers of careful preparation making that speed possible. Let me walk through each one slowly.</speak>",
+          "text_expressive": "Underneath, there are six layers of careful preparation making that speed possible. Let me walk through each one slowly."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Layer one: Intent Capture. This is about taking a vague request and turning it into clear instructions AI can follow. Layer two: the Pattern Library. This means common parts like logins and payments don't need to be built from scratch every time.",
+          "text_ssml": "<speak>Layer one: Intent Capture. This is about taking a vague request and turning it into clear instructions AI can follow. Layer two: the Pattern Library. This means common parts like logins and payments don't need to be built from scratch every time.</speak>",
+          "text_expressive": "Layer one: Intent Capture. This is about taking a vague request and turning it into clear instructions AI can follow. Layer two: the Pattern Library. This means common parts like logins and payments don't need to be built from scratch every time."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Layer three: the AI Engine, which creates code and designs at the same time. Layer four: the Validation Loop, which checks quality early rather than at the very end.",
+          "text_ssml": "<speak>Layer three: the AI Engine, which creates code and designs at the same time. Layer four: the Validation Loop, which checks quality early rather than at the very end.</speak>",
+          "text_expressive": "Layer three: the AI Engine, which creates code and designs at the same time. Layer four: the Validation Loop, which checks quality early rather than at the very end."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Layer five: Compliance Guards, which make sure important rules — especially in industries like banking and finance — are followed before anything is delivered.",
+          "text_ssml": "<speak>Layer five: Compliance Guards, which make sure important rules<break time=\"200ms\"/> especially in industries like banking and finance<break time=\"200ms\"/> are followed before anything is delivered.</speak>",
+          "text_expressive": "Layer five: Compliance Guards, which make sure important rules — especially in industries like banking and finance — are followed before anything is delivered."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And layer six: the Co-Working Bridge. This is working closely with the client every day during testing, until they feel completely confident before anything goes live.",
+          "text_ssml": "<speak>And layer six: the Co-Working Bridge. This is working closely with the client every day during testing, until they feel completely confident before anything goes live.</speak>",
+          "text_expressive": "And layer six: the Co-Working Bridge. This is working closely with the client every day during testing, until they feel completely confident before anything goes live."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "confident",
+          "text": "The small visible result is only possible because of all that invisible preparation underneath.",
+          "text_ssml": "<speak>The small visible result is only possible because of all that invisible preparation underneath.</speak>",
+          "text_expressive": "The small visible result is only possible because of all that invisible preparation underneath."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "comparison_table",
+      "title": "Old World vs OrchestrAI",
+      "subtitle": "Six dimensions, one paradigm shift",
+      "icon": "arrow-left-right",
+      "analogy": {
+        "title": "A Tailor vs a 3D Printer",
+        "text": "Think of the old way as a skilled tailor — great at their job, but slow, making one suit at a time, and if they're out sick, work stops. OrchestrAI is more like a 3D printer with a perfected template — same quality, but it can repeat the process quickly, and it never gets sick."
+      },
+      "table": [
+        {
+          "icon": "calendar",
+          "old": "Timeline: 90–120 days to baseline",
+          "new": "Timeline: 7 days to QA PIP"
+        },
+        {
+          "icon": "shield-check",
+          "old": "Quality: caught in QA, fixed in cycles",
+          "new": "Quality: engineered upstream, validated continuously"
+        },
+        {
+          "icon": "timer",
+          "old": "Estimation: story points, hope, and padding",
+          "new": "Estimation: iteration loops in hours — prove, don't estimate"
+        },
+        {
+          "icon": "file-text",
+          "old": "Documentation: written last, if at all",
+          "new": "Documentation: auto-generated alongside delivery"
+        },
+        {
+          "icon": "repeat",
+          "old": "Change management: sprints, refinement, backlog grooming",
+          "new": "Change management: plain-English requests, implemented same-day"
+        },
+        {
+          "icon": "user-x",
+          "old": "Key person risk: high — one architect, one knowledge holder",
+          "new": "Key person risk: low — orchestration in patterns, not in heads"
+        }
+      ],
+      "visual_chart": {
+        "type": "horizontal_bar_comparison",
+        "data": [
+          {
+            "label": "Old World",
+            "value": 120,
+            "unit": "days",
+            "color": "coral"
+          },
+          {
+            "label": "OrchestrAI",
+            "value": 7,
+            "unit": "days",
+            "color": "teal"
+          }
+        ],
+        "title": "Time to first working baseline"
+      },
+      "memory_hook": "Same level of quality. A faster, more reliable process. Around seventeen times quicker.",
+      "narration": "Let's compare the old way and the OrchestrAI way across six different areas. I'll go through each one. Think of it like comparing a skilled tailor to a 3D printer. The tailor is very skilled and makes beautiful suits, but only one at a time, and if they're sick, all the work stops. The 3D printer with a good template produces the same quality, but much faster, and it never gets sick. Timeline: the old way takes 90 to 120 days. OrchestrAI takes 7 days. Quality: the old way catches problems at the end. OrchestrAI builds quality in from the beginning. Estimation: the old way uses complicated planning tools. OrchestrAI uses short test cycles measured in hours. Documentation: the old way writes it at the end, if at all. OrchestrAI creates it automatically as work happens. Change management: the old way requires long planning meetings. OrchestrAI handles changes in plain language the same day. And key person risk: the old way depends heavily on one person. OrchestrAI stores knowledge in shared patterns, not in one person's head. And that chart: 120 days compared to 7 days. That's about seventeen times faster — not from working harder, but from removing steps that didn't need to be there.",
+      "estimated_duration_seconds": 112,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Let's compare the old way and the OrchestrAI way across six different areas. I'll go through each one.",
+          "text_ssml": "<speak>Let's compare the old way and the OrchestrAI way across six different areas. I'll go through each one.</speak>",
+          "text_expressive": "Let's compare the old way and the OrchestrAI way across six different areas. I'll go through each one."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Think of it like comparing a skilled tailor to a 3D printer. The tailor is very skilled and makes beautiful suits, but only one at a time, and if they're sick, all the work stops. The 3D printer with a good template produces the same quality, but much faster, and it never gets sick.",
+          "text_ssml": "<speak>Think of it like comparing a skilled tailor to a 3D printer. The tailor is very skilled and makes beautiful suits, but only one at a time, and if they're sick, all the work stops. The 3D printer with a good template produces the same quality, but much faster, and it never gets sick.</speak>",
+          "text_expressive": "Think of it like comparing a skilled tailor to a 3D printer. The tailor is very skilled and makes beautiful suits, but only one at a time, and if they're sick, all the work stops. The 3D printer with a good template produces the same quality, but much faster, and it never gets sick."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Timeline: the old way takes 90 to 120 days. OrchestrAI takes 7 days. Quality: the old way catches problems at the end. OrchestrAI builds quality in from the beginning.",
+          "text_ssml": "<speak>Timeline: the old way takes 90 to 120 days. OrchestrAI takes 7 days. Quality: the old way catches problems at the end. OrchestrAI builds quality in from the beginning.</speak>",
+          "text_expressive": "Timeline: the old way takes 90 to 120 days. OrchestrAI takes 7 days. Quality: the old way catches problems at the end. OrchestrAI builds quality in from the beginning."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Estimation: the old way uses complicated planning tools. OrchestrAI uses short test cycles measured in hours. Documentation: the old way writes it at the end, if at all. OrchestrAI creates it automatically as work happens.",
+          "text_ssml": "<speak>Estimation: the old way uses complicated planning tools. OrchestrAI uses short test cycles measured in hours. Documentation: the old way writes it at the end, if at all. OrchestrAI creates it automatically as work happens.</speak>",
+          "text_expressive": "Estimation: the old way uses complicated planning tools. OrchestrAI uses short test cycles measured in hours. Documentation: the old way writes it at the end, if at all. OrchestrAI creates it automatically as work happens."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Change management: the old way requires long planning meetings. OrchestrAI handles changes in plain language the same day. And key person risk: the old way depends heavily on one person. OrchestrAI stores knowledge in shared patterns, not in one person's head.",
+          "text_ssml": "<speak>Change management: the old way requires long planning meetings. OrchestrAI handles changes in plain language the same day. And key person risk: the old way depends heavily on one person. OrchestrAI stores knowledge in shared patterns, not in one person's head.</speak>",
+          "text_expressive": "Change management: the old way requires long planning meetings. OrchestrAI handles changes in plain language the same day. And key person risk: the old way depends heavily on one person. OrchestrAI stores knowledge in shared patterns, not in one person's head."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "confident",
+          "text": "And that chart: 120 days compared to 7 days. That's about seventeen times faster — not from working harder, but from removing steps that didn't need to be there.",
+          "text_ssml": "<speak>And that chart: 120 days compared to 7 days. That's about <emphasis level=\"moderate\">seventeen times faster</emphasis><break time=\"200ms\"/> not from working harder, but from removing steps that didn't need to be there.</speak>",
+          "text_expressive": "And that chart: 120 days compared to 7 days. That's about seventeen times faster — not from working harder, but from removing steps that didn't need to be there."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "welcome",
+      "title": "What OrchestrAI Actually Delivers",
+      "subtitle": "The number that started the conversation",
+      "icon": "target",
+      "hero_stat": {
+        "value": "7 days",
+        "label": "from blank page to 80% baseline running in client QA",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "This isn't a rough draft. It's real, high-quality software, built properly.",
+        "It's not live for customers yet — it goes to the client's testing area first, and we work through testing together.",
+        "It's not 100% finished on day one. About 80% is ready, and the last 20% gets finished together during testing.",
+        "The software only goes fully live once the client feels completely confident — never before that."
+      ],
+      "closing_thread": "Everything you learn for the rest of this hour explains exactly how this is achieved.",
+      "narration": "Let me be very clear about what the seven-day number means, because it's easy to misunderstand. In seven days, OrchestrAI delivers a working version of the software to the client's testing area. It's real, high-quality software — not a rough draft or a simplified prototype. But it's not finished yet — it's about 80% complete. The remaining 20% gets finished together with the client during testing, where they check it, give feedback, and we make adjustments. And it doesn't go live for real users until the client says they are completely confident. Not before. Speed is important, but never at the expense of doing it properly.",
+      "estimated_duration_seconds": 100,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Let me be very clear about what the seven-day number means, because it's easy to misunderstand.",
+          "text_ssml": "<speak>Let me be very clear about what the seven-day number means, because it's easy to misunderstand.</speak>",
+          "text_expressive": "Let me be very clear about what the seven-day number means, because it's easy to misunderstand."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "In seven days, OrchestrAI delivers a working version of the software to the client's testing area. It's real, high-quality software — not a rough draft or a simplified prototype.",
+          "text_ssml": "<speak>In seven days, OrchestrAI delivers a working version of the software to the client's testing area. It's real, high-quality software<break time=\"200ms\"/> not a rough draft or a simplified prototype.</speak>",
+          "text_expressive": "In seven days, OrchestrAI delivers a working version of the software to the client's testing area. It's real, high-quality software — not a rough draft or a simplified prototype."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "But it's not finished yet — it's about 80% complete. The remaining 20% gets finished together with the client during testing, where they check it, give feedback, and we make adjustments.",
+          "text_ssml": "<speak>But it's not finished yet<break time=\"200ms\"/> it's about 80% complete. The remaining 20% gets finished together with the client during testing, where they check it, give feedback, and we make adjustments.</speak>",
+          "text_expressive": "But it's not finished yet — it's about 80% complete. The remaining 20% gets finished together with the client during testing, where they check it, give feedback, and we make adjustments."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And it doesn't go live for real users until the client says they are completely confident. Not before. Speed is important, but never at the expense of doing it properly.",
+          "text_ssml": "<speak>And it doesn't go live for real users until the client says they are completely confident. Not before. Speed is important, but never at the expense of doing it properly.</speak>",
+          "text_expressive": "And it doesn't go live for real users until the client says they are completely confident. Not before. Speed is important, but never at the expense of doing it properly."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "mindset_shift",
+      "title": "From Soloist to Conductor",
+      "subtitle": "The single biggest mental rewire of your career",
+      "icon": "music-2",
+      "analogy": {
+        "title": "A Conductor, Not a Solo Musician",
+        "text": "A violin player controls one instrument with their own hands, note by note. A conductor leads eighty musicians without playing a single instrument themselves — by writing very clear, detailed instructions ahead of time. The conductor isn't less skilled — their skill is just used differently. That's the exact change happening in your job right now."
+      },
+      "table": [
+        {
+          "icon": "code-2",
+          "old": "\"I write the code / I manage the sprint\"",
+          "new": "\"I define the intent and validate the outcome\""
+        },
+        {
+          "icon": "help-circle",
+          "old": "\"Requirements clarified during development\"",
+          "new": "\"Requirements crystallized before AI interaction\""
+        },
+        {
+          "icon": "shield-check",
+          "old": "\"We'll fix quality issues in QA later\"",
+          "new": "\"Quality is baked in from the first prompt\""
+        },
+        {
+          "icon": "timer",
+          "old": "\"Estimation based on team story points\"",
+          "new": "\"Iteration loops in hours — we prove, don't estimate\""
+        },
+        {
+          "icon": "list-checks",
+          "old": "\"Backlog grooming for future quarters\"",
+          "new": "\"Plain-English implementation of changes today\""
+        }
+      ],
+      "reflection_prompt": "Think back to a recent project where something wasn't clear until partway through. What problems could have been avoided if that had been figured out at the very start instead?",
+      "memory_hook": "A solo player handles one instrument. A conductor leads eighty — without playing any of them directly.",
+      "narration": "This is the most important slide in the entire module. If you remember nothing else, please remember this one. Think about someone who plays violin in an orchestra. Their hands are on the instrument, playing note by note. They're skilled, but they're only controlling one instrument. Now think about the conductor. The conductor stands at the front, but doesn't play any instrument at all. Instead, they lead eighty musicians, all playing together. How? By writing very precise, detailed instructions beforehand — called a score. The conductor's job is just as important as the violinist's — it's just pointed in a completely different direction. And that is exactly the shift that's happening in your job. The left column shows the old way of thinking: writing code yourself, fixing things in QA, grooming a backlog. The right column shows the new way: defining what needs to be built, setting up AI to build it, then checking that it's right. You're not losing skill. You're using it differently — just like the conductor. Instead of playing the instrument, you're writing the score.",
+      "estimated_duration_seconds": 118,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "earnest",
+          "text": "This is the most important slide in the entire module. If you remember nothing else, please remember this one.",
+          "text_ssml": "<speak>This is the most important slide in the entire module. If you remember nothing else, please remember this one.</speak>",
+          "text_expressive": "This is the most important slide in the entire module. If you remember nothing else, please remember this one."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Think about someone who plays violin in an orchestra. Their hands are on the instrument, playing note by note. They're skilled, but they're only controlling one instrument.",
+          "text_ssml": "<speak>Think about someone who plays violin in an orchestra. Their hands are on the instrument, playing note by note. They're skilled, but they're only controlling one instrument.</speak>",
+          "text_expressive": "Think about someone who plays violin in an orchestra. Their hands are on the instrument, playing note by note. They're skilled, but they're only controlling one instrument."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Now think about the conductor. The conductor stands at the front, but doesn't play any instrument at all. Instead, they lead eighty musicians, all playing together. How? By writing very precise, detailed instructions beforehand — called a score.",
+          "text_ssml": "<speak>Now think about the conductor. The conductor stands at the front, but doesn't play any instrument at all. Instead, they lead eighty musicians, all playing together. How? By writing very precise, detailed instructions beforehand<break time=\"200ms\"/> called a score.</speak>",
+          "text_expressive": "Now think about the conductor. The conductor stands at the front, but doesn't play any instrument at all. Instead, they lead eighty musicians, all playing together. How? By writing very precise, detailed instructions beforehand — called a score."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The conductor's job is just as important as the violinist's — it's just pointed in a completely different direction. And that is exactly the shift that's happening in your job.",
+          "text_ssml": "<speak>The conductor's job is just as important as the violinist's<break time=\"200ms\"/> it's just pointed in a completely different direction. And that is exactly the shift that's happening in your job.</speak>",
+          "text_expressive": "The conductor's job is just as important as the violinist's — it's just pointed in a completely different direction. And that is exactly the shift that's happening in your job."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The left column shows the old way of thinking: writing code yourself, fixing things in QA, grooming a backlog. The right column shows the new way: defining what needs to be built, setting up AI to build it, then checking that it's right.",
+          "text_ssml": "<speak>The left column shows the old way of thinking: writing code yourself, fixing things in QA, grooming a backlog. The right column shows the new way: defining what needs to be built, setting up AI to build it, then checking that it's right.</speak>",
+          "text_expressive": "The left column shows the old way of thinking: writing code yourself, fixing things in QA, grooming a backlog. The right column shows the new way: defining what needs to be built, setting up AI to build it, then checking that it's right."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "confident",
+          "text": "You're not losing skill. You're using it differently — just like the conductor. Instead of playing the instrument, you're writing the score.",
+          "text_ssml": "<speak>You're not losing skill. You're using it differently<break time=\"200ms\"/> just like the conductor. Instead of playing the instrument, you're writing the score.</speak>",
+          "text_expressive": "You're not losing skill. You're using it differently — just like the conductor. Instead of playing the instrument, you're writing the score."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "competencies",
+      "title": "Your New Job Description",
+      "subtitle": "Three roles in one Lead",
+      "icon": "user-cog",
+      "analogy": {
+        "title": "Three Jobs Rolled Into One",
+        "text": "You're not losing your technical skills — you're adding two new responsibilities on top of them. Most days, you'll switch between all three roles, often before lunchtime."
+      },
+      "list": [
+        {
+          "name": "Strategic Advisor",
+          "icon": "compass",
+          "desc": "You take what the business wants and turn it into something AI can work with. You help decide what gets built first, and why. This is the role senior leaders interact with."
+        },
+        {
+          "name": "Intent Translator",
+          "icon": "languages",
+          "desc": "You take unclear requirements and turn them into clear, specific instructions AI can follow. The P.R.O.M.P.T. formula is your main tool here. This is the role AI 'sees.'"
+        },
+        {
+          "name": "Quality Guardian",
+          "icon": "shield-check",
+          "desc": "You don't write the code yourself, but you're responsible for making sure it's good. You check it, raise concerns when needed, and refuse to deliver anything low-quality. This is the role clients see directly."
+        }
+      ],
+      "memory_hook": "Advisor decides what to build. Translator writes the clear instructions. Guardian makes sure the final result is good.",
+      "narration": "So what does the new job actually look like day to day? It involves three roles, and you'll often play all three in the same day. The first is Strategic Advisor. This is when you're working with business leaders, helping them turn their big goals into a clear plan of what needs to be built. Senior leaders in the organization see you in this role. The second is Intent Translator. This is when you take that plan and write it down as very clear instructions that AI can follow. There's a special formula for this, called P.R.O.M.P.T., that we'll learn in a few slides. The third is Quality Guardian. This is when you check what AI has built, make sure it's good enough, and refuse to pass it on if it isn't. You keep all your existing skills and knowledge. These three roles simply build on top of what you already know.",
+      "estimated_duration_seconds": 110,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "So what does the new job actually look like day to day? It involves three roles, and you'll often play all three in the same day.",
+          "text_ssml": "<speak>So what does the new job actually look like day to day? It involves three roles, and you'll often play all three in the same day.</speak>",
+          "text_expressive": "So what does the new job actually look like day to day? It involves three roles, and you'll often play all three in the same day."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The first is Strategic Advisor. This is when you're working with business leaders, helping them turn their big goals into a clear plan of what needs to be built. Senior leaders in the organization see you in this role.",
+          "text_ssml": "<speak>The first is Strategic Advisor. This is when you're working with business leaders, helping them turn their big goals into a clear plan of what needs to be built. Senior leaders in the organization see you in this role.</speak>",
+          "text_expressive": "The first is Strategic Advisor. This is when you're working with business leaders, helping them turn their big goals into a clear plan of what needs to be built. Senior leaders in the organization see you in this role."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The second is Intent Translator. This is when you take that plan and write it down as very clear instructions that AI can follow. There's a special formula for this, called P.R.O.M.P.T., that we'll learn in a few slides.",
+          "text_ssml": "<speak>The second is Intent Translator. This is when you take that plan and write it down as very clear instructions that AI can follow. There's a special formula for this, called P.R.O.M.P.T., that we'll learn in a few slides.</speak>",
+          "text_expressive": "The second is Intent Translator. This is when you take that plan and write it down as very clear instructions that AI can follow. There's a special formula for this, called P.R.O.M.P.T., that we'll learn in a few slides."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The third is Quality Guardian. This is when you check what AI has built, make sure it's good enough, and refuse to pass it on if it isn't.",
+          "text_ssml": "<speak>The third is Quality Guardian. This is when you check what AI has built, make sure it's good enough, and refuse to pass it on if it isn't.</speak>",
+          "text_expressive": "The third is Quality Guardian. This is when you check what AI has built, make sure it's good enough, and refuse to pass it on if it isn't."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "You keep all your existing skills and knowledge. These three roles simply build on top of what you already know.",
+          "text_ssml": "<speak>You keep all your existing skills and knowledge. These three roles simply build on top of what you already know.</speak>",
+          "text_expressive": "You keep all your existing skills and knowledge. These three roles simply build on top of what you already know."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "welcome",
+      "title": "Quality Is Upstream",
+      "subtitle": "Why QA cycles are an old-world relic",
+      "icon": "arrow-up-from-line",
+      "visual_cue": "river_source_vs_filter_diagram",
+      "analogy": {
+        "title": "Stop Problems Before They Start",
+        "text": "Old-style quality checks happen at the very end, like trying to filter a river after it's already flowed through everything. By that point, the problem has already spread. OrchestrAI fixes problems at the very beginning — if you write clear instructions from the start, the mistake never happens in the first place."
+      },
+      "bullets": [
+        "In the old approach, problems are usually found at the very end — which is slow and expensive, and someone else has to fix them.",
+        "In the OrchestrAI approach, quality is built in from the beginning — early, cheap, and it's your responsibility to get it right.",
+        "Any bug found later usually means the original instructions weren't clear enough.",
+        "Any compliance problem found during testing usually means an important rule wasn't included in the original instructions."
+      ],
+      "memory_hook": "Old way: catch problems at the end. New way: prevent problems at the start.",
+      "closing_thread": "Which means the instructions you write are the most important part of your job.",
+      "narration": "Here's a simple but very important idea. In the old way of working, quality is something you check at the end. You build everything first, then you check if it's right, then you fix the problems. In OrchestrAI, quality is built in from the very beginning — before AI starts building anything. The clear instructions you write prevent mistakes from being made in the first place. Here's a simple picture to help you remember this. Imagine a river. Old-style quality checking is like putting a filter at the end of the river — by the time you catch a problem there, it's already been flowing through everything. OrchestrAI cleans the water at the source instead. If the instructions are clear enough from the beginning, the problem never enters the river in the first place. This means the instructions you write are the most important work you do. More important than any code. More important than any meeting. Treat them with care.",
+      "estimated_duration_seconds": 110,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Here's a simple but very important idea. In the old way of working, quality is something you check at the end. You build everything first, then you check if it's right, then you fix the problems.",
+          "text_ssml": "<speak>Here's a simple but very important idea. In the old way of working, quality is something you check at the end. You build everything first, then you check if it's right, then you fix the problems.</speak>",
+          "text_expressive": "Here's a simple but very important idea. In the old way of working, quality is something you check at the end. You build everything first, then you check if it's right, then you fix the problems."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "In OrchestrAI, quality is built in from the very beginning — before AI starts building anything. The clear instructions you write prevent mistakes from being made in the first place.",
+          "text_ssml": "<speak>In OrchestrAI, quality is built in from the very beginning<break time=\"200ms\"/> before AI starts building anything. The clear instructions you write prevent mistakes from being made in the first place.</speak>",
+          "text_expressive": "In OrchestrAI, quality is built in from the very beginning — before AI starts building anything. The clear instructions you write prevent mistakes from being made in the first place."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Here's a simple picture to help you remember this. Imagine a river. Old-style quality checking is like putting a filter at the end of the river — by the time you catch a problem there, it's already been flowing through everything.",
+          "text_ssml": "<speak>Here's a simple picture to help you remember this. Imagine a river. Old-style quality checking is like putting a filter at the end of the river<break time=\"200ms\"/> by the time you catch a problem there, it's already been flowing through everything.</speak>",
+          "text_expressive": "Here's a simple picture to help you remember this. Imagine a river. Old-style quality checking is like putting a filter at the end of the river — by the time you catch a problem there, it's already been flowing through everything."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "OrchestrAI cleans the water at the source instead. If the instructions are clear enough from the beginning, the problem never enters the river in the first place.",
+          "text_ssml": "<speak>OrchestrAI cleans the water at the source instead. If the instructions are clear enough from the beginning, the problem never enters the river in the first place.</speak>",
+          "text_expressive": "OrchestrAI cleans the water at the source instead. If the instructions are clear enough from the beginning, the problem never enters the river in the first place."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "confident",
+          "text": "This means the instructions you write are the most important work you do. More important than any code. More important than any meeting. Treat them with care.",
+          "text_ssml": "<speak>This means the instructions you write are the most important work you do. More important than any code. More important than any meeting. Treat them with care.</speak>",
+          "text_expressive": "This means the instructions you write are the most important work you do. More important than any code. More important than any meeting. Treat them with care."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "welcome",
+      "title": "What Your Tuesday Looks Like",
+      "subtitle": "Preview of the OrchestrAI daily cadence",
+      "icon": "calendar-clock",
+      "visual_cue": "day_timeline_preview",
+      "bullets": [
+        "9:00 AM — A meeting to understand what's needed. The result is a clear written brief, not a long planning document.",
+        "10:30 AM — The first round of AI building. AI creates something, and you check it over.",
+        "11:30 AM — You show a real, working screen to the business owner — not just a picture or a sketch, but the actual thing.",
+        "2:00 PM — A second round of changes, based on feedback from that morning, described in plain language.",
+        "4:30 PM — The day's work is sent to the client's testing area. Documentation updates automatically."
+      ],
+      "closing_thread": "We'll explain this day step by step in slide 17. But first, you need to learn the tool that makes it all possible.",
+      "narration": "Let me give you a preview of what a typical day looks like. I'll explain each step, one at a time. At nine in the morning, you meet with someone from the business to understand what they need. Instead of writing lots of notes, you turn their request into a clear, structured set of instructions — a brief. At ten-thirty, you give those instructions to the AI. The AI builds code, the structure of the data, and the visual screens — all at the same time. You check through what it's made. At eleven-thirty, you show the business person a real, working screen — not just a picture of what it might look like, but the actual thing. At two in the afternoon, you make adjustments based on the feedback from that morning, by updating the instructions in plain language. And at four-thirty, the day's work is sent to the client's testing area, with documentation updating automatically. We'll look at each step in more detail in slide 17. But first, let me teach you the tool that makes this whole day possible.",
+      "estimated_duration_seconds": 102,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Let me give you a preview of what a typical day looks like. I'll explain each step, one at a time.",
+          "text_ssml": "<speak>Let me give you a preview of what a typical day looks like. I'll explain each step, one at a time.</speak>",
+          "text_expressive": "Let me give you a preview of what a typical day looks like. I'll explain each step, one at a time."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "At nine in the morning, you meet with someone from the business to understand what they need. Instead of writing lots of notes, you turn their request into a clear, structured set of instructions — a brief.",
+          "text_ssml": "<speak>At nine in the morning, you meet with someone from the business to understand what they need. Instead of writing lots of notes, you turn their request into a clear, structured set of instructions<break time=\"200ms\"/> a brief.</speak>",
+          "text_expressive": "At nine in the morning, you meet with someone from the business to understand what they need. Instead of writing lots of notes, you turn their request into a clear, structured set of instructions — a brief."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "At ten-thirty, you give those instructions to the AI. The AI builds code, the structure of the data, and the visual screens — all at the same time. You check through what it's made.",
+          "text_ssml": "<speak>At ten-thirty, you give those instructions to the AI. The AI builds code, the structure of the data, and the visual screens<break time=\"200ms\"/> all at the same time. You check through what it's made.</speak>",
+          "text_expressive": "At ten-thirty, you give those instructions to the AI. The AI builds code, the structure of the data, and the visual screens — all at the same time. You check through what it's made."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "At eleven-thirty, you show the business person a real, working screen — not just a picture of what it might look like, but the actual thing.",
+          "text_ssml": "<speak>At eleven-thirty, you show the business person a real, working screen<break time=\"200ms\"/> not just a picture of what it might look like, but the actual thing.</speak>",
+          "text_expressive": "At eleven-thirty, you show the business person a real, working screen — not just a picture of what it might look like, but the actual thing."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "At two in the afternoon, you make adjustments based on the feedback from that morning, by updating the instructions in plain language. And at four-thirty, the day's work is sent to the client's testing area, with documentation updating automatically.",
+          "text_ssml": "<speak>At two in the afternoon, you make adjustments based on the feedback from that morning, by updating the instructions in plain language. And at four-thirty, the day's work is sent to the client's testing area, with documentation updating automatically.</speak>",
+          "text_expressive": "At two in the afternoon, you make adjustments based on the feedback from that morning, by updating the instructions in plain language. And at four-thirty, the day's work is sent to the client's testing area, with documentation updating automatically."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "We'll look at each step in more detail in slide 17. But first, let me teach you the tool that makes this whole day possible.",
+          "text_ssml": "<speak>We'll look at each step in more detail in slide 17. But first, let me teach you the tool that makes this whole day possible.</speak>",
+          "text_expressive": "We'll look at each step in more detail in slide 17. But first, let me teach you the tool that makes this whole day possible."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "competencies",
+      "title": "How to Talk to AI: The P.R.O.M.P.T. Formula",
+      "subtitle": "Six letters that turn AI into a senior team member",
+      "icon": "message-square-text",
+      "analogy": {
+        "title": "Like Giving Very Clear Instructions, Not a Vague Wish",
+        "text": "Imagine hiring a great architect and just telling them 'make something nice.' You'll get a building — but probably not what you wanted. Now imagine giving them a clear brief: why you need it, who they should act as, what format you want, what limits apply, how it should be organized, and what tone to use. You'd get exactly what you pictured. P.R.O.M.P.T. is that same kind of clear brief, used every time you talk to AI."
+      },
+      "list": [
+        {
+          "name": "P — Purpose",
+          "icon": "target",
+          "desc": "What do you want the end result to be? Just one clear sentence. (Example: 'Plan a 5-day family vacation to Bali.')"
+        },
+        {
+          "name": "R — Role",
+          "icon": "user-cog",
+          "desc": "Who should the AI act like? (Example: 'An expert tour planner with experience in Asia.')"
+        },
+        {
+          "name": "O — Output",
+          "icon": "layout-template",
+          "desc": "What format do you want the answer in? (Example: 'A table' or 'a list of steps.')"
+        },
+        {
+          "name": "M — Marker",
+          "icon": "shield-alert",
+          "desc": "What are the hard limits or rules that can't be broken? (Example: 'Budget of ₹80,000' or 'must follow this safety rule.')"
+        },
+        {
+          "name": "P — Pattern",
+          "icon": "grid-3x3",
+          "desc": "How should the answer be organized? (Example: 'One section for each day, broken into morning, afternoon, and evening.')"
+        },
+        {
+          "name": "T — Tone",
+          "icon": "smile",
+          "desc": "How should it sound when it talks to you? (Example: 'Friendly and easy to understand' or 'formal and professional.')"
+        }
+      ],
+      "memory_hook": "Purpose is why. Role is who. Output is what it looks like. Marker is the rules. Pattern is how it's organized. Tone is how it sounds.",
+      "narration": "Now we come to the most important practical tool in this whole program. It's called P.R.O.M.P.T., and it's a six-step formula for telling AI exactly what you need. Here's a simple way to understand it. Imagine you hire a very skilled architect. If you just say 'make something nice,' they'll build a building — but probably not the building you wanted. They need a proper brief. P.R.O.M.P.T. is that brief. Let's go through each letter, one at a time, slowly. P is for Purpose. This is the 'why' — what do you actually want to achieve? Write it in one clear sentence. R is for Role. Tell AI who it should pretend to be — for example, 'an experienced event planner' or 'a senior finance software engineer.' This changes how detailed and specific the answer is. O is for Output. Tell AI what format you want the answer in — a table, a list, a piece of code, a document. M is for Marker. These are the hard rules that cannot be broken — budget limits, safety rules, things that must or must not be included. P is for Pattern. This is how you want the answer organized — for example, broken into morning, afternoon, and evening sections. And T is for Tone. How should it sound? Friendly and casual? Professional and formal? Six letters. Purpose, Role, Output, Marker, Pattern, Tone. Try to remember them — the next two slides will show you exactly how they work in real examples.",
+      "estimated_duration_seconds": 135,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "calm_warm",
+          "text": "Now we come to the most important practical tool in this whole program. It's called P.R.O.M.P.T., and it's a six-step formula for telling AI exactly what you need.",
+          "text_ssml": "<speak>Now we come to the most important practical tool in this whole program. It's called P.R.O.M.P.T., and it's a six-step formula for telling AI exactly what you need.</speak>",
+          "text_expressive": "Now we come to the most important practical tool in this whole program. It's called P.R.O.M.P.T., and it's a six-step formula for telling AI exactly what you need."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Here's a simple way to understand it. Imagine you hire a very skilled architect. If you just say 'make something nice,' they'll build a building — but probably not the building you wanted. They need a proper brief.",
+          "text_ssml": "<speak>Here's a simple way to understand it. Imagine you hire a very skilled architect. If you just say 'make something nice,' they'll build a building<break time=\"200ms\"/> but probably not the building you wanted. They need a proper brief.</speak>",
+          "text_expressive": "Here's a simple way to understand it. Imagine you hire a very skilled architect. If you just say 'make something nice,' they'll build a building — but probably not the building you wanted. They need a proper brief."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "P.R.O.M.P.T. is that brief. Let's go through each letter, one at a time, slowly.",
+          "text_ssml": "<speak>P.R.O.M.P.T. is that brief. Let's go through each letter, one at a time, slowly.</speak>",
+          "text_expressive": "P.R.O.M.P.T. is that brief. Let's go through each letter, one at a time, slowly."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "P is for Purpose. This is the 'why' — what do you actually want to achieve? Write it in one clear sentence.",
+          "text_ssml": "<speak>P is for Purpose. This is the 'why'<break time=\"200ms\"/> what do you actually want to achieve? Write it in one clear sentence.</speak>",
+          "text_expressive": "P is for Purpose. This is the 'why' — what do you actually want to achieve? Write it in one clear sentence."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "R is for Role. Tell AI who it should pretend to be — for example, 'an experienced event planner' or 'a senior finance software engineer.' This changes how detailed and specific the answer is.",
+          "text_ssml": "<speak>R is for Role. Tell AI who it should pretend to be<break time=\"200ms\"/> for example, 'an experienced event planner' or 'a senior finance software engineer.' This changes how detailed and specific the answer is.</speak>",
+          "text_expressive": "R is for Role. Tell AI who it should pretend to be — for example, 'an experienced event planner' or 'a senior finance software engineer.' This changes how detailed and specific the answer is."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "O is for Output. Tell AI what format you want the answer in — a table, a list, a piece of code, a document.",
+          "text_ssml": "<speak>O is for Output. Tell AI what format you want the answer in<break time=\"200ms\"/> a table, a list, a piece of code, a document.</speak>",
+          "text_expressive": "O is for Output. Tell AI what format you want the answer in — a table, a list, a piece of code, a document."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "M is for Marker. These are the hard rules that cannot be broken — budget limits, safety rules, things that must or must not be included.",
+          "text_ssml": "<speak>M is for Marker. These are the hard rules that cannot be broken<break time=\"200ms\"/> budget limits, safety rules, things that must or must not be included.</speak>",
+          "text_expressive": "M is for Marker. These are the hard rules that cannot be broken — budget limits, safety rules, things that must or must not be included."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "P is for Pattern. This is how you want the answer organized — for example, broken into morning, afternoon, and evening sections.",
+          "text_ssml": "<speak>P is for Pattern. This is how you want the answer organized<break time=\"200ms\"/> for example, broken into morning, afternoon, and evening sections.</speak>",
+          "text_expressive": "P is for Pattern. This is how you want the answer organized — for example, broken into morning, afternoon, and evening sections."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And T is for Tone. How should it sound? Friendly and casual? Professional and formal?",
+          "text_ssml": "<speak>And T is for Tone. How should it sound? Friendly and casual? Professional and formal?</speak>",
+          "text_expressive": "And T is for Tone. How should it sound? Friendly and casual? Professional and formal?"
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "Six letters. Purpose, Role, Output, Marker, Pattern, Tone. Try to remember them — the next two slides will show you exactly how they work in real examples.",
+          "text_ssml": "<speak>Six letters. Purpose, Role, Output, Marker, Pattern, Tone. Try to remember them<break time=\"200ms\"/> the next two slides will show you exactly how they work in real examples.</speak>",
+          "text_expressive": "Six letters. Purpose, Role, Output, Marker, Pattern, Tone. Try to remember them — the next two slides will show you exactly how they work in real examples."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "welcome",
+      "title": "P.R.O.M.P.T. in Action: The Bali Example",
+      "subtitle": "Same request. Two ways. Night-and-day output.",
+      "icon": "map",
+      "visual_cue": "before_after_split",
+      "before_after": {
+        "before": {
+          "label": "An Unclear Request",
+          "icon": "frown",
+          "output": "'Plan a trip to Bali for me.' → You get a generic answer, like a travel blog. It doesn't consider your budget, isn't organized day by day, doesn't think about safety for kids, and doesn't suggest hotels. You'd have to spend hours fixing it up before it's actually useful."
+        },
+        "after": {
+          "label": "A P.R.O.M.P.T.-Style Request",
+          "icon": "smile",
+          "output": "'Act as an expert tour planner who knows Asia well (Role). Plan a 5-day family vacation to Bali (Purpose). Give me a day-by-day table (Output). Budget is ₹80,000 for a family of 4, no extreme activities (Marker). Organize each day into morning, afternoon, and evening, with hotel suggestions (Pattern). Keep the tone friendly and kid-appropriate (Tone).' → A clear, ready-to-use day-by-day plan. Within budget, safe for the family, and no extra work needed to fix it up."
+        }
+      },
+      "memory_hook": "Same AI tool, same intelligence — just a much clearer set of instructions, and a completely different result.",
+      "narration": "Let me show you the P.R.O.M.P.T. formula in action with a simple example that everyone can relate to. On the left: a simple request — 'Plan a trip to Bali for me.' What you get back is very generic — a list of tourist attractions, written like a travel blog. It doesn't know your budget, your family situation, or what activities you'd enjoy. You'd need to spend a long time rewriting it before it was actually useful. Now look at the right side. The same request, but using P.R.O.M.P.T. Role: an expert tour planner who knows Asia. Purpose: plan a five-day family vacation to Bali. Output: a table organized by day. Marker: budget of ₹80,000 for a family of four, no dangerous activities, suitable for children. Pattern: morning, afternoon, and evening sections, with hotel suggestions. Tone: friendly. What comes back is a detailed, ready-to-use plan. The same AI, the same question — just with much clearer instructions. That's the entire difference.",
+      "estimated_duration_seconds": 118,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Let me show you the P.R.O.M.P.T. formula in action with a simple example that everyone can relate to.",
+          "text_ssml": "<speak>Let me show you the P.R.O.M.P.T. formula in action with a simple example that everyone can relate to.</speak>",
+          "text_expressive": "Let me show you the P.R.O.M.P.T. formula in action with a simple example that everyone can relate to."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "On the left: a simple request — 'Plan a trip to Bali for me.' What you get back is very generic — a list of tourist attractions, written like a travel blog. It doesn't know your budget, your family situation, or what activities you'd enjoy.",
+          "text_ssml": "<speak>On the left: a simple request<break time=\"200ms\"/> 'Plan a trip to Bali for me.' What you get back is very generic<break time=\"200ms\"/> a list of tourist attractions, written like a travel blog. It doesn't know your budget, your family situation, or what activities you'd enjoy.</speak>",
+          "text_expressive": "On the left: a simple request — 'Plan a trip to Bali for me.' What you get back is very generic — a list of tourist attractions, written like a travel blog. It doesn't know your budget, your family situation, or what activities you'd enjoy."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "You'd need to spend a long time rewriting it before it was actually useful.",
+          "text_ssml": "<speak>You'd need to spend a long time rewriting it before it was actually useful.</speak>",
+          "text_expressive": "You'd need to spend a long time rewriting it before it was actually useful."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Now look at the right side. The same request, but using P.R.O.M.P.T. Role: an expert tour planner who knows Asia. Purpose: plan a five-day family vacation to Bali. Output: a table organized by day.",
+          "text_ssml": "<speak>Now look at the right side. The same request, but using P.R.O.M.P.T. Role: an expert tour planner who knows Asia. Purpose: plan a five-day family vacation to Bali. Output: a table organized by day.</speak>",
+          "text_expressive": "Now look at the right side. The same request, but using P.R.O.M.P.T. Role: an expert tour planner who knows Asia. Purpose: plan a five-day family vacation to Bali. Output: a table organized by day."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Marker: budget of ₹80,000 for a family of four, no dangerous activities, suitable for children. Pattern: morning, afternoon, and evening sections, with hotel suggestions. Tone: friendly.",
+          "text_ssml": "<speak>Marker: budget of ₹80,000 for a family of four, no dangerous activities, suitable for children. Pattern: morning, afternoon, and evening sections, with hotel suggestions. Tone: friendly.</speak>",
+          "text_expressive": "Marker: budget of ₹80,000 for a family of four, no dangerous activities, suitable for children. Pattern: morning, afternoon, and evening sections, with hotel suggestions. Tone: friendly."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "confident",
+          "text": "What comes back is a detailed, ready-to-use plan. The same AI, the same question — just with much clearer instructions. That's the entire difference.",
+          "text_ssml": "<speak>What comes back is a detailed, ready-to-use plan. The same AI, the same question<break time=\"200ms\"/> just with much clearer instructions. That's the entire difference.</speak>",
+          "text_expressive": "What comes back is a detailed, ready-to-use plan. The same AI, the same question — just with much clearer instructions. That's the entire difference."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "welcome",
+      "title": "P.R.O.M.P.T. for Real Software",
+      "subtitle": "Not vacations — your actual day job",
+      "icon": "code-2",
+      "visual_cue": "before_after_split",
+      "before_after": {
+        "before": {
+          "label": "An Unclear Software Request",
+          "icon": "frown",
+          "output": "'Build a login screen.' → You get a basic, generic screen. It's not connected to your actual login system, doesn't check for mistakes, doesn't show error messages properly, and doesn't work well for users with disabilities. It would need a lot of fixing before it's ready to use."
+        },
+        "after": {
+          "label": "A P.R.O.M.P.T.-Style Request",
+          "icon": "smile",
+          "output": "'Act as a senior frontend engineer (Role). Build a login screen for our finance app (Purpose). I want a React component with Tailwind styling and TypeScript (Output). It must connect to Firebase Auth, support both password login and extra security (MFA), be usable by people with disabilities, and only use approved tools (Marker). Structure it with a branded header, a form that checks for mistakes, and a footer with a help link and password reset option (Pattern). Keep error messages professional, matching a finance company (Tone).' → A ready-to-use component. Fully connected, accessible, and no extra fixing needed."
+        }
+      },
+      "memory_hook": "The Bali example was just for practice. This shows what P.R.O.M.P.T. does in your real, everyday work.",
+      "narration": "The Bali example was a nice easy starting point. Now let's see the same formula applied to a software example from your actual job. On the left: 'Build a login screen.' What you get back is a basic, generic screen. It might look reasonable on its own, but it's missing everything specific to your situation. It's not connected to your login system. It doesn't support extra security steps. It doesn't meet accessibility requirements. It doesn't match the rest of your software's design. You'd need to redo most of it. Now the P.R.O.M.P.T. version. Role: a senior frontend engineer. Purpose: a login screen for a finance resource planning app. Output: a React component with specific styling. Marker: must connect to Firebase Auth, support extra security steps, meet accessibility standards, only use approved tools. Pattern: a branded header, a form with checking built in, and a help link at the bottom. Tone: professional, like a finance company. What comes back is ready to use. No extra work needed. The same formula, just applied to a software scenario this time.",
+      "estimated_duration_seconds": 118,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The Bali example was a nice easy starting point. Now let's see the same formula applied to a software example from your actual job.",
+          "text_ssml": "<speak>The Bali example was a nice easy starting point. Now let's see the same formula applied to a software example from your actual job.</speak>",
+          "text_expressive": "The Bali example was a nice easy starting point. Now let's see the same formula applied to a software example from your actual job."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "On the left: 'Build a login screen.' What you get back is a basic, generic screen. It might look reasonable on its own, but it's missing everything specific to your situation.",
+          "text_ssml": "<speak>On the left: 'Build a login screen.' What you get back is a basic, generic screen. It might look reasonable on its own, but it's missing everything specific to your situation.</speak>",
+          "text_expressive": "On the left: 'Build a login screen.' What you get back is a basic, generic screen. It might look reasonable on its own, but it's missing everything specific to your situation."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "It's not connected to your login system. It doesn't support extra security steps. It doesn't meet accessibility requirements. It doesn't match the rest of your software's design. You'd need to redo most of it.",
+          "text_ssml": "<speak>It's not connected to your login system. It doesn't support extra security steps. It doesn't meet accessibility requirements. It doesn't match the rest of your software's design. You'd need to redo most of it.</speak>",
+          "text_expressive": "It's not connected to your login system. It doesn't support extra security steps. It doesn't meet accessibility requirements. It doesn't match the rest of your software's design. You'd need to redo most of it."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Now the P.R.O.M.P.T. version. Role: a senior frontend engineer. Purpose: a login screen for a finance resource planning app.",
+          "text_ssml": "<speak>Now the P.R.O.M.P.T. version. Role: a senior frontend engineer. Purpose: a login screen for a finance resource planning app.</speak>",
+          "text_expressive": "Now the P.R.O.M.P.T. version. Role: a senior frontend engineer. Purpose: a login screen for a finance resource planning app."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Output: a React component with specific styling. Marker: must connect to Firebase Auth, support extra security steps, meet accessibility standards, only use approved tools. Pattern: a branded header, a form with checking built in, and a help link at the bottom. Tone: professional, like a finance company.",
+          "text_ssml": "<speak>Output: a React component with specific styling. Marker: must connect to Firebase Auth, support extra security steps, meet accessibility standards, only use approved tools. Pattern: a branded header, a form with checking built in, and a help link at the bottom. Tone: professional, like a finance company.</speak>",
+          "text_expressive": "Output: a React component with specific styling. Marker: must connect to Firebase Auth, support extra security steps, meet accessibility standards, only use approved tools. Pattern: a branded header, a form with checking built in, and a help link at the bottom. Tone: professional, like a finance company."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "confident",
+          "text": "What comes back is ready to use. No extra work needed. The same formula, just applied to a software scenario this time.",
+          "text_ssml": "<speak>What comes back is ready to use. No extra work needed. The same formula, just applied to a software scenario this time.</speak>",
+          "text_expressive": "What comes back is ready to use. No extra work needed. The same formula, just applied to a software scenario this time."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "day_in_life",
+      "title": "A Day in the Life of an OrchestrAI Lead",
+      "subtitle": "From 9 AM intent capture to 4:30 PM QA push",
+      "icon": "clock",
+      "analogy": {
+        "title": "Like NASA's Mission Control Room",
+        "text": "Think about NASA's Mission Control. They don't fly the rocket themselves — they watch the instruments closely, give approval at key moments, and step in only when something needs their attention. Your day will work the same way: short moments of deciding things, longer periods of watching and checking, and very little manual hands-on work."
+      },
+      "timeline": [
+        {
+          "time": "9:00 AM",
+          "icon": "headphones",
+          "phase": "Intent Capture",
+          "desc": "A meeting with someone who needs something built. You turn their request into a clear, structured brief — usually just one or two paragraphs."
+        },
+        {
+          "time": "10:30 AM",
+          "icon": "wand-2",
+          "phase": "First Generation",
+          "desc": "The AI's first attempt at building something — code, data structure, the visual screen, and tests, all at the same time. You don't write any code yourself — you read through it and check it's right."
+        },
+        {
+          "time": "11:30 AM",
+          "icon": "monitor-play",
+          "phase": "Live Validation",
+          "desc": "You show the actual working screens to the business owner — with real data, not just pictures or slides. If they want changes, you can adjust things right there."
+        },
+        {
+          "time": "2:00 PM",
+          "icon": "repeat",
+          "phase": "Iteration 2",
+          "desc": "You make changes using everyday language — for example, 'Change the date format' or 'Add a confirmation step before deleting something.' The system updates within minutes."
+        },
+        {
+          "time": "4:30 PM",
+          "icon": "git-merge",
+          "phase": "Delivery",
+          "desc": "Today's progress is sent to the client's testing area. The documentation updates by itself. Tomorrow's plan is already drafted, based on what happened today."
+        }
+      ],
+      "visual_chart": {
+        "type": "gantt_timeline",
+        "phases": [
+          {
+            "label": "Intent",
+            "start": "9:00",
+            "end": "10:30",
+            "color": "gold"
+          },
+          {
+            "label": "Generation",
+            "start": "10:30",
+            "end": "11:30",
+            "color": "teal"
+          },
+          {
+            "label": "Validation",
+            "start": "11:30",
+            "end": "12:30",
+            "color": "teal"
+          },
+          {
+            "label": "Iteration",
+            "start": "14:00",
+            "end": "16:00",
+            "color": "teal"
+          },
+          {
+            "label": "Delivery",
+            "start": "16:30",
+            "end": "17:00",
+            "color": "gold"
+          }
+        ]
+      },
+      "memory_hook": "Five steps make up the day. By 4:30 PM, real, working software is in the client's testing area.",
+      "narration": "Now let me walk you through the full day, step by step. I'll use the NASA Mission Control idea to explain it simply. The people in Mission Control don't actually fly the rocket. They watch the information coming in, make decisions at key moments, and only step in when something needs human judgment. Your day works the same way. At nine in the morning, you meet someone from the business. You turn what they need into clear, written instructions — the brief. This usually takes about an hour and a half. At ten-thirty, you give those instructions to the AI. The AI starts building — code, data structure, screens, and tests — all at the same time. You read through what it's made and check for any problems. At eleven-thirty, you show the business person a real working screen. Not a sketch or a plan — actual working software, just two and a half hours after your day began. At two in the afternoon, you update the instructions based on the feedback from that morning. You write the changes in plain language. The AI updates the software within minutes. And at four-thirty, the day's work is sent to the client's testing area. The documentation updates itself. And the plan for tomorrow is already starting to take shape. That's a completely normal working day in OrchestrAI. Five clear phases. Real software delivered by end of day.",
+      "estimated_duration_seconds": 135,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Now let me walk you through the full day, step by step. I'll use the NASA Mission Control idea to explain it simply.",
+          "text_ssml": "<speak>Now let me walk you through the full day, step by step. I'll use the NASA Mission Control idea to explain it simply.</speak>",
+          "text_expressive": "Now let me walk you through the full day, step by step. I'll use the NASA Mission Control idea to explain it simply."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The people in Mission Control don't actually fly the rocket. They watch the information coming in, make decisions at key moments, and only step in when something needs human judgment. Your day works the same way.",
+          "text_ssml": "<speak>The people in Mission Control don't actually fly the rocket. They watch the information coming in, make decisions at key moments, and only step in when something needs human judgment. Your day works the same way.</speak>",
+          "text_expressive": "The people in Mission Control don't actually fly the rocket. They watch the information coming in, make decisions at key moments, and only step in when something needs human judgment. Your day works the same way."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "At nine in the morning, you meet someone from the business. You turn what they need into clear, written instructions — the brief. This usually takes about an hour and a half.",
+          "text_ssml": "<speak>At nine in the morning, you meet someone from the business. You turn what they need into clear, written instructions<break time=\"200ms\"/> the brief. This usually takes about an hour and a half.</speak>",
+          "text_expressive": "At nine in the morning, you meet someone from the business. You turn what they need into clear, written instructions — the brief. This usually takes about an hour and a half."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "At ten-thirty, you give those instructions to the AI. The AI starts building — code, data structure, screens, and tests — all at the same time. You read through what it's made and check for any problems.",
+          "text_ssml": "<speak>At ten-thirty, you give those instructions to the AI. The AI starts building<break time=\"200ms\"/> code, data structure, screens, and tests<break time=\"200ms\"/> all at the same time. You read through what it's made and check for any problems.</speak>",
+          "text_expressive": "At ten-thirty, you give those instructions to the AI. The AI starts building — code, data structure, screens, and tests — all at the same time. You read through what it's made and check for any problems."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "At eleven-thirty, you show the business person a real working screen. Not a sketch or a plan — actual working software, just two and a half hours after your day began.",
+          "text_ssml": "<speak>At eleven-thirty, you show the business person a real working screen. Not a sketch or a plan<break time=\"200ms\"/> actual working software, just two and a half hours after your day began.</speak>",
+          "text_expressive": "At eleven-thirty, you show the business person a real working screen. Not a sketch or a plan — actual working software, just two and a half hours after your day began."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "At two in the afternoon, you update the instructions based on the feedback from that morning. You write the changes in plain language. The AI updates the software within minutes.",
+          "text_ssml": "<speak>At two in the afternoon, you update the instructions based on the feedback from that morning. You write the changes in plain language. The AI updates the software within minutes.</speak>",
+          "text_expressive": "At two in the afternoon, you update the instructions based on the feedback from that morning. You write the changes in plain language. The AI updates the software within minutes."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And at four-thirty, the day's work is sent to the client's testing area. The documentation updates itself. And the plan for tomorrow is already starting to take shape.",
+          "text_ssml": "<speak>And at four-thirty, the day's work is sent to the client's testing area. The documentation updates itself. And the plan for tomorrow is already starting to take shape.</speak>",
+          "text_expressive": "And at four-thirty, the day's work is sent to the client's testing area. The documentation updates itself. And the plan for tomorrow is already starting to take shape."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "That's a completely normal working day in OrchestrAI. Five clear phases. Real software delivered by end of day.",
+          "text_ssml": "<speak>That's a completely normal working day in OrchestrAI. Five clear phases. Real software delivered by end of day.</speak>",
+          "text_expressive": "That's a completely normal working day in OrchestrAI. Five clear phases. Real software delivered by end of day."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "competencies",
+      "title": "Your Cockpit Instrument Panel",
+      "subtitle": "The five competencies of an OrchestrAI Lead",
+      "icon": "gauge",
+      "analogy": {
+        "title": "Five Things to Keep Balanced",
+        "text": "A pilot keeps an eye on five different instruments at the same time — altitude, speed, direction, fuel, and engine condition. You'll be doing something similar with five skills. The goal isn't to be amazing at just one — it's to keep all five balanced. Being great at four but weak at one can still cause problems."
+      },
+      "list": [
+        {
+          "name": "Intent Articulation",
+          "icon": "message-circle",
+          "desc": "Can you write clear instructions (using P.R.O.M.P.T.) that get good results the first time? You build this skill by practicing, not just by reading about it."
+        },
+        {
+          "name": "Quality Judgment",
+          "icon": "shield-check",
+          "desc": "Can you notice when AI gives a wrong answer, misses an important rule, or makes a logical mistake — before it's delivered? Your judgment is the last safety check."
+        },
+        {
+          "name": "Stakeholder Translation",
+          "icon": "handshake",
+          "desc": "Can you take a leader's big-picture idea and turn it into clear instructions within about 30 minutes? A big part of this job is the conversation, not the typing."
+        },
+        {
+          "name": "Iteration Discipline",
+          "icon": "repeat",
+          "desc": "Can you go through several rounds of changes in one day without exhausting your team or the client? Going at the right pace matters just as much as knowing what to do."
+        },
+        {
+          "name": "Pattern Stewardship",
+          "icon": "library",
+          "desc": "Do you add what you've learned back into the shared pattern library, so future projects start with a head start? This is how improvements build up over time."
+        }
+      ],
+      "visual_chart": {
+        "type": "radar_skill_map",
+        "axes": [
+          "Intent Articulation",
+          "Quality Judgment",
+          "Stakeholder Translation",
+          "Iteration Discipline",
+          "Pattern Stewardship"
+        ],
+        "scale": [
+          1,
+          5
+        ],
+        "instruction": "Rate yourself from 1 to 5 on each one. Try to be balanced across all five, rather than really strong in just one area."
+      },
+      "memory_hook": "Keep all five balanced. Being amazing at one but weak in another can still cause real problems.",
+      "narration": "We're getting close to the end of the module. Let me explain the five skills that make up a strong OrchestrAI Lead. Think of it like five gauges in a car dashboard. You want all five to be at a good level, not just one very high and the rest very low. The first skill is Intent Articulation — can you write clear enough instructions that AI gets it right the first time? This is built by practice. The second is Quality Judgment — can you spot when AI has made a mistake or missed something important before it's sent to the client? This is your most important safety check. Third is Stakeholder Translation — can you take what someone from the business says and turn it into a clear written brief, within about thirty minutes? A lot of this skill is about listening carefully and asking good questions. Fourth is Iteration Discipline — can you manage several rounds of changes in one day without tiring everyone out? Knowing when to keep going and when to pause is important. And fifth is Pattern Stewardship — do you share what you've learned, so the next project can benefit from it too? Look at the chart and give yourself an honest score from one to five on each. Aim for a balanced shape. That's what a strong Lead looks like.",
+      "estimated_duration_seconds": 120,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "We're getting close to the end of the module. Let me explain the five skills that make up a strong OrchestrAI Lead.",
+          "text_ssml": "<speak>We're getting close to the end of the module. Let me explain the five skills that make up a strong OrchestrAI Lead.</speak>",
+          "text_expressive": "We're getting close to the end of the module. Let me explain the five skills that make up a strong OrchestrAI Lead."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Think of it like five gauges in a car dashboard. You want all five to be at a good level, not just one very high and the rest very low.",
+          "text_ssml": "<speak>Think of it like five gauges in a car dashboard. You want all five to be at a good level, not just one very high and the rest very low.</speak>",
+          "text_expressive": "Think of it like five gauges in a car dashboard. You want all five to be at a good level, not just one very high and the rest very low."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The first skill is Intent Articulation — can you write clear enough instructions that AI gets it right the first time? This is built by practice.",
+          "text_ssml": "<speak>The first skill is Intent Articulation<break time=\"200ms\"/> can you write clear enough instructions that AI gets it right the first time? This is built by practice.</speak>",
+          "text_expressive": "The first skill is Intent Articulation — can you write clear enough instructions that AI gets it right the first time? This is built by practice."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "The second is Quality Judgment — can you spot when AI has made a mistake or missed something important before it's sent to the client? This is your most important safety check.",
+          "text_ssml": "<speak>The second is Quality Judgment<break time=\"200ms\"/> can you spot when AI has made a mistake or missed something important before it's sent to the client? This is your most important safety check.</speak>",
+          "text_expressive": "The second is Quality Judgment — can you spot when AI has made a mistake or missed something important before it's sent to the client? This is your most important safety check."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Third is Stakeholder Translation — can you take what someone from the business says and turn it into a clear written brief, within about thirty minutes? A lot of this skill is about listening carefully and asking good questions.",
+          "text_ssml": "<speak>Third is Stakeholder Translation<break time=\"200ms\"/> can you take what someone from the business says and turn it into a clear written brief, within about thirty minutes? A lot of this skill is about listening carefully and asking good questions.</speak>",
+          "text_expressive": "Third is Stakeholder Translation — can you take what someone from the business says and turn it into a clear written brief, within about thirty minutes? A lot of this skill is about listening carefully and asking good questions."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Fourth is Iteration Discipline — can you manage several rounds of changes in one day without tiring everyone out? Knowing when to keep going and when to pause is important.",
+          "text_ssml": "<speak>Fourth is Iteration Discipline<break time=\"200ms\"/> can you manage several rounds of changes in one day without tiring everyone out? Knowing when to keep going and when to pause is important.</speak>",
+          "text_expressive": "Fourth is Iteration Discipline — can you manage several rounds of changes in one day without tiring everyone out? Knowing when to keep going and when to pause is important."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And fifth is Pattern Stewardship — do you share what you've learned, so the next project can benefit from it too?",
+          "text_ssml": "<speak>And fifth is Pattern Stewardship<break time=\"200ms\"/> do you share what you've learned, so the next project can benefit from it too?</speak>",
+          "text_expressive": "And fifth is Pattern Stewardship — do you share what you've learned, so the next project can benefit from it too?"
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "Look at the chart and give yourself an honest score from one to five on each. Aim for a balanced shape. That's what a strong Lead looks like.",
+          "text_ssml": "<speak>Look at the chart and give yourself an honest score from one to five on each. Aim for a balanced shape. That's what a strong Lead looks like.</speak>",
+          "text_expressive": "Look at the chart and give yourself an honest score from one to five on each. Aim for a balanced shape. That's what a strong Lead looks like."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "welcome",
+      "title": "If You Remember Nothing Else…",
+      "subtitle": "Module 1 in five sentences",
+      "icon": "bookmark",
+      "bullets": [
+        "1. AI works a lot like you — similar structure, different material.",
+        "2. The old way of building software is struggling — slow, risky, and full of wasted effort.",
+        "3. Your new role is to guide AI, not do everything by hand — decide what's needed, then check the result.",
+        "4. P.R.O.M.P.T. is your tool — Purpose, Role, Output, Marker, Pattern, Tone.",
+        "5. Quality starts early — build it in from the beginning, instead of fixing it later."
+      ],
+      "memory_hook": "Five words to remember: Twin. Broken. Conductor. P.R.O.M.P.T. Upstream. That's the whole lesson.",
+      "closing_thread": "Just one short quiz left before Module 2. You've got this.",
+      "narration": "We're almost done. Let me wrap up the whole module in five simple ideas. These are the things I want you to carry with you. First: AI works a lot like you. It has something like a brain, memory, and hands. It's not mysterious — it was designed by studying how people think. Second: the old way of building software has real problems — it's slow, it wastes effort, and it depends too much on one or two people. OrchestrAI fixes this. Third: your new role is like a conductor, not a solo musician. You direct the work by writing clear instructions, rather than doing everything yourself. Fourth: when you talk to AI, use P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone. All six, every time. And fifth: quality starts at the beginning, not the end. Write clear instructions, and problems won't happen in the first place. Five ideas: twin, broken, conductor, P.R.O.M.P.T., upstream. Just one short quiz left, and then you've completed Module 1.",
+      "estimated_duration_seconds": 105,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "warm",
+          "text": "We're almost done. Let me wrap up the whole module in five simple ideas. These are the things I want you to carry with you.",
+          "text_ssml": "<speak>We're almost done. Let me wrap up the whole module in five simple ideas. These are the things I want you to carry with you.</speak>",
+          "text_expressive": "We're almost done. Let me wrap up the whole module in five simple ideas. These are the things I want you to carry with you."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "First: AI works a lot like you. It has something like a brain, memory, and hands. It's not mysterious — it was designed by studying how people think.",
+          "text_ssml": "<speak>First: AI works a lot like you. It has something like a brain, memory, and hands. It's not mysterious<break time=\"200ms\"/> it was designed by studying how people think.</speak>",
+          "text_expressive": "First: AI works a lot like you. It has something like a brain, memory, and hands. It's not mysterious — it was designed by studying how people think."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Second: the old way of building software has real problems — it's slow, it wastes effort, and it depends too much on one or two people. OrchestrAI fixes this.",
+          "text_ssml": "<speak>Second: the old way of building software has real problems<break time=\"200ms\"/> it's slow, it wastes effort, and it depends too much on one or two people. OrchestrAI fixes this.</speak>",
+          "text_expressive": "Second: the old way of building software has real problems — it's slow, it wastes effort, and it depends too much on one or two people. OrchestrAI fixes this."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Third: your new role is like a conductor, not a solo musician. You direct the work by writing clear instructions, rather than doing everything yourself.",
+          "text_ssml": "<speak>Third: your new role is like a conductor, not a solo musician. You direct the work by writing clear instructions, rather than doing everything yourself.</speak>",
+          "text_expressive": "Third: your new role is like a conductor, not a solo musician. You direct the work by writing clear instructions, rather than doing everything yourself."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Fourth: when you talk to AI, use P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone. All six, every time.",
+          "text_ssml": "<speak>Fourth: when you talk to AI, use P.R.O.M.P.T.<break time=\"200ms\"/> Purpose, Role, Output, Marker, Pattern, Tone. All six, every time.</speak>",
+          "text_expressive": "Fourth: when you talk to AI, use P.R.O.M.P.T. — Purpose, Role, Output, Marker, Pattern, Tone. All six, every time."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "And fifth: quality starts at the beginning, not the end. Write clear instructions, and problems won't happen in the first place.",
+          "text_ssml": "<speak>And fifth: quality starts at the beginning, not the end. Write clear instructions, and problems won't happen in the first place.</speak>",
+          "text_expressive": "And fifth: quality starts at the beginning, not the end. Write clear instructions, and problems won't happen in the first place."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "Five ideas: twin, broken, conductor, P.R.O.M.P.T., upstream. Just one short quiz left, and then you've completed Module 1.",
+          "text_ssml": "<speak>Five ideas: twin, broken, conductor, P.R.O.M.P.T., upstream. Just one short quiz left, and then you've completed Module 1.</speak>",
+          "text_expressive": "Five ideas: twin, broken, conductor, P.R.O.M.P.T., upstream. Just one short quiz left, and then you've completed Module 1."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "interactive_quiz_engine",
+      "title": "Module 1 Knowledge Check",
+      "subtitle": "10 questions. 80% to pass. Unlimited retakes.",
+      "icon": "clipboard-check",
+      "pass_threshold": 80,
+      "questions": [
+        {
+          "id": "q1",
+          "category": "AI Anatomy",
+          "icon": "brain",
+          "question": "Which AI feature works most like your long-term memory?",
+          "choices": [
+            "Large Language Model (LLM)",
+            "Retrieval-Augmented Generation (RAG)",
+            "Reinforcement Learning",
+            "Transformers"
+          ],
+          "correct_answer": "Retrieval-Augmented Generation (RAG)",
+          "explanation": "RAG works like long-term memory — it lets AI look up real facts, like your company's documents, instead of just guessing from what it learned before. Remember from earlier: brain = LLM, long-term memory = RAG."
+        },
+        {
+          "id": "q2",
+          "category": "AI Anatomy",
+          "icon": "alert-triangle",
+          "question": "AI hallucinations are most like which human experience?",
+          "choices": [
+            "Conscious lying",
+            "Confident false memories or vivid dreams",
+            "Refusing to answer when uncertain",
+            "Asking a clarifying question"
+          ],
+          "correct_answer": "Confident false memories or vivid dreams",
+          "explanation": "Hallucinations are like AI dreaming — confident, vivid, and sometimes completely made up. The AI isn't lying on purpose — it just doesn't realize it doesn't know the answer. This is exactly why the P.R.O.M.P.T. formula exists — to set clear limits on what AI is allowed to make up."
+        },
+        {
+          "id": "q3",
+          "category": "Old World",
+          "icon": "calendar-x",
+          "question": "How long does it usually take to build a basic working version of enterprise software, the old way?",
+          "choices": [
+            "7 days",
+            "30 days",
+            "90–120 days",
+            "12 months"
+          ],
+          "correct_answer": "90–120 days",
+          "explanation": "Traditional enterprise software usually takes 90 to 120 days just to get a basic working version ready. OrchestrAI compresses this down to about 7 days — roughly seventeen times faster — not because people work harder, but because unnecessary steps are removed."
+        },
+        {
+          "id": "q4",
+          "category": "OrchestrAI Model",
+          "icon": "rocket",
+          "question": "In 7 days, OrchestrAI delivers software to the client's ___ area — not directly to the live, public version.",
+          "choices": [
+            "Production",
+            "QA (Quality Assurance)",
+            "Staging",
+            "Sandbox"
+          ],
+          "correct_answer": "QA (Quality Assurance)",
+          "explanation": "OrchestrAI delivers about 80% of the finished software to the client's testing area within 7 days. The last 20% gets completed together during testing. The software only goes fully live once the client feels completely confident — never before. This matters: OrchestrAI moves fast, but never carelessly."
+        },
+        {
+          "id": "q5",
+          "category": "Mindset Shift",
+          "icon": "music-2",
+          "question": "Which comparison best describes what an OrchestrAI Lead does?",
+          "choices": [
+            "Solo violinist — total control of one instrument",
+            "Orchestra conductor — commands eighty musicians without touching one",
+            "Music critic — judges performance from the audience",
+            "Studio engineer — mixes after the recording is done"
+          ],
+          "correct_answer": "Orchestra conductor — commands eighty musicians without touching one",
+          "explanation": "The conductor analogy is the most important idea in this whole program. A violin player's hands are directly on the instrument. A conductor's hands touch nothing at all — yet they're in charge of much more, because they wrote very clear instructions beforehand. That's the shift you're making: from doing the work yourself to clearly directing how it should be done."
+        },
+        {
+          "id": "q6",
+          "category": "Quality Model",
+          "icon": "arrow-up-from-line",
+          "question": "At what point is quality mainly built into the OrchestrAI process?",
+          "choices": [
+            "In the QA cycle, by dedicated testers",
+            "Upstream, in the prompt and brief",
+            "During UAT, by the client",
+            "In production, by monitoring"
+          ],
+          "correct_answer": "Upstream, in the prompt and brief",
+          "explanation": "Think of it like cleaning a river at the source instead of filtering it downstream. The old way catches mistakes after they've already spread through the whole system. OrchestrAI builds quality in from the very start, in the instructions you write. Every mistake found later usually means the original instructions weren't clear enough, or an important rule (a Marker) was missing."
+        },
+        {
+          "id": "q7",
+          "category": "P.R.O.M.P.T.",
+          "icon": "shield-alert",
+          "question": "In P.R.O.M.P.T., what does the letter 'M' mean?",
+          "choices": [
+            "Method — the steps to follow",
+            "Model — which AI model to use",
+            "Marker — hard constraints and guardrails",
+            "Mode — formal or casual"
+          ],
+          "correct_answer": "Marker — hard constraints and guardrails",
+          "explanation": "Marker means the hard rules that can't be broken — like budget limits, compliance requirements, or things that are off-limits. Without setting Markers, AI might confidently break your important rules without realizing it. This is probably the most important letter for preventing real problems from AI mistakes."
+        },
+        {
+          "id": "q8",
+          "category": "P.R.O.M.P.T.",
+          "icon": "user-cog",
+          "question": "If you forget to include 'Role' in your P.R.O.M.P.T. request, what usually happens?",
+          "choices": [
+            "AI refuses to answer",
+            "AI gives a generic, non-expert response that needs heavy rework",
+            "AI asks you a clarifying question",
+            "AI defaults to the most recent role from your last session"
+          ],
+          "correct_answer": "AI gives a generic, non-expert response that needs heavy rework",
+          "explanation": "Without specifying a Role, AI gives a generic, surface-level answer that isn't an expert response. Telling it to 'act as a senior payments architect' completely changes how detailed and specific the answer is. Same AI, same question — just adding a Role makes a huge difference in quality."
+        },
+        {
+          "id": "q9",
+          "category": "P.R.O.M.P.T.",
+          "icon": "layout-template",
+          "question": "Which two parts of P.R.O.M.P.T. mostly decide what format the answer comes in?",
+          "choices": [
+            "Purpose and Tone",
+            "Output and Pattern",
+            "Role and Marker",
+            "Marker and Tone"
+          ],
+          "correct_answer": "Output and Pattern",
+          "explanation": "Output decides the format — like a table, a list, or a piece of code. Pattern decides the internal organization — like breaking a plan into morning, afternoon, evening sections. Together, they shape the answer so it's ready to use right away. Purpose and Role tell AI what to do and who to be. Marker and Tone set the rules and the style."
+        },
+        {
+          "id": "q10",
+          "category": "Daily Cadence",
+          "icon": "monitor-play",
+          "question": "In a typical OrchestrAI day, when does the business owner first see a real, working screen?",
+          "choices": [
+            "End of the first sprint, around day 10",
+            "End of the first week",
+            "Same day as intent capture — around 11:30 AM",
+            "Only after QA sign-off"
+          ],
+          "correct_answer": "Same day as intent capture — around 11:30 AM",
+          "explanation": "At 9 AM, the request is captured. At 10:30 AM, the first version is built by AI. By 11:30 AM, the business owner sees a real, working screen — just two and a half hours into the day. This matches the Mission Control idea: short bursts of decisions, longer periods of watching and checking, and real software ready by mid-morning on the very first day. Not a sketch — the real thing."
+        }
+      ],
+      "memory_hook": "10 questions. You need 8 out of 10 correct to pass. Passing unlocks Module 2.",
+      "narration": "You're almost there. Just a short quiz before Module 2 opens up. There are ten questions, and you need to get eight of them right — that's eighty percent. Don't worry if you don't pass the first time. You can try again as many times as you need — there's no penalty for retaking it. Just review the summary slide, and then try again. Some of the questions mention the comparisons we used — the conductor, the river, the architect's brief. If you remember those, you'll almost always know the right answer. Take your time. Read each question carefully. You've covered everything you need to know. Good luck.",
+      "estimated_duration_seconds": 82,
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "You're almost there. Just a short quiz before Module 2 opens up. There are ten questions, and you need to get eight of them right — that's eighty percent.",
+          "text_ssml": "<speak>You're almost there. Just a short quiz before Module 2 opens up. There are ten questions, and you need to get eight of them right<break time=\"200ms\"/> that's eighty percent.</speak>",
+          "text_expressive": "You're almost there. Just a short quiz before Module 2 opens up. There are ten questions, and you need to get eight of them right — that's eighty percent."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "reassuring",
+          "text": "Don't worry if you don't pass the first time. You can try again as many times as you need — there's no penalty for retaking it. Just review the summary slide, and then try again.",
+          "text_ssml": "<speak>Don't worry if you don't pass the first time. You can try again as many times as you need<break time=\"200ms\"/> there's no penalty for retaking it. Just review the summary slide, and then try again.</speak>",
+          "text_expressive": "Don't worry if you don't pass the first time. You can try again as many times as you need — there's no penalty for retaking it. Just review the summary slide, and then try again."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Some of the questions mention the comparisons we used — the conductor, the river, the architect's brief. If you remember those, you'll almost always know the right answer.",
+          "text_ssml": "<speak>Some of the questions mention the comparisons we used<break time=\"200ms\"/> the conductor, the river, the architect's brief. If you remember those, you'll almost always know the right answer.</speak>",
+          "text_expressive": "Some of the questions mention the comparisons we used — the conductor, the river, the architect's brief. If you remember those, you'll almost always know the right answer."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "warm",
+          "text": "Take your time. Read each question carefully. You've covered everything you need to know. Good luck.",
+          "text_ssml": "<speak>Take your time. Read each question carefully. You've covered everything you need to know. Good luck.</speak>",
+          "text_expressive": "Take your time. Read each question carefully. You've covered everything you need to know. Good luck."
+        }
+      ]
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "prompt_lab",
+      "title": "Prompt Engineering Lab 1",
+      "subtitle": "Plan My Team Offsite — Try Writing a P.R.O.M.P.T. Yourself",
+      "icon": "flask-conical",
+      "lab_number": 1,
+      "scenario": {
+        "label": "The Scenario",
+        "text": "Your manager has sent you a message: \"Can you help me plan our team offsite next month? Nothing crazy, just something fun for the team.\" That is the whole message — nothing else. Your job is to turn this vague request into a proper P.R.O.M.P.T. before asking AI to plan it."
+      },
+      "task_prompt": "Using the six steps you learned in slide 14, fill in each field below. Take your time — there are no wrong answers on a first attempt. This is practice.",
+      "input_fields": [
+        {
+          "key": "purpose",
+          "label": "P — Purpose",
+          "placeholder": "In one sentence, what do you want AI to do?"
+        },
+        {
+          "key": "role",
+          "label": "R — Role",
+          "placeholder": "Who should AI act as? (e.g. 'an experienced event planner')"
+        },
+        {
+          "key": "output",
+          "label": "O — Output",
+          "placeholder": "What format do you want the answer in? (e.g. 'a table', 'a list')"
+        },
+        {
+          "key": "marker",
+          "label": "M — Marker",
+          "placeholder": "What are the hard rules? Budget, number of people, things to avoid..."
+        },
+        {
+          "key": "pattern",
+          "label": "P — Pattern",
+          "placeholder": "How should the answer be organized? (e.g. 'one section for each part of the day')"
+        },
+        {
+          "key": "tone",
+          "label": "T — Tone",
+          "placeholder": "How should it sound? (e.g. 'friendly and easy to read')"
+        }
+      ],
+      "submit_button_label": "Show Me How AI Would Write This",
+      "model_answer": {
+        "purpose": "Plan a one-day team offsite for 12 people, happening next month, that builds team connection without feeling forced.",
+        "role": "Act as an experienced corporate event planner who specializes in mid-size team offsites.",
+        "output": "A day schedule presented as a table, with time slots and short descriptions for each activity.",
+        "marker": "Budget is ₹3,000 per person. The location must be within 90 minutes of the office. No activities that involve alcohol as a requirement. A backup plan is needed in case of rain.",
+        "pattern": "Divided into morning, afternoon, and evening. Include one group activity, one shared meal, and some free time.",
+        "tone": "Relaxed and friendly — not stiff or overly formal."
+      },
+      "comparison_report": {
+        "title": "Your Version, Compared to the AI Reference Version",
+        "intro": "There is no single correct answer — this is a learning exercise, not a test. The goal is to look at the reference version and notice which parts of your brief were clear and complete, and which parts might have been missing or thin. Everyone misses something on their first attempt. That is completely normal.",
+        "common_gaps": [
+          {
+            "element": "Marker",
+            "insight": "The Marker section is the one most people leave incomplete on their first try. Details like 'budget per person,' 'no alcohol-based activities,' and 'a rain backup' aren't small extras — they're the instructions that prevent AI from giving you something you have to completely redo. If your Marker was short, that's the most useful thing to improve next time."
+          },
+          {
+            "element": "Role",
+            "insight": "If you didn't include a Role, the AI would default to being a general assistant — giving a broad, surface-level answer. Including 'an experienced event planner' makes the answer much more specific and practical. This matches what we covered in slide 14."
+          },
+          {
+            "element": "Pattern",
+            "insight": "Without a Pattern, AI might give you one long paragraph instead of a clear, easy-to-follow schedule. Asking for 'morning, afternoon, and evening sections' turns the answer into something you could actually use and share."
+          }
+        ],
+        "closing_line": "Look at each section and notice where you were specific and where you weren't. That awareness is what Lab 2 will help you build on."
+      },
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "Well done for making it this far. Now it's time to try the P.R.O.M.P.T. formula yourself — for the first time.",
+          "text_ssml": "<speak>Well done for making it this far. Now it's time to try the P.R.O.M.P.T. formula yourself<break time=\"200ms\"/> for the first time.</speak>",
+          "text_expressive": "Well done for making it this far. Now it's time to try the P.R.O.M.P.T. formula yourself — for the first time."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Here is the scenario. Your manager has sent you a message: 'Can you help me plan our team offsite next month? Nothing crazy, just something fun.' That's everything they said.",
+          "text_ssml": "<speak>Here is the scenario. Your manager has sent you a message: 'Can you help me plan our team offsite next month? Nothing crazy, just something fun.' That's everything they said.</speak>",
+          "text_expressive": "Here is the scenario. Your manager has sent you a message: 'Can you help me plan our team offsite next month? Nothing crazy, just something fun.' That's everything they said."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Your job is to fill in the six P.R.O.M.P.T. fields on the left. Don't worry about getting it perfect — your first attempt is just about trying. There are no marks, no judgment, only learning.",
+          "text_ssml": "<speak>Your job is to fill in the six P.R.O.M.P.T. fields on the left. Don't worry about getting it perfect<break time=\"200ms\"/> your first attempt is just about trying. There are no marks, no judgment, only learning.</speak>",
+          "text_expressive": "Your job is to fill in the six P.R.O.M.P.T. fields on the left. Don't worry about getting it perfect — your first attempt is just about trying. There are no marks, no judgment, only learning."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Once you press the button, you'll see a reference version — how someone with experience would write the same brief. Then you can compare the two side by side and notice the differences.",
+          "text_ssml": "<speak>Once you press the button, you'll see a reference version<break time=\"200ms\"/> how someone with experience would write the same brief. Then you can compare the two side by side and notice the differences.</speak>",
+          "text_expressive": "Once you press the button, you'll see a reference version — how someone with experience would write the same brief. Then you can compare the two side by side and notice the differences."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "warm",
+          "text": "Take as long as you need. Go at your own pace.",
+          "text_ssml": "<speak>Take as long as you need. Go at your own pace.</speak>",
+          "text_expressive": "Take as long as you need. Go at your own pace."
+        }
+      ],
+      "estimated_duration_seconds": 70
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "prompt_lab",
+      "title": "Prompt Engineering Lab 2",
+      "subtitle": "Brief AI to Build a Feedback Form — One More Practice Before the Quiz",
+      "icon": "flask-conical",
+      "lab_number": 2,
+      "scenario": {
+        "label": "The Scenario",
+        "text": "A client contacts you: \"We need a way for customers to leave feedback after their order. Can you get something built?\" Remember: you are not building this yourself. Your role is to write the clear instructions — the brief — that AI will use to build it."
+      },
+      "task_prompt": "Fill in all six P.R.O.M.P.T. fields for this scenario. Remember: you don't need to know anything about computer code to do this well. You just need to think carefully about what the end result should be.",
+      "input_fields": [
+        {
+          "key": "purpose",
+          "label": "P — Purpose",
+          "placeholder": "In one sentence, what do you want AI to build?"
+        },
+        {
+          "key": "role",
+          "label": "R — Role",
+          "placeholder": "Who should AI act as? (e.g. 'an experienced software engineer')"
+        },
+        {
+          "key": "output",
+          "label": "O — Output",
+          "placeholder": "What should AI deliver back? (e.g. 'a working form component')"
+        },
+        {
+          "key": "marker",
+          "label": "M — Marker",
+          "placeholder": "What rules must be followed? Required fields, must work on mobile, privacy rules..."
+        },
+        {
+          "key": "pattern",
+          "label": "P — Pattern",
+          "placeholder": "How should the form be laid out?"
+        },
+        {
+          "key": "tone",
+          "label": "T — Tone",
+          "placeholder": "How should the words in the form sound to the customer?"
+        }
+      ],
+      "submit_button_label": "Show Me How AI Would Write This",
+      "model_answer": {
+        "purpose": "Build a short, simple feedback form that customers see after completing their order.",
+        "role": "Act as a senior software engineer who specializes in building simple, customer-facing forms.",
+        "output": "A working web form, plus a short description of what fields it includes and what rules are checked.",
+        "marker": "Must take less than 60 seconds to fill in. Only two required fields: a star rating and an optional comment box. Must work properly on mobile phones. Must follow our privacy policy — do not collect any personal information beyond what is already part of the order.",
+        "pattern": "Star rating at the top, comment box below, one submit button at the bottom. Not more than one page.",
+        "tone": "Warm and appreciative — make the customer feel that their opinion is genuinely important, not that this is a required form."
+      },
+      "comparison_report": {
+        "title": "Your Version, Compared to the AI Reference Version",
+        "intro": "This time it was a software scenario, and you still didn't need to know any coding to write a clear and useful brief. That's exactly the point. This is what the Intent Translator role looks like in practice.",
+        "common_gaps": [
+          {
+            "element": "Marker",
+            "insight": "'Must take less than 60 seconds' and 'do not collect any personal information beyond what is already part of the order' look like small points — but they're the kind of instructions that stop an overly complicated or privacy-risking form from being built. This connects directly to what we covered in slide 12 about preventing problems at the source."
+          },
+          {
+            "element": "Output",
+            "insight": "Did you just write 'a feedback form'? Or did you say what exactly you wanted delivered — a working component, plus a description of how it works? Being specific about what comes back means you're less likely to get just a written description when you needed actual working software."
+          },
+          {
+            "element": "Tone",
+            "insight": "This one is easy to forget when the request involves software. But the words a customer sees on that form really do matter. 'Warm and appreciative' versus nothing at all is the difference between a form that builds trust and one that just feels like paperwork."
+          }
+        ],
+        "closing_line": "You've now tried P.R.O.M.P.T. on two completely different types of scenarios — and the same six-step formula worked for both. Well done. The quiz is next."
+      },
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "warm",
+          "text": "Lab 2. One more practice exercise before the quiz.",
+          "text_ssml": "<speak>Lab 2. One more practice exercise before the quiz.</speak>",
+          "text_expressive": "Lab 2. One more practice exercise before the quiz."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "This time, the scenario involves software. A client says: 'We need a way for customers to leave feedback after their order. Can you get something built?'",
+          "text_ssml": "<speak>This time, the scenario involves software. A client says: 'We need a way for customers to leave feedback after their order. Can you get something built?'</speak>",
+          "text_expressive": "This time, the scenario involves software. A client says: 'We need a way for customers to leave feedback after their order. Can you get something built?'"
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "reassuring",
+          "text": "Before you start, I want to remind you: you do not need to know how to code to do this. Your job is to write the instructions. Remember from slide eleven — you are the Intent Translator. The brief is your responsibility, not the building.",
+          "text_ssml": "<speak>Before you start, I want to remind you: you do not need to know how to code to do this. Your job is to write the instructions. Remember from slide eleven<break time=\"200ms\"/> you are the Intent Translator. The brief is your responsibility, not the building.</speak>",
+          "text_expressive": "Before you start, I want to remind you: you do not need to know how to code to do this. Your job is to write the instructions. Remember from slide eleven — you are the Intent Translator. The brief is your responsibility, not the building."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Think about what really matters for a feedback form. How easy is it to fill in? What information are you collecting? How will it feel to the customer who sees it?",
+          "text_ssml": "<speak>Think about what really matters for a feedback form. How easy is it to fill in? What information are you collecting? How will it feel to the customer who sees it?</speak>",
+          "text_expressive": "Think about what really matters for a feedback form. How easy is it to fill in? What information are you collecting? How will it feel to the customer who sees it?"
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "Fill in the six fields, then compare your answer to the reference. You've done one of these already — you know the process. Take your time.",
+          "text_ssml": "<speak>Fill in the six fields, then compare your answer to the reference. You've done one of these already<break time=\"200ms\"/> you know the process. Take your time.</speak>",
+          "text_expressive": "Fill in the six fields, then compare your answer to the reference. You've done one of these already — you know the process. Take your time."
+        }
+      ],
+      "estimated_duration_seconds": 68
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "title": "You Did It",
+      "subtitle": "Module 1 Complete",
+      "icon": "party-popper",
+      "hero_visual": {
+        "concept": "celebratory_conductor",
+        "description": "A conductor mid-performance, arms raised, caught in a warm gold spotlight against the dark navy brand background — tying directly back to the central conductor metaphor from slide 10.",
+        "alt_text": "An illustrated conductor standing triumphantly with arms raised, gold light radiating outward, symbolizing mastery of orchestration.",
+        "fallback_icon": "party-popper",
+        "animation_suggestion": "Gold particle burst or confetti animation on slide entry, settling after two seconds."
+      },
+      "score_display": {
+        "label": "Your Quiz Score",
+        "source_slide": "slide_20",
+        "show_percentage": true,
+        "show_fraction": true,
+        "pass_threshold": 80,
+        "pass_message": "You passed. Module 2 is now unlocked.",
+        "retry_message": "You're very close. Review the summary on slide 19, then try the quiz again. You can take it as many times as you need.",
+        "visual_treatment": "Circular progress ring in gold, animating from 0 to the final score on load."
+      },
+      "milestone_banner": {
+        "formal": "You have completed the foundational module of the OrchestrAI Lead Certification.",
+        "conversational": "You just finished the most important hour of this entire certification.",
+        "genz": "You just finished the most important hour in this whole certification. No cap.",
+        "beginner": "You've just completed the most important part of this certification — the foundation everything else builds on."
+      },
+      "summary_bullets": {
+        "formal": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI exhibits a structural correspondence to human cognition."
+          },
+          {
+            "icon": "trending-down",
+            "text": "Traditional software delivery carries significant structural risk; OrchestrAI addresses this through orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "Your function has shifted from direct execution to intent orchestration."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. is now a practiced skill, not just a memorized acronym."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality is engineered upstream, not detected downstream."
+          }
+        ],
+        "conversational": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI is your twin — same anatomy, different substrate."
+          },
+          {
+            "icon": "trending-down",
+            "text": "The old world of software delivery is breaking, and OrchestrAI fixes it with orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "You're a conductor now, not a soloist."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. isn't just something you memorized — you actually used it, twice."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality lives upstream, in the brief."
+          }
+        ],
+        "genz": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI's your twin — same anatomy, different hardware."
+          },
+          {
+            "icon": "trending-down",
+            "text": "Old world's broken. OrchestrAI fixes it with orchestration."
+          },
+          {
+            "icon": "music-2",
+            "text": "You're the conductor now, not the soloist."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "P.R.O.M.P.T. isn't just something you memorized — you actually used it. Twice."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality lives upstream, in the brief. Always."
+          }
+        ],
+        "beginner": [
+          {
+            "icon": "brain-circuit",
+            "text": "AI works a lot like you — similar structure, different material."
+          },
+          {
+            "icon": "trending-down",
+            "text": "The old way of building software has real problems, and OrchestrAI fixes them through better organization."
+          },
+          {
+            "icon": "music-2",
+            "text": "Your role has changed — you guide AI now, instead of doing everything by hand."
+          },
+          {
+            "icon": "message-square-text",
+            "text": "You didn't just learn P.R.O.M.P.T. — you practiced it, twice, in real scenarios."
+          },
+          {
+            "icon": "arrow-up-from-line",
+            "text": "Quality starts at the beginning, not the end."
+          }
+        ]
+      },
+      "achievement_stats": {
+        "label": {
+          "formal": "Session Summary",
+          "conversational": "What You Just Did",
+          "genz": "What You Just Pulled Off",
+          "beginner": "What You Accomplished"
+        },
+        "stats": [
+          {
+            "icon": "layout-grid",
+            "value": "20",
+            "label": {
+              "formal": "Concepts Covered",
+              "conversational": "Slides Completed",
+              "genz": "Slides Crushed",
+              "beginner": "Lessons Completed"
+            }
+          },
+          {
+            "icon": "flask-conical",
+            "value": "2",
+            "label": {
+              "formal": "Applied Exercises",
+              "conversational": "Labs Completed",
+              "genz": "Labs Done",
+              "beginner": "Practice Exercises"
+            }
+          },
+          {
+            "icon": "clipboard-check",
+            "value": "10",
+            "label": {
+              "formal": "Assessment Items",
+              "conversational": "Quiz Questions",
+              "genz": "Quiz Questions",
+              "beginner": "Quiz Questions"
+            }
+          },
+          {
+            "icon": "clock",
+            "value": "60",
+            "label": {
+              "formal": "Minutes Invested",
+              "conversational": "Minutes Well Spent",
+              "genz": "Minutes, Zero Wasted",
+              "beginner": "Minutes of Learning"
+            }
+          }
+        ]
+      },
+      "closing_message": {
+        "formal": "This concludes Module 1. The foundational mindset established here — orchestration, structured intent, and upstream quality — underlies all subsequent modules. Proceed to Module 2 when ready.",
+        "conversational": "That's a wrap on Module 1. Everything else in this program builds on what you just learned — the conductor mindset, P.R.O.M.P.T., upstream quality. You're ready for Module 2 whenever you are.",
+        "genz": "And that's a wrap on Module 1. Everything else in this program builds on what you just locked in — conductor mindset, P.R.O.M.P.T., upstream quality. Module 2's whenever you're ready. Let's gooo.",
+        "beginner": "You've completed Module 1. Everything you learn next builds on what you just covered — thinking like a conductor, using P.R.O.M.P.T., and building in quality from the start. Take a moment to feel good about this. Module 2 is ready whenever you are."
+      },
+      "cta_button": {
+        "formal": "Proceed to Module 2",
+        "conversational": "Continue to Module 2",
+        "genz": "Let's Go to Module 2",
+        "beginner": "Start Module 2 When You're Ready"
+      },
+      "narration_script": [
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "warm",
+          "text": "You've done it. Module 1 is complete. That took real effort, and it's genuinely worth feeling good about.",
+          "text_ssml": "<speak>You've done it. Module 1 is complete. That took real effort, and it's genuinely worth feeling good about.</speak>",
+          "text_expressive": "You've done it. Module 1 is complete. That took real effort, and it's genuinely worth feeling good about."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "encouraging",
+          "text": "Look at your score. Whether you passed first try or needed a few attempts, you got there — and the understanding you now have is real.",
+          "text_ssml": "<speak>Look at your score. Whether you passed first try or needed a few attempts, you got there<break time=\"200ms\"/> and the understanding you now have is real.</speak>",
+          "text_expressive": "Look at your score. Whether you passed first try or needed a few attempts, you got there — and the understanding you now have is real."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "explaining",
+          "text": "Think about where you started. AI felt complicated and distant. Now you know it works a bit like your own mind. You've written two P.R.O.M.P.T. briefs from scratch — in two completely different areas.",
+          "text_ssml": "<speak>Think about where you started. AI felt complicated and distant. Now you know it works a bit like your own mind. You've written two P.R.O.M.P.T. briefs from scratch<break time=\"200ms\"/> in two completely different areas.</speak>",
+          "text_expressive": "Think about where you started. AI felt complicated and distant. Now you know it works a bit like your own mind. You've written two P.R.O.M.P.T. briefs from scratch — in two completely different areas."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "confident",
+          "text": "Five ideas to take with you: twin, broken, conductor, P.R.O.M.P.T., upstream. These are the foundation that everything in Module 2 will build on.",
+          "text_ssml": "<speak>Five ideas to take with you: twin, broken, conductor, P.R.O.M.P.T., upstream. These are the foundation that everything in Module 2 will build on.</speak>",
+          "text_expressive": "Five ideas to take with you: twin, broken, conductor, P.R.O.M.P.T., upstream. These are the foundation that everything in Module 2 will build on."
+        },
+        {
+          "speaker": "Sam",
+          "voice": "male_beginner",
+          "emotion": "warm",
+          "text": "Whenever you're ready, Module 2 is waiting for you. It was a pleasure going through this with you.",
+          "text_ssml": "<speak>Whenever you're ready, Module 2 is waiting for you. It was a pleasure going through this with you.</speak>",
+          "text_expressive": "Whenever you're ready, Module 2 is waiting for you. It was a pleasure going through this with you."
+        }
+      ],
+      "estimated_duration_seconds": 62,
+      "background_music": {
+        "track_key": "outro_theme",
+        "behavior": "fade_in_then_duck_under_narration",
+        "fade_in_ms": 1000,
+        "duck_volume_percent": 15,
+        "fade_out_ms": 2500,
+        "notes": "Play a celebratory completion theme on slide load. Fade in over 1s, duck to 15% during narration, fade out over 2.5s on CTA click."
+      }
+    }
+  ]
+}

@@ -21,6 +21,15 @@ interface TrainingPresenterProps {
   onComplete: () => void;
 }
 
+// ── Mobile audio tuning ──
+// Web Speech behaves differently on iOS Safari / Android Chrome: voices load async,
+// pitch is often ignored, `onend` can mis-fire, and the engine silently pauses after ~15s on Chrome Android.
+// These constants and the IS_MOBILE flag drive the platform-aware fixes in speakNarration().
+const IS_MOBILE_DEVICE = typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const INTER_SEGMENT_PAUSE_MS = 300;       // breathing space between dialogue lines
+const SPEAKER_CHANGE_PAUSE_MS = 500;      // longer pause when Sara → Arjun (or vice versa)
+const ANDROID_KEEPALIVE_MS = 12000;       // Chrome Android pauses speech after ~15s; nudge before then
+
 // ── ICON RESOLVER ──
 const RI = (name: string, cls = 'h-4 w-4'): React.ReactNode => {
   const m: Record<string, React.ReactNode> = {
@@ -500,6 +509,35 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
   const [labSubmitted, setLabSubmitted] = useState<Record<string, boolean>>({});
 
   const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+  const narrationAudioRef = useRef<HTMLAudioElement | null>(null); // Pre-rendered MP3 narration (per segment / slide)
+  const activeAudioSlideRef = useRef<any>(null);
+  const currentSegmentIndexRef = useRef<number>(0);
+  const isPausedAudioRef = useRef<boolean>(false);
+  const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const activeTimersRef = useRef<number[]>([]);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+  // Listen for speech synthesis voices changed to ensure mobile compatibility
+  useEffect(() => {
+    if (!('speechSynthesis' in window)) return;
+    
+    const updateVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices && voices.length > 0) {
+        setAvailableVoices(voices);
+      }
+    };
+    
+    updateVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = updateVoices;
+    }
+    
+    window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
+    return () => {
+      window.speechSynthesis.removeEventListener('voiceschanged', updateVoices);
+    };
+  }, []);
 
   // Stop background music on unmount
   useEffect(() => {
@@ -675,28 +713,62 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
 
   const selectVoice = (voiceKey: string, voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined => {
     const vk = voiceKey.toLowerCase();
-    const isMale = !vk.includes('female') && (vk.includes('male') || vk.includes('dev') || vk.includes('kai') || vk.includes('ravi') || vk.includes('beginner'));
-    
+    const isMale = !vk.includes('female') && (vk.includes('male') || vk.includes('dev') || vk.includes('kai') || vk.includes('ravi') || vk.includes('beginner') || vk.includes('arjun') || vk.includes('host_male'));
+
     const enVoices = voices.filter(v => v.lang.startsWith('en'));
     if (enVoices.length === 0) return voices[0];
 
+    // Google Android TTS encodes gender into the voiceURI:
+    //   en-us-x-iom-*, en-us-x-iol-*, en-us-x-sfg-*  → MALE
+    //   en-us-x-tpc-*, en-us-x-tpf-*                  → FEMALE
+    // We match these patterns first because on Android the human-readable `name` is often
+    // just "English (United States)" with no gender hint — name-only matching fails there.
+    const maleUriCodes = ['x-iom', 'x-iol', 'x-sfg', 'x-iog', 'x-ios'];
+    const femaleUriCodes = ['x-tpc', 'x-tpf', 'x-tpd', 'x-tph'];
+
+    const matchByUri = (v: SpeechSynthesisVoice, codes: string[]) => {
+      const uri = (v.voiceURI || '').toLowerCase();
+      return codes.some(c => uri.includes(c));
+    };
+
+    const maleNames = ['david', 'alex', 'daniel', 'fred', 'george', 'arthur', 'gordon', 'aaron', 'rishi', 'grandpa', 'reed', 'rocko', 'eddy', 'bruce', 'ralph', 'jarvis', 'siri voice 1', 'siri voice 3', 'siri voice 5', 'male'];
+    const femaleNames = ['zira', 'samantha', 'victoria', 'karen', 'moira', 'tessa', 'sandy', 'shelley', 'siri female', 'sara', 'lisa', 'clara', 'elena', 'tracy', 'martha', 'catherine', 'siri voice 2', 'siri voice 4', 'female', 'google us english'];
+
+    // Identify the voice that WOULD be picked for the opposite gender — we use this both for
+    // exclusion (never pick the same voice for both speakers) and for diagnostics.
+    const femaleCandidate =
+      enVoices.find(v => matchByUri(v, femaleUriCodes)) ||
+      enVoices.find(v => femaleNames.some(n => v.name.toLowerCase().includes(n))) ||
+      enVoices[0];
+
     if (isMale) {
-      const maleNames = ['david', 'alex', 'daniel', 'fred', 'george', 'microsoft david', 'male'];
+      // 1. Try male URI codes
+      const byUri = enVoices.find(v => matchByUri(v, maleUriCodes));
+      if (byUri) return byUri;
+      // 2. Try male name list
       for (const name of maleNames) {
         const match = enVoices.find(v => v.name.toLowerCase().includes(name));
         if (match) return match;
       }
-      const david = enVoices.find(v => v.name.toLowerCase().includes('david'));
-      if (david) return david;
-      return enVoices.length > 1 ? enVoices[1] : enVoices[0];
+      // 3. Anything NOT known-female, but exclude the voice already picked for Sara
+      const remaining = enVoices.filter(v => v !== femaleCandidate && !femaleNames.some(fn => v.name.toLowerCase().includes(fn)) && !matchByUri(v, femaleUriCodes));
+      if (remaining.length > 0) return remaining[remaining.length - 1]; // last → maximize separation
+      // 4. Last resort — at least pick a DIFFERENT voice than Sara even if it's also female.
+      const anyOther = enVoices.filter(v => v !== femaleCandidate);
+      if (anyOther.length > 0) return anyOther[anyOther.length - 1];
+      return enVoices[0];
     } else {
-      const femaleNames = ['zira', 'samantha', 'victoria', 'google us english', 'karen', 'microsoft zira', 'female'];
+      // Mirror for female: prefer URI match, then name match, then fallback.
+      const byUri = enVoices.find(v => matchByUri(v, femaleUriCodes));
+      if (byUri) return byUri;
       for (const name of femaleNames) {
         const match = enVoices.find(v => v.name.toLowerCase().includes(name));
         if (match) return match;
       }
-      const zira = enVoices.find(v => v.name.toLowerCase().includes('zira')) || enVoices.find(v => v.name.toLowerCase().includes('samantha'));
-      if (zira) return zira;
+      const nonMaleVoices = enVoices.filter(v => !maleNames.some(mn => v.name.toLowerCase().includes(mn)) && !matchByUri(v, maleUriCodes));
+      if (nonMaleVoices.length > 0) {
+        return nonMaleVoices[0];
+      }
       return enVoices[0];
     }
   };
@@ -706,8 +778,23 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     setIsPausedAudio(false);
     setCurrentSpeaker(null);
     setAudioProgress(0);
+    activeAudioSlideRef.current = null;
+    currentSegmentIndexRef.current = 0;
+    isPausedAudioRef.current = false;
+    activeUtteranceRef.current = null;
+    if (typeof window !== 'undefined') {
+      (window as any)._activeUtterance = null;
+    }
+    // Clear all active pacing timeouts
+    activeTimersRef.current.forEach(id => window.clearTimeout(id));
+    activeTimersRef.current = [];
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
+    }
+    if (narrationAudioRef.current) {
+      narrationAudioRef.current.pause();
+      narrationAudioRef.current.src = '';
+      narrationAudioRef.current = null;
     }
   };
 
@@ -715,12 +802,48 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     setIsPlayingAudio(true);
     setIsPausedAudio(false);
     setAudioProgress(0);
+    activeAudioSlideRef.current = slide;
+    currentSegmentIndexRef.current = 0;
+    isPausedAudioRef.current = false;
     const duration = getSlideDuration(slide);
     setAudioDuration(duration);
-    speakNarration(slide);
+
+    // Android Chrome silently pauses the speech queue after ~15s. Periodically resume it.
+    // No-op on iOS / desktop since resume() while speaking has no adverse effect.
+    if ('speechSynthesis' in window && IS_MOBILE_DEVICE) {
+      const keepaliveId = window.setInterval(() => {
+        if (!window.speechSynthesis.speaking) return;
+        if (isPausedAudioRef.current) return;
+        // The pause-then-resume pair is the documented Chrome keepalive trick.
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      }, ANDROID_KEEPALIVE_MS);
+      activeTimersRef.current.push(keepaliveId as unknown as number);
+    }
+
+    // Voice list may load asynchronously on mobile; wait briefly so the FIRST segment
+    // doesn't grab the platform default voice (usually female) before our selectVoice() can pick.
+    const proceed = () => speakNarration(slide, 0);
+    if (IS_MOBILE_DEVICE && availableVoices.length === 0 && 'speechSynthesis' in window) {
+      const ready = window.speechSynthesis.getVoices();
+      if (ready.length === 0) {
+        let resolved = false;
+        const onLoaded = () => {
+          if (resolved) return;
+          resolved = true;
+          window.speechSynthesis.removeEventListener('voiceschanged', onLoaded);
+          proceed();
+        };
+        window.speechSynthesis.addEventListener('voiceschanged', onLoaded);
+        // Hard cap so we never block more than 600ms even if voiceschanged never fires.
+        window.setTimeout(onLoaded, 600);
+        return;
+      }
+    }
+    proceed();
   };
 
-  const speakNarration = (slide: any) => {
+  const speakNarration = (slide: any, startIdx: number = 0) => {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     
@@ -729,63 +852,244 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       setIsPausedAudio(false);
       setCurrentSpeaker(null);
       setAudioProgress(0);
+      currentSegmentIndexRef.current = 0;
+      activeAudioSlideRef.current = null;
+      isPausedAudioRef.current = false;
+      activeUtteranceRef.current = null;
+      if (typeof window !== 'undefined') {
+        (window as any)._activeUtterance = null;
+      }
+      activeTimersRef.current.forEach(id => window.clearTimeout(id));
+      activeTimersRef.current = [];
       return;
     }
 
-    const voices = window.speechSynthesis.getVoices();
+    activeAudioSlideRef.current = slide;
+    const currentVoices = availableVoices.length > 0 ? availableVoices : window.speechSynthesis.getVoices();
+
+    // ── Voice diagnostics: log once per session so we can debug remotely.
+    // Surfaces what voices a device actually has — critical because Android often hides male voices.
+    if (typeof window !== 'undefined' && !(window as any)._orchestraiVoiceLogged) {
+      (window as any)._orchestraiVoiceLogged = true;
+      const summary = currentVoices.map((v) => ({ name: v.name, lang: v.lang, uri: v.voiceURI, default: v.default, localService: v.localService }));
+      // eslint-disable-next-line no-console
+      console.info('[OrchestrAI · TTS voices available]', { mobile: IS_MOBILE_DEVICE, count: currentVoices.length, voices: summary });
+      (window as any)._orchestraiVoices = summary;
+    }
     
     if (Array.isArray(slide.narration_script) && slide.narration_script.length > 0) {
-      slide.narration_script.forEach((segment: any, index: number) => {
+      const playSegment = (index: number) => {
+        if (activeAudioSlideRef.current !== slide) return;
+        if (isPausedAudioRef.current) return;
+        
+        if (index >= slide.narration_script.length) {
+          stopAudio();
+          return;
+        }
+
+        currentSegmentIndexRef.current = index;
+        const segment = slide.narration_script[index];
         const text = segment.text;
         const voiceKey = segment.voice || 'female_genz';
+
+        // ── PRE-RENDERED MP3 PATH ──
+        // If the segment carries an audio_url, play that file directly — same voice on every device.
+        // Falls back to Web Speech (below) when audio_url is absent.
+        if (segment.audio_url) {
+          const audio = new Audio(segment.audio_url);
+          audio.preload = 'auto';
+          narrationAudioRef.current = audio;
+          setCurrentSpeaker(segment.speaker || null);
+
+          let proceeded = false;
+          const finishSegment = () => {
+            if (proceeded) return;
+            proceeded = true;
+            narrationAudioRef.current = null;
+            if (activeAudioSlideRef.current !== slide) return;
+            if (isPausedAudioRef.current) return;
+            const nextSeg = slide.narration_script[index + 1];
+            const pause = nextSeg && nextSeg.speaker && nextSeg.speaker !== segment.speaker
+              ? SPEAKER_CHANGE_PAUSE_MS
+              : INTER_SEGMENT_PAUSE_MS;
+            const timerId = window.setTimeout(() => {
+              activeTimersRef.current = activeTimersRef.current.filter(id => id !== timerId);
+              playSegment(index + 1);
+            }, pause);
+            activeTimersRef.current.push(timerId);
+          };
+
+          audio.onended = finishSegment;
+          audio.onerror = finishSegment;     // missing/broken file → skip ahead, don't stall
+          audio.play().catch(finishSegment); // mobile autoplay restriction → skip ahead
+          return;
+        }
+
         const utt = new SpeechSynthesisUtterance(text);
+        utt.lang = 'en-US'; // Force English language to prevent speech engine errors on regional locales
+        activeUtteranceRef.current = utt;
+        (window as any)._activeUtterance = utt; // Prevent GC on iOS/Mobile
         
-        const voiceObj = selectVoice(voiceKey, voices);
+        const voiceObj = selectVoice(voiceKey, currentVoices);
         if (voiceObj) utt.voice = voiceObj;
-        utt.rate = 1.0;
+
+        // Apply pitch + rate modulation to differentiate male/female on engines where the
+        // voice list is thin (Android Chrome often serves the same voice for both keys).
+        // Pitch is pushed wide on mobile; a small rate split adds perceived identity contrast.
+        const vk = voiceKey.toLowerCase();
+        const isMale = !vk.includes('female') && (vk.includes('male') || vk.includes('dev') || vk.includes('kai') || vk.includes('ravi') || vk.includes('beginner') || vk.includes('arjun') || vk.includes('host_male'));
+        utt.pitch = isMale
+          ? (IS_MOBILE_DEVICE ? 0.65 : 0.83)
+          : (IS_MOBILE_DEVICE ? 1.35 : 1.12);
+        // Mobile base rate is 0.94 to fight the inherent mobile speed-up. Add a tiny gender split.
+        const baseRate = IS_MOBILE_DEVICE ? 0.94 : 1.0;
+        utt.rate = isMale ? baseRate - 0.04 : baseRate + 0.02;
+        
+        const startTime = Date.now();
+        const estimatedMs = Math.max(1500, text.length * 65);
+        let proceeded = false;
+
+        const handleNextSegment = () => {
+          if (activeAudioSlideRef.current !== slide) return;
+          if (isPausedAudioRef.current) return;
+          if (proceeded) return;
+          proceeded = true;
+
+          const elapsed = Date.now() - startTime;
+          const remaining = estimatedMs - elapsed;
+
+          // Always insert a breathing pause between segments — longer when the speaker changes.
+          // Fixes the "rushing without pauses" effect, most visible on mobile where TTS often ends early.
+          const nextSeg = slide.narration_script[index + 1];
+          const pause = nextSeg && nextSeg.speaker && nextSeg.speaker !== segment.speaker
+            ? SPEAKER_CHANGE_PAUSE_MS
+            : INTER_SEGMENT_PAUSE_MS;
+          const wait = Math.max(remaining, pause);
+
+          const timerId = window.setTimeout(() => {
+            activeTimersRef.current = activeTimersRef.current.filter(id => id !== timerId);
+            playSegment(index + 1);
+          }, wait);
+          activeTimersRef.current.push(timerId);
+        };
         
         utt.onstart = () => {
+          if (activeAudioSlideRef.current !== slide) return;
           setCurrentSpeaker(segment.speaker);
         };
 
         utt.onerror = (e) => {
+          if (activeAudioSlideRef.current !== slide) return;
+          if (isPausedAudioRef.current) return;
           if (e.error !== 'interrupted' && e.error !== 'canceled') {
-            stopAudio();
+            // Pacing fallback for browser SpeechSynthesis failure
+            handleNextSegment();
           }
         };
         
-        if (index === slide.narration_script.length - 1) {
-          utt.onend = () => {
-            stopAudio();
-          };
-        }
-        
+        utt.onend = () => {
+          if (activeAudioSlideRef.current !== slide) return;
+          if (isPausedAudioRef.current) return;
+          handleNextSegment();
+        };
+
         window.speechSynthesis.speak(utt);
-      });
+
+        // Watchdog: Chrome Android sometimes never fires `onend` on short utterances.
+        // If we haven't proceeded by 1.8× the estimated time (min 4s), force the next segment.
+        const watchdogId = window.setTimeout(() => {
+          activeTimersRef.current = activeTimersRef.current.filter(id => id !== watchdogId);
+          if (proceeded) return;
+          if (activeAudioSlideRef.current !== slide) return;
+          if (isPausedAudioRef.current) return;
+          handleNextSegment();
+        }, Math.max(4000, Math.ceil(estimatedMs * 1.8)));
+        activeTimersRef.current.push(watchdogId);
+      };
+
+      playSegment(startIdx);
     } else {
       const text = slide.narration;
+      // Slide-level pre-rendered MP3 — same idea as per-segment audio_url, just for slides without narration_script.
+      if (slide.audio_url) {
+        const audio = new Audio(slide.audio_url);
+        audio.preload = 'auto';
+        narrationAudioRef.current = audio;
+        const speakers: Record<string, string> = { conversational: 'Maya', formal: 'Aanya', genz: 'Zo', beginner: 'Sir Ravi' };
+        setCurrentSpeaker(speakers[selectedTone || 'conversational'] || 'Guide');
+        const done = () => {
+          narrationAudioRef.current = null;
+          if (activeAudioSlideRef.current !== slide) return;
+          if (isPausedAudioRef.current) return;
+          stopAudio();
+        };
+        audio.onended = done;
+        audio.onerror = done;
+        audio.play().catch(done);
+        return;
+      }
       if (!text) {
         stopAudio();
         return;
       }
       const utt = new SpeechSynthesisUtterance(text);
-      const voiceObj = selectVoice(selectedTone || 'conversational', voices);
-      if (voiceObj) utt.voice = voiceObj;
-      utt.rate = 1.0;
+      utt.lang = 'en-US';
+      activeUtteranceRef.current = utt;
+      (window as any)._activeUtterance = utt; // Prevent GC on iOS/Mobile
       
+      const voiceObj = selectVoice(selectedTone || 'conversational', currentVoices);
+      if (voiceObj) utt.voice = voiceObj;
+
+      const toneKey = (selectedTone || 'conversational').toLowerCase();
+      const isMaleSimple = toneKey === 'beginner';
+      utt.pitch = isMaleSimple
+        ? (IS_MOBILE_DEVICE ? 0.65 : 0.83)
+        : (IS_MOBILE_DEVICE ? 1.35 : 1.12);
+      const baseRateSimple = IS_MOBILE_DEVICE ? 0.94 : 1.0;
+      utt.rate = isMaleSimple ? baseRateSimple - 0.04 : baseRateSimple + 0.02;
+      
+      const startTime = Date.now();
+      const estimatedMs = Math.max(1500, text.length * 65);
+      let proceeded = false;
+
+      const handleEnd = () => {
+        if (activeAudioSlideRef.current !== slide) return;
+        if (isPausedAudioRef.current) return;
+        if (proceeded) return;
+        proceeded = true;
+        
+        const elapsed = Date.now() - startTime;
+        const remaining = estimatedMs - elapsed;
+        
+        if (remaining > 0) {
+          const timerId = window.setTimeout(() => {
+            activeTimersRef.current = activeTimersRef.current.filter(id => id !== timerId);
+            stopAudio();
+          }, remaining);
+          activeTimersRef.current.push(timerId);
+        } else {
+          stopAudio();
+        }
+      };
+
       utt.onstart = () => {
+        if (activeAudioSlideRef.current !== slide) return;
         const speakers: Record<string, string> = { conversational: 'Maya', formal: 'Aanya', genz: 'Zo', beginner: 'Sir Ravi' };
         setCurrentSpeaker(speakers[selectedTone || 'conversational'] || 'Guide');
       };
 
       utt.onerror = (e) => {
+        if (activeAudioSlideRef.current !== slide) return;
+        if (isPausedAudioRef.current) return;
         if (e.error !== 'interrupted' && e.error !== 'canceled') {
-          stopAudio();
+          handleEnd();
         }
       };
       
       utt.onend = () => {
-        stopAudio();
+        if (activeAudioSlideRef.current !== slide) return;
+        if (isPausedAudioRef.current) return;
+        handleEnd();
       };
       
       window.speechSynthesis.speak(utt);
@@ -809,11 +1113,25 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     
     if (isPlayingAudio) {
       if (isPausedAudio) {
+        isPausedAudioRef.current = false;
         setIsPausedAudio(false);
-        window.speechSynthesis.resume();
+        const s = totalSlides[currentSlide];
+        if (s) {
+          if (Array.isArray(s.narration_script) && s.narration_script.length > 0) {
+            speakNarration(s, currentSegmentIndexRef.current);
+          } else {
+            speakNarration(s, 0);
+          }
+        }
       } else {
+        isPausedAudioRef.current = true;
         setIsPausedAudio(true);
-        window.speechSynthesis.pause();
+        // Clear active timeouts when pausing
+        activeTimersRef.current.forEach(id => window.clearTimeout(id));
+        activeTimersRef.current = [];
+        window.speechSynthesis.cancel();
+        // Also pause MP3 narration playback if active.
+        if (narrationAudioRef.current) narrationAudioRef.current.pause();
       }
     } else {
       startAudio(totalSlides[currentSlide]);
