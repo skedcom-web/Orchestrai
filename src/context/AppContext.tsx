@@ -40,6 +40,7 @@ export interface UserProfile {
   mobile?: string;
   emailVerified?: boolean;
   mobileVerified?: boolean;
+  disabled?: boolean;
 }
 
 // Badge metadata — id, label, description, lucide icon name (UI maps icons in Change #2)
@@ -176,7 +177,7 @@ export interface SystemConfig {
   };
   moduleSlides?: {
     [key: number]: any[] | {
-      conversational: any[];
+      conversational?: any[];
       formal?: any[];
       genz?: any[];
       beginner?: any[];
@@ -228,6 +229,15 @@ export interface Submission {
   automatedTotal: number;
 }
 
+// ── Talent Radar (Change #5) — outreach tags + notes per learner ──
+export type OutreachTag = 'New' | 'Shortlisted' | 'Contacted' | 'Hired' | 'Dismissed';
+
+export interface OutreachRecord {
+  tag: OutreachTag;
+  notes: string;
+  updatedAt: string;
+}
+
 // Celebration event (level-up or badge unlock) — rendered by the global CelebrationOverlay
 export interface Celebration {
   id: string;
@@ -260,6 +270,7 @@ interface AppContextType {
   setCurrentUser: (user: UserProfile | null) => void;
   usersList: UserProfile[];
   updateUserProfile: (uid: string, updates: Partial<UserProfile>) => void;
+  toggleUserDisabledStatus: (uid: string) => void;
   systemConfig: SystemConfig;
   updateSystemConfig: (updates: Partial<SystemConfig>) => void;
   notificationLogs: NotificationLog[];
@@ -278,7 +289,8 @@ interface AppContextType {
   seedAdminAccount: () => void;
 
   // ── Gamification / XP engine ──
-  awardXP: (amount: number, reason: string) => void;
+  // Set silent=true to skip the toast (interactions use this — header XP bar animates instead).
+  awardXP: (amount: number, reason: string, silent?: boolean) => void;
   recordSlideView: (moduleId: number, slideIdx: number) => void;
   recordModuleComplete: (moduleId: number) => void;
   recordQuizScore: (moduleId: number, score: number) => void;
@@ -286,6 +298,11 @@ interface AppContextType {
   touchStreak: () => void;
   celebrations: Celebration[];
   dismissCelebration: (id: string) => void;
+  // ── Talent Radar ──
+  outreachData: Record<string, OutreachRecord>;
+  setOutreachTag: (uid: string, tag: OutreachTag) => void;
+  setOutreachNotes: (uid: string, notes: string) => void;
+  seedSampleCohort: () => void;
 
   toasts: ToastConfig[];
   addToast: (message: string, type?: ToastConfig['type']) => void;
@@ -386,6 +403,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCelebrations((prev) => [...prev, { ...c, id: Math.random().toString(36).substring(2, 9) }]);
   const dismissCelebration = (id: string) =>
     setCelebrations((prev) => prev.filter((c) => c.id !== id));
+
+  // ── Talent Radar — outreach tags + notes ──
+  const [outreachData, setOutreachData] = useState<Record<string, OutreachRecord>>(() => {
+    try { return JSON.parse(localStorage.getItem('orchestrai_db_outreach') || '{}'); } catch { return {}; }
+  });
+  const persistOutreach = (next: Record<string, OutreachRecord>) => {
+    setOutreachData(next);
+    localStorage.setItem('orchestrai_db_outreach', JSON.stringify(next));
+  };
+  const setOutreachTag = (uid: string, tag: OutreachTag) => {
+    const next = { ...outreachData, [uid]: { tag, notes: outreachData[uid]?.notes || '', updatedAt: new Date().toISOString() } };
+    persistOutreach(next);
+  };
+  const setOutreachNotes = (uid: string, notes: string) => {
+    const next = { ...outreachData, [uid]: { tag: outreachData[uid]?.tag || 'New', notes, updatedAt: new Date().toISOString() } };
+    persistOutreach(next);
+  };
 
   const addToast = (message: string, type: ToastConfig['type'] = 'info') => {
     const id = Math.random().toString(36).substring(2, 9);
@@ -512,7 +546,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             firebaseStorageBucket: config.firebaseStorageBucket || localConfig.firebaseStorageBucket || DEFAULT_CONFIG.firebaseStorageBucket || '',
             firebaseMessagingSenderId: config.firebaseMessagingSenderId || localConfig.firebaseMessagingSenderId || DEFAULT_CONFIG.firebaseMessagingSenderId || '',
             firebaseAppId: config.firebaseAppId || localConfig.firebaseAppId || DEFAULT_CONFIG.firebaseAppId || '',
-            adminPassword: localConfig.adminPassword !== undefined ? localConfig.adminPassword : '',
+            adminPassword: config.adminPassword !== undefined ? config.adminPassword : (localConfig.adminPassword !== undefined ? localConfig.adminPassword : ''),
             requireEmailVerification: config.requireEmailVerification !== undefined ? config.requireEmailVerification : (localConfig.requireEmailVerification !== undefined ? localConfig.requireEmailVerification : true),
             requirePhoneVerification: config.requirePhoneVerification !== undefined ? config.requirePhoneVerification : (localConfig.requirePhoneVerification !== undefined ? localConfig.requirePhoneVerification : false)
           };
@@ -638,7 +672,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             firebaseStorageBucket: config.firebaseStorageBucket || localConfig.firebaseStorageBucket || DEFAULT_CONFIG.firebaseStorageBucket || '',
             firebaseMessagingSenderId: config.firebaseMessagingSenderId || localConfig.firebaseMessagingSenderId || DEFAULT_CONFIG.firebaseMessagingSenderId || '',
             firebaseAppId: config.firebaseAppId || localConfig.firebaseAppId || DEFAULT_CONFIG.firebaseAppId || '',
-            adminPassword: localConfig.adminPassword !== undefined ? localConfig.adminPassword : '',
+            adminPassword: config.adminPassword !== undefined ? config.adminPassword : (localConfig.adminPassword !== undefined ? localConfig.adminPassword : ''),
             requireEmailVerification: config.requireEmailVerification !== undefined ? config.requireEmailVerification : (localConfig.requireEmailVerification !== undefined ? localConfig.requireEmailVerification : true),
             requirePhoneVerification: config.requirePhoneVerification !== undefined ? config.requirePhoneVerification : (localConfig.requirePhoneVerification !== undefined ? localConfig.requirePhoneVerification : false)
           };
@@ -646,11 +680,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setSystemConfig(mergedConfig);
           localStorage.setItem('orchestrai_db_config', JSON.stringify(mergedConfig));
         } else {
-          // Seed initial config to RTDB if it doesn't exist yet (preserving current local settings, but omitting local credentials)
-          const {
-            adminPassword,
-            ...dbConfigToSeed
-          } = localConfig;
+          // Seed initial config to RTDB if it doesn't exist yet (preserving current local settings)
+          const dbConfigToSeed = {
+            ...localConfig
+          };
 
           // Seed the database configuration node
           set(ref(db, 'config'), dbConfigToSeed).catch((err) => {
@@ -669,10 +702,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             if (data.email === 'vthinkorchestrai@gmail.com') {
               hasAdmin = true;
             }
-            if (data.email === 'skedcom@gmail.com') {
-              remove(ref(db, `users/${key}`));
-              console.log("[AppContext] Purged skedcom@gmail.com from RTDB on startup.");
-            } else if (data.email !== 'vthinkorchestrai@gmail.com' && data.role === 'ADMIN') {
+            if (data.email !== 'vthinkorchestrai@gmail.com' && data.role === 'ADMIN') {
               update(ref(db, `users/${key}`), { role: 'USER' });
               console.log(`[AppContext] Demoted admin ${data.email} on RTDB.`);
             }
@@ -721,9 +751,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const dbUsers: UserProfile[] = JSON.parse(localUsers);
         
         let hasAdmin = dbUsers.some(u => u.email === 'vthinkorchestrai@gmail.com');
-        // 1. Purge skedcom@gmail.com so it acts as a completely new user
-        let updatedUsers = dbUsers.filter(u => u.email !== 'skedcom@gmail.com');
-        let changed = dbUsers.length !== updatedUsers.length;
+        let updatedUsers = [...dbUsers];
+        let changed = false;
 
         // 2. Demote any other non-vthinkorchestrai accounts carrying ADMIN role
         updatedUsers = updatedUsers.map(u => {
@@ -783,11 +812,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (sessionUserStr) {
       try {
         const sessionUser = JSON.parse(sessionUserStr);
-        if (sessionUser.email === 'skedcom@gmail.com') {
-          // Force log out skedcom to allow fresh registration testing
-          sessionStorage.removeItem('orchestrai_session_user');
-          setCurrentUser(null);
-        } else if (sessionUser.role === 'ADMIN' && sessionUser.email !== 'vthinkorchestrai@gmail.com') {
+        if (sessionUser.role === 'ADMIN' && sessionUser.email !== 'vthinkorchestrai@gmail.com') {
           // Force demote other unauthorized admins
           sessionUser.role = 'USER';
           sessionStorage.setItem('orchestrai_session_user', JSON.stringify(sessionUser));
@@ -870,6 +895,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     
     // Find profile in current states (synced with Firestore/LocalStorage)
     let profile = usersList.find(u => u.email === formattedEmail);
+
+    if (profile && profile.disabled) {
+      addToast("Your account has been disabled/blacklisted. Please contact the administrator.", "error");
+      return;
+    }
 
     const isAdmin = formattedEmail === 'vthinkorchestrai@gmail.com';
 
@@ -1048,6 +1078,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
+  const toggleUserDisabledStatus = (uid: string) => {
+    const db = getFirebaseDb();
+    const user = usersList.find(u => u.uid === uid);
+    if (!user) return;
+
+    const newDisabledState = !user.disabled;
+    const actionName = newDisabledState ? 'DISABLE_USER' : 'ENABLE_USER';
+    const actionDesc = newDisabledState ? 'Disabled candidate account' : 'Enabled candidate account';
+
+    logAuditEvent(actionName, `${actionDesc}: ${user.name} (${user.email})`, user.email);
+
+    if (db) {
+      update(ref(db, `users/${uid}`), { disabled: newDisabledState })
+        .then(() => {
+          addToast(`Candidate account ${newDisabledState ? 'disabled' : 'enabled'} successfully.`, "success");
+        })
+        .catch(err => {
+          console.error("Error updating user disabled status:", err);
+          addToast("Failed to update candidate status.", "error");
+        });
+    } else {
+      const updated = usersList.map(u => u.uid === uid ? { ...u, disabled: newDisabledState } : u);
+      saveUsersList(updated);
+      addToast(`Candidate account ${newDisabledState ? 'disabled' : 'enabled'} locally.`, "success");
+    }
+  };
+
   // ── XP / PROGRESSION ENGINE ──
   // Single atomic core: reads the freshest progress, applies a mutation, recomputes
   // level + badges centrally, persists once, and fires the right notifications.
@@ -1079,8 +1136,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     newBadges.forEach((bid) => pushCelebration({ kind: 'badge', badgeId: bid }));
   };
 
-  const awardXP = (amount: number, reason: string) => {
-    applyProgressUpdate((p) => ({ progress: { ...p, xp: p.xp + amount }, xpGained: amount, reason }));
+  const awardXP = (amount: number, reason: string, silent?: boolean) => {
+    applyProgressUpdate((p) => ({ progress: { ...p, xp: p.xp + amount }, xpGained: amount, reason, silent }));
   };
 
   const recordSlideView = (moduleId: number, slideIdx: number) => {
@@ -1280,15 +1337,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('orchestrai_db_config', JSON.stringify(updated));
 
     if (db) {
-      // Exclude connection strings, local credentials, and sensitive tokens from being written to the database node.
-      // This is a major security benefit and ensures client connection configurations do not get overwritten
-      // by the server or trigger circular sync/listener loops.
-      const {
-        adminPassword,
-        ...dbConfig
-      } = updated;
-
-      set(ref(db, 'config'), dbConfig).catch((err) => {
+      // Sync the entire configuration settings, including the admin password, to the Realtime Database
+      // so that changes are reflected across all devices immediately.
+      set(ref(db, 'config'), updated).catch((err) => {
         console.error("[AppContext] Failed to sync config updates to Realtime Database:", err);
       });
     }
@@ -1553,6 +1604,56 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addToast("Database wiped and reset successfully. Admin account preserved.", "success");
   };
 
+  // ── Talent Radar — seed a realistic sample cohort so the radar UI can be inspected ──
+  // Creates 8 synthetic users spanning the readiness spectrum: standouts, mid-pack, casual browsers.
+  const seedSampleCohort = () => {
+    const dbUsers: UserProfile[] = JSON.parse(localStorage.getItem('orchestrai_db_users') || '[]');
+    const today = new Date().toISOString().slice(0, 10);
+
+    type Sample = { name: string; email: string; xp: number; level: number; streak: number; modulesCompleted: number[]; quizScores: Record<number, number>; labsPassed: number[]; slidesViewedTotal: number; badges: string[]; status: UserProfile['accountStatus'] };
+    const samples: Sample[] = [
+      { name: 'Riya Sharma',       email: 'riya.sharma+sample@orchestrai.test',    xp: 720, level: 3, streak: 6, modulesCompleted: [1, 2], quizScores: { 2: 100 }, labsPassed: [1, 2], slidesViewedTotal: 46, badges: ['first-steps','quiz-master','guardian','module-1','foundation','streak-3'], status: 'APPROVED' },
+      { name: 'Marcus Chen',       email: 'marcus.chen+sample@orchestrai.test',    xp: 880, level: 3, streak: 8, modulesCompleted: [1, 2], quizScores: { 2: 100 }, labsPassed: [1, 2], slidesViewedTotal: 50, badges: ['first-steps','quiz-master','guardian','module-1','foundation','streak-3','streak-7'], status: 'APPROVED' },
+      { name: 'Daniel Okafor',     email: 'daniel.okafor+sample@orchestrai.test',  xp: 420, level: 3, streak: 3, modulesCompleted: [1], quizScores: { 2: 80 }, labsPassed: [1], slidesViewedTotal: 32, badges: ['first-steps','quiz-master','guardian','module-1','streak-3'], status: 'APPROVED' },
+      { name: 'Sophie Laurent',    email: 'sophie.laurent+sample@orchestrai.test', xp: 280, level: 2, streak: 2, modulesCompleted: [1], quizScores: { 2: 80 }, labsPassed: [], slidesViewedTotal: 27, badges: ['first-steps','quiz-master','module-1'], status: 'PENDING_APPROVAL' },
+      { name: 'Zara Khan',         email: 'zara.khan+sample@orchestrai.test',      xp: 340, level: 2, streak: 5, modulesCompleted: [1], quizScores: { 2: 60 }, labsPassed: [], slidesViewedTotal: 31, badges: ['first-steps','module-1','streak-3'], status: 'FREE_TIER' },
+      { name: 'Aanya Patel',       email: 'aanya.patel+sample@orchestrai.test',    xp: 170, level: 2, streak: 1, modulesCompleted: [], quizScores: {}, labsPassed: [], slidesViewedTotal: 24, badges: ['first-steps'], status: 'FREE_TIER' },
+      { name: 'Tom Wilson',        email: 'tom.wilson+sample@orchestrai.test',     xp: 95,  level: 1, streak: 2, modulesCompleted: [], quizScores: { 2: 60 }, labsPassed: [], slidesViewedTotal: 14, badges: ['first-steps'], status: 'FREE_TIER' },
+      { name: 'Diego Ramirez',     email: 'diego.ramirez+sample@orchestrai.test',  xp: 35,  level: 1, streak: 1, modulesCompleted: [], quizScores: {}, labsPassed: [], slidesViewedTotal: 6,  badges: ['first-steps'], status: 'FREE_TIER' },
+    ];
+
+    let added = 0;
+    samples.forEach((s) => {
+      if (dbUsers.some((u) => u.email === s.email)) return; // idempotent
+      const slidesViewed: Record<number, number[]> = {};
+      const distribution = s.slidesViewedTotal > 23 ? { 1: 23, 2: s.slidesViewedTotal - 23 } : { 1: s.slidesViewedTotal };
+      Object.entries(distribution).forEach(([modId, count]) => {
+        slidesViewed[parseInt(modId)] = Array.from({ length: count }, (_, i) => i);
+      });
+      dbUsers.push({
+        uid: 'sample-' + Math.random().toString(36).substring(2, 10),
+        email: s.email,
+        name: s.name,
+        role: 'USER',
+        accountStatus: s.status,
+        quizPassed: (s.quizScores[2] ?? 0) >= 80,
+        progress: {
+          xp: s.xp, level: s.level, streakDays: s.streak, lastActiveDate: today,
+          modulesCompleted: s.modulesCompleted, slidesViewed, quizScores: s.quizScores,
+          labsPassed: s.labsPassed, badges: s.badges,
+        },
+      });
+      added++;
+    });
+
+    if (added === 0) {
+      addToast("Sample cohort already seeded — nothing new to add.", "info");
+      return;
+    }
+    saveUsersList(dbUsers);
+    addToast(`Seeded ${added} sample trainers for Talent Radar inspection.`, "success");
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -1562,6 +1663,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCurrentUser,
         usersList,
         updateUserProfile,
+        toggleUserDisabledStatus,
         systemConfig,
         updateSystemConfig,
         notificationLogs,
@@ -1586,6 +1688,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         touchStreak,
         celebrations,
         dismissCelebration,
+        outreachData,
+        setOutreachTag,
+        setOutreachNotes,
+        seedSampleCohort,
         toasts,
         addToast,
         removeToast,

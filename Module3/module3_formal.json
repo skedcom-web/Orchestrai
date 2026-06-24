@@ -1,0 +1,1392 @@
+{
+  "module": "Module 3 — The OrchestrAI Bible · Governance-First Setup",
+  "preset": "formal",
+  "format": "two_voice_dialogue",
+  "speakers": {
+    "Vikram": {
+      "voice_key": "male_formal",
+      "gender": "male",
+      "persona": "Vikram — Senior OrchestrAI Architect. Authoritative, precise, frames concepts in enterprise terms."
+    },
+    "Anjali": {
+      "voice_key": "female_formal",
+      "gender": "female",
+      "persona": "Anjali — Principal Consultant. Methodical, asks for clarification, brings implications to the surface."
+    }
+  },
+  "tts_field_priority": [
+    "text_expressive",
+    "text_ssml",
+    "text"
+  ],
+  "schema_version": "v8_interactive_with_music",
+  "last_updated": "2026-06-24T11:37:35.957Z",
+  "acts": [
+    {
+      "id": "act_1",
+      "name": "The Mandate",
+      "slide_start": 1,
+      "slide_end": 2
+    },
+    {
+      "id": "act_2",
+      "name": "Two Roads, One Discipline",
+      "slide_start": 3,
+      "slide_end": 6
+    },
+    {
+      "id": "act_3",
+      "name": "OGE — The Three Pillars",
+      "slide_start": 7,
+      "slide_end": 11
+    },
+    {
+      "id": "act_4",
+      "name": "The Master Prompts",
+      "slide_start": 12,
+      "slide_end": 15
+    },
+    {
+      "id": "act_5",
+      "name": "Your Blueprint Ships",
+      "slide_start": 16,
+      "slide_end": 23
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "act": "The Mandate",
+      "title": "The OrchestrAI Bible",
+      "subtitle": "Module 3 · Governance-First Setup",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 75,
+      "opening_hook": "Modules 1 and 2 established the mindset. Module 3 establishes the discipline that makes the mindset operational.",
+      "bullets": [
+        "Five acts. Twenty-three slides. The complete pre-engagement playbook for a real client project.",
+        "We will establish OGE — Observability, Guardrails, Evaluation — as the framework's spine.",
+        "Two reusable master prompts will be provided as artifacts to retain.",
+        "The vThink Issue Tracker engagement runs as our case study throughout."
+      ],
+      "closing_thread": "We begin with the foundational mandate that governs every engagement.",
+      "narration": "Module three. The bible. Five acts, twenty-three slides, the complete pre-engagement playbook. We establish OGE, deliver two reusable master prompts, and walk the vThink Issue Tracker engagement as our case study throughout.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Welcome to Module 3 of the OrchestrAI Lead Certification."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Modules 1 and 2 established the mindset and lifecycle. Module 3 establishes the discipline that makes the mindset operational."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Five acts. We will introduce the OGE framework — Observability, Guardrails, and Evaluation — as the spine of every OrchestrAI engagement. We will provide two reusable master prompts as artifacts to retain."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "And throughout, we anchor each principle to the vThink Issue Tracker — a production engagement that we will refer to repeatedly. Let us begin."
+        }
+      ],
+      "background_music": {
+        "track_key": "intro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "stats_hero",
+      "act": "The Mandate",
+      "title": "Quality is not a service. It is a mandate.",
+      "subtitle": "The foundational principle of OrchestrAI delivery",
+      "icon": "shield-check",
+      "estimated_duration_seconds": 115,
+      "hero_stat": {
+        "value": "100%",
+        "label": "of OrchestrAI engagements operate under OGE — without exception",
+        "icon": "shield-check"
+      },
+      "analogy": {
+        "title": "Safety in a high-performance vehicle",
+        "text": "A high-performance vehicle without safety systems is not premium engineering — it is a liability. OrchestrAI delivers production-ready outcomes in seven days because OGE is engineered in from the first prompt, never appended as an afterthought."
+      },
+      "bullets": [
+        "Clients do not contract for security as a line item. They assume it is the baseline.",
+        "Acceleration without governance produces production incidents that erode client trust.",
+        "OGE is the mechanism that allows the same engagement to claim both 'delivered in seven days' and 'passed security review on day eight'.",
+        "Every certified Lead internalises the mandate: Quality is not a service. It is a mandate."
+      ],
+      "closing_thread": "With the mandate established, we examine the two engagement entry points.",
+      "narration": "Quality is not a service. It is a mandate. This principle governs every OrchestrAI engagement. Clients do not contract for security as a line item — they assume it as baseline. OGE is the mechanism that lets the same engagement claim both rapid delivery and security review pass.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "If you retain one sentence from this module, retain this one."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Quality is not a service. It is a mandate."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Clients do not contract for security as a line item. They assume it as the baseline. The day your AI-built application leaks data is the day your acceleration advantage evaporates."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "OGE is precisely the mechanism that permits us to claim both rapid delivery and security review pass — simultaneously, in the same engagement."
+        }
+      ],
+      "background_music": {
+        "track_key": "intro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "comparison_table",
+      "act": "Two Roads, One Discipline",
+      "title": "Two Engagement Entry Points",
+      "subtitle": "Approach A · client-led    versus    Approach B · builder-led",
+      "icon": "git-commit",
+      "estimated_duration_seconds": 135,
+      "analogy": {
+        "title": "Navigation with destination versus navigation with intent",
+        "text": "In some engagements the client provides the destination — stack, standards, structure. In others, they convey only the intent. Either way, navigation converges to the same governance-anchored build."
+      },
+      "table": [
+        {
+          "icon": "users",
+          "pain": "Tech stack",
+          "trad": "Client mandates: React + NestJS + PostgreSQL",
+          "orch": "AI-assisted analysis: SPA versus MPA, monolith versus services"
+        },
+        {
+          "icon": "layout-template",
+          "pain": "UI preferences",
+          "trad": "Client provides brand kit, colours, typography",
+          "orch": "Lead proposes two or three options for client selection"
+        },
+        {
+          "icon": "shield-alert",
+          "pain": "Coding standards",
+          "trad": "Client provides style guide and linter config",
+          "orch": "Lead proposes a neutral default — Airbnb, Standard, or Google"
+        },
+        {
+          "icon": "grid-3x3",
+          "pain": "Folder structure",
+          "trad": "Client provides existing monorepo conventions",
+          "orch": "Lead scaffolds a default — feature-by-domain"
+        },
+        {
+          "icon": "scale",
+          "pain": "Governance rules",
+          "trad": "Common framework plus client-specific overlay",
+          "orch": "Common framework plus Lead defaults — client refines on review"
+        }
+      ],
+      "memory_hook": "A = the client tells you. B = you tell the client. Both converge on the governance setup.",
+      "closing_thread": "We examine each in turn.",
+      "narration": "Two engagement entry points. Approach A is client-led — they provide the stack, the UI, the standards. Approach B is builder-led — they provide only the intent, and the Lead conducts analysis. Both converge on identical governance setup.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "An important point that practitioners often overlook."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Not every client arrives with crystallised requirements. Some hand you a forty-page specification. Others say, in effect, 'build us something useful'."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Two approaches address this. Approach A — client-led discovery. Approach B — builder-led analysis. Both converge on the same governance setup."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Different entry ramps. Identical destination. The discipline does not change with the entry point."
+        }
+      ],
+      "background_music": {
+        "track_key": "mandate_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "welcome",
+      "act": "Two Roads, One Discipline",
+      "title": "Approach A · Client-Led Discovery",
+      "subtitle": "When the customer provides crystallised inputs",
+      "icon": "users",
+      "estimated_duration_seconds": 145,
+      "analogy": {
+        "title": "Executing a defined brief",
+        "text": "The client specifies the deliverable in detail. The Lead's role is not to define the dish but to execute flawlessly within tight constraints, with governance as the enforcement mechanism."
+      },
+      "bullets": [
+        "Inputs received: target tech stack, quality SLAs, UI design preferences, coding standards, existing folder structure.",
+        "Lead action: assemble inputs into the project document kit.",
+        "Append the generic OrchestrAI governance rules document — covered in Act 3.",
+        "Attach the kit to the AI tool. Issue the opening prompt (Master Prompt T1).",
+        "Output: FDD, TDD, DB Design, UI Specifications, Test Plan — aligned to both client requirements and OGE constraints."
+      ],
+      "closing_thread": "Approach B addresses the case where these inputs are unavailable.",
+      "narration": "Approach A. The client provides crystallised inputs — tech stack, UI preferences, coding standards, folder structure. The Lead assembles the inputs, appends the generic OrchestrAI governance rules, attaches the kit to the AI tool, and issues the opening prompt. The output is five aligned design documents.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Approach A is, in some respects, the more straightforward of the two."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "The client provides the inputs directly. Tech stack — for example, React, NestJS, PostgreSQL. UI preferences — brand kit and design tokens. Standards — perhaps an established Airbnb configuration."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "The Lead assembles these inputs into the project document kit. Appends the generic OrchestrAI governance rules document. The kit is then complete."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Attach the kit to the AI tool. Issue the opening prompt. The AI produces FDD, TDD, DB Design, UI Specifications, and Test Plan — aligned to both client requirements and OGE constraints."
+        }
+      ],
+      "background_music": {
+        "track_key": "mandate_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "welcome",
+      "act": "Two Roads, One Discipline",
+      "title": "Approach B · Builder-Led Analysis",
+      "subtitle": "When the client conveys the problem, not the plan",
+      "icon": "search",
+      "estimated_duration_seconds": 145,
+      "analogy": {
+        "title": "Interpreting an intent brief",
+        "text": "The client describes the outcome and trusts the Lead to determine the means. The Lead performs structured analysis, proposes options, secures client selection — converting the engagement to Approach A from that point forward."
+      },
+      "bullets": [
+        "Initial step: structured AI-assisted analysis covering SPA versus server-rendered, load profile, real-time requirements, mobile considerations.",
+        "Propose two or three stack options with clearly articulated trade-offs. Secure client agreement on one.",
+        "Propose default UI directions. Secure client agreement.",
+        "Propose default coding standards and folder structure. Secure client agreement.",
+        "From this point, the engagement proceeds as Approach A: kit assembly, governance overlay, opening prompt, document generation."
+      ],
+      "memory_hook": "Approach B introduces a pre-step that converts ambiguous engagements into structured ones.",
+      "closing_thread": "Both paths converge in the next step.",
+      "narration": "Approach B. The client conveys the problem but not the plan. The Lead performs structured analysis with AI assistance — stack options, UI directions, standards — and secures client selection. From that point the engagement proceeds as Approach A.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "teasing",
+          "text": "Approach B addresses the case where the client articulates a problem but not a solution path."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "The Lead does not improvise. The Lead conducts structured AI-assisted analysis. Is this a single-page application or server-rendered? What is the load profile? Are there real-time requirements? Is mobile a primary consideration?"
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "From that analysis, propose two or three stack options. Articulate trade-offs clearly. Secure client selection on one."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "amazed",
+          "text": "Once selection is made, the engagement converts to Approach A. The same kit assembly, the same governance overlay, the same opening prompt."
+        }
+      ],
+      "background_music": {
+        "track_key": "mandate_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "transition_bridge",
+      "act": "Two Roads, One Discipline",
+      "title": "Both Roads Converge Here",
+      "subtitle": "Governance-first setup is universal",
+      "icon": "git-commit",
+      "estimated_duration_seconds": 70,
+      "closing_thread": "We now define the framework that every governance document enforces.",
+      "narration": "Whether the engagement begins at Approach A or Approach B, both converge at governance-first setup. The framework that every governance document enforces is OGE.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Both approaches — A and B — converge at the same destination."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Governance-first setup. Document kit assembled, generic rules attached, opening prompt issued."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "playful_intrigue",
+          "text": "We now examine the framework that every governance document enforces — three pillars known as OGE."
+        }
+      ],
+      "background_music": {
+        "track_key": "mandate_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "competencies",
+      "act": "OGE — The Three Pillars",
+      "title": "OGE — Observability · Guardrails · Evaluation",
+      "subtitle": "Enterprise-grade assurance at delivery speed",
+      "icon": "shield-check",
+      "estimated_duration_seconds": 135,
+      "analogy": {
+        "title": "The three-legged construct",
+        "text": "Remove any one leg and the construct collapses. Observability without Guardrails produces transparent disorder. Guardrails without Evaluation produces enforced rules without verification. Evaluation without Observability produces blind testing. All three are required."
+      },
+      "list": [
+        {
+          "name": "Observability",
+          "icon": "search",
+          "desc": "Traceability and transparency by design. Every AI prompt, every code commit, every business event is logged. No opaque behaviour."
+        },
+        {
+          "name": "Guardrails",
+          "icon": "shield-alert",
+          "desc": "Policies, templates, and technical controls that bound AI action — from prompt structure through CI/CD deployment gates."
+        },
+        {
+          "name": "Evaluation",
+          "icon": "clipboard-check",
+          "desc": "Continuous multi-layer quality and risk verification — functional, security, performance, AI output, regression. Not a late phase."
+        }
+      ],
+      "memory_hook": "Observability — see what occurred. Guardrails — define what is permitted. Evaluation — verify that quality has held.",
+      "closing_thread": "We examine each pillar in turn, beginning with Observability.",
+      "narration": "OGE — three pillars. A three-legged construct. Observability is to see what occurred. Guardrails is to define what is permitted. Evaluation is to verify that quality has held. All three are required.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "The three pillars — Observability, Guardrails, Evaluation."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "A three-legged construct. Remove any one leg and the construct collapses."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "A useful mnemonic — Observability is to see what occurred. Guardrails is to define what is permitted. Evaluation is to verify that quality has held."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "We examine each in turn. Observability first — because without sight, no correction is possible."
+        }
+      ],
+      "background_music": {
+        "track_key": "pillars_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "competencies",
+      "act": "OGE — The Three Pillars",
+      "title": "Observability — Full Transparency by Design",
+      "subtitle": "Pillar 1 of 3",
+      "icon": "search",
+      "estimated_duration_seconds": 165,
+      "analogy": {
+        "title": "Flight recorder principle",
+        "text": "Commercial aircraft do not operate without flight recorders. Every input, every output, every decision is logged so that — when something goes wrong, and eventually something will — engineers do not guess. They replay."
+      },
+      "list": [
+        {
+          "name": "AI Interaction Logging",
+          "icon": "message-square-text",
+          "desc": "All prompts and AI-generated responses are logged. Complete audit trail of how code and logic were produced."
+        },
+        {
+          "name": "Code Versioning",
+          "icon": "git-commit",
+          "desc": "AI-generated code committed to version control — Git. Full history, rollback capability, ownership clarity."
+        },
+        {
+          "name": "System Monitoring",
+          "icon": "gauge",
+          "desc": "API logs, error tracking, performance metrics. Real-time visibility into system health."
+        },
+        {
+          "name": "Business Event Tracking",
+          "icon": "clipboard-check",
+          "desc": "Workflow-level logging — approvals, validations, state transitions. Transparent enforcement of business rules."
+        }
+      ],
+      "memory_hook": "No opaque behaviour. Every decision and output is explainable.",
+      "reflection_prompt": "Consider a system you operate today. If a defect arose, could a reviewer determine exactly what occurred and why? If not, that is an observability gap that OrchestrAI eliminates by design.",
+      "closing_thread": "Guardrails govern what AI is permitted to do.",
+      "narration": "Observability — four capabilities. AI interaction logging stores every prompt and response. Code versioning commits every AI-generated change to Git. System monitoring provides real-time visibility. Business event tracking logs workflow-level events. The outcome is that no system behaviour is opaque.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Observability is the flight recorder principle. Commercial aircraft do not operate without flight recorders."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Four capabilities. One — AI interaction logging. Every prompt and response is stored. The audit trail of how code came to exist."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Two — code versioning. Every AI-generated change committed to Git. Full history, rollback capability, ownership clarity."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "Three — system monitoring. API logs, error tracking, performance metrics in real time."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "Four — business event tracking. State transitions, approvals, validations all logged. Workflow behaviour becomes inspectable on demand."
+        }
+      ],
+      "background_music": {
+        "track_key": "pillars_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "competencies",
+      "act": "OGE — The Three Pillars",
+      "title": "Guardrails — Enterprise Control Mechanisms",
+      "subtitle": "Pillar 2 of 3",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 175,
+      "analogy": {
+        "title": "Highway safety infrastructure",
+        "text": "Highways install barriers not because drivers are incompetent, but because at high velocity there is no margin for error. The same principle applies to AI-accelerated development — at delivery speed, recovery from a security breach is not feasible."
+      },
+      "list": [
+        {
+          "name": "Prompt Guardrails",
+          "icon": "edit-3",
+          "desc": "Structured requirement templates. Mandatory business rules and edge cases. Reduces ambiguous or unsafe AI outputs."
+        },
+        {
+          "name": "Code Guardrails",
+          "icon": "code-2",
+          "desc": "Secure coding aligned to OWASP. Mandatory input validation and error handling. No deployment of unreviewed AI-generated code."
+        },
+        {
+          "name": "Access Control",
+          "icon": "user-cog",
+          "desc": "Role-based access control. Principle of least privilege. Server-side enforcement of authorisation on every request."
+        },
+        {
+          "name": "Data Protection",
+          "icon": "shield-check",
+          "desc": "No sensitive data in prompts. Masking or tokenisation where required. Alignment with GDPR, SOC 2, ISO 27001."
+        },
+        {
+          "name": "Deployment Guardrails",
+          "icon": "git-commit",
+          "desc": "Mandatory approval checkpoints. Security validation and test-pass criteria. Controlled CI/CD pipelines."
+        }
+      ],
+      "memory_hook": "Five categories — Prompt, Code, Access, Data, Deployment. Omitting any one constitutes a material risk.",
+      "closing_thread": "Evaluation completes the framework by verifying that the controls hold.",
+      "narration": "Guardrails — five categories. Prompt guardrails enforce structured templates. Code guardrails align to OWASP with no unreviewed deployment. Access control implements RBAC with server-side enforcement. Data protection prohibits sensitive data in prompts. Deployment guardrails establish controlled CI/CD with mandatory approval checkpoints.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "Guardrails — the highway safety infrastructure of an AI-accelerated build. At delivery speed, recovery from a breach is not feasible."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Five categories. First, prompt guardrails. Structured templates with mandatory business rules and edge cases. This reduces ambiguous or unsafe AI outputs at source."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Second, code guardrails. OWASP-aligned secure coding. Mandatory input validation. Mandatory error handling. No deployment of unreviewed AI-generated code under any circumstances."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Third, access control. Role-based access control. Principle of least privilege. Server-side enforcement on every request — never client-side alone."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "teasing",
+          "text": "Fourth, data protection. Sensitive data is never inserted into prompts. Masking or tokenisation is required where data must be referenced. GDPR, SOC 2, and ISO 27001 alignment is non-negotiable."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Fifth, deployment guardrails. Controlled CI/CD pipelines. Approval checkpoints. Security validation prior to promotion. The pipeline itself functions as a guardrail."
+        }
+      ],
+      "background_music": {
+        "track_key": "pillars_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "competencies",
+      "act": "OGE — The Three Pillars",
+      "title": "Evaluation — Continuous Quality Assurance",
+      "subtitle": "Pillar 3 of 3",
+      "icon": "clipboard-check",
+      "estimated_duration_seconds": 175,
+      "analogy": {
+        "title": "Continuous quality versus end-of-line inspection",
+        "text": "End-of-line inspection identifies defects after the product is complete. Continuous quality assurance prevents defects from being introduced at any stage. OrchestrAI implements the latter by design."
+      },
+      "list": [
+        {
+          "name": "Functional",
+          "icon": "check-circle",
+          "desc": "Business requirement accuracy. Test cases mapped one-to-one to each requirement."
+        },
+        {
+          "name": "Security",
+          "icon": "shield-alert",
+          "desc": "Static analysis security testing. Dependency vulnerability scans. Authentication and authorisation verification per route."
+        },
+        {
+          "name": "Performance",
+          "icon": "gauge",
+          "desc": "Load testing. Response time benchmarks. Scalability validation."
+        },
+        {
+          "name": "AI Output",
+          "icon": "brain",
+          "desc": "Accuracy verification of generated logic. Edge-case validation. Hallucination checks."
+        },
+        {
+          "name": "Regression",
+          "icon": "refresh-cw",
+          "desc": "Automated regression suites executed on every meaningful update. Stability across changes."
+        }
+      ],
+      "memory_hook": "Five layers — Functional, Security, Performance, AI Output, Regression. Continuous, never deferred.",
+      "closing_thread": "We have established the framework. The ten mandatory practices that operationalise it follow.",
+      "narration": "Evaluation — five layers. Functional verifies business requirement accuracy. Security executes SAST scans and dependency vulnerability checks. Performance conducts load testing and benchmarking. AI output validates generated logic and checks for hallucinations. Regression runs automated suites on every meaningful update.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Evaluation is the third pillar. It is not a phase. It is not deferred to the end of the engagement. It is continuous."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "Five layers. Functional — every business requirement has a corresponding test case. One-to-one mapping. No requirement is untested."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Security — static analysis security testing, dependency vulnerability checks, per-route authentication and authorisation verification. Automated on every pull request."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Performance — load testing and response-time benchmarks. AI Output — edge-case validation and hallucination checks. Regression — automated suites that execute on every change."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "If an OrchestrAI build does not exercise all five layers in an automated fashion, it is not an OrchestrAI build. It is an experiment."
+        }
+      ],
+      "background_music": {
+        "track_key": "pillars_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "recap",
+      "act": "OGE — The Three Pillars",
+      "title": "Ten Mandatory Practices",
+      "subtitle": "Non-negotiables for every OrchestrAI implementation",
+      "icon": "list-checks",
+      "estimated_duration_seconds": 160,
+      "items": [
+        "Define clear, structured prompts including business rules and constraints.",
+        "Enforce human-in-the-loop validation before deployment.",
+        "Log all AI interactions, outputs, and material system events.",
+        "Implement security controls from Day 1 — authentication, authorisation, validation.",
+        "Build features in small, testable units.",
+        "Run continuous testing — functional, integration, regression.",
+        "Use standard, maintainable technology stacks.",
+        "Establish AI usage policies and data-sharing boundaries.",
+        "Enable real-time monitoring and alerting.",
+        "Maintain living documentation alongside development."
+      ],
+      "memory_hook": "Ten practices. OGE operationalised. To be retained and applied without exception.",
+      "closing_thread": "We now turn to the two master prompts that operationalise OGE from the first interaction with an AI tool.",
+      "narration": "Ten mandatory practices. These operationalise OGE. Structured prompts, human-in-the-loop validation, comprehensive logging, day-one security, small testable units, continuous testing, standard stacks, AI usage policies, real-time monitoring, and living documentation. Retain and apply without exception.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Ten mandatory practices. Print this list. Retain it as a reference."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "These are not aspirations. They are the operating floor. Every OrchestrAI engagement implements all ten — without exception."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "The question that follows naturally — how does one ensure an AI tool actually honours these practices from the first prompt?"
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "Two master prompts. We provide them next as artifacts to retain."
+        }
+      ],
+      "background_music": {
+        "track_key": "pillars_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "welcome",
+      "act": "The Master Prompts",
+      "title": "The Two Master Prompts",
+      "subtitle": "Artifacts to retain and reuse",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 95,
+      "bullets": [
+        "Prompt T1 — Session Opener — issued after the document kit is assembled. Establishes rules of engagement.",
+        "Prompt T2 — Governance Bootstrap — issued when no governance document exists. Generates one.",
+        "Both prompts are short, reusable, and derived from production client engagements.",
+        "Retain in a permanent reference. These prompts initiate effectively every engagement."
+      ],
+      "memory_hook": "T1 opens the session. T2 generates the governance.",
+      "closing_thread": "We examine each prompt in detail.",
+      "narration": "Two master prompts. T1 is the session opener — issued after the document kit is assembled. T2 is the governance bootstrap — issued when no governance document exists. Both are short, reusable, and derived from production engagements.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Two master prompts. Both reusable. Both derived from production client engagements."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "T1 — the session opener. Issued after the document kit has been assembled. T2 — the governance bootstrap. Issued when no governance document exists."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "Retain both in a permanent reference. You will issue one of them at the start of effectively every engagement."
+        }
+      ],
+      "background_music": {
+        "track_key": "prompts_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "stats_hero",
+      "act": "The Master Prompts",
+      "title": "Master Prompt T1 — Session Opener",
+      "subtitle": "Issued after the document kit is attached",
+      "icon": "rocket",
+      "estimated_duration_seconds": 155,
+      "hero_stat": {
+        "value": "T1",
+        "label": "The session opener — issued once per engagement after kit attachment",
+        "icon": "rocket"
+      },
+      "analogy": {
+        "title": "Pre-flight briefing",
+        "text": "Before any commercial flight, the crew conducts a briefing — assignments, weather, no-go conditions. T1 fulfils that function for the AI tool. The engagement should not commence without it."
+      },
+      "bullets": [
+        "Quote verbatim — the exact wording matters:",
+        "→ \"Analyse the attached documents and be ready so that we can start building our app.\"",
+        "→ \"Stick to governance rules documents attached to make sure that we don't deviate.\"",
+        "→ \"And create the necessary documents as part of governance rules.\"",
+        "Mechanism: three sentences that compel the AI to acknowledge the documents, commit to governance, and announce deliverables before producing any code."
+      ],
+      "closing_thread": "Prompt T2 addresses the case where no governance document exists.",
+      "narration": "T1 — the session opener. Quote: Analyse the attached documents and be ready so that we can start building our app. Stick to governance rules documents attached to make sure that we don't deviate. And create the necessary documents as part of governance rules. Three sentences compel the AI to acknowledge, commit, and announce deliverables before any code is produced.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Prompt T1 — verbatim. The exact wording carries weight."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Quote — Analyse the attached documents and be ready so that we can start building our app. Stick to governance rules documents attached to make sure that we don't deviate. And create the necessary documents as part of governance rules. End quote."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "Three sentences performing three functions. First, compelling the AI to read and acknowledge the documents. Second, binding the AI to the governance overlay. Third, demanding deliverables prior to code."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "The third sentence is the one most practitioners omit. Do not omit it. That is the sentence that produces the FDD, the TDD, the database design — generated upfront, as we saw in the Issue Tracker engagement."
+        }
+      ],
+      "background_music": {
+        "track_key": "prompts_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "stats_hero",
+      "act": "The Master Prompts",
+      "title": "Master Prompt T2 — Governance Bootstrap",
+      "subtitle": "Issued when no governance document exists",
+      "icon": "shield-check",
+      "estimated_duration_seconds": 165,
+      "hero_stat": {
+        "value": "T2",
+        "label": "The governance bootstrap — produces the OGE rules document when none exists",
+        "icon": "shield-check"
+      },
+      "analogy": {
+        "title": "Establishing the rulebook",
+        "text": "On occasion, an engagement begins without an established rulebook. T2 produces one — a defensible governance document drafted on the spot, then refined for the specific client."
+      },
+      "bullets": [
+        "Quote: \"From a compliance and security standpoint, could you also address how observability, guardrails, and evaluations are built into the application to convince the clients\"",
+        "\"And also mention the key steps / Dos with respect to this while building any application in this approach.\"",
+        "Output: a governance rules document covering OGE, suitable for attachment alongside the document kit.",
+        "Refine with client-specific overlays — typically two to three additional constraints such as PCI DSS, HIPAA, or internal policy.",
+        "Thereafter that document serves as the governance reference for every subsequent prompt in the engagement."
+      ],
+      "memory_hook": "T2 produces governance — attach to kit — issue T1 — receive five design documents.",
+      "closing_thread": "We address the composition of the dynamic document kit next.",
+      "narration": "T2 — the governance bootstrap. Quote: From a compliance and security standpoint, could you also address how observability, guardrails, and evaluations are built into the application to convince the clients. And also mention the key steps Dos with respect to this while building any application in this approach. The output is a governance rules document covering OGE, suitable for kit attachment.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Prompt T2. Issued when no governance document is yet available. This is common in first-time engagements."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Quote — From a compliance and security standpoint, could you also address how observability, guardrails, and evaluations are built into the application to convince the clients. And also mention the key steps Dos with respect to this while building any application in this approach. End quote."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "The output is a governance rules document. Covers OGE comprehensively. Suitable for presentation to the client and for attachment alongside the document kit."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "Refine with client-specific overlays. Typically two or three additional constraints — PCI DSS, HIPAA, internal data-handling policies."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "Thereafter that document serves as the governance reference for every subsequent prompt in the engagement."
+        }
+      ],
+      "background_music": {
+        "track_key": "prompts_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "preview",
+      "act": "The Master Prompts",
+      "title": "The Document Kit — A Living Folder",
+      "subtitle": "Composed iteratively, not assembled upfront",
+      "icon": "book-open",
+      "estimated_duration_seconds": 115,
+      "items": [
+        "Governance rules document — from T2 or pre-existing — always present in the kit",
+        "Client intent notes — captured from discovery sessions",
+        "Tech stack decision — agreed between Lead and client",
+        "Coding standards reference — Airbnb, Google, or client-specific",
+        "UI design preferences — brand kit, colour tokens, layout principles",
+        "Folder structure template — feature-by-domain or layer-based",
+        "Additional documents — introduced into the kit as the engagement reveals new requirements"
+      ],
+      "memory_hook": "The kit is a living folder. New context is introduced mid-engagement; upfront completeness is not required.",
+      "closing_thread": "We now examine the actual output produced by T1 and T2 in the Issue Tracker engagement.",
+      "narration": "The document kit is a living folder. Governance rules are always present. Intent notes, tech stack, standards, UI preferences, folder structure — introduced as available. Additional documents are added as the engagement reveals new requirements. Upfront completeness is not required.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "A clarifying point — the document kit is not a one-time upfront checklist."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "It is a living folder. Governance rules are always present. Intent notes early. Tech stack, standards, UI preferences as they are established."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Mid-engagement, a new requirement emerges — for example, integration with an SAP system. A new document is introduced into the kit and referenced in subsequent prompts."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "We now examine the actual output produced when T1 fires against a kit. A real example, from the Issue Tracker engagement."
+        }
+      ],
+      "background_music": {
+        "track_key": "prompts_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "welcome",
+      "act": "Your Blueprint Ships",
+      "title": "What T1 and OGE Produce",
+      "subtitle": "Five design documents · generated in one session",
+      "icon": "file-text",
+      "estimated_duration_seconds": 95,
+      "hero_stat": {
+        "value": "5 documents",
+        "label": "FDD · TDD · DB Design · UI Specifications · Test Plan — generated under OGE constraints",
+        "icon": "file-text"
+      },
+      "bullets": [
+        "These are not theoretical templates. These are the actual documents that produced the vThink Issue Tracker.",
+        "Each was generated by the AI in one session — following T2 governance and T1 opener.",
+        "All five are available in the resource vault at the conclusion of the programme.",
+        "We now tour each document — its scope, and the role it plays in the engagement."
+      ],
+      "closing_thread": "Each document examined in turn.",
+      "narration": "What T1 plus OGE produce. Five design documents — FDD, TDD, DB Design, UI Specifications, Test Plan — generated in one session under OGE constraints. These are the actual documents that produced the vThink Issue Tracker engagement.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "T2 has been issued. T1 has been issued. What does the AI actually produce?"
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Five design documents. FDD. TDD. DB Design. UI Specifications. Test Plan. Generated in a single session."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "playful_intrigue",
+          "text": "These are not theoretical artifacts. These are the actual documents that produced the vThink Issue Tracker — the engagement you will examine hands-on in Modules 4, 5, and 6."
+        }
+      ],
+      "background_music": {
+        "track_key": "outro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "competencies",
+      "act": "Your Blueprint Ships",
+      "title": "FDD and TDD — Functional and Technical",
+      "subtitle": "Documents 1 and 2 of 5",
+      "icon": "file-text",
+      "estimated_duration_seconds": 155,
+      "list": [
+        {
+          "name": "FDD — Functional Design",
+          "icon": "users",
+          "desc": "What the application does. Roles — Admin, Manager, Developer-QA-Reporter. Authentication flow. Issue lifecycle. Workflow and comments. Reports. Each section maps to a user journey."
+        },
+        {
+          "name": "TDD — Technical Design",
+          "icon": "code-2",
+          "desc": "How the application is constructed. React SPA, NestJS modular monolith, Prisma ORM, PostgreSQL. JWT-based authentication with route guards. API surface at /api/v1. Repository layout."
+        }
+      ],
+      "memory_hook": "FDD is the client-facing document. TDD is the engineer-facing document. Both are required.",
+      "closing_thread": "Documents 3 and 4 cover the data structure and the visual system.",
+      "narration": "FDD and TDD. FDD is the functional design — what the application does, who uses it, the lifecycle of each entity. TDD is the technical design — how the application is constructed. React SPA, NestJS, Prisma, PostgreSQL, JWT, route guards, API surface, repository layout.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "Documents one and two. FDD and TDD."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "FDD — Functional Design Document. What the application does. Three roles. Authentication flow. Issue lifecycle. Comment rules. Reports. The client-facing reference."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "TDD — Technical Design Document. How the application is constructed. React single-page application. NestJS modular monolith. Prisma. PostgreSQL. JWT authentication with route guards. API surface at slash API slash v1. The engineer-facing reference."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "Both documents generated in the same session. From the same kit. Under the same governance constraints."
+        }
+      ],
+      "background_music": {
+        "track_key": "outro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "competencies",
+      "act": "Your Blueprint Ships",
+      "title": "DB Design and UI Specifications",
+      "subtitle": "Documents 3 and 4 of 5 · data and presentation",
+      "icon": "grid-3x3",
+      "estimated_duration_seconds": 155,
+      "list": [
+        {
+          "name": "DB Design",
+          "icon": "grid-3x3",
+          "desc": "PostgreSQL with Prisma. Core entities — Employee, User, Project, Issue, Comment, ActivityLog, ProjectCounter. Relationships, indexes on status, priority, projectId, enumerations. The data foundation."
+        },
+        {
+          "name": "UI Specifications",
+          "icon": "layout-template",
+          "desc": "Brand — vThink purple, hex 5A00EE. Sen font family. Split-view login layout. Sidebar shell. Light and dark themes. Table patterns. Accessibility requirements. The visual contract."
+        }
+      ],
+      "memory_hook": "DB Design defines the structure. UI Specifications define the surface. Both are written before code so that AI cannot drift.",
+      "closing_thread": "Document 5 — the verification framework.",
+      "narration": "DB Design and UI Specifications. DB Design is the data foundation — PostgreSQL with Prisma, entities, relationships, indexes, enumerations. UI Specifications define the visual contract — colours, typography, layout patterns, themes, accessibility. Both are written before code so that AI cannot drift.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Documents three and four. DB Design and UI Specifications."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "DB Design — PostgreSQL with Prisma. Seven core entities — Employee, User, Project, Issue, Comment, ActivityLog, ProjectCounter. Relationships, indexes, enumerations all explicitly defined."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "playful_intrigue",
+          "text": "UI Specifications — vThink purple, hex five A zero zero E E. Sen font family. Split-view login layout. Sidebar shell. Light and dark themes. Table patterns. Accessibility requirements."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "teasing",
+          "text": "DB Design defines structure. UI Specifications define surface. Both are written before code is generated — so that AI cannot drift from established intent."
+        }
+      ],
+      "background_music": {
+        "track_key": "outro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "welcome",
+      "act": "Your Blueprint Ships",
+      "title": "Test Plan and QA Handbook — The Verification Framework",
+      "subtitle": "Document 5 of 5 · how correctness is verified",
+      "icon": "shield-check",
+      "estimated_duration_seconds": 135,
+      "bullets": [
+        "Test Plan — concise and strategic. Objectives, test types — manual, API, automated. Coverage areas — auth, issues, comments, administration, reports. Entry and exit criteria.",
+        "QA Test Cases Handbook — the substantial reference. Twenty-six sections, approximately two hundred fifty test identifiers. Every feature, every transition, every edge case.",
+        "Note: the QA handbook was generated by AI in approximately twenty minutes from the FDD.",
+        "The QA team uses these documents to execute smoke and UAT alongside the client. We return to this in Module 6."
+      ],
+      "memory_hook": "Test Plan defines strategy. QA Handbook executes it. AI drafted both. Lead and QA refined both.",
+      "closing_thread": "The conceptual material is complete. We now verify retention through interactive exercises.",
+      "narration": "Test Plan and QA Handbook. Test Plan is concise and strategic — objectives, types, coverage areas, entry and exit criteria. QA Handbook is the substantial reference — twenty-six sections, approximately two hundred fifty test identifiers, every feature and edge case. The QA handbook was generated by AI in approximately twenty minutes from the FDD.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "The final document. Two related artifacts — Test Plan and QA Handbook."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Test Plan is concise and strategic. Objectives, test types, coverage areas, entry and exit criteria."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "QA Handbook is the substantial reference. Twenty-six sections. Approximately two hundred fifty test identifiers. Every feature, every state transition, every edge case."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "A point worth noting — the QA handbook was generated by AI in approximately twenty minutes from the FDD, under T1's governance constraints. That is not an exceptional result. That is OGE functioning as designed."
+        }
+      ],
+      "background_music": {
+        "track_key": "outro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "spot_the_flaw",
+      "act": "Your Blueprint Ships",
+      "title": "Identify the OGE failures in this opening prompt",
+      "subtitle": "Indicate every clause that breaches governance discipline",
+      "icon": "alert-triangle",
+      "estimated_duration_seconds": 125,
+      "text": "Build me a project tracker app fast. Use whatever stack you think is best. Skip the docs and just generate the code so we can demo it tomorrow. We will add tests later.",
+      "flaws": [
+        {
+          "phrase": "whatever stack you think is best",
+          "explanation": "Unspecified stack produces inconsistency. T1 requires the stack to be present in the attached document kit before code generation. Otherwise each regeneration yields a different framework."
+        },
+        {
+          "phrase": "Skip the docs",
+          "explanation": "Documents constitute governance. Omitting them means no FDD, no TDD, no DB design — the AI has no constraints. Drift becomes inevitable."
+        },
+        {
+          "phrase": "We will add tests later",
+          "explanation": "Evaluation is continuous, not deferred. Adding tests later means the third OGE pillar is not operational. By the time tests are added, defects have reached production."
+        }
+      ],
+      "narration": "Identify the OGE failures. This opening prompt breaches every principle examined. Three clauses violate governance discipline. Indicate each.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Practical exercise. An actual opening prompt submitted by a practitioner."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Three clauses breach OGE discipline. Each violates a different pillar. Indicate them."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "If all three are not immediately apparent, review slides seven through ten before proceeding."
+        }
+      ],
+      "background_music": {
+        "track_key": "outro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "mini_match",
+      "act": "Your Blueprint Ships",
+      "title": "Map each practice to its OGE pillar",
+      "subtitle": "Select a practice, then select the appropriate pillar",
+      "icon": "sparkles",
+      "estimated_duration_seconds": 95,
+      "pairs": [
+        {
+          "left": "Logging every AI prompt and response",
+          "right": "Observability"
+        },
+        {
+          "left": "RBAC with server-side enforcement",
+          "right": "Guardrails"
+        },
+        {
+          "left": "Automated regression suites on every PR",
+          "right": "Evaluation"
+        },
+        {
+          "left": "Workflow status transition log",
+          "right": "Observability"
+        },
+        {
+          "left": "No sensitive data inserted into prompts",
+          "right": "Guardrails"
+        },
+        {
+          "left": "SAST and dependency vulnerability scans",
+          "right": "Evaluation"
+        }
+      ],
+      "narration": "Map each practice to its OGE pillar. Six pairs.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "Six practices. Three pillars. Map each."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "Incorrect selections indicate visually. Correct selections lock confirmed. Proceed."
+        }
+      ],
+      "background_music": {
+        "track_key": "outro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "confidence_slider",
+      "act": "Your Blueprint Ships",
+      "title": "Readiness check before concluding",
+      "icon": "help-circle",
+      "estimated_duration_seconds": 75,
+      "prompt": "Given a client call transcript Monday morning, could you assemble the document kit, issue T2 to draft governance, issue T1 to produce FDD, TDD, DB Design, UI Specifications, and Test Plan — independently?",
+      "scale": {
+        "min_label": "Not yet",
+        "max_label": "Confidently"
+      },
+      "narration": "Readiness check. Given a client call transcript Monday morning, could you execute this workflow independently? Select a number. No answer is incorrect.",
+      "narration_script": [
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "A readiness check before we conclude."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Given a client call transcript placed on your desk Monday morning, could you execute this workflow independently — kit assembly, T2, T1, and the five design documents?"
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "Select a number. No selection is incorrect. The next three modules depend on this baseline."
+        }
+      ],
+      "background_music": {
+        "track_key": "outro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "act": "Your Blueprint Ships",
+      "title": "Module 3 Complete — The Bible is Established",
+      "subtitle": "Next · Module 4 — Foundation Build",
+      "icon": "rocket",
+      "estimated_duration_seconds": 85,
+      "hero_stat": {
+        "value": "3 / 6",
+        "label": "modules complete · the governance spine is in place",
+        "icon": "shield-check"
+      },
+      "bullets": [
+        "OGE — Observability, Guardrails, Evaluation — internalised.",
+        "T1 and T2 retained as reusable artifacts.",
+        "Dynamic document kit pattern understood — composed iteratively, not upfront.",
+        "Five design documents observed end-to-end in the Issue Tracker engagement.",
+        "Module 4 commences hands-on construction — authentication, application shell, dashboard — using prompts you will compose."
+      ],
+      "closing_thread": "We continue in Module 4.",
+      "narration": "Module 3 complete. OGE internalised. T1 and T2 retained. Dynamic document kit pattern understood. Five design documents observed end-to-end. Module 4 commences hands-on construction.",
+      "narration_script": [
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "amazed",
+          "text": "Module 3 is complete. The bible is established."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "real_talk",
+          "text": "OGE — internalised. T1 and T2 — retained as artifacts. The dynamic document kit pattern — understood. Five design documents — observed end-to-end."
+        },
+        {
+          "speaker": "Anjali",
+          "voice": "female_formal",
+          "emotion": "playful_intrigue",
+          "text": "Module 4 commences hands-on construction. Authentication, application shell, dashboard. The prompts will be composed by you."
+        },
+        {
+          "speaker": "Vikram",
+          "voice": "male_formal",
+          "emotion": "teasing",
+          "text": "We continue in Module 4."
+        }
+      ],
+      "background_music": {
+        "track_key": "outro_theme",
+        "fade_in_ms": 1500,
+        "fade_out_ms": 1200,
+        "duck_volume_percent": 10
+      }
+    }
+  ]
+}

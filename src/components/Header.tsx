@@ -124,6 +124,12 @@ export const Header: React.FC = () => {
     try {
       const existingUser = usersList.find((u) => u.email === formattedEmail);
 
+      if (existingUser && existingUser.disabled) {
+        setErrorMessage('Your account has been disabled/blacklisted. Please contact the administrator.');
+        setLoading(false);
+        return;
+      }
+
       if (authMode === 'login') {
         if (!existingUser) {
           setErrorMessage('This email address is not registered. Please click the "Register" tab above to create a new account.');
@@ -711,7 +717,7 @@ export const Header: React.FC = () => {
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
                     <div 
-                      className="absolute right-0 top-full mt-2 w-64 z-50 glass-card rounded-2xl p-4 animate-in fade-in slide-in-from-top-1 zoom-in-95 duration-200"
+                      className="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-32px)] z-50 glass-card rounded-2xl p-4 animate-in fade-in slide-in-from-top-1 zoom-in-95 duration-200"
                       style={{ position: 'absolute', top: '100%', right: 0, marginTop: '8px' }}
                     >
                       {/* Identity */}
@@ -774,6 +780,15 @@ export const Header: React.FC = () => {
             <Link to="/admin" className={`text-xs font-semibold ${isActive('/admin') ? 'text-purple-500' : 'text-[var(--text-secondary)]'}`}>
               Admin Settings
             </Link>
+          )}
+          {currentUser && (
+            <button
+              onClick={() => { logout(); setShowUserMenu(false); navigate('/'); }}
+              className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors flex items-center gap-1"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Logout</span>
+            </button>
           )}
         </div>
       </header>

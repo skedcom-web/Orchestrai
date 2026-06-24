@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import type { UserProfile, Submission } from '../context/AppContext';
-import { 
-  Shield, Settings, Mail, List, CheckCircle, 
+import {
+  Shield, Settings, Mail, List, CheckCircle,
   Trash2, Award, ExternalLink, Save,
   BarChart2, TrendingUp, Users, Activity, Search, Filter, Clock,
-  BookOpen, Upload, HelpCircle, Eye, EyeOff
+  BookOpen, Upload, HelpCircle, Eye, EyeOff, Ban, UserCheck, Radar,
+  Star, Sparkles, Download
 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
+import { computeLeadReadiness, scoreColor, tagColor, OUTREACH_TAGS, triggerCsvDownload } from '../utils/leadReadiness';
+import type { OutreachTag } from '../context/AppContext';
 
 export const Admin: React.FC = () => {
   const { 
     currentUser, 
     usersList, 
     updateUserProfile, 
+    toggleUserDisabledStatus,
     systemConfig, 
     updateSystemConfig,
     notificationLogs, 
@@ -29,10 +33,14 @@ export const Admin: React.FC = () => {
     wipeAndResetDatabase,
     auditLogs,
     visitorsList,
-    clearAuditLogs
+    clearAuditLogs,
+    outreachData,
+    setOutreachTag,
+    setOutreachNotes,
+    seedSampleCohort
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'submissions' | 'logs' | 'reports' | 'audit' | 'modules'>('reports');
+  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'submissions' | 'logs' | 'reports' | 'audit' | 'modules' | 'candidates'>('reports');
   const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'gating' | 'verification' | 'emailjs' | 'maintenance'>('connection');
   const [requireEmailVerifVal, setRequireEmailVerifVal] = useState(systemConfig.requireEmailVerification !== false);
   const [requirePhoneVerifVal, setRequirePhoneVerifVal] = useState(!!systemConfig.requirePhoneVerification);
@@ -52,8 +60,125 @@ export const Admin: React.FC = () => {
   const [auditCategory, setAuditCategory] = useState('ALL');
   const [auditCurrentPage, setAuditCurrentPage] = useState(1);
 
+  // Candidate Database States
+  const [candidateSearchTerm, setCandidateSearchTerm] = useState('');
+  const [filterScoreRange, setFilterScoreRange] = useState<'all' | 'passed' | 'top_scored'>('all');
+  const [filterModuleProgress, setFilterModuleProgress] = useState<'all' | 'completed_m1' | 'completed_m2' | 'passed_lab'>('all');
+  const [filterAccountStatus, setFilterAccountStatus] = useState<'all' | 'FREE_TIER' | 'PENDING_APPROVAL' | 'APPROVED' | 'CERTIFIED'>('all');
+  // Talent Radar filters
+  const [showStandoutsOnly, setShowStandoutsOnly] = useState(false);
+  const [filterOutreachTag, setFilterOutreachTag] = useState<'all' | OutreachTag | 'Untagged'>('all');
+  const [selectedCandidateDetail, setSelectedCandidateDetail] = useState<UserProfile | null>(null);
+  const [feedbackCandidate, setFeedbackCandidate] = useState<UserProfile | null>(null);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [isSendingFeedback, setIsSendingFeedback] = useState(false);
+
+  // Candidates calculations & filtering
+  const candidatesList = usersList.filter(u => u.role !== 'ADMIN');
+  const totalCands = candidatesList.length;
+  const m1CompleteCands = candidatesList.filter(c => c.progress?.modulesCompleted?.includes(1)).length;
+  const labCompleteCands = candidatesList.filter(c => (c.progress?.labsPassed || []).includes(1)).length;
+  const certifiedCands = candidatesList.filter(c => 
+    submissions.some(s => s.userEmail === c.email && (s.status === 'CERTIFIED' || s.status === 'HIRE_ELIGIBLE'))
+  ).length;
+
+  const filteredCandidates = candidatesList.filter(c => {
+    if (candidateSearchTerm.trim()) {
+      const term = candidateSearchTerm.toLowerCase();
+      const nameMatch = c.name?.toLowerCase().includes(term);
+      const emailMatch = c.email?.toLowerCase().includes(term);
+      const phoneMatch = c.mobile?.toLowerCase().includes(term);
+      if (!nameMatch && !emailMatch && !phoneMatch) return false;
+    }
+
+    if (filterScoreRange !== 'all') {
+      const quizScores = c.progress?.quizScores || {};
+      const scoresArray = Object.values(quizScores) as number[];
+      const bestScore = scoresArray.length > 0 ? Math.max(...scoresArray) : 0;
+      if (filterScoreRange === 'passed' && bestScore < 80) return false;
+      if (filterScoreRange === 'top_scored' && bestScore < 90) return false;
+    }
+
+    if (filterModuleProgress !== 'all') {
+      if (filterModuleProgress === 'completed_m1' && !c.progress?.modulesCompleted?.includes(1)) return false;
+      if (filterModuleProgress === 'completed_m2' && !c.progress?.modulesCompleted?.includes(2)) return false;
+      if (filterModuleProgress === 'passed_lab' && !(c.progress?.labsPassed || []).includes(1)) return false;
+    }
+
+    if (filterAccountStatus !== 'all') {
+      if (filterAccountStatus === 'CERTIFIED') {
+        const isCertified = submissions.some(s => s.userEmail === c.email && (s.status === 'CERTIFIED' || s.status === 'HIRE_ELIGIBLE'));
+        if (!isCertified) return false;
+      } else {
+        if (c.accountStatus !== filterAccountStatus) return false;
+      }
+    }
+
+    // Talent Radar filters
+    const hasSubmission = submissions.some((s) => s.userEmail === c.email);
+    const readiness = computeLeadReadiness(c, hasSubmission);
+    if (showStandoutsOnly && !readiness.isStandout) return false;
+    if (filterOutreachTag !== 'all') {
+      const tag = outreachData[c.uid]?.tag;
+      if (filterOutreachTag === 'Untagged' && tag) return false;
+      if (filterOutreachTag !== 'Untagged' && tag !== filterOutreachTag) return false;
+    }
+
+    return true;
+  })
+  // Sort high → low by Lead Readiness Score so the standouts surface
+  .sort((a, b) => {
+    const sa = computeLeadReadiness(a, submissions.some((s) => s.userEmail === a.email)).score;
+    const sb = computeLeadReadiness(b, submissions.some((s) => s.userEmail === b.email)).score;
+    return sb - sa;
+  });
+
+  // Cohort-wide readiness stats — surfaces "is this cohort hot or cold?"
+  const cohortStats = (() => {
+    if (candidatesList.length === 0) return { avg: 0, standouts: 0 };
+    let sum = 0, standouts = 0;
+    candidatesList.forEach((c) => {
+      const r = computeLeadReadiness(c, submissions.some((s) => s.userEmail === c.email));
+      sum += r.score;
+      if (r.isStandout) standouts++;
+    });
+    return { avg: Math.round(sum / candidatesList.length), standouts };
+  })();
+
+  // Export visible candidates to CSV — includes radar score + outreach metadata
+  const handleExportTalentCSV = () => {
+    const rows = filteredCandidates.map((c) => {
+      const hasSubmission = submissions.some((s) => s.userEmail === c.email);
+      const r = computeLeadReadiness(c, hasSubmission);
+      const o = outreachData[c.uid];
+      const quizScores = Object.values(c.progress?.quizScores || {});
+      return {
+        Name: c.name || '',
+        Email: c.email,
+        Phone: c.mobile || '',
+        Status: c.accountStatus,
+        Level: c.progress?.level || 1,
+        XP: c.progress?.xp || 0,
+        Streak: c.progress?.streakDays || 0,
+        'Quiz Avg': quizScores.length ? Math.round(quizScores.reduce((a, b) => a + b, 0) / quizScores.length) : 0,
+        'Labs Cleared': (c.progress?.labsPassed || []).length,
+        Submitted: hasSubmission ? 'Yes' : 'No',
+        Score: r.score,
+        Standout: r.isStandout ? 'Yes' : 'No',
+        Tag: o?.tag || 'New',
+        Notes: o?.notes || '',
+      };
+    });
+    triggerCsvDownload(rows, 'talent-radar');
+    addToast(`Exported ${rows.length} trainer${rows.length === 1 ? '' : 's'} to CSV.`, 'success');
+  };
+
   // Modules Management States
   const [selectedModId, setSelectedModId] = useState<number>(1);
+  // Modules 2-6 are 2-preset (Formal + Gen-Z only). Module 1 (and any future 4-tone module) keeps all 4.
+  // MUST stay in sync with TrainingPresenter.tsx's TWO_PRESET_MODULES list.
+  const TWO_PRESET_MODULE_IDS = [2, 3, 4, 5, 6];
+  const isTwoPresetMode = TWO_PRESET_MODULE_IDS.includes(selectedModId);
   const [modVideoUrl, setModVideoUrl] = useState('');
   const [modVideoType, setModVideoType] = useState<'url' | 'upload'>('url');
   const [modAudioUrl, setModAudioUrl] = useState('');
@@ -99,7 +224,11 @@ export const Admin: React.FC = () => {
   }, [selectedModId, systemConfig]);
 
   useEffect(() => {
-    setPresetTab('conversational');
+    if (isTwoPresetMode) {
+      setPresetTab('formal');
+    } else {
+      setPresetTab('conversational');
+    }
   }, [selectedModId]);
 
   useEffect(() => {
@@ -444,21 +573,37 @@ export const Admin: React.FC = () => {
       const text = event.target?.result as string;
       try {
         let parsed = JSON.parse(text);
+        // Capture wrapper metadata (schema_version, acts, last_updated) before unpacking.
+        // These describe the deck as a whole — useful for upload-time feedback.
+        let schemaVersion: string | undefined;
+        let actCount = 0;
         if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.slides)) {
-          console.log("[Admin] Unpacking slides from wrapper object...");
+          schemaVersion = parsed.schema_version;
+          actCount = Array.isArray(parsed.acts) ? parsed.acts.length : 0;
+          console.log("[Admin] Unpacking slides from wrapper object...", { schema_version: schemaVersion, acts: actCount, slide_count: parsed.slides.length });
           parsed = parsed.slides;
         }
         if (!Array.isArray(parsed)) {
           setJsonValidationErrors(prev => ({ ...prev, [key]: "JSON must be a valid array of slides." }));
           addToast("Invalid JSON structure: must be an array or contain a 'slides' array.", "error");
         } else {
+          // Detect per-slide act tagging even if wrapper-level acts weren't present.
+          const taggedActs = new Set<string>();
+          parsed.forEach((s: any) => { const a = s && (s.act || s.act_id); if (a) taggedActs.add(a); });
+
           const formatted = JSON.stringify(parsed, null, 2);
           if (key === 'conversational') setModSlidesConversational(formatted);
           else if (key === 'formal') setModSlidesFormal(formatted);
           else if (key === 'genz') setModSlidesGenz(formatted);
           else if (key === 'beginner') setModSlidesBeginner(formatted);
           setJsonValidationErrors(prev => ({ ...prev, [key]: null }));
-          addToast(`${key.toUpperCase()} slides JSON uploaded and formatted successfully!`, "success");
+
+          // Build a richer success message that surfaces the schema + act metadata.
+          const bits = [`${parsed.length} slides`];
+          if (schemaVersion) bits.push(`schema ${schemaVersion}`);
+          const totalActs = actCount || taggedActs.size;
+          if (totalActs > 0) bits.push(`${totalActs} acts`);
+          addToast(`${key.toUpperCase()} uploaded · ${bits.join(' · ')}`, "success");
         }
       } catch (err: any) {
         setJsonValidationErrors(prev => ({ ...prev, [key]: "JSON Parse Error: " + err.message }));
@@ -502,64 +647,76 @@ export const Admin: React.FC = () => {
 
   const handleSaveModuleConfig = () => {
     let conversationalParsed: any[] = [];
-    if (modSlidesConversational.trim()) {
-      try {
-        let parsed = JSON.parse(modSlidesConversational);
-        if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.slides)) {
-          parsed = parsed.slides;
-        }
-        conversationalParsed = parsed;
-        if (!Array.isArray(conversationalParsed)) {
-          addToast("Conversational slides must be a valid JSON array.", "error");
+    if (!isTwoPresetMode || !modHasPresets) {
+      if (modSlidesConversational.trim()) {
+        try {
+          let parsed = JSON.parse(modSlidesConversational);
+          if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.slides)) {
+            parsed = parsed.slides;
+          }
+          conversationalParsed = parsed;
+          if (!Array.isArray(conversationalParsed)) {
+            addToast("Conversational slides must be a valid JSON array.", "error");
+            return;
+          }
+        } catch (err: any) {
+          addToast("Conversational JSON Parse Error: " + err.message, "error");
           return;
         }
-      } catch (err: any) {
-        addToast("Conversational JSON Parse Error: " + err.message, "error");
+      } else {
+        addToast("Conversational (Default) slides JSON is required.", "error");
         return;
       }
-    } else {
-      addToast("Conversational (Default) slides JSON is required.", "error");
-      return;
     }
 
     let formalParsed: any[] = [];
-    if (modHasPresets && modSlidesFormal.trim()) {
-      try {
-        let parsed = JSON.parse(modSlidesFormal);
-        if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.slides)) {
-          parsed = parsed.slides;
-        }
-        formalParsed = parsed;
-        if (!Array.isArray(formalParsed)) {
-          addToast("Formal slides must be a valid JSON array.", "error");
+    if (modHasPresets && (!isTwoPresetMode || modSlidesFormal.trim())) {
+      if (modSlidesFormal.trim()) {
+        try {
+          let parsed = JSON.parse(modSlidesFormal);
+          if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.slides)) {
+            parsed = parsed.slides;
+          }
+          formalParsed = parsed;
+          if (!Array.isArray(formalParsed)) {
+            addToast("Formal slides must be a valid JSON array.", "error");
+            return;
+          }
+        } catch (err: any) {
+          addToast("Formal JSON Parse Error: " + err.message, "error");
           return;
         }
-      } catch (err: any) {
-        addToast("Formal JSON Parse Error: " + err.message, "error");
+      } else if (isTwoPresetMode) {
+        addToast("Formal slides JSON is required.", "error");
         return;
       }
     }
 
     let genzParsed: any[] = [];
-    if (modHasPresets && modSlidesGenz.trim()) {
-      try {
-        let parsed = JSON.parse(modSlidesGenz);
-        if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.slides)) {
-          parsed = parsed.slides;
-        }
-        genzParsed = parsed;
-        if (!Array.isArray(genzParsed)) {
-          addToast("Gen-Z slides must be a valid JSON array.", "error");
+    if (modHasPresets && (!isTwoPresetMode || modSlidesGenz.trim())) {
+      if (modSlidesGenz.trim()) {
+        try {
+          let parsed = JSON.parse(modSlidesGenz);
+          if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.slides)) {
+            parsed = parsed.slides;
+          }
+          genzParsed = parsed;
+          if (!Array.isArray(genzParsed)) {
+            addToast("Gen-Z slides must be a valid JSON array.", "error");
+            return;
+          }
+        } catch (err: any) {
+          addToast("Gen-Z JSON Parse Error: " + err.message, "error");
           return;
         }
-      } catch (err: any) {
-        addToast("Gen-Z JSON Parse Error: " + err.message, "error");
+      } else if (isTwoPresetMode) {
+        addToast("Gen-Z slides JSON is required.", "error");
         return;
       }
     }
 
     let beginnerParsed: any[] = [];
-    if (modHasPresets && modSlidesBeginner.trim()) {
+    if (!isTwoPresetMode && modHasPresets && modSlidesBeginner.trim()) {
       try {
         let parsed = JSON.parse(modSlidesBeginner);
         if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.slides)) {
@@ -585,12 +742,17 @@ export const Admin: React.FC = () => {
       hasPresets: modHasPresets
     };
 
-    const slidesPayload = modHasPresets ? {
-      conversational: conversationalParsed,
-      formal: formalParsed,
-      genz: genzParsed,
-      beginner: beginnerParsed
-    } : conversationalParsed;
+    const slidesPayload = modHasPresets ? (
+      isTwoPresetMode ? {
+        formal: formalParsed,
+        genz: genzParsed
+      } : {
+        conversational: conversationalParsed,
+        formal: formalParsed,
+        genz: genzParsed,
+        beginner: beginnerParsed
+      }
+    ) : conversationalParsed;
 
     const updatedMedia = {
       ...(systemConfig.moduleMedia || {}),
@@ -611,28 +773,34 @@ export const Admin: React.FC = () => {
   };
   
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-      
-      {/* Panel Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-[var(--border-color)] pb-5 mb-8">
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight flex items-center space-x-2">
-            <Shield className="h-7 w-7 text-purple-500" />
-            <span>Admin Control Panel</span>
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-1">
-            Configure system configurations, email alerts, manual payment approvals, and candidate submissions.
-          </p>
+    <div className="mx-auto max-w-[1760px] px-6 lg:px-10 xl:px-14 py-6">
+
+      {/* Panel Title — compact strip with inline status pill */}
+      <div className="flex items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4 mb-6">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 text-purple-400">
+            <Shield className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--text-primary)] leading-tight">Admin Control Panel</h2>
+            <p className="text-[11px] text-[var(--text-secondary)] mt-0.5 truncate">System configuration · approvals · talent intelligence</p>
+          </div>
         </div>
-        <div className="mt-3 sm:mt-0 bg-purple-500/10 border border-purple-500/20 text-purple-400 px-3 py-1 rounded text-xs font-semibold uppercase tracking-wider self-start sm:self-center">
-          Active: Sithanandham R.
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="hidden md:inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> Online
+          </span>
+          <span className="bg-purple-500/10 border border-purple-500/25 text-purple-400 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide whitespace-nowrap">
+            {currentUser?.name || 'Admin'}
+          </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        
+      <div className="grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)] gap-6">
+
         {/* Left Side Tab Navigation */}
-        <div className="lg:col-span-1 space-y-1">
+        <div className="space-y-1">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-1 pb-1.5">Overview</p>
           <button
             onClick={() => setActiveTab('reports')}
             className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
@@ -644,6 +812,8 @@ export const Admin: React.FC = () => {
             <BarChart2 className="h-4 w-4" />
             <span>Reports & Insights</span>
           </button>
+
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-3 pb-1.5">Training Ops</p>
 
           <button
             onClick={() => setActiveTab('modules')}
@@ -695,6 +865,29 @@ export const Admin: React.FC = () => {
             )}
           </button>
 
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-3 pb-1.5">Talent</p>
+
+          <button
+            onClick={() => setActiveTab('candidates')}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-xs font-bold transition-all ${
+              activeTab === 'candidates'
+                ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <Radar className="h-4 w-4" />
+              <span>Talent Radar</span>
+            </div>
+            {usersList.filter(u => u.role !== 'ADMIN').length > 0 && (
+              <span className="bg-purple-500/20 text-purple-400 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                {usersList.filter(u => u.role !== 'ADMIN').length}
+              </span>
+            )}
+          </button>
+
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-3 pb-1.5">System</p>
+
           <button
             onClick={() => setActiveTab('logs')}
             className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
@@ -733,74 +926,94 @@ export const Admin: React.FC = () => {
         </div>
 
         {/* Right Side Content Pane */}
-        <div className="lg:col-span-3 space-y-6">
+        <div className="min-w-0 space-y-6">
           
           {/* TAB: REPORTS & INSIGHTS */}
           {activeTab === 'reports' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
-              {/* Summary Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="glass-card rounded-xl p-5 border border-[var(--border-color)] bg-slate-500/5 flex items-center justify-between hover:-translate-y-0.5 transition-all">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Total Traffic</p>
-                    <h3 className="text-2xl font-extrabold text-[var(--text-primary)]">{visitorsList.length}</h3>
-                    <p className="text-[9px] text-[var(--text-muted)] font-semibold">Unique anonymous visitors</p>
+              {/* Hero header — matches Talent Radar polish */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-indigo-500/5 via-[var(--bg-card)]/40 to-purple-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start gap-4">
+                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-500/25">
+                    <BarChart2 className="h-6 w-6" />
                   </div>
-                  <div className="p-3 bg-indigo-500/10 rounded-xl text-indigo-400">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Reports & Insights</h3>
+                      <span className="text-[10px] font-extrabold text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Live Metrics</span>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                      Real-time view of the cohort — from anonymous landing-page traffic to certified graduates. Updated every time a visitor lands, a learner progresses, or a portfolio is reviewed.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Summary Cards — accent gradient per dimension */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="glass-card rounded-2xl p-5 border border-indigo-500/25 bg-gradient-to-br from-indigo-500/8 to-transparent flex items-center justify-between hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-1 min-w-0">
+                    <p className="text-[11px] font-extrabold text-indigo-400 uppercase tracking-[0.12em]">Total Traffic</p>
+                    <h3 className="text-3xl font-extrabold text-[var(--text-primary)] leading-none mt-1">{visitorsList.length}</h3>
+                    <p className="text-[10px] text-[var(--text-muted)] font-semibold mt-1.5">Unique anonymous visitors</p>
+                  </div>
+                  <div className="h-12 w-12 shrink-0 rounded-xl bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center text-indigo-400">
                     <Users className="h-6 w-6" />
                   </div>
                 </div>
 
-                <div className="glass-card rounded-xl p-5 border border-[var(--border-color)] bg-slate-500/5 flex items-center justify-between hover:-translate-y-0.5 transition-all">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Explored Modules</p>
-                    <h3 className="text-2xl font-extrabold text-[var(--text-primary)]">
+                <div className="glass-card rounded-2xl p-5 border border-purple-500/25 bg-gradient-to-br from-purple-500/8 to-transparent flex items-center justify-between hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-1 min-w-0">
+                    <p className="text-[11px] font-extrabold text-purple-400 uppercase tracking-[0.12em]">Explored Modules</p>
+                    <h3 className="text-3xl font-extrabold text-[var(--text-primary)] leading-none mt-1">
                       {visitorsList.filter(v => v.viewedModule1 || v.viewedModule2).length}
                     </h3>
-                    <p className="text-[9px] text-[var(--text-muted)] font-semibold">Viewed Module 1 or 2 slides</p>
+                    <p className="text-[10px] text-[var(--text-muted)] font-semibold mt-1.5">Viewed Module 1 or 2 slides</p>
                   </div>
-                  <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400">
+                  <div className="h-12 w-12 shrink-0 rounded-xl bg-purple-500/15 border border-purple-500/25 flex items-center justify-center text-purple-400">
                     <Activity className="h-6 w-6" />
                   </div>
                 </div>
 
-                <div className="glass-card rounded-xl p-5 border border-[var(--border-color)] bg-slate-500/5 flex items-center justify-between hover:-translate-y-0.5 transition-all">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Registered Learners</p>
-                    <h3 className="text-2xl font-extrabold text-[var(--text-primary)]">
+                <div className="glass-card rounded-2xl p-5 border border-cyan-500/25 bg-gradient-to-br from-cyan-500/8 to-transparent flex items-center justify-between hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-1 min-w-0">
+                    <p className="text-[11px] font-extrabold text-cyan-400 uppercase tracking-[0.12em]">Registered Learners</p>
+                    <h3 className="text-3xl font-extrabold text-[var(--text-primary)] leading-none mt-1">
                       {usersList.filter(u => u.email !== 'vthinkorchestrai@gmail.com').length}
                     </h3>
-                    <p className="text-[9px] text-[var(--text-muted)] font-semibold">Created academy profiles</p>
+                    <p className="text-[10px] text-[var(--text-muted)] font-semibold mt-1.5">Created academy profiles</p>
                   </div>
-                  <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                  <div className="h-12 w-12 shrink-0 rounded-xl bg-cyan-500/15 border border-cyan-500/25 flex items-center justify-center text-cyan-400">
                     <TrendingUp className="h-6 w-6" />
                   </div>
                 </div>
 
-                <div className="glass-card rounded-xl p-5 border border-[var(--border-color)] bg-slate-500/5 flex items-center justify-between hover:-translate-y-0.5 transition-all">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">Certified Grads</p>
-                    <h3 className="text-2xl font-extrabold text-[var(--text-primary)]">
+                <div className="glass-card rounded-2xl p-5 border border-emerald-500/25 bg-gradient-to-br from-emerald-500/8 to-transparent flex items-center justify-between hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-1 min-w-0">
+                    <p className="text-[11px] font-extrabold text-emerald-400 uppercase tracking-[0.12em]">Certified Grads</p>
+                    <h3 className="text-3xl font-extrabold text-[var(--text-primary)] leading-none mt-1">
                       {submissions.filter(s => s.status === 'CERTIFIED' || s.status === 'HIRE_ELIGIBLE').length}
                     </h3>
-                    <p className="text-[9px] text-[var(--text-muted)] font-semibold">Passed portfolio review</p>
+                    <p className="text-[10px] text-[var(--text-muted)] font-semibold mt-1.5">Passed portfolio review</p>
                   </div>
-                  <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                  <div className="h-12 w-12 shrink-0 rounded-xl bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center text-emerald-400">
                     <Award className="h-6 w-6" />
                   </div>
                 </div>
               </div>
 
               {/* Conversion Funnel */}
-              <div className="glass-card rounded-xl p-6 border border-[var(--border-color)] space-y-6">
-                <div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5">
-                    <TrendingUp className="h-4 w-4 text-indigo-400" />
-                    <span>Visitor Conversion Funnel</span>
-                  </h3>
-                  <p className="text-[11px] text-[var(--text-secondary)] mt-1">
-                    Track the activation journey from initial landing page visit to certified graduation.
-                  </p>
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)] space-y-6">
+                <div className="flex items-start gap-3 border-b border-[var(--border-color)] pb-4">
+                  <div className="h-9 w-9 shrink-0 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                    <TrendingUp className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-extrabold text-[var(--text-primary)] tracking-tight">Visitor Conversion Funnel</h3>
+                    <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                      The activation journey — anonymous landing visit → certified graduation.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Funnel chart steps */}
@@ -852,15 +1065,17 @@ export const Admin: React.FC = () => {
               </div>
 
               {/* Heatmap Section */}
-              <div className="glass-card rounded-xl p-6 border border-[var(--border-color)] space-y-6">
-                <div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5">
-                    <BarChart2 className="h-4 w-4 text-purple-400" />
-                    <span>Modules Completion Heatmap</span>
-                  </h3>
-                  <p className="text-[11px] text-[var(--text-secondary)] mt-1">
-                    Completion rate distribution for each of the 8 curriculum training modules.
-                  </p>
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)] space-y-6">
+                <div className="flex items-start gap-3 border-b border-[var(--border-color)] pb-4">
+                  <div className="h-9 w-9 shrink-0 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                    <BarChart2 className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-extrabold text-[var(--text-primary)] tracking-tight">Modules Completion Heatmap</h3>
+                    <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                      Completion rate per module — at a glance, which content is landing and which is being skipped.
+                    </p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
@@ -869,21 +1084,34 @@ export const Admin: React.FC = () => {
                     const completions = usersList.filter(u => u.email !== 'vthinkorchestrai@gmail.com' && u.progress?.modulesCompleted?.includes(modId)).length;
                     const totalLearners = Math.max(1, usersList.filter(u => u.email !== 'vthinkorchestrai@gmail.com').length);
                     const percentage = Math.round((completions / totalLearners) * 100);
+                    // Color band by completion — gives the heatmap an actual heat dimension
+                    const band = percentage >= 70 ? 'from-emerald-500 to-teal-400 text-emerald-400 border-emerald-500/30 bg-emerald-500/5'
+                      : percentage >= 40 ? 'from-indigo-500 to-purple-500 text-indigo-400 border-indigo-500/30 bg-indigo-500/5'
+                      : percentage >= 15 ? 'from-amber-500 to-orange-500 text-amber-400 border-amber-500/30 bg-amber-500/5'
+                      : 'from-slate-500 to-slate-400 text-[var(--text-muted)] border-[var(--border-color)] bg-slate-500/5';
+                    const [gradCls, textCls, borderCls, bgCls] = band.split(' ');
                     return (
-                      <div key={modId} className="flex flex-col items-center p-3 rounded-xl border border-[var(--border-color)] bg-slate-500/5 hover:bg-slate-500/10 transition-all group">
-                        <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-2">Mod {modId}</span>
-                        {/* Vertical Bar Container */}
-                        <div className="w-6 h-24 bg-[var(--surface-sunken)] rounded-full relative overflow-hidden flex items-end">
-                          <div 
-                            className="w-full bg-gradient-to-t from-indigo-500 to-purple-600 rounded-full transition-all duration-500 group-hover:brightness-110" 
-                            style={{ height: `${percentage}%` }}
+                      <div key={modId} className={`flex flex-col items-center p-3.5 rounded-xl border ${borderCls} ${bgCls} hover:brightness-110 transition-all group`}>
+                        <span className="text-[10px] font-extrabold text-[var(--text-secondary)] uppercase tracking-[0.12em] mb-2.5">Module {modId}</span>
+                        <div className="w-7 h-24 bg-[var(--surface-sunken)] rounded-full relative overflow-hidden flex items-end">
+                          <div
+                            className={`w-full bg-gradient-to-t ${gradCls} ${band.split(' ').slice(1,2).join(' ')} rounded-full transition-all duration-700 group-hover:brightness-125`}
+                            style={{ height: `${Math.max(4, percentage)}%` }}
                           />
                         </div>
-                        <span className="text-xs font-extrabold text-[var(--text-primary)] mt-3">{completions}</span>
-                        <span className="text-[9px] text-[var(--text-muted)] font-semibold mt-0.5">{percentage}%</span>
+                        <span className="text-base font-extrabold text-[var(--text-primary)] mt-3 leading-none">{completions}</span>
+                        <span className={`text-[10px] font-extrabold mt-1 ${textCls}`}>{percentage}%</span>
                       </div>
                     );
                   })}
+                </div>
+                {/* Legend */}
+                <div className="flex flex-wrap items-center gap-3 text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider pt-2 border-t border-[var(--border-color)]">
+                  <span>Legend:</span>
+                  <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /> ≥70%</span>
+                  <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-indigo-500" /> 40–69%</span>
+                  <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" /> 15–39%</span>
+                  <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-slate-500" /> &lt;15%</span>
                 </div>
               </div>
             </div>
@@ -891,34 +1119,44 @@ export const Admin: React.FC = () => {
 
           {/* TAB: SYSTEM AUDIT LOG */}
           {activeTab === 'audit' && (
-            // ... truncated for space ...
-            <div className="glass-card rounded-xl p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-[var(--border-color)] pb-3 gap-3">
-                <div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5">
-                    <Clock className="h-4 w-4 text-purple-500" />
-                    <span>System Activity & Audit Log</span>
-                  </h3>
-                  <p className="text-[11px] text-[var(--text-secondary)] mt-1">
-                    Trace all core settings updates, user logins, registrations, and student progression events.
-                  </p>
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-slate-500/5 via-[var(--bg-card)]/40 to-purple-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-slate-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-slate-500/25">
+                      <Activity className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">System Audit Log</h3>
+                        <span className="text-[10px] font-extrabold text-purple-400 bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Forensic Trail</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                        Every settings update, login, registration, and progression event recorded. Searchable, filterable, exportable — the system's memory.
+                      </p>
+                    </div>
+                  </div>
+                  {auditLogs.length > 0 && (
+                    <button
+                      onClick={() => {
+                        confirmAction(
+                          "CLEAR SYSTEM AUDIT LOGS?",
+                          "WARNING: This will permanently wipe all logs of logins, settings changes, and student scores. This cannot be undone.",
+                          () => clearAuditLogs()
+                        );
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-2 text-red-400 hover:bg-red-500/10 border border-red-500/30 hover:border-red-500/50 rounded-lg text-xs font-bold transition-all shrink-0"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      <span>Clear Audit Logs</span>
+                    </button>
+                  )}
                 </div>
-                {auditLogs.length > 0 && (
-                  <button
-                    onClick={() => {
-                      confirmAction(
-                        "CLEAR SYSTEM AUDIT LOGS?",
-                        "WARNING: This will permanently wipe all logs of logins, settings changes, and student scores. This cannot be undone.",
-                        () => clearAuditLogs()
-                      );
-                    }}
-                    className="flex items-center space-x-1 px-2.5 py-1 text-red-400 hover:bg-red-500/10 border border-red-500/15 rounded text-[11px] font-semibold transition-all self-start sm:self-center cursor-pointer"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                    <span>Clear Audit Logs</span>
-                  </button>
-                )}
               </div>
+
+              {/* Content card */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)] space-y-6">
 
               {/* Filters Toolbar */}
               <div className="flex flex-col sm:flex-row gap-3">
@@ -1072,17 +1310,32 @@ export const Admin: React.FC = () => {
                   </div>
                 );
               })()}
+              </div>
             </div>
           )}
 
           {/* TAB: MANAGE MODULES */}
           {activeTab === 'modules' && (
-            <div className="glass-card rounded-xl p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
-              <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3">
-                <BookOpen className="h-4 w-4 text-purple-500" />
-                <span>Manage Curriculum Modules</span>
-              </h3>
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-amber-500/5 via-[var(--bg-card)]/40 to-orange-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start gap-4">
+                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-amber-500/25">
+                    <BookOpen className="h-6 w-6" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Manage Curriculum Modules</h3>
+                      <span className="text-[10px] font-extrabold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Content Studio</span>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                      Configure each module's slides JSON, video briefing, AI avatar audio, and tone presets. Upload v6+ slide decks with acts and interactivity baked in.
+                    </p>
+                  </div>
+                </div>
+              </div>
 
+              {/* Content */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Module selector */}
                 <div className="md:col-span-1">
@@ -1196,13 +1449,13 @@ export const Admin: React.FC = () => {
                       />
                       <div>
                         <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1">
-                          Enable 4-Tone Presets for this Module
-                          <span title="Enables separate uploads for Formal, Conversational, Gen-Z, and Beginner slide decks.">
+                          Enable {[2, 3, 4, 5, 6].includes(selectedModId) ? '2-Preset' : '4-Tone'} Mode for this Module
+                          <span title={[2, 3, 4, 5, 6].includes(selectedModId) ? "Enables separate uploads for Formal and Gen-Z slide decks." : "Enables separate uploads for Formal, Conversational, Gen-Z, and Beginner slide decks."}>
                             <HelpCircle className="h-3.5 w-3.5 text-purple-400" />
                           </span>
                         </span>
                         <span className="text-[10px] text-[var(--text-secondary)] mt-0.5 leading-relaxed block">
-                          If enabled, candidates can choose their preferred learning style (Conversational, Formal, Gen-Z, or Beginner) at launch.
+                          If enabled, candidates can choose their preferred learning style ({[2, 3, 4, 5, 6].includes(selectedModId) ? 'Formal or Gen-Z' : 'Conversational, Formal, Gen-Z, or Beginner'}) at launch.
                         </span>
                       </div>
                     </label>
@@ -1218,7 +1471,7 @@ export const Admin: React.FC = () => {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[var(--border-color)] pb-3">
                       <div>
                         <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-primary)]">
-                          Configure 4-Tone Presets
+                          Configure {isTwoPresetMode ? '2-Tone' : '4-Tone'} Presets
                         </h4>
                         <p className="text-[10px] text-[var(--text-secondary)] mt-0.5">
                           Select each preset tab to upload the corresponding slide deck JSON.
@@ -1241,7 +1494,7 @@ export const Admin: React.FC = () => {
 
                     {/* Preset Selector Tabs */}
                     <div className="flex flex-wrap gap-2">
-                      {(['conversational', 'formal', 'genz', 'beginner'] as const).map((tab) => (
+                      {(isTwoPresetMode ? ['formal', 'genz'] as const : ['conversational', 'formal', 'genz', 'beginner'] as const).map((tab) => (
                         <button
                           key={tab}
                           type="button"
@@ -1385,16 +1638,26 @@ export const Admin: React.FC = () => {
           {/* TAB 1: SYSTEM SETTINGS (CONSOLIDATED) */}
           {activeTab === 'settings' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
-              {/* Header card */}
-              <div className="glass-card rounded-xl p-6 border border-[var(--border-color)]">
-                <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3 mb-4">
-                  <Settings className="h-5 w-5 text-purple-500" />
-                  <span>System Settings & Configuration</span>
-                </h3>
-                <p className="text-xs text-[var(--text-secondary)] mb-6">
-                  Manage database connectivity, custom workflow gating rules, authentication options, and EmailJS integrations from a unified workspace.
-                </p>
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-violet-500/5 via-[var(--bg-card)]/40 to-fuchsia-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start gap-4">
+                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-violet-500/25">
+                    <Settings className="h-6 w-6" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">System Settings</h3>
+                      <span className="text-[10px] font-extrabold text-violet-400 bg-violet-500/10 border border-violet-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Configuration</span>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                      Database connectivity, workflow gating rules, authentication options, and EmailJS integrations — all in one place.
+                    </p>
+                  </div>
+                </div>
+              </div>
 
+              {/* Content card */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
                 {/* Sub-Tab navigation bar */}
                 <div className="flex flex-wrap gap-2 border-b border-[var(--border-color)] pb-4 mb-6">
                   {(['connection', 'gating', 'verification', 'emailjs', 'maintenance'] as const).map((subTab) => (
@@ -1956,12 +2219,34 @@ export const Admin: React.FC = () => {
 
           {/* TAB 3: PENDING APPROVAL USERS */}
           {activeTab === 'approvals' && (
-            <div className="glass-card rounded-xl p-6">
-              <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3 mb-6">
-                <CheckCircle className="h-4 w-4 text-purple-500" />
-                <span>Manual Verification & Approval Requests</span>
-              </h3>
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-emerald-500/5 via-[var(--bg-card)]/40 to-teal-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-500/25">
+                      <CheckCircle className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Manual Approvals</h3>
+                        <span className="text-[10px] font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Payment Gate</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                        Verify ₹99 payments and unlock premium access (Modules 3–8). Pending requests show up here when the workflow is set to Manual approval mode.
+                      </p>
+                    </div>
+                  </div>
+                  {pendingUsers.length > 0 && (
+                    <span className="px-3 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-extrabold shrink-0">
+                      {pendingUsers.length} pending
+                    </span>
+                  )}
+                </div>
+              </div>
 
+              {/* Content card */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
               {pendingUsers.length === 0 ? (
                 <div className="py-12 text-center text-[var(--text-secondary)]">
                   <CheckCircle className="h-10 w-10 text-emerald-500/30 mx-auto mb-2" />
@@ -2000,17 +2285,40 @@ export const Admin: React.FC = () => {
                   </table>
                 </div>
               )}
+              </div>
             </div>
           )}
 
           {/* TAB 4: PORTFOLIO SUBMISSIONS REVIEW */}
           {activeTab === 'submissions' && (
-            <div className="glass-card rounded-xl p-6">
-              <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5 border-b border-[var(--border-color)] pb-3 mb-6">
-                <Award className="h-4 w-4 text-purple-500" />
-                <span>Candidate Portfolio Evaluation</span>
-              </h3>
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-cyan-500/5 via-[var(--bg-card)]/40 to-blue-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-cyan-500/25">
+                      <Award className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Project Submissions</h3>
+                        <span className="text-[10px] font-extrabold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Portfolio Review</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                        Inspect candidate GitHub repos and AI prompt logs. Award certification — Hire-Eligible (≥90%) or Standard Certified — and trigger their result email.
+                      </p>
+                    </div>
+                  </div>
+                  {submissions.filter(s => s.status === 'SUBMITTED').length > 0 && (
+                    <span className="px-3 py-1.5 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-300 text-xs font-extrabold shrink-0">
+                      {submissions.filter(s => s.status === 'SUBMITTED').length} awaiting review
+                    </span>
+                  )}
+                </div>
+              </div>
 
+              {/* Content card */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
               {submissions.length === 0 ? (
                 <div className="py-12 text-center text-[var(--text-secondary)]">
                   <Award className="h-10 w-10 text-indigo-500/30 mx-auto mb-2" />
@@ -2101,27 +2409,44 @@ export const Admin: React.FC = () => {
                   ))}
                 </div>
               )}
+              </div>
             </div>
           )}
 
-          {/* TAB 5: AUDIT LOGS */}
+          {/* TAB 5: NOTIFICATION DELIVERY LOG */}
           {activeTab === 'logs' && (
-            <div className="glass-card rounded-xl p-6">
-              <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-6">
-                <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5">
-                  <List className="h-4 w-4 text-purple-500" />
-                  <span>Notification Delivery Audit Log</span>
-                </h3>
-                {notificationLogs.length > 0 && (
-                  <button
-                    onClick={clearNotificationLogs}
-                    className="flex items-center space-x-1 px-2.5 py-1 text-red-400 hover:bg-red-500/10 border border-red-500/15 rounded text-[11px] font-semibold transition-all"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                    <span>Clear Logs</span>
-                  </button>
-                )}
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-rose-500/5 via-[var(--bg-card)]/40 to-pink-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-rose-500/25">
+                      <Mail className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Notification Delivery Log</h3>
+                        <span className="text-[10px] font-extrabold text-rose-400 bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Email Audit</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                        Every EmailJS dispatch tracked here — payment pending alerts, approval emails, certification notices. Spot delivery failures and re-trigger from Manual Approvals.
+                      </p>
+                    </div>
+                  </div>
+                  {notificationLogs.length > 0 && (
+                    <button
+                      onClick={clearNotificationLogs}
+                      className="flex items-center gap-1.5 px-3 py-2 text-rose-400 hover:bg-rose-500/10 border border-rose-500/30 hover:border-rose-500/50 rounded-lg text-xs font-bold transition-all shrink-0"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      <span>Clear Logs</span>
+                    </button>
+                  )}
+                </div>
               </div>
+
+              {/* Content card */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
 
               {notificationLogs.length === 0 ? (
                 <div className="py-12 text-center text-[var(--text-secondary)]">
@@ -2170,12 +2495,727 @@ export const Admin: React.FC = () => {
                   </table>
                 </div>
               )}
+              </div>
             </div>
           )}
 
+          {/* TAB: TALENT RADAR (merged Candidate Database + Lead Discovery) */}
+          {activeTab === 'candidates' && (
+            <div className="space-y-6 animate-in fade-in duration-300">
+              {/* Talent Radar header — branding + global actions */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-purple-500/5 via-[var(--bg-card)]/40 to-indigo-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start justify-between gap-6 flex-wrap">
+                  <div className="flex items-start gap-4 min-w-0 flex-1">
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-purple-500/25">
+                      <Radar className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Talent Radar</h3>
+                        <span className="text-[10px] font-extrabold text-purple-400 bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Lead Discovery</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                        Every trainer ranked by Lead-Readiness Score (0–100). <Star className="inline h-3 w-3 fill-amber-400 text-amber-400 -mt-0.5" /> flags high-scorers worth recruiting.
+                      </p>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-[10px] text-[var(--text-muted)]">
+                        <span className="font-bold uppercase tracking-wider">Score weights:</span>
+                        <span><strong className="text-indigo-400">30%</strong> quiz</span>
+                        <span><strong className="text-indigo-400">30%</strong> engagement</span>
+                        <span><strong className="text-indigo-400">25%</strong> labs</span>
+                        <span><strong className="text-indigo-400">15%</strong> mastery</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={seedSampleCohort}
+                      className="px-3.5 py-2 border border-[var(--border-color)] hover:border-indigo-500/40 hover:bg-indigo-500/10 rounded-lg text-xs font-bold text-[var(--text-primary)] transition-all flex items-center gap-1.5"
+                      title="Seed 8 synthetic trainers so the radar populates for inspection"
+                    >
+                      <Sparkles className="h-3.5 w-3.5 text-indigo-400" /> Seed cohort
+                    </button>
+                    <button
+                      onClick={handleExportTalentCSV}
+                      disabled={filteredCandidates.length === 0}
+                      className="px-3.5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg text-xs font-bold shadow-md shadow-purple-500/25 flex items-center gap-1.5 transition-all"
+                    >
+                      <Download className="h-3.5 w-3.5" /> Export ({filteredCandidates.length})
+                    </button>
+                  </div>
+                </div>
+              </div>
 
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <div className="glass-card rounded-xl p-4 flex items-center space-x-3.5 bg-[var(--bg-card)]/30 border border-[var(--border-color)]">
+                  <div className="h-10 w-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Total Candidates</p>
+                    <p className="text-xl font-extrabold text-[var(--text-primary)] mt-0.5">{totalCands}</p>
+                  </div>
+                </div>
+
+                <div className="glass-card rounded-xl p-4 flex items-center space-x-3.5 bg-[var(--bg-card)]/30 border border-[var(--border-color)]">
+                  <div className="h-10 w-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">M1 Completed</p>
+                    <p className="text-xl font-extrabold text-[var(--text-primary)] mt-0.5">{m1CompleteCands}</p>
+                  </div>
+                </div>
+
+                <div className="glass-card rounded-xl p-4 flex items-center space-x-3.5 bg-[var(--bg-card)]/30 border border-[var(--border-color)]">
+                  <div className="h-10 w-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                    <Shield className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Labs Cleared</p>
+                    <p className="text-xl font-extrabold text-[var(--text-primary)] mt-0.5">{labCompleteCands}</p>
+                  </div>
+                </div>
+
+                <div className="glass-card rounded-xl p-4 flex items-center space-x-3.5 bg-[var(--bg-card)]/30 border border-[var(--border-color)]">
+                  <div className="h-10 w-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                    <Award className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">Certified Leads</p>
+                    <p className="text-xl font-extrabold text-[var(--text-primary)] mt-0.5">{certifiedCands}</p>
+                  </div>
+                </div>
+
+                {/* ── Talent Radar — Avg Readiness ── */}
+                <div className="glass-card rounded-xl p-4 flex items-center space-x-3.5 bg-indigo-500/5 border border-indigo-500/25">
+                  <div className="h-10 w-10 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-indigo-400 font-extrabold">Avg Readiness</p>
+                    <p className="text-xl font-extrabold text-[var(--text-primary)] mt-0.5">{cohortStats.avg}<span className="text-xs text-[var(--text-secondary)] font-bold">/100</span></p>
+                  </div>
+                </div>
+
+                {/* ── Talent Radar — Standouts ── */}
+                <div className="glass-card rounded-xl p-4 flex items-center space-x-3.5 bg-amber-500/5 border border-amber-500/25">
+                  <div className="h-10 w-10 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <Star className="h-5 w-5 fill-amber-400" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-amber-400 font-extrabold">Standouts</p>
+                    <p className="text-xl font-extrabold text-[var(--text-primary)] mt-0.5">{cohortStats.standouts}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Filters Block */}
+              <div className="glass-card rounded-xl p-5 space-y-4 bg-[var(--bg-card)]/30 border border-[var(--border-color)]">
+                <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+                  <h4 className="text-xs font-bold text-[var(--text-primary)] flex items-center space-x-1.5">
+                    <Filter className="h-3.5 w-3.5 text-purple-400" />
+                    <span>Filter Candidates</span>
+                  </h4>
+                  <span className="text-[10px] text-[var(--text-secondary)] font-semibold">Showing {filteredCandidates.length} of {totalCands} records</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  {/* Search */}
+                  <div className="relative col-span-1 sm:col-span-1">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-[var(--text-secondary)]">
+                      <Search className="h-3.5 w-3.5" />
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="Search name, email, phone..."
+                      value={candidateSearchTerm}
+                      onChange={(e) => setCandidateSearchTerm(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2 border border-[var(--border-color)] rounded-lg bg-slate-500/5 text-xs text-[var(--text-primary)] placeholder-[var(--text-secondary)]/50 focus:outline-none focus:border-purple-500/55 transition-all"
+                    />
+                  </div>
+
+                  {/* Score Filter */}
+                  <div>
+                    <select
+                      value={filterScoreRange}
+                      onChange={(e: any) => setFilterScoreRange(e.target.value)}
+                      className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg bg-[var(--bg-card)]/50 text-xs text-[var(--text-primary)] focus:outline-none focus:border-purple-500/55 transition-all"
+                    >
+                      <option value="all">All Quiz Scores</option>
+                      <option value="passed">Quiz Passed (≥ 80%)</option>
+                      <option value="top_scored">Top Performers (≥ 90%)</option>
+                    </select>
+                  </div>
+
+                  {/* Progress Filter */}
+                  <div>
+                    <select
+                      value={filterModuleProgress}
+                      onChange={(e: any) => setFilterModuleProgress(e.target.value)}
+                      className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg bg-[var(--bg-card)]/50 text-xs text-[var(--text-primary)] focus:outline-none focus:border-purple-500/55 transition-all"
+                    >
+                      <option value="all">All Module Progress</option>
+                      <option value="completed_m1">Completed Module 1</option>
+                      <option value="completed_m2">Completed Module 2</option>
+                      <option value="passed_lab">Passed Simulator Lab</option>
+                    </select>
+                  </div>
+
+                  {/* Account Status Filter */}
+                  <div>
+                    <select
+                      value={filterAccountStatus}
+                      onChange={(e: any) => setFilterAccountStatus(e.target.value)}
+                      className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg bg-[var(--bg-card)]/50 text-xs text-[var(--text-primary)] focus:outline-none focus:border-purple-500/55 transition-all"
+                    >
+                      <option value="all">All Account Statuses</option>
+                      <option value="FREE_TIER">Free Tier Access</option>
+                      <option value="PENDING_APPROVAL">Pending Premium Approval</option>
+                      <option value="APPROVED">Approved Premium Access</option>
+                      <option value="CERTIFIED">Certified / Hire Eligible</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Talent Radar filters — sit alongside the existing dropdowns */}
+                <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-[var(--border-color)]/60">
+                  <button
+                    onClick={() => setShowStandoutsOnly((v) => !v)}
+                    className={`px-3 py-1.5 rounded-lg border text-[11px] font-bold flex items-center gap-1.5 transition-all ${
+                      showStandoutsOnly
+                        ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
+                        : 'bg-slate-500/5 border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-amber-500/30'
+                    }`}
+                  >
+                    <Star className={`h-3.5 w-3.5 ${showStandoutsOnly ? 'fill-amber-400' : ''}`} />
+                    Standouts only
+                  </button>
+                  <select
+                    value={filterOutreachTag}
+                    onChange={(e: any) => setFilterOutreachTag(e.target.value)}
+                    className="px-3 py-1.5 border border-[var(--border-color)] rounded-lg bg-[var(--bg-card)]/50 text-[11px] font-bold text-[var(--text-primary)] focus:outline-none focus:border-purple-500/55 transition-all"
+                  >
+                    <option value="all">All outreach tags</option>
+                    <option value="Untagged">Untagged</option>
+                    {OUTREACH_TAGS.map((t) => (<option key={t} value={t}>{t}</option>))}
+                  </select>
+                  <span className="text-[10px] text-[var(--text-muted)] italic">Table is sorted by Lead Readiness, high to low.</span>
+                </div>
+              </div>
+
+              {/* Table / Database Panel */}
+              <div className="glass-card rounded-xl overflow-hidden border border-[var(--border-color)] bg-[var(--bg-card)]/30">
+                {filteredCandidates.length === 0 ? (
+                  <div className="py-12 text-center text-[var(--text-secondary)]">
+                    <Users className="h-10 w-10 text-slate-500/30 mx-auto mb-2" />
+                    <p className="text-xs font-bold text-[var(--text-primary)]">No candidates matched the filters</p>
+                    <p className="text-[11px] mt-1">Try adjusting your filters or search keywords.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="bg-slate-500/5 font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)]">
+                          <th className="p-3.5">Candidate</th>
+                          <th className="p-3.5 text-center">Score</th>
+                          <th className="p-3.5">Tag</th>
+                          <th className="p-3.5">Status</th>
+                          <th className="p-3.5">Engagement Stats</th>
+                          <th className="p-3.5">Quiz Scores</th>
+                          <th className="p-3.5">Lab Status</th>
+                          <th className="p-3.5">Evaluation</th>
+                          <th className="p-3.5 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
+                        {filteredCandidates.map(candidate => {
+                          const m1QuizScore = candidate.progress?.quizScores?.[1];
+                          const hasM1Lab = (candidate.progress?.labsPassed || []).includes(1);
+
+                          // Correlate with submission
+                          const candidateSubmission = submissions.find(s => s.userEmail === candidate.email);
+
+                          // Talent Radar: per-candidate readiness + outreach tag
+                          const readiness = computeLeadReadiness(candidate, !!candidateSubmission);
+                          const outreach = outreachData[candidate.uid];
+
+                          return (
+                            <tr key={candidate.uid} className={`transition-all ${candidate.disabled ? 'opacity-60 bg-red-950/5 hover:bg-red-950/10' : 'hover:bg-slate-500/5'}`}>
+                              <td className="p-3.5 whitespace-nowrap">
+                                <div className="font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                                  {readiness.isStandout && <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 shrink-0" />}
+                                  {candidate.name || 'Anonymous Learner'}
+                                </div>
+                                <div className="text-[10px] text-[var(--text-secondary)] mt-0.5">{candidate.email}</div>
+                                {candidate.mobile && (
+                                  <div className="text-[9px] text-purple-400 font-mono mt-0.5">{candidate.mobile}</div>
+                                )}
+                              </td>
+                              <td className="p-3.5 whitespace-nowrap text-center">
+                                <span className={`inline-block px-2.5 py-1 rounded-full border text-[11px] font-extrabold ${scoreColor(readiness.score)}`}>
+                                  {readiness.score}
+                                </span>
+                              </td>
+                              <td className="p-3.5 whitespace-nowrap">
+                                <span className={`inline-block px-2 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider ${tagColor(outreach?.tag)}`}>
+                                  {outreach?.tag || 'New'}
+                                </span>
+                              </td>
+                              <td className="p-3.5 whitespace-nowrap">
+                                {candidate.disabled ? (
+                                  <span className="px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-red-500/10 border-red-500/20 text-red-400">
+                                    Blacklisted
+                                  </span>
+                                ) : (
+                                  <span className={`px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide ${
+                                    candidate.accountStatus === 'APPROVED'
+                                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                                      : candidate.accountStatus === 'PENDING_APPROVAL'
+                                        ? 'bg-amber-500/10 border-amber-500/20 text-amber-400 animate-pulse'
+                                        : 'bg-slate-500/10 border-slate-500/20 text-[var(--text-secondary)]'
+                                  }`}>
+                                    {candidate.accountStatus.replace('_', ' ')}
+                                  </span>
+                                )}
+                              </td>
+                              <td className="p-3.5">
+                                <div className="flex flex-wrap gap-1.5 items-center">
+                                  <span className="text-[10px] font-bold text-[var(--text-primary)]">Lvl {candidate.progress?.level || 1}</span>
+                                  <span className="text-[9px] text-[var(--text-secondary)]">({candidate.progress?.xp || 0} XP)</span>
+                                  {candidate.progress && candidate.progress.streakDays > 0 && (
+                                    <span className="text-[9px] bg-orange-500/10 text-orange-400 px-1 rounded font-semibold">🔥 {candidate.progress.streakDays}d streak</span>
+                                  )}
+                                  {candidate.progress?.badges && candidate.progress.badges.length > 0 && (
+                                    <span className="text-[9px] bg-indigo-500/10 text-indigo-400 px-1 rounded font-semibold">🏅 {candidate.progress.badges.length} badges</span>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="p-3.5 whitespace-nowrap">
+                                <div className="space-y-1">
+                                  <div className="flex items-center space-x-1.5">
+                                    <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] font-bold">Mod 1:</span>
+                                    <span className={`font-mono text-[11px] font-bold ${m1QuizScore !== undefined ? (m1QuizScore >= 80 ? 'text-emerald-400' : 'text-red-400') : 'text-[var(--text-secondary)]/40'}`}>
+                                      {m1QuizScore !== undefined ? `${m1QuizScore}%` : 'Not Taken'}
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="p-3.5 whitespace-nowrap">
+                                <span className={`px-2 py-1 rounded text-[10px] font-bold ${
+                                  hasM1Lab
+                                    ? 'bg-cyan-500/10 text-cyan-400'
+                                    : 'bg-slate-500/10 text-[var(--text-secondary)]/50'
+                                }`}>
+                                  {hasM1Lab ? 'Module 1 Cleared' : 'Incomplete'}
+                                </span>
+                              </td>
+                              <td className="p-3.5 whitespace-nowrap">
+                                {candidateSubmission ? (
+                                  <div className="space-y-1">
+                                    <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold uppercase border tracking-wide ${
+                                      candidateSubmission.status === 'HIRE_ELIGIBLE'
+                                        ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                                        : candidateSubmission.status === 'CERTIFIED'
+                                          ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'
+                                          : 'bg-blue-500/10 border-blue-500/20 text-blue-400'
+                                    }`}>
+                                      {candidateSubmission.status.replace('_', ' ')}
+                                    </span>
+                                    {candidateSubmission.automatedTotal > 0 && (
+                                      <div className="text-[9px] text-[var(--text-secondary)] font-semibold mt-0.5">
+                                        Score: <strong className="text-[var(--text-primary)]">{candidateSubmission.automatedTotal}%</strong>
+                                      </div>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <span className="text-[10px] italic text-[var(--text-secondary)]/50">No submission</span>
+                                )}
+                              </td>
+                              <td className="p-3.5 text-right whitespace-nowrap">
+                                <div className="flex items-center justify-end space-x-1.5">
+                                  <button
+                                    onClick={() => setSelectedCandidateDetail(candidate)}
+                                    className="p-1.5 hover:bg-purple-500/10 hover:text-purple-400 border border-transparent hover:border-purple-500/20 rounded transition-all"
+                                    title="View Profile Details"
+                                  >
+                                    <Eye className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setFeedbackCandidate(candidate);
+                                      setFeedbackMessage('');
+                                    }}
+                                    className="p-1.5 hover:bg-blue-500/10 hover:text-blue-400 border border-transparent hover:border-blue-500/20 rounded transition-all"
+                                    title="Send Instructor Feedback Email"
+                                  >
+                                    <Mail className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      confirmAction(
+                                        candidate.disabled ? "Enable Candidate Account" : "Disable/Blacklist Candidate Account",
+                                        `Are you sure you want to ${candidate.disabled ? 'enable' : 'disable/blacklist'} candidate ${candidate.name || 'Anonymous'} (${candidate.email})?`,
+                                        () => toggleUserDisabledStatus(candidate.uid)
+                                      );
+                                    }}
+                                    className={`p-1.5 border border-transparent rounded transition-all ${candidate.disabled ? 'hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/20 text-emerald-400' : 'hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20'}`}
+                                    title={candidate.disabled ? "Enable Account" : "Disable / Blacklist Account"}
+                                  >
+                                    {candidate.disabled ? (
+                                      <UserCheck className="h-3.5 w-3.5" />
+                                    ) : (
+                                      <Ban className="h-3.5 w-3.5" />
+                                    )}
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
         </div>
+
+        {/* MODAL: View Candidate Profile Details */}
+        {selectedCandidateDetail && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <div className="glass-card rounded-xl max-w-2xl w-full p-6 max-h-[85vh] overflow-y-auto relative bg-[var(--bg-card)] border border-[var(--border-color)] animate-in fade-in zoom-in-95 duration-200">
+              <button
+                onClick={() => setSelectedCandidateDetail(null)}
+                className="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-lg"
+              >
+                ✕
+              </button>
+
+              <div className="border-b border-[var(--border-color)] pb-4 mb-4 flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+                    Trainer Profile · Lead Readiness
+                    {(() => {
+                      const r = computeLeadReadiness(selectedCandidateDetail, submissions.some(s => s.userEmail === selectedCandidateDetail.email));
+                      return r.isStandout ? <Star className="h-4 w-4 fill-amber-400 text-amber-400" /> : null;
+                    })()}
+                  </h3>
+                  <p className="text-xs text-[var(--text-secondary)] mt-1">Engagement, audit trail, and recruiting signal in one place.</p>
+                </div>
+                {(() => {
+                  const r = computeLeadReadiness(selectedCandidateDetail, submissions.some(s => s.userEmail === selectedCandidateDetail.email));
+                  return (
+                    <span className={`inline-block px-3 py-1.5 rounded-xl border text-base font-extrabold ${scoreColor(r.score)}`} title="Lead Readiness Score">
+                      {r.score}<span className="text-xs font-bold opacity-70">/100</span>
+                    </span>
+                  );
+                })()}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                {/* Left Column: Personal info & Gamification */}
+                <div className="space-y-4">
+                  <div className="bg-slate-500/5 p-3 rounded-lg border border-[var(--border-color)]">
+                    <h4 className="text-xs font-bold text-indigo-400 mb-2 uppercase tracking-wide">Candidate Identity</h4>
+                    <div className="space-y-1.5 text-xs">
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Name:</span> <strong className="text-[var(--text-primary)]">{selectedCandidateDetail.name}</strong></div>
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Email:</span> <strong className="text-[var(--text-primary)]">{selectedCandidateDetail.email}</strong></div>
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Phone:</span> <strong className="text-[var(--text-primary)]">{selectedCandidateDetail.mobile || 'None Provided'}</strong></div>
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Account Level:</span> <strong className="text-[var(--text-primary)]">{selectedCandidateDetail.accountStatus}</strong></div>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-500/5 p-3 rounded-lg border border-[var(--border-color)]">
+                    <h4 className="text-xs font-bold text-indigo-400 mb-2 uppercase tracking-wide">Gamification Metrics</h4>
+                    <div className="space-y-1.5 text-xs">
+                      <div><span className="text-[var(--text-secondary)] font-semibold">XP Score:</span> <strong className="text-emerald-400">{selectedCandidateDetail.progress?.xp || 0} XP</strong></div>
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Level reached:</span> <strong className="text-[var(--text-primary)]">Level {selectedCandidateDetail.progress?.level || 1}</strong></div>
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Learning Streak:</span> <strong className="text-orange-400">{selectedCandidateDetail.progress?.streakDays || 0} days active</strong></div>
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Badges Awarded:</span>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {selectedCandidateDetail.progress?.badges && selectedCandidateDetail.progress.badges.length > 0 ? (
+                            selectedCandidateDetail.progress.badges.map(b => (
+                              <span key={b} className="text-[9px] bg-purple-500/10 text-purple-300 border border-purple-500/20 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">{b.replace('-', ' ')}</span>
+                            ))
+                          ) : (
+                            <span className="text-[10px] text-[var(--text-secondary)]/50 italic">None unlocked yet</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column: Module & Quiz stats */}
+                <div className="space-y-4">
+                  <div className="bg-slate-500/5 p-3 rounded-lg border border-[var(--border-color)]">
+                    <h4 className="text-xs font-bold text-indigo-400 mb-2 uppercase tracking-wide">Curriculum Completion</h4>
+                    <div className="space-y-2.5 text-xs">
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-semibold text-[var(--text-secondary)]">Module 1 Slides Viewed:</span>
+                          <strong className="text-[var(--text-primary)]">{selectedCandidateDetail.progress?.slidesViewed?.[1]?.length || 0} / 23</strong>
+                        </div>
+                        <div className="h-1.5 w-full bg-slate-500/10 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-purple-500" 
+                            style={{ width: `${Math.min(100, ((selectedCandidateDetail.progress?.slidesViewed?.[1]?.length || 0) / 23) * 100)}%` }}
+                          />
+                        </div>
+                        {selectedCandidateDetail.progress?.slidesViewed?.[1] && selectedCandidateDetail.progress.slidesViewed[1].length > 0 && (
+                          <div className="text-[9px] text-[var(--text-secondary)] mt-1.5 break-words">
+                            <span className="font-bold">Indexes seen:</span> {selectedCandidateDetail.progress.slidesViewed[1].sort((a,b)=>a-b).map(s=>s+1).join(', ')}
+                          </div>
+                        )}
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-semibold text-[var(--text-secondary)]">Module 2 Slides Viewed:</span>
+                          <strong className="text-[var(--text-primary)]">{selectedCandidateDetail.progress?.slidesViewed?.[2]?.length || 0} / 23</strong>
+                        </div>
+                        <div className="h-1.5 w-full bg-slate-500/10 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-purple-500" 
+                            style={{ width: `${Math.min(100, ((selectedCandidateDetail.progress?.slidesViewed?.[2]?.length || 0) / 23) * 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-500/5 p-3 rounded-lg border border-[var(--border-color)]">
+                    <h4 className="text-xs font-bold text-indigo-400 mb-2 uppercase tracking-wide">Knowledge Gates & Labs</h4>
+                    <div className="space-y-1.5 text-xs">
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Module 1 Quiz Score:</span> <strong className={`font-mono ${selectedCandidateDetail.progress?.quizScores?.[1] !== undefined ? (selectedCandidateDetail.progress.quizScores[1] >= 80 ? 'text-emerald-400' : 'text-red-400') : 'text-[var(--text-secondary)]/50'}`}>{selectedCandidateDetail.progress?.quizScores?.[1] !== undefined ? `${selectedCandidateDetail.progress.quizScores[1]}%` : 'Not Taken'}</strong></div>
+                      <div><span className="text-[var(--text-secondary)] font-semibold">Module 1 Simulator Lab:</span> <strong className={selectedCandidateDetail.progress?.labsPassed?.includes(1) ? 'text-cyan-400' : 'text-[var(--text-secondary)]/50'}>{selectedCandidateDetail.progress?.labsPassed?.includes(1) ? 'Passed & Cleared' : 'Incomplete'}</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── Lead Readiness Profile + Outreach panel (Talent Radar) ── */}
+              {(() => {
+                const hasSubmission = submissions.some(s => s.userEmail === selectedCandidateDetail.email);
+                const r = computeLeadReadiness(selectedCandidateDetail, hasSubmission);
+                const outreach = outreachData[selectedCandidateDetail.uid];
+                const rows = [
+                  { label: 'Quiz aptitude',          val: r.breakdown.quiz,        max: 30 },
+                  { label: 'Engagement & streak',    val: r.breakdown.engagement,  max: 30 },
+                  { label: 'Application (labs)',     val: r.breakdown.application, max: 25 },
+                  { label: 'Mastery (level/badges)', val: r.breakdown.mastery,     max: 15 },
+                ];
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                    {/* Lead readiness breakdown */}
+                    <div className="bg-slate-500/5 p-4 rounded-lg border border-indigo-500/20">
+                      <h4 className="text-xs font-bold text-indigo-400 mb-3 uppercase tracking-wide flex items-center gap-1.5">
+                        <Radar className="h-3.5 w-3.5" /> Lead Readiness Breakdown
+                      </h4>
+                      {rows.map((row) => (
+                        <div key={row.label} className="mb-2.5 last:mb-0">
+                          <div className="flex justify-between text-[10px] font-semibold text-[var(--text-secondary)] mb-0.5">
+                            <span>{row.label}</span>
+                            <span className="text-[var(--text-primary)]">{row.val} / {row.max}</span>
+                          </div>
+                          <div className="h-1.5 rounded-full bg-[var(--surface-sunken)] overflow-hidden">
+                            <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all duration-700" style={{ width: `${(row.val / row.max) * 100}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Outreach panel */}
+                    <div className="bg-slate-500/5 p-4 rounded-lg border border-purple-500/20">
+                      <h4 className="text-xs font-bold text-purple-400 mb-3 uppercase tracking-wide flex items-center gap-1.5">
+                        <Mail className="h-3.5 w-3.5" /> Outreach
+                      </h4>
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {OUTREACH_TAGS.map((t) => {
+                          const selected = (outreach?.tag || 'New') === t;
+                          return (
+                            <button
+                              key={t}
+                              onClick={() => setOutreachTag(selectedCandidateDetail.uid, t)}
+                              className={`px-2.5 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider transition-all ${
+                                selected ? tagColor(t) : 'bg-slate-500/5 border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                              }`}
+                            >
+                              {t}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">Private notes</label>
+                      <textarea
+                        rows={3}
+                        placeholder="Notes only you can see — strengths, gaps, when to follow up…"
+                        value={outreach?.notes || ''}
+                        onChange={(e) => setOutreachNotes(selectedCandidateDetail.uid, e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-purple-500 resize-none"
+                      />
+                      {outreach?.updatedAt && (
+                        <p className="text-[10px] text-[var(--text-muted)] mt-1">Last updated: {new Date(outreach.updatedAt).toLocaleString()}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Audit Logs matching this user */}
+              <div className="bg-slate-500/5 p-3 rounded-lg border border-[var(--border-color)]">
+                <h4 className="text-xs font-bold text-indigo-400 mb-2 uppercase tracking-wide flex items-center space-x-1">
+                  <Activity className="h-3.5 w-3.5" />
+                  <span>Candidate Activity Audit Trail</span>
+                </h4>
+                
+                {auditLogs.filter(log => log.userEmail === selectedCandidateDetail.email).length === 0 ? (
+                  <p className="text-[11px] text-[var(--text-secondary)]/50 italic py-2">No activity audit logs registered for this user yet.</p>
+                ) : (
+                  <div className="max-h-[160px] overflow-y-auto border border-[var(--border-color)] rounded divide-y divide-[var(--border-color)] text-[10px] font-mono">
+                    {auditLogs
+                      .filter(log => log.userEmail === selectedCandidateDetail.email)
+                      .map(log => (
+                        <div key={log.id} className="p-2 hover:bg-slate-500/5 flex justify-between items-start space-x-2">
+                          <div className="space-y-0.5">
+                            <div className="font-bold text-[var(--text-primary)]">{log.type}</div>
+                            <div className="text-[9px] text-[var(--text-secondary)] leading-relaxed">{log.description}</div>
+                          </div>
+                          <div className="text-[9px] text-[var(--text-secondary)] whitespace-nowrap shrink-0">{new Date(log.timestamp).toLocaleString()}</div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => setSelectedCandidateDetail(null)}
+                  className="px-4 py-2 border border-[var(--border-color)] hover:bg-slate-500/5 text-xs font-semibold rounded-lg text-[var(--text-primary)]"
+                >
+                  Close Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL: Send Instructor Feedback Email */}
+        {feedbackCandidate && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <div className="glass-card rounded-xl max-w-md w-full p-6 relative bg-[var(--bg-card)] border border-[var(--border-color)] animate-in fade-in zoom-in-95 duration-200">
+              <button
+                onClick={() => setFeedbackCandidate(null)}
+                className="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-lg"
+              >
+                ✕
+              </button>
+
+              <div className="border-b border-[var(--border-color)] pb-3 mb-4">
+                <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center space-x-1.5">
+                  <Mail className="h-4 w-4 text-purple-500" />
+                  <span>Send Candidate Feedback</span>
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] mt-1">This will dispatch an email via EmailJS (if configured) or trigger a notification log.</p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="text-xs">
+                  <span className="text-[var(--text-secondary)] font-semibold">Recipient:</span> <strong className="text-[var(--text-primary)]">{feedbackCandidate.name} ({feedbackCandidate.email})</strong>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-[var(--text-primary)]">Feedback Message</label>
+                  <textarea
+                    rows={6}
+                    placeholder="Provide detailed comments on their quiz scores, lab prompt logs, or general curriculum performance..."
+                    value={feedbackMessage}
+                    onChange={(e) => setFeedbackMessage(e.target.value)}
+                    className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg bg-slate-500/5 text-xs text-[var(--text-primary)] placeholder-[var(--text-secondary)]/50 focus:outline-none focus:border-purple-500/55 resize-none transition-all"
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-2">
+                  <button
+                    onClick={() => setFeedbackCandidate(null)}
+                    disabled={isSendingFeedback}
+                    className="px-4 py-2 border border-[var(--border-color)] hover:bg-slate-500/5 text-xs font-semibold rounded-lg text-[var(--text-primary)] disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={async () => {
+                      if (!feedbackMessage.trim()) return;
+                      setIsSendingFeedback(true);
+                      const emailSubject = `[OrchestrAI] Instructor feedback regarding your progress`;
+                      const emailBody = `Hi ${feedbackCandidate.name},\n\nSithanandham R. has reviewed your certification progress and provided the following feedback:\n\n${feedbackMessage}\n\nKeep learning and building!\nProduct Owner,\nSithanandham R.`;
+                      
+                      const config = systemConfig;
+                      const hasKeys = config.emailjsServiceId && config.emailjsTemplateId && config.emailjsPublicKey;
+                      
+                      if (hasKeys) {
+                        try {
+                          await emailjs.send(
+                            config.emailjsServiceId,
+                            config.emailjsTemplateId,
+                            {
+                              to_email: feedbackCandidate.email,
+                              subject: emailSubject,
+                              message: emailBody
+                            },
+                            config.emailjsPublicKey
+                          );
+                          addNotificationLog({
+                            type: 'Instructor Feedback Email',
+                            recipient: feedbackCandidate.email,
+                            subject: emailSubject,
+                            channel: 'EmailJS API',
+                            status: 'Sent'
+                          });
+                          addToast("Feedback email sent successfully!", "success");
+                        } catch (e: any) {
+                          addNotificationLog({
+                            type: 'Instructor Feedback Email',
+                            recipient: feedbackCandidate.email,
+                            subject: emailSubject,
+                            channel: `EmailJS API (Error: ${e?.text || String(e)})`,
+                            status: 'Failed'
+                          });
+                          addToast("Failed to send feedback email.", "error");
+                        }
+                      } else {
+                        addNotificationLog({
+                          type: 'Instructor Feedback Email (Simulated)',
+                          recipient: feedbackCandidate.email,
+                          subject: emailSubject,
+                          channel: 'EmailJS API (Simulated)',
+                          status: 'Sent'
+                        });
+                        addToast("Feedback email simulation completed successfully.", "success");
+                      }
+                      setIsSendingFeedback(false);
+                      setFeedbackCandidate(null);
+                      setFeedbackMessage('');
+                    }}
+                    disabled={isSendingFeedback || !feedbackMessage.trim()}
+                    className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-650 hover:brightness-110 text-white text-xs font-bold rounded-lg shadow disabled:opacity-50 transition-all flex items-center justify-center space-x-1.5"
+                  >
+                    {isSendingFeedback ? (
+                      <span>Sending...</span>
+                    ) : (
+                      <>
+                        <Mail className="h-3.5 w-3.5" />
+                        <span>Send Feedback</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
 

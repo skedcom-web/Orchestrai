@@ -12,7 +12,7 @@ import {
   BarChart2, TrendingUp, TrendingDown, XCircle,
   Award, Layers, Shield, Activity,
   Frown, Music2, Headphones, Wand2, MonitorPlay, GitMerge,
-  Compass, Languages, ArrowLeftRight
+  Compass, Languages, ArrowLeftRight, Eye, EyeOff
 } from 'lucide-react';
 
 interface TrainingPresenterProps {
@@ -462,7 +462,7 @@ const resolveToneValue = (val: any, tone: string): any => {
   if (val === null || val === undefined) return val;
   if (typeof val === 'object') {
     if ('conversational' in val || 'formal' in val || 'genz' in val || 'beginner' in val) {
-      return val[tone] || val.conversational || '';
+      return val[tone] || val.formal || val.genz || val.conversational || '';
     }
     if (Array.isArray(val)) {
       return val.map(item => resolveToneValue(item, tone));
@@ -476,9 +476,15 @@ const resolveToneValue = (val: any, tone: string): any => {
   return val;
 };
 
+// Background music catalogue. Slides reference these via `background_music.track_key`.
+// Tracks stream from SoundHelix (royalty-free demo bed). Add more keys here as the
+// curriculum grows — the renderer will pick the right one and crossfade.
 const MUSIC_TRACKS: Record<string, string> = {
-  intro_theme: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-  outro_theme: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
+  intro_theme:    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+  outro_theme:    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  mandate_theme:  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  pillars_theme:  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+  prompts_theme:  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3'
 };
 
 export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, onClose, onComplete }) => {
@@ -507,6 +513,13 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
   });
   const [labAnswers, setLabAnswers] = useState<Record<string, Record<string, string>>>({});
   const [labSubmitted, setLabSubmitted] = useState<Record<string, boolean>>({});
+  const [revealedCards, setRevealedCards] = useState<Record<number, boolean>>({});
+  const [sliderVal, setSliderVal] = useState(50);
+  const [matchItems, setMatchItems] = useState<any[]>([]);
+  const [matchChecked, setMatchChecked] = useState(false);
+  const [matchCorrect, setMatchCorrect] = useState(false);
+  const [matchAttempts, setMatchAttempts] = useState(0);
+  const [shakeKey, setShakeKey] = useState(0);
 
   const bgAudioRef = useRef<HTMLAudioElement | null>(null);
   const narrationAudioRef = useRef<HTMLAudioElement | null>(null); // Pre-rendered MP3 narration (per segment / slide)
@@ -539,12 +552,23 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     };
   }, []);
 
-  // Stop background music on unmount
+  // Stop all audio, speech synthesis, and timers on unmount
   useEffect(() => {
     return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (narrationAudioRef.current) {
+        narrationAudioRef.current.pause();
+        narrationAudioRef.current = null;
+      }
       if (bgAudioRef.current) {
         bgAudioRef.current.pause();
         bgAudioRef.current = null;
+      }
+      if (activeTimersRef.current) {
+        activeTimersRef.current.forEach(id => window.clearTimeout(id));
+        activeTimersRef.current = [];
       }
     };
   }, []);
@@ -556,17 +580,20 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
 
   useEffect(() => {
     if (!mediaConfig || !mediaConfig.hasPresets) {
-      setSelectedTone('conversational');
+      setSelectedTone(moduleId === 2 ? 'formal' : 'conversational');
     }
-  }, [mediaConfig]);
+  }, [mediaConfig, moduleId]);
 
   let slidesForSelectedTone: any[] = [];
   if (customSlides) {
     if (Array.isArray(customSlides)) {
       slidesForSelectedTone = customSlides;
     } else {
-      const toneKey = selectedTone || 'conversational';
-      slidesForSelectedTone = (customSlides as any)[toneKey] || (customSlides as any).conversational || [];
+      const toneKey = selectedTone || (moduleId === 2 ? 'formal' : 'conversational');
+      slidesForSelectedTone = (customSlides as any)[toneKey] || 
+                              (moduleId === 2 
+                                ? (customSlides as any).formal || (customSlides as any).genz 
+                                : (customSlides as any).conversational) || [];
     }
   }
   const rawCoreSlides = getSlidesForModule(moduleId, slidesForSelectedTone) || [];
@@ -613,7 +640,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     : slides;
   const totalSlides = (rawTotalSlides || [])
     .filter(s => s !== null && s !== undefined)
-    .map(s => resolveToneValue(s, selectedTone || 'conversational'));
+    .map(s => resolveToneValue(s, selectedTone || (moduleId === 2 ? 'formal' : 'conversational')));
   const slidesCount = totalSlides.length;
 
   // Background Music player effect
@@ -647,7 +674,14 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     };
 
     if (musicConfig && musicConfig.track_key) {
-      const trackUrl = MUSIC_TRACKS[musicConfig.track_key];
+      let trackUrl = MUSIC_TRACKS[musicConfig.track_key];
+      if (!trackUrl) {
+        if (musicConfig.track_key.includes('outro') || musicConfig.track_key.includes('end')) {
+          trackUrl = MUSIC_TRACKS.outro_theme;
+        } else {
+          trackUrl = MUSIC_TRACKS.intro_theme;
+        }
+      }
       if (trackUrl) {
         if (bgAudioRef.current && bgAudioRef.current.src === trackUrl) {
           if (isPlayingAudio && !isPausedAudio) {
@@ -796,6 +830,61 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       narrationAudioRef.current.src = '';
       narrationAudioRef.current = null;
     }
+  };
+
+  const speakCustomText = (text: string) => {
+    if (!('speechSynthesis' in window)) return;
+    
+    stopAudio();
+
+    const tone = selectedTone || (moduleId === 2 ? 'formal' : 'conversational');
+    let voiceKey: string = tone;
+    if (tone === 'genz') {
+      voiceKey = 'female_genz'; 
+    }
+
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'en-US';
+    activeUtteranceRef.current = utt;
+    (window as any)._activeUtterance = utt; 
+
+    const voiceObj = selectVoice(voiceKey, availableVoices);
+    if (voiceObj) utt.voice = voiceObj;
+
+    const vk = voiceKey.toLowerCase();
+    const isMale = !vk.includes('female') && (vk.includes('male') || vk.includes('dev') || vk.includes('kai') || vk.includes('ravi') || vk.includes('beginner') || vk.includes('arjun') || vk.includes('host_male'));
+    utt.pitch = isMale
+      ? (IS_MOBILE_DEVICE ? 0.65 : 0.83)
+      : (IS_MOBILE_DEVICE ? 1.35 : 1.12);
+    const baseRate = IS_MOBILE_DEVICE ? 0.94 : 1.0;
+    utt.rate = isMale ? baseRate - 0.04 : baseRate + 0.02;
+
+    setIsPlayingAudio(true);
+    setIsPausedAudio(false);
+    
+    const speakerNames: Record<string, string> = { 
+      conversational: 'Maya', 
+      formal: 'Aanya', 
+      genz: 'Sara', 
+      beginner: 'Sir Ravi',
+      female_genz: 'Sara',
+      male_genz: 'Arjun'
+    };
+    setCurrentSpeaker(speakerNames[voiceKey] || 'Guide');
+
+    const handleEnd = () => {
+      setIsPlayingAudio(false);
+      setIsPausedAudio(false);
+      setCurrentSpeaker(null);
+      activeUtteranceRef.current = null;
+    };
+
+    utt.onend = handleEnd;
+    utt.onerror = handleEnd;
+
+    window.setTimeout(() => {
+      window.speechSynthesis.speak(utt);
+    }, 50);
   };
 
   const startAudio = (slide: any) => {
@@ -1016,7 +1105,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
         audio.preload = 'auto';
         narrationAudioRef.current = audio;
         const speakers: Record<string, string> = { conversational: 'Maya', formal: 'Aanya', genz: 'Zo', beginner: 'Sir Ravi' };
-        setCurrentSpeaker(speakers[selectedTone || 'conversational'] || 'Guide');
+        setCurrentSpeaker(speakers[selectedTone || (moduleId === 2 ? 'formal' : 'conversational')] || 'Guide');
         const done = () => {
           narrationAudioRef.current = null;
           if (activeAudioSlideRef.current !== slide) return;
@@ -1037,10 +1126,10 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       activeUtteranceRef.current = utt;
       (window as any)._activeUtterance = utt; // Prevent GC on iOS/Mobile
       
-      const voiceObj = selectVoice(selectedTone || 'conversational', currentVoices);
+      const voiceObj = selectVoice(selectedTone || (moduleId === 2 ? 'formal' : 'conversational'), currentVoices);
       if (voiceObj) utt.voice = voiceObj;
 
-      const toneKey = (selectedTone || 'conversational').toLowerCase();
+      const toneKey = (selectedTone || (moduleId === 2 ? 'formal' : 'conversational')).toLowerCase();
       const isMaleSimple = toneKey === 'beginner';
       utt.pitch = isMaleSimple
         ? (IS_MOBILE_DEVICE ? 0.65 : 0.83)
@@ -1075,7 +1164,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       utt.onstart = () => {
         if (activeAudioSlideRef.current !== slide) return;
         const speakers: Record<string, string> = { conversational: 'Maya', formal: 'Aanya', genz: 'Zo', beginner: 'Sir Ravi' };
-        setCurrentSpeaker(speakers[selectedTone || 'conversational'] || 'Guide');
+        setCurrentSpeaker(speakers[selectedTone || (moduleId === 2 ? 'formal' : 'conversational')] || 'Guide');
       };
 
       utt.onerror = (e) => {
@@ -1097,6 +1186,54 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
   };
 
   const handleNext = () => {
+    const slide = totalSlides[currentSlide];
+    if (!slide) return;
+
+    if (slide.type === 'interactive_quiz_engine' || slide.type === 'quiz') {
+      if (!quizSubmitted[currentSlide]) {
+        addToast("Please complete the quiz and click 'Submit Answers' first!", "warning");
+        return;
+      }
+    }
+    
+    if (slide.type === 'lab') {
+      if (!labPassed) {
+        addToast("Please complete the lab simulator challenge first!", "warning");
+        return;
+      }
+    }
+
+    if (slide.type === 'prompt_lab') {
+      const slideId = slide.slide_id || String(currentSlide);
+      if (!labSubmitted[slideId]) {
+        addToast("Please complete the prompt validation challenge and click 'Submit' first!", "warning");
+        return;
+      }
+    }
+
+    if (slide.type === 'mini_match') {
+      if (!matchCorrect) {
+        addToast("Please reorder the components and match them correctly first!", "warning");
+        return;
+      }
+    }
+
+    if (slide.type === 'spot_the_flaw') {
+      const allRevealed = slide.flaws?.every((_: any, idx: number) => revealedCards[idx]);
+      if (!allRevealed) {
+        addToast("Please find and read all flaws in the intent statement first!", "warning");
+        return;
+      }
+    }
+
+    if (slide.type === 'tap_reveal') {
+      const allRevealed = slide.cards?.every((_: any, idx: number) => revealedCards[idx]);
+      if (!allRevealed) {
+        addToast("Please tap and review all scenarios first!", "warning");
+        return;
+      }
+    }
+
     if (currentSlide < slidesCount - 1) {
       setSlideDirection('right');
       setCurrentSlide(p => p + 1);
@@ -1159,9 +1296,21 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
 
   useEffect(() => {
     setAnimKey(k => k + 1);
+    setRevealedCards({});
+    setSliderVal(50);
+    setMatchChecked(false);
+    setMatchCorrect(false);
+    setMatchAttempts(0);
+
     const s = totalSlides[currentSlide];
     if (s?.type === 'day_in_life' && s.schedule?.length > 0) setActiveHour(s.schedule[0].time);
     else setActiveHour(null);
+
+    if (s?.type === 'mini_match' && s.pairs) {
+      const rightItems = s.pairs.map((p: any) => p.right);
+      const shuffled = [...rightItems].sort(() => Math.random() - 0.5);
+      setMatchItems(shuffled);
+    }
     
     if (isPlayingAudio && s) {
       startAudio(s);
@@ -1195,10 +1344,16 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Modules 2-6 are 2-preset (Formal + Gen-Z only). Module 1 + others are 4-tone.
+  // Match the same list used by the tone-selector filter below to keep behavior consistent.
+  const TWO_PRESET_MODULES = [2, 3, 4, 5, 6];
+  const isTwoPresetModule = TWO_PRESET_MODULES.includes(moduleId);
   const hasUploadedSlides = !!(
     customSlides &&
     (Array.isArray(customSlides)
       ? customSlides.length > 0
+      : isTwoPresetModule
+      ? !!((customSlides.formal && customSlides.formal.length > 0) || (customSlides.genz && customSlides.genz.length > 0))
       : !!(customSlides.conversational && customSlides.conversational.length > 0))
   );
 
@@ -1360,7 +1515,9 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       }
 
       // ─────────────── WELCOME ───────────────
-      case 'welcome': {
+      case 'welcome':
+      case 'stats_hero':
+      case 'recap': {
         return (
           <div className="flex-1 flex flex-col gap-4 max-w-4xl mx-auto w-full min-h-0 overflow-y-auto pr-1">
             <div className="text-center">
@@ -1452,6 +1609,329 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                 🎯 {slide.closing_thread}
               </p>
             )}
+          </div>
+        );
+      }
+
+      // ─────────────── TAP REVEAL ───────────────
+      case 'tap_reveal': {
+        return (
+          <div className="flex-1 flex flex-col gap-4 max-w-4xl mx-auto w-full min-h-0 overflow-y-auto pr-1">
+            <div className="text-center">
+              <div className="inline-flex items-center gap-1.5 text-indigo-400 text-[10px] font-bold uppercase tracking-wider">
+                {RI(slide.icon || 'alert-triangle', 'h-3.5 w-3.5')}
+                {slide.subtitle || 'Tap each card to reveal the core principle breach'}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mt-1">{slide.title}</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+              {slide.cards?.map((card: any, idx: number) => {
+                const isRevealed = !!revealedCards[idx];
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      const nextState = !revealedCards[idx];
+                      setRevealedCards(prev => ({ ...prev, [idx]: nextState }));
+                      if (nextState && card.reveal) {
+                        speakCustomText(card.reveal);
+                      } else {
+                        stopAudio();
+                      }
+                    }}
+                    className={`p-5 rounded-2xl border text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[140px] cursor-pointer group ${
+                      isRevealed
+                        ? 'border-purple-500/40 bg-purple-500/10 shadow-[0_0_15px_rgba(168,85,247,0.15)] scale-[1.01]'
+                        : 'border-[var(--border-color)] bg-[var(--bg-card)] hover:border-indigo-500/30 hover:bg-slate-500/5'
+                    }`}
+                  >
+                    {/* Background glow */}
+                    <div className={`absolute -right-4 -bottom-4 w-24 h-24 rounded-full filter blur-xl opacity-20 transition-all duration-300 ${
+                      isRevealed ? 'bg-purple-500' : 'bg-indigo-500 group-hover:opacity-30'
+                    }`} />
+
+                    <div className="space-y-2 relative z-10">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[9px] uppercase tracking-widest font-black text-indigo-400">
+                          Scenario {idx + 1}
+                        </span>
+                        <div className={`p-1.5 rounded-lg border transition-all ${
+                          isRevealed 
+                            ? 'border-purple-500/25 bg-purple-500/10 text-purple-400' 
+                            : 'border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-secondary)]'
+                        }`}>
+                          {isRevealed ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+                        </div>
+                      </div>
+
+                      <p className={`text-xs font-bold transition-colors ${
+                        isRevealed ? 'text-purple-300' : 'text-[var(--text-primary)]'
+                      }`}>
+                        {card.label}
+                      </p>
+                    </div>
+
+                    <div className="mt-4 relative z-10">
+                      {isRevealed ? (
+                        <div className="text-[10px] leading-relaxed text-[var(--text-secondary)] bg-purple-500/5 border border-purple-500/20 p-2.5 rounded-xl animate-in slide-in-from-bottom-2 duration-200 font-semibold">
+                          {card.reveal}
+                        </div>
+                      ) : (
+                        <span className="text-[9px] uppercase tracking-widest font-black text-[var(--text-muted)] group-hover:text-indigo-400 transition-colors">
+                          Click card to analyze
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {slide.memory_hook && (
+              <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-4 py-2.5 flex items-center gap-2 mt-2">
+                <Sparkles className="h-3.5 w-3.5 text-indigo-400 shrink-0" />
+                <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed italic">
+                  <span className="font-bold text-indigo-400 uppercase tracking-wider mr-1">Hook:</span>
+                  {slide.memory_hook}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // ─────────────── CONFIDENCE SLIDER ───────────────
+      case 'confidence_slider': {
+        return (
+          <div className="flex-1 flex flex-col justify-center items-center gap-6 max-w-2xl mx-auto w-full text-center animate-fade-in pr-1 overflow-y-auto">
+            <div className="text-center">
+              <div className="inline-flex items-center gap-1.5 text-indigo-400 text-[10px] font-bold uppercase tracking-wider">
+                {RI(slide.icon || 'help-circle', 'h-3.5 w-3.5')}
+                {slide.subtitle || 'Self Assessment'}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mt-1">{slide.title}</h2>
+            </div>
+
+            <div className="w-full rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-6 space-y-6 shadow-lg">
+              <p className="text-sm font-semibold text-[var(--text-primary)] leading-relaxed">
+                "{slide.prompt}"
+              </p>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                  <span>{slide.scale?.min_label || 'Not Confident'}</span>
+                  <span className="text-indigo-400 text-xs font-black">{sliderVal}%</span>
+                  <span>{slide.scale?.max_label || 'Ready'}</span>
+                </div>
+
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sliderVal}
+                  onChange={(e) => setSliderVal(parseInt(e.target.value))}
+                  className="w-full h-2 bg-[var(--surface-sunken)] rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                />
+
+                <div className="text-[10px] italic text-[var(--text-muted)] font-semibold mt-2">
+                  {sliderVal < 30 && "Need some review? Take your time, slide previous to recap!"}
+                  {sliderVal >= 30 && sliderVal < 70 && "Getting there! Ready for a challenge."}
+                  {sliderVal >= 70 && "Awesome! You are ready to crush the quiz."}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ─────────────── SPOT THE FLAW ───────────────
+      case 'spot_the_flaw': {
+        return (
+          <div className="flex-1 flex flex-col gap-4 max-w-4xl mx-auto w-full min-h-0 overflow-y-auto pr-1">
+            <div className="text-center">
+              <div className="inline-flex items-center gap-1.5 text-indigo-400 text-[10px] font-bold uppercase tracking-wider">
+                {RI(slide.icon || 'search', 'h-3.5 w-3.5')}
+                {slide.subtitle || 'Analyze the text and select the flaws to learn more'}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mt-1">{slide.title}</h2>
+            </div>
+
+            <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--surface-sunken)] p-5 text-xs text-[var(--text-primary)] leading-relaxed italic relative">
+              <div className="absolute top-3 right-3 text-red-500/20">{RI('alert-triangle', 'h-10 w-10')}</div>
+              "{slide.text}"
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)]">Flaws detected: {slide.flaws?.length || 0}</p>
+              <div className="grid grid-cols-1 gap-2.5">
+                {slide.flaws?.map((flaw: any, idx: number) => {
+                  const isExpanded = !!revealedCards[idx];
+                  return (
+                    <div
+                      key={idx}
+                      className={`rounded-xl border transition-all duration-300 ${
+                        isExpanded
+                          ? 'border-red-500/30 bg-red-500/5'
+                          : 'border-[var(--border-color)] bg-[var(--bg-card)] hover:border-red-500/25 hover:bg-slate-500/5'
+                      }`}
+                    >
+                      <button
+                        onClick={() => {
+                          const nextState = !revealedCards[idx];
+                          setRevealedCards(prev => ({ ...prev, [idx]: nextState }));
+                          if (nextState && flaw.explanation) {
+                            speakCustomText(flaw.explanation);
+                          } else {
+                            stopAudio();
+                          }
+                        }}
+                        className="w-full p-4 flex items-center justify-between text-left cursor-pointer font-bold text-xs"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 ${
+                            isExpanded ? 'bg-red-500 text-white' : 'bg-slate-500/10 text-[var(--text-secondary)]'
+                          }`}>
+                            {idx + 1}
+                          </span>
+                          <span className={isExpanded ? 'text-red-400' : 'text-[var(--text-primary)]'}>
+                            "{flaw.phrase}"
+                          </span>
+                        </div>
+                        <div className={`transition-transform duration-300 text-[var(--text-muted)] ${isExpanded ? 'rotate-180' : ''}`}>
+                          {RI('trending-down', 'h-3.5 w-3.5')}
+                        </div>
+                      </button>
+                      
+                      {isExpanded && (
+                        <div className="px-4 pb-4 pt-1 text-[11px] leading-relaxed text-[var(--text-secondary)] border-t border-red-500/10 mt-1 animate-in slide-in-from-bottom-1 duration-200">
+                          {flaw.explanation}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ─────────────── MINI MATCH ───────────────
+      case 'mini_match': {
+        const correctSequence = slide.pairs?.map((p: any) => p.right) || [];
+        const isMatched = matchItems.every((item, idx) => item === correctSequence[idx]);
+
+        const moveItem = (index: number, direction: 'up' | 'down') => {
+          if (matchChecked) return;
+          const newIndex = direction === 'up' ? index - 1 : index + 1;
+          if (newIndex < 0 || newIndex >= matchItems.length) return;
+          
+          const newItems = [...matchItems];
+          const temp = newItems[index];
+          newItems[index] = newItems[newIndex];
+          newItems[newIndex] = temp;
+          setMatchItems(newItems);
+        };
+
+        const handleVerify = () => {
+          setMatchChecked(true);
+          if (isMatched) {
+            setMatchCorrect(true);
+            addToast("Order matched successfully!", "success");
+          } else {
+            setMatchCorrect(false);
+            setMatchAttempts(prev => prev + 1);
+            setShakeKey(prev => prev + 1);
+            addToast("Incorrect order. Try again!", "error");
+          }
+        };
+
+        const handleRetry = () => {
+          setMatchChecked(false);
+          const shuffled = [...correctSequence].sort(() => Math.random() - 0.5);
+          setMatchItems(shuffled);
+        };
+
+        return (
+          <div className="flex-1 flex flex-col gap-4 max-w-4xl mx-auto w-full min-h-0 overflow-y-auto pr-1">
+            <div className="text-center">
+              <div className="inline-flex items-center gap-1.5 text-indigo-400 text-[10px] font-bold uppercase tracking-wider">
+                {RI(slide.icon || 'sort-asc', 'h-3.5 w-3.5')}
+                {slide.subtitle || 'Re-order the steps in dependency order'}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mt-1">{slide.title}</h2>
+            </div>
+
+            <div key={shakeKey} className={`space-y-2.5 mt-2 ${!matchCorrect && matchChecked ? 'animate-shake' : ''}`}>
+              {matchItems.map((item, idx) => {
+                const isCorrectIndex = matchChecked && item === correctSequence[idx];
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-center justify-between p-3.5 rounded-xl border transition-all duration-300 ${
+                      matchChecked
+                        ? isCorrectIndex
+                          ? 'border-emerald-500/30 bg-emerald-500/5 text-emerald-300 animate-pulse'
+                          : 'border-red-500/30 bg-red-500/5 text-red-300'
+                        : 'border-[var(--border-color)] bg-[var(--bg-card)] hover:border-indigo-500/20'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-indigo-400">
+                        {slide.pairs?.[idx]?.left || `Step ${idx + 1}`}
+                      </span>
+                      <span className="text-xs font-semibold">{item}</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        disabled={idx === 0 || matchChecked}
+                        onClick={() => moveItem(idx, 'up')}
+                        className="p-1 rounded bg-[var(--surface-sunken)] hover:bg-slate-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      >
+                        <ArrowRight className="h-3.5 w-3.5 -rotate-90 text-[var(--text-secondary)]" />
+                      </button>
+                      <button
+                        disabled={idx === matchItems.length - 1 || matchChecked}
+                        onClick={() => moveItem(idx, 'down')}
+                        className="p-1 rounded bg-[var(--surface-sunken)] hover:bg-slate-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      >
+                        <ArrowRight className="h-3.5 w-3.5 rotate-90 text-[var(--text-secondary)]" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex gap-3 justify-center pt-2">
+              {!matchChecked ? (
+                <button
+                  onClick={handleVerify}
+                  className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black shadow-lg transition-all hover:scale-[1.02] cursor-pointer"
+                >
+                  Verify Build Order
+                </button>
+              ) : (
+                <div className="flex gap-3 items-center">
+                  {matchCorrect ? (
+                    <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold bg-emerald-500/10 border border-emerald-500/20 px-4 py-2.5 rounded-xl">
+                      <CheckCircle className="h-4 w-4" />
+                      <span>Perfect! Correct order verified.</span>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleRetry}
+                      className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-black shadow-lg transition-all hover:scale-[1.02] cursor-pointer flex items-center gap-2"
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      <span>Retry Order ({matchAttempts} attempt{matchAttempts === 1 ? '' : 's'})</span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         );
       }
@@ -2587,7 +3067,9 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                 {RI(slide.icon || 'party-popper', 'h-4 w-4')}
                 <span>{slide.subtitle || 'Module Complete'}</span>
               </div>
-              <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{slide.title || 'You Did It!'}</h2>
+              <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">
+                {isPassed ? (slide.title || 'You Did It!') : 'Keep Practicing!'}
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-5 items-start">
@@ -2723,6 +3205,23 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     }
   };
 
+  const isModuleCompleteAllowed = (() => {
+    if (moduleId === 1) return labPassed;
+    if (moduleId === 2) {
+      const quizSlideIdx = totalSlides.findIndex(s => s.type === 'quiz');
+      let quizScore = currentUser?.progress?.quizScores?.[2] || 0;
+      if (quizSlideIdx !== -1 && quizSubmitted[quizSlideIdx]) {
+        const Qs = getQuizQuestions(totalSlides[quizSlideIdx]);
+        const answers = quizAnswers[quizSlideIdx] || {};
+        const correct = Qs.reduce((a: number, q: any, i: number) => a + (answers[i] === q.answer ? 1 : 0), 0);
+        const pct = Qs.length > 0 ? Math.round((correct / Qs.length) * 100) : 0;
+        quizScore = Math.max(quizScore, pct);
+      }
+      return quizScore >= 80;
+    }
+    return true;
+  })();
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--surface-overlay)] backdrop-blur-lg p-4">
       <div className="w-full max-w-6xl h-[90vh] rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl flex flex-col overflow-hidden">
@@ -2768,7 +3267,11 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                   subtitle: 'Explain Like I\'m 5',
                   desc: 'Slower paced explainers, no jargon left unexplained, with hand-held guidance throughout.'
                 }
-              ].map((t) => (
+              ].filter(t => {
+                // Module 1 supports all 4 presets. Modules 2-6 restrict to Formal + Gen-Z only.
+                const twoPresetModules = [2, 3, 4, 5, 6];
+                return !twoPresetModules.includes(moduleId) || t.key === 'formal' || t.key === 'genz';
+              }).map((t) => (
                 <button
                   key={t.key}
                   onClick={() => setSelectedTone(t.key as any)}
@@ -2821,7 +3324,10 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
               <div className="flex items-center gap-3">
                 <div className="hidden md:flex gap-1 items-center">
                   {Array.from({ length: slidesCount }).map((_, i) => (
-                    <button key={i} onClick={() => setCurrentSlide(i)} className={`rounded-full transition-all ${i === currentSlide ? 'w-5 h-1.5 bg-indigo-500' : i < currentSlide ? 'w-1.5 h-1.5 bg-emerald-500/50' : 'w-1.5 h-1.5 bg-[var(--border-color)] hover:bg-slate-400/40'}`} />
+                    <button key={i} onClick={() => {
+                      if (i <= currentSlide) setCurrentSlide(i);
+                      else addToast("Please proceed sequentially using the 'Next' button.", "warning");
+                    }} className={`rounded-full transition-all ${i === currentSlide ? 'w-5 h-1.5 bg-indigo-500' : i < currentSlide ? 'w-1.5 h-1.5 bg-emerald-500/50' : 'w-1.5 h-1.5 bg-[var(--border-color)] hover:bg-slate-400/40'}`} />
                   ))}
                 </div>
                 <button onClick={onClose} className="p-1.5 hover:bg-slate-500/10 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
@@ -2897,8 +3403,8 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                   <span className="text-[10px] text-[var(--text-secondary)] font-semibold">{currentSlide + 1} / {slidesCount}</span>
 
                   {currentSlide === slidesCount - 1 ? (
-                    <button onClick={() => { recordModuleComplete(moduleId); onClose(); }} disabled={moduleId === 1 && !labPassed}
-                      className={`flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-emerald-500 to-indigo-500 text-white rounded-lg text-xs font-bold shadow-lg hover:brightness-110 transition-all ${moduleId === 1 && !labPassed ? 'opacity-40 cursor-not-allowed' : ''}`}>
+                    <button onClick={() => { recordModuleComplete(moduleId); onClose(); }} disabled={!isModuleCompleteAllowed}
+                      className={`flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-emerald-500 to-indigo-500 text-white rounded-lg text-xs font-bold shadow-lg hover:brightness-110 transition-all ${!isModuleCompleteAllowed ? 'opacity-40 cursor-not-allowed' : ''}`}>
                       <CheckCircle2 className="h-3.5 w-3.5" /> Complete Module
                     </button>
                   ) : (
@@ -2943,7 +3449,10 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                 <div className="shrink-0 space-y-1.5">
                   <div className="flex flex-wrap gap-1 justify-center">
                     {Array.from({ length: slidesCount }).map((_, i) => (
-                      <button key={i} onClick={() => setCurrentSlide(i)} className={`rounded-full transition-all ${i === currentSlide ? 'w-5 h-2 bg-indigo-500' : i < currentSlide ? 'w-2 h-2 bg-emerald-500/60' : 'w-2 h-2 bg-[var(--border-color)]'}`} />
+                      <button key={i} onClick={() => {
+                        if (i <= currentSlide) setCurrentSlide(i);
+                        else addToast("Please proceed sequentially using the 'Next' button.", "warning");
+                      }} className={`rounded-full transition-all ${i === currentSlide ? 'w-5 h-2 bg-indigo-500' : i < currentSlide ? 'w-2 h-2 bg-emerald-500/60' : 'w-2 h-2 bg-[var(--border-color)]'}`} />
                     ))}
                   </div>
                   <p className="text-[10px] text-center text-[var(--text-secondary)]">{progressPct}% complete</p>

@@ -341,6 +341,99 @@ button:disabled {
 .animate-float-down { animation: floatDown 15s ease-in-out infinite; }
 .animate-float-spin { animation: floatSpin 20s ease-in-out infinite; }
 
+/* =====================================================
+   SLIDE PRESENTATION ANIMATIONS — Tier 1 richness layer
+   ===================================================== */
+
+/* Stagger reveal for direct children. Wrap any list/grid with .stagger-children. */
+.stagger-children > * {
+  opacity: 0;
+  animation: staggerIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.stagger-children > *:nth-child(1)  { animation-delay: 0.04s; }
+.stagger-children > *:nth-child(2)  { animation-delay: 0.12s; }
+.stagger-children > *:nth-child(3)  { animation-delay: 0.20s; }
+.stagger-children > *:nth-child(4)  { animation-delay: 0.28s; }
+.stagger-children > *:nth-child(5)  { animation-delay: 0.36s; }
+.stagger-children > *:nth-child(6)  { animation-delay: 0.44s; }
+.stagger-children > *:nth-child(7)  { animation-delay: 0.52s; }
+.stagger-children > *:nth-child(8)  { animation-delay: 0.60s; }
+.stagger-children > *:nth-child(9)  { animation-delay: 0.68s; }
+.stagger-children > *:nth-child(10) { animation-delay: 0.76s; }
+@keyframes staggerIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero stat — radial halo that breathes behind the number */
+.hero-halo { position: relative; }
+.hero-halo::before {
+  content: '';
+  position: absolute;
+  inset: -28px;
+  background: radial-gradient(circle, rgba(99,102,241,0.22) 0%, rgba(168,85,247,0.10) 45%, transparent 75%);
+  z-index: -1;
+  border-radius: 9999px;
+  animation: heroGlow 4s ease-in-out infinite;
+  filter: blur(2px);
+}
+@keyframes heroGlow {
+  0%, 100% { opacity: 0.45; transform: scale(0.95); }
+  50%      { opacity: 1;    transform: scale(1.08); }
+}
+
+/* Slow gentle icon breath — for prominent slide icons */
+.icon-breath { animation: iconBreath 5s ease-in-out infinite; transform-origin: center; }
+@keyframes iconBreath {
+  0%, 100% { transform: scale(1);     filter: brightness(1); }
+  50%      { transform: scale(1.06);  filter: brightness(1.15); }
+}
+
+/* Slide enter — gentle slide-and-fade */
+.slide-enter {
+  animation: slideEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes slideEnter {
+  from { opacity: 0; transform: translateY(12px) scale(0.99); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* Act transition full-bleed banner */
+.act-banner {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: actBannerLife 1700ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.act-banner-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(12,8,38,0.92) 0%, rgba(5,8,20,0.85) 60%, rgba(5,8,20,0.55) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.act-banner-content {
+  position: relative;
+  text-align: center;
+  transform-origin: center;
+  animation: actBannerInner 1700ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes actBannerLife {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes actBannerInner {
+  0%   { transform: scale(0.78) translateY(20px); filter: blur(8px); }
+  15%  { transform: scale(1)    translateY(0);   filter: blur(0); }
+  80%  { transform: scale(1)    translateY(0);   filter: blur(0); }
+  100% { transform: scale(1.06) translateY(-6px);filter: blur(2px); }
+}
+
 /* Celebration confetti */
 @keyframes confetti-fall {
   0%   { transform: translateY(-12vh) rotate(var(--rot, 0deg)); opacity: 1; }
