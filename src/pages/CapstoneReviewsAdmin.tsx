@@ -1854,7 +1854,7 @@ const ReviewDetail: React.FC<{
                       ? 'border-amber-500/50 focus:border-amber-500/70'
                       : reworkChecklist.trim() ? 'border-emerald-500/30' : ''
                   }`}
-                  placeholder={`1. Add Excel export to Status Report&#10;2. Fix RBAC bypass on /admin/users&#10;…`}
+                  placeholder={`1. Add Excel export to Status Report\n2. Fix RBAC bypass on /admin/users\n…`}
                 />
                 {(decision === 'rework' || decision === 'rebuild') && !reworkChecklist.trim() && (
                   <p className="text-[10px] text-amber-400 mt-1">⚠ Required for {decision.toUpperCase()} — list each item the learner must address.</p>

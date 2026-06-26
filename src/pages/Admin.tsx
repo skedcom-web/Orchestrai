@@ -73,6 +73,7 @@ export const Admin: React.FC = () => {
   const [feedbackCandidate, setFeedbackCandidate] = useState<UserProfile | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
+  const [approvingUid, setApprovingUid] = useState<string | null>(null);
 
   // Candidates calculations & filtering
   const candidatesList = usersList.filter(u => u.role !== 'ADMIN');
@@ -447,8 +448,11 @@ export const Admin: React.FC = () => {
   };
 
   const handleApproveUser = async (user: UserProfile) => {
+    if (approvingUid) return;
+    setApprovingUid(user.uid);
     updateUserProfile(user.uid, { accountStatus: 'APPROVED' });
     await triggerApprovalEmail(user);
+    setApprovingUid(null);
     alert(`Candidate ${user.name} approved! Access unlocked.`);
   };
 
@@ -525,6 +529,10 @@ export const Admin: React.FC = () => {
   const handleUpdatePassword = () => {
     if (!newPasswordVal) {
       addToast("Please enter a new password.", "warning");
+      return;
+    }
+    if (newPasswordVal.length < 8) {
+      addToast("Password must be at least 8 characters.", "warning");
       return;
     }
     updateSystemConfig({
@@ -2341,9 +2349,10 @@ export const Admin: React.FC = () => {
                           <td className="p-4 text-right">
                             <button
                               onClick={() => handleApproveUser(user)}
-                              className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded text-[11px] font-bold shadow transition-all"
+                              disabled={approvingUid === user.uid}
+                              className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded text-[11px] font-bold shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              Approve Candidate
+                              {approvingUid === user.uid ? 'Approving…' : 'Approve Candidate'}
                             </button>
                           </td>
                         </tr>

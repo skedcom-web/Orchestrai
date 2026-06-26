@@ -441,7 +441,7 @@ const DEFAULT_SLIDES_MAP: Record<number, any[]> = {
   ]
 };
 
-const getSlidesForModule = (moduleId: number, customSlides?: any[]) => {
+export const getSlidesForModule = (moduleId: number, customSlides?: any[]) => {
   if (customSlides && customSlides.length > 0) return customSlides;
   if (DEFAULT_SLIDES_MAP[moduleId]) return DEFAULT_SLIDES_MAP[moduleId];
   const names: Record<number, string> = { 3: 'The OrchestrAI Bible', 4: 'Foundation Build', 5: 'The Workflow Engine', 6: 'Admin, Reports & Going Live', 7: 'Practical Demo — Capstone' };
@@ -452,13 +452,13 @@ const getSlidesForModule = (moduleId: number, customSlides?: any[]) => {
   ];
 };
 
-const getQuizQuestions = (slide: any) => {
+export const getQuizQuestions = (slide: any) => {
   if (Array.isArray(slide.questions) && slide.questions.length > 0 && typeof slide.questions[0] === 'object') return slide.questions;
   if (slide.question && Array.isArray(slide.options)) return [{ question: slide.question, options: slide.options, answer: slide.answer, explanation: slide.explanation }];
   return [];
 };
 
-const resolveToneValue = (val: any, tone: string): any => {
+export const resolveToneValue = (val: any, tone: string): any => {
   if (val === null || val === undefined) return val;
   if (typeof val === 'object') {
     if ('conversational' in val || 'formal' in val || 'genz' in val || 'beginner' in val) {
