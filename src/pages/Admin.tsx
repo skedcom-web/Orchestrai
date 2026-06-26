@@ -258,6 +258,8 @@ export const Admin: React.FC = () => {
   const [templateIdSmeWelcome, setTemplateIdSmeWelcome] = useState(systemConfig.emailjsTemplateIdSmeWelcome || '');
   const [templateIdFeedback, setTemplateIdFeedback] = useState(systemConfig.emailjsTemplateIdFeedback || '');
   const [templateIdCertification, setTemplateIdCertification] = useState(systemConfig.emailjsTemplateIdCertification || '');
+  const [templateIdAdminNotification, setTemplateIdAdminNotification] = useState(systemConfig.emailjsTemplateIdAdminNotification || '');
+  const [templateIdSmeReassigned, setTemplateIdSmeReassigned] = useState(systemConfig.emailjsTemplateIdSmeReassigned || '');
 
   // Synchronize local states with global systemConfig (needed when RTDB config listener loads values asynchronously)
   useEffect(() => {
@@ -268,6 +270,8 @@ export const Admin: React.FC = () => {
     setTemplateIdSmeWelcome(systemConfig.emailjsTemplateIdSmeWelcome || '');
     setTemplateIdFeedback(systemConfig.emailjsTemplateIdFeedback || '');
     setTemplateIdCertification(systemConfig.emailjsTemplateIdCertification || '');
+    setTemplateIdAdminNotification(systemConfig.emailjsTemplateIdAdminNotification || '');
+    setTemplateIdSmeReassigned(systemConfig.emailjsTemplateIdSmeReassigned || '');
     setRequireEmailVerifVal(systemConfig.requireEmailVerification !== false);
     setRequirePhoneVerifVal(!!systemConfig.requirePhoneVerification);
     setFreeModulesLimitVal(systemConfig.freeModulesLimit || 2);
@@ -280,6 +284,8 @@ export const Admin: React.FC = () => {
     systemConfig.emailjsTemplateIdSmeWelcome,
     systemConfig.emailjsTemplateIdFeedback,
     systemConfig.emailjsTemplateIdCertification,
+    systemConfig.emailjsTemplateIdAdminNotification,
+    systemConfig.emailjsTemplateIdSmeReassigned,
     systemConfig.requireEmailVerification,
     systemConfig.requirePhoneVerification,
     systemConfig.freeModulesLimit,
@@ -352,7 +358,9 @@ export const Admin: React.FC = () => {
       adminEmail: adminEmail,
       emailjsTemplateIdSmeWelcome: templateIdSmeWelcome,
       emailjsTemplateIdFeedback: templateIdFeedback,
-      emailjsTemplateIdCertification: templateIdCertification
+      emailjsTemplateIdCertification: templateIdCertification,
+      emailjsTemplateIdAdminNotification: templateIdAdminNotification,
+      emailjsTemplateIdSmeReassigned: templateIdSmeReassigned
     });
     alert("EmailJS API settings saved!");
   };
@@ -465,6 +473,10 @@ export const Admin: React.FC = () => {
         return '{{name}} (student name), {{email}} (student email), {{capstoneId}} (capstone ID), {{capstoneTitle}} (capstone title), {{decision}} (OUTSTANDING/PASS/REWORK/REBUILD), {{score}} (total score), {{scoreBreakdown}} (category-by-category scores), {{strengths}} (strengths comments), {{gaps}} (gaps comments), {{reworkChecklist}} (rework requirements), {{nextSteps}} (instructions based on decision), {{reviewerName}} (reviewer name), {{reviewedAt}} (reviewed date/time)';
       case 'certification_issued':
         return '{{name}} (student name), {{email}} (student email), {{capstoneId}} (capstone ID), {{capstoneTitle}} (capstone title), {{capstoneDomain}} (capstone domain), {{decision}} (OUTSTANDING/PASS), {{score}} (total score), {{certificateUrl}} (live certificate URL), {{certifiedAt}} (issued date/time), {{certifiedBy}} (signing authority name)';
+      case 'capstone_submitted_admin':
+        return '{{learnerName}} (student name), {{learnerEmail}} (student email), {{capstoneId}} (capstone ID), {{capstoneTitle}} (capstone title), {{capstoneDomain}} (capstone domain), {{submittedAt}} (submitted date/time), {{githubUrl}} (repo), {{firebaseUrl}} (live app), {{readmeUrl}} (readme)';
+      case 'sme_reassigned':
+        return '{{name}} (SME name), {{learnerName}} (student name), {{learnerEmail}} (student email), {{capstoneId}} (capstone ID), {{capstoneTitle}} (capstone title), {{capstoneDomain}} (capstone domain), {{submittedAt}} (submitted date/time), {{githubUrl}} (repo), {{firebaseUrl}} (live app), {{readmeUrl}} (readme)';
       default:
         return '';
     }
@@ -2129,6 +2141,30 @@ export const Admin: React.FC = () => {
                               className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
                             />
                           </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Admin Submission Alert Template ID (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="template_admin_alert"
+                              value={templateIdAdminNotification}
+                              onChange={(e) => setTemplateIdAdminNotification(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              SME Reassigned Alert Template ID (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="template_sme_reassigned"
+                              value={templateIdSmeReassigned}
+                              onChange={(e) => setTemplateIdSmeReassigned(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
                         </div>
 
                         <div className="pt-2">
@@ -2169,6 +2205,8 @@ export const Admin: React.FC = () => {
                               <option value="reviewer_password_reset">SME Password Reset: New Credentials</option>
                               <option value="decision_feedback">Student Notice: Capstone Decision & Rubric Feedback</option>
                               <option value="certification_issued">Student Notice: Lead Certification Granted</option>
+                              <option value="capstone_submitted_admin">Admin Alert: Capstone Review Initiated</option>
+                              <option value="sme_reassigned">SME Notice: Review Assigned</option>
                             </select>
                           </div>
 

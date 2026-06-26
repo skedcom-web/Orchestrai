@@ -9,11 +9,8 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { getFirebaseApp, getFirebaseDb } from '../firebase';
-import { CAPSTONES, DOMAINS, type Capstone as CapstoneItem } from '../data/capstones';
+import { CAPSTONES, type Capstone as CapstoneItem } from '../data/capstones';
 
-const REVIEWER_DEFAULT_EMAIL = 'vthinkorchestrai@gmail.com';
-const REVIEWER_DEFAULT_NAME = 'Sithanandham R';
-const REVIEWER_DEFAULT_UID = 'reviewer-vthink-default';
 
 interface CapstoneSelection { capstoneId: string; selectedAt: number; status: string; }
 interface SupportingDoc { name: string; storageUrl: string; size: number; uploadedAt: number; }
@@ -204,56 +201,8 @@ export const CapstoneSubmit: React.FC = () => {
     setUploading((prev) => prev.filter((x) => x.file !== file));
   };
 
-  // ─── Reviewer assignment (round-robin by domain) ───────────────────────────
-  const assignReviewer = async (submissionDomain: string): Promise<{ uid: string; name: string; email: string }> => {
-    const db = getFirebaseDb();
-    if (!db) {
-      return { uid: REVIEWER_DEFAULT_UID, name: REVIEWER_DEFAULT_NAME, email: REVIEWER_DEFAULT_EMAIL };
-    }
 
-    const snap = await get(ref(db, 'reviewers'));
-    let reviewers: Array<any> = [];
-    if (snap.exists()) {
-      const obj = snap.val();
-      reviewers = Object.entries(obj).map(([uid, v]: [string, any]) => ({ uid, ...v }));
-    }
-
-    // Seed default reviewer if pool empty
-    if (reviewers.length === 0) {
-      const seed = {
-        name: REVIEWER_DEFAULT_NAME,
-        email: REVIEWER_DEFAULT_EMAIL,
-        domainsCovered: DOMAINS,
-        activeAssignments: 0,
-        completedReviews: 0,
-        seededAt: Date.now()
-      };
-      await set(ref(db, `reviewers/${REVIEWER_DEFAULT_UID}`), seed);
-      reviewers = [{ uid: REVIEWER_DEFAULT_UID, ...seed }];
-    }
-
-    // Pick reviewers covering this domain, lowest active load
-    const eligible = reviewers.filter((r) =>
-      !r.domainsCovered || r.domainsCovered.length === 0 || r.domainsCovered.includes(submissionDomain)
-    );
-    const pool = eligible.length > 0 ? eligible : reviewers;
-    pool.sort((a, b) => (a.activeAssignments || 0) - (b.activeAssignments || 0));
-    const chosen = pool[0];
-
-    // Increment chosen reviewer's load
-    try {
-      await update(ref(db, `reviewers/${chosen.uid}`), {
-        activeAssignments: (chosen.activeAssignments || 0) + 1,
-        lastAssignedAt: Date.now()
-      });
-    } catch (err) {
-      console.warn('[CapstoneSubmit] Could not increment reviewer load:', err);
-    }
-
-    return { uid: chosen.uid, name: chosen.name, email: chosen.email };
-  };
-
-  // ─── Send notification email (single template, multi-purpose payload) ──────
+  // ─── Send notification email to admin ──────────────────────────────────────
   const sendNotificationEmail = async (params: {
     learnerName: string; learnerEmail: string;
     reviewerName: string; reviewerEmail: string;
@@ -262,41 +211,31 @@ export const CapstoneSubmit: React.FC = () => {
     readmeUrl: string; workflowDiagramUrl: string; supportingDocsCount: number;
   }) => {
     const serviceId = systemConfig.emailjsServiceId;
-    const templateId = systemConfig.emailjsTemplateId;
+    const templateId = systemConfig.emailjsTemplateIdAdminNotification || systemConfig.emailjsTemplateId;
     const publicKey = systemConfig.emailjsPublicKey;
     if (!serviceId || !templateId || !publicKey) {
       console.warn('[CapstoneSubmit] EmailJS not configured — skipping notification email.');
       return { skipped: true };
     }
-    const subject = `[OrchestrAI Capstone Submission] ${params.capstoneId} · ${params.capstoneTitle} · ${params.learnerName}`;
-    const body = [
-      `A new OrchestrAI Lead Certification capstone has been submitted for review.`,
-      ``,
-      `LEARNER`,
-      `  Name:      ${params.learnerName}`,
-      `  Email:     ${params.learnerEmail}`,
-      ``,
-      `CAPSTONE`,
-      `  ID:        ${params.capstoneId}`,
-      `  Title:     ${params.capstoneTitle}`,
-      `  Domain:    ${params.capstoneDomain}`,
-      ``,
-      `ASSIGNED REVIEWER`,
-      `  Name:      ${params.reviewerName}`,
-      `  Email:     ${params.reviewerEmail}`,
-      ``,
-      `SUBMISSION PACKAGE`,
-      `  Submitted:        ${params.submittedAt}`,
-      `  GitHub Repo:      ${params.githubUrl}`,
-      `  Firebase Live:    ${params.firebaseUrl}`,
-      `  README:           ${params.readmeUrl}`,
-      `  Workflow Diagram: ${params.workflowDiagramUrl || '(not provided)'}`,
-      `  Supporting Docs:  ${params.supportingDocsCount} file(s) uploaded`,
-      ``,
-      `Open the Admin → Review Queue (shipping in Phase 4) to score this submission against the 9-category rubric.`,
-      ``,
-      `— OrchestrAI Academy automated notification`
-    ].join('\n');
+
+    const configTemplate = systemConfig.templates?.capstone_submitted_admin;
+    const templateSubject = configTemplate?.subject || "[OrchestrAI Alert] Capstone Review Initiated — {{capstoneId}} · {{learnerName}}";
+    const templateBody = configTemplate?.body || "Hi Admin,\n\nA new capstone project review has been initiated by {{learnerName}} ({{learnerEmail}}) and is awaiting review or reviewer assignment.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  README: {{readmeUrl}}\n\nPlease visit the Admin Console to assign or review this project.\n\n— OrchestrAI Academy";
+
+    const subject = templateSubject
+      .replace(/{{capstoneId}}/g, params.capstoneId)
+      .replace(/{{learnerName}}/g, params.learnerName);
+
+    const body = templateBody
+      .replace(/{{learnerName}}/g, params.learnerName)
+      .replace(/{{learnerEmail}}/g, params.learnerEmail)
+      .replace(/{{capstoneId}}/g, params.capstoneId)
+      .replace(/{{capstoneTitle}}/g, params.capstoneTitle)
+      .replace(/{{capstoneDomain}}/g, params.capstoneDomain)
+      .replace(/{{submittedAt}}/g, params.submittedAt)
+      .replace(/{{githubUrl}}/g, params.githubUrl)
+      .replace(/{{firebaseUrl}}/g, params.firebaseUrl)
+      .replace(/{{readmeUrl}}/g, params.readmeUrl);
 
     try {
       await emailjs.send(serviceId, templateId, {
@@ -305,7 +244,6 @@ export const CapstoneSubmit: React.FC = () => {
         subject,
         message: body,
         body,
-        paymentId: params.capstoneId,
         learnerName: params.learnerName,
         learnerEmail: params.learnerEmail,
         capstoneId: params.capstoneId,
@@ -345,7 +283,11 @@ export const CapstoneSubmit: React.FC = () => {
     const submittedAt = Date.now();
     const submittedAtIso = new Date(submittedAt).toISOString();
 
-    const reviewer = await assignReviewer(capstone.domain);
+    const reviewer = {
+      uid: 'admin-new-uid',
+      name: 'vThink OrchestrAI Admin',
+      email: systemConfig.adminEmail || 'vthinkorchestrai@gmail.com'
+    };
 
     const submission = {
       submissionId,
@@ -361,7 +303,7 @@ export const CapstoneSubmit: React.FC = () => {
       workflowDiagramUrl: workflowDiagramUrl.trim() || '',
       supportingDocs,
       submittedAt,
-      status: 'assigned',
+      status: 'submitted',
       assignedReviewerUid: reviewer.uid,
       assignedReviewerName: reviewer.name,
       assignedReviewerEmail: reviewer.email,
@@ -441,19 +383,19 @@ export const CapstoneSubmit: React.FC = () => {
     if (emailRes.skipped) {
       alertUser(
         'Capstone Submitted',
-        `${capstone.id} submitted for review and assigned to ${reviewer.name}. Email notification is queued but EmailJS is not configured on the admin side — the reviewer will pick it up from the admin queue.`,
+        `${capstone.id} has been submitted for review. It is currently awaiting review/assignment. Email notification is queued but EmailJS is not configured on the admin side — the administrator will pick it up from the admin queue.`,
         'success'
       );
     } else if (emailRes.error) {
       alertUser(
         'Submitted — Notification Failed',
-        `${capstone.id} was saved to the cloud and assigned to ${reviewer.name}. The notification email failed to send (${emailRes.error}). The reviewer can still see it in the admin queue.`,
+        `${capstone.id} was saved to the cloud and is awaiting review. The administrator alert email failed to send (${emailRes.error}). The administrator can still see it in the admin queue.`,
         'warning'
       );
     } else {
       alertUser(
         'Capstone Submitted',
-        `${capstone.id} submitted for review and assigned to ${reviewer.name}. A notification email was sent. You'll receive a decision report once the review completes.`,
+        `${capstone.id} has been submitted for review and is awaiting review or reviewer assignment. An email alert has been sent to the administrator.`,
         'success'
       );
     }

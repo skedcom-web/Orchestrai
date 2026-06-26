@@ -163,6 +163,8 @@ export interface SystemConfig {
   emailjsTemplateIdSmeWelcome?: string;
   emailjsTemplateIdFeedback?: string;
   emailjsTemplateIdCertification?: string;
+  emailjsTemplateIdAdminNotification?: string;
+  emailjsTemplateIdSmeReassigned?: string;
   firebaseApiKey?: string;
   firebaseAuthDomain?: string;
   firebaseProjectId?: string;
@@ -351,6 +353,8 @@ const DEFAULT_CONFIG: SystemConfig = {
   emailjsTemplateIdSmeWelcome: '',
   emailjsTemplateIdFeedback: '',
   emailjsTemplateIdCertification: '',
+  emailjsTemplateIdAdminNotification: '',
+  emailjsTemplateIdSmeReassigned: '',
   firebaseApiKey: 'AIzaSyDb2WxO-sGsKEHWGYwBaSSCI058F8gcwB0',
   firebaseAuthDomain: 'vthinkorchestrai-auth.firebaseapp.com',
   firebaseProjectId: 'vthinkorchestrai-auth',
@@ -397,6 +401,14 @@ const DEFAULT_CONFIG: SystemConfig = {
     certification_issued: {
       subject: "🎓 OrchestrAI Lead Certification — {{capstoneTitle}}",
       body: "Congratulations, {{name}}!\n\nYou have been certified as an OrchestrAI Lead.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nYour certificate is now available in your account:\n  {{certificateUrl}}\n\nFrom the Certification page you can download a printable HTML copy.\n\nCertified on: {{certifiedAt}}\nCertified by: {{certifiedBy}}\n\nWelcome to the OrchestrAI Lead alumni network.\n\n— OrchestrAI Academy"
+    },
+    capstone_submitted_admin: {
+      subject: "[OrchestrAI Alert] Capstone Review Initiated — {{capstoneId}} · {{learnerName}}",
+      body: "Hi Admin,\n\nA new capstone project review has been initiated by {{learnerName}} ({{learnerEmail}}) and is awaiting review or reviewer assignment.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  README: {{readmeUrl}}\n\nPlease visit the Admin Console to assign or review this project.\n\n— OrchestrAI Academy"
+    },
+    sme_reassigned: {
+      subject: "[OrchestrAI Review Assigned] {{capstoneId}} · {{capstoneTitle}}",
+      body: "Hi {{name}},\n\nYou have been assigned to review a capstone project.\n\nSTUDENT\n  Name:  {{learnerName}}\n  Email: {{learnerEmail}}\n\nCAPSTONE\n  ID:    {{capstoneId}}\n  Title: {{capstoneTitle}}\n  Domain: {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  README: {{readmeUrl}}\n\nPlease visit the Reviewer Portal to review and score this submission.\n\n— OrchestrAI Academy"
     }
   },
   moduleMedia: {

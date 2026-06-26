@@ -1046,6 +1046,76 @@ const ReviewDetail: React.FC<{
     setScores(prev => ({ ...prev, [key]: clamped }));
   };
 
+  const sendReassignmentEmail = async (reviewerName: string, reviewerEmail: string) => {
+    const serviceId = systemConfig.emailjsServiceId;
+    const templateId = systemConfig.emailjsTemplateIdSmeReassigned || systemConfig.emailjsTemplateId;
+    const publicKey = systemConfig.emailjsPublicKey;
+    
+    if (!serviceId || !templateId || !publicKey) {
+      console.warn('[SubmissionReviewDetail] EmailJS not configured — skipping reassignment notification.');
+      addToast('Reassigned. EmailJS not configured to alert SME.', 'warning');
+      return;
+    }
+
+    const configTemplate = systemConfig.templates?.sme_reassigned;
+    const templateSubject = configTemplate?.subject || "[OrchestrAI Review Assigned] {{capstoneId}} · {{capstoneTitle}}";
+    const templateBody = configTemplate?.body || "Hi {{name}},\n\nYou have been assigned to review a capstone project.\n\nSTUDENT\n  Name:  {{learnerName}}\n  Email: {{learnerEmail}}\n\nCAPSTONE\n  ID:    {{capstoneId}}\n  Title: {{capstoneTitle}}\n  Domain: {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  README: {{readmeUrl}}\n\nPlease visit the Reviewer Portal to review and score this submission.\n\n— OrchestrAI Academy";
+
+    const subject = templateSubject
+      .replace(/{{capstoneId}}/g, submission.capstoneId)
+      .replace(/{{capstoneTitle}}/g, submission.capstoneTitle)
+      .replace(/{{name}}/g, reviewerName);
+
+    const body = templateBody
+      .replace(/{{name}}/g, reviewerName)
+      .replace(/{{learnerName}}/g, submission.learnerName)
+      .replace(/{{learnerEmail}}/g, submission.learnerEmail)
+      .replace(/{{capstoneId}}/g, submission.capstoneId)
+      .replace(/{{capstoneTitle}}/g, submission.capstoneTitle)
+      .replace(/{{capstoneDomain}}/g, submission.capstoneDomain)
+      .replace(/{{submittedAt}}/g, new Date(submission.submittedAt).toLocaleString())
+      .replace(/{{githubUrl}}/g, submission.githubUrl)
+      .replace(/{{firebaseUrl}}/g, submission.firebaseUrl)
+      .replace(/{{readmeUrl}}/g, submission.readmeUrl);
+
+    let emailStatus = 'sent';
+    let emailErr = '';
+
+    try {
+      await emailjs.send(serviceId, templateId, {
+        name: reviewerName,
+        email: reviewerEmail,
+        subject,
+        message: body,
+        body,
+        learnerName: submission.learnerName,
+        learnerEmail: submission.learnerEmail,
+        capstoneId: submission.capstoneId,
+        capstoneTitle: submission.capstoneTitle,
+        githubUrl: submission.githubUrl,
+        firebaseUrl: submission.firebaseUrl
+      }, { publicKey });
+    } catch (e: any) {
+      emailStatus = 'failed';
+      emailErr = e?.text || e?.message || String(e);
+      console.error('[sendReassignmentEmail] failed:', e);
+    }
+
+    addNotificationLog({
+      type: 'SME Review Assigned',
+      recipient: reviewerEmail,
+      subject,
+      channel: emailStatus === 'sent' ? 'EmailJS API' : `EmailJS API (${emailStatus}${emailErr ? ': ' + emailErr.slice(0, 80) : ''})`,
+      status: emailStatus === 'sent' ? 'Sent' : 'Failed'
+    });
+
+    if (emailStatus === 'sent') {
+      addToast(`Reassigned. Notification email sent to ${reviewerName}.`, 'success');
+    } else {
+      addToast(`Reassigned, but notification email failed to send to ${reviewerName}. Check logs.`, 'warning');
+    }
+  };
+
   const saveDraft = async () => {
     const db = getFirebaseDb();
     if (!db) { addToast('Cloud database not available.', 'error'); return; }
@@ -1066,6 +1136,11 @@ const ReviewDetail: React.FC<{
       // Persist mode + assignment if changed
       const subUpdates: any = {};
       if (reviewMode && reviewMode !== submission.reviewMode) subUpdates.reviewMode = reviewMode;
+      
+      let hasReassigned = false;
+      let chosenReviewerName = '';
+      let chosenReviewerEmail = '';
+
       if (assignedUid && assignedUid !== submission.assignedReviewerUid) {
         const r = reviewers.find(x => x.uid === assignedUid);
         if (r) {
@@ -1073,12 +1148,25 @@ const ReviewDetail: React.FC<{
           subUpdates.assignedReviewerName = r.name;
           subUpdates.assignedReviewerEmail = r.email;
           subUpdates.assignedAt = Date.now();
+          if (r.uid !== 'admin-new-uid') {
+            subUpdates.status = 'assigned_to_sme';
+            hasReassigned = true;
+            chosenReviewerName = r.name;
+            chosenReviewerEmail = r.email;
+          } else {
+            subUpdates.status = 'submitted';
+          }
         }
       }
       if (Object.keys(subUpdates).length > 0) {
         await update(ref(db, `submissions/${submission.learnerUid}/${submission.capstoneId}`), subUpdates);
       }
       addToast('Draft saved.', 'success');
+      
+      if (hasReassigned) {
+        await sendReassignmentEmail(chosenReviewerName, chosenReviewerEmail);
+      }
+
       onSaved();
     } catch (err: any) {
       addToast(`Save failed: ${err?.message || err}`, 'error');
@@ -1406,9 +1494,7 @@ const ReviewDetail: React.FC<{
     }
   };
 
-  const eligibleReviewers = reviewers.filter(r =>
-    r.domainsCovered.length === 0 || r.domainsCovered.length === DOMAINS.length || r.domainsCovered.includes(submission.capstoneDomain)
-  );
+  const eligibleReviewers = reviewers.filter(r => !r.disabled);
 
   return (
     <div className="space-y-5 animate-in fade-in duration-200">
