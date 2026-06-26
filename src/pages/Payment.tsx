@@ -30,7 +30,7 @@ export const Payment: React.FC = () => {
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h3 className="text-xl font-bold mb-2">Quiz Verification Required</h3>
         <p className="text-sm text-[var(--text-secondary)] mb-4">
-          Please score $\ge 80\%$ on the knowledge check before proceeding to payment.
+          Please score ≥ 80% on the knowledge check before proceeding to payment.
         </p>
         <button
           onClick={() => navigate('/quiz')}

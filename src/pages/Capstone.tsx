@@ -510,7 +510,7 @@ const ConfirmLockModal: React.FC<{
       <ul className="text-xs text-[var(--text-secondary)] space-y-1.5 mb-5">
         <li>• Your selection is saved to your candidate profile.</li>
         <li>• You can still swap capstones later (re-lock from any card).</li>
-        <li>• When you're ready, submit via Module 7 → Submission (shipping in Phase 3).</li>
+        <li>• When you're ready, submit via Module 7 → Submission.</li>
       </ul>
       <div className="flex items-center justify-end gap-2">
         <button
