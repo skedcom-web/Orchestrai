@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { PromptSimulator } from './PromptSimulator';
 import {
@@ -444,7 +444,7 @@ const DEFAULT_SLIDES_MAP: Record<number, any[]> = {
 const getSlidesForModule = (moduleId: number, customSlides?: any[]) => {
   if (customSlides && customSlides.length > 0) return customSlides;
   if (DEFAULT_SLIDES_MAP[moduleId]) return DEFAULT_SLIDES_MAP[moduleId];
-  const names: Record<number, string> = { 3: 'Intent Mastery', 4: 'Roles & Governance', 5: 'Live Iteration', 6: 'Observability', 7: 'Guardrails', 8: 'Evaluation & KPIs' };
+  const names: Record<number, string> = { 3: 'The OrchestrAI Bible', 4: 'Foundation Build', 5: 'The Workflow Engine', 6: 'Admin, Reports & Going Live', 7: 'Practical Demo — Capstone' };
   const n = names[moduleId] || `Module ${moduleId}`;
   return [
     { type: 'hero_welcome', icon: 'rocket', title: `Module ${moduleId}: ${n}`, tagline: '"Mastering the next level of OrchestrAI delivery."', subtitle: `Track Certified · ${n}`, hero_stat: { value: `Mod ${moduleId}`, label: n }, promises: [{ icon: 'target', color: PILLAR_GRAD[0], title: 'Learn', desc: `Core principles of ${n}` }, { icon: 'check-circle', color: PILLAR_GRAD[2], title: 'Apply', desc: 'Practical techniques in real engagements' }, { icon: 'award', color: PILLAR_GRAD[4], title: 'Certify', desc: 'Validate mastery with the assessment' }], analogy: `Module ${moduleId} builds on the foundations established in Modules 1 and 2.`, narration: `Welcome to Module ${moduleId}: ${n}.` },
@@ -522,13 +522,37 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
   const [shakeKey, setShakeKey] = useState(0);
 
   const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+  const fadeIntervalRef = useRef<any>(null);
   const narrationAudioRef = useRef<HTMLAudioElement | null>(null); // Pre-rendered MP3 narration (per segment / slide)
   const activeAudioSlideRef = useRef<any>(null);
   const currentSegmentIndexRef = useRef<number>(0);
   const isPausedAudioRef = useRef<boolean>(false);
   const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const activeTimersRef = useRef<number[]>([]);
+  const audioUnlockedRef = useRef<boolean>(false);
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+  // Unlock browser audio context — must be called from a user gesture (click/tap).
+  // Plays a silent buffer so that subsequent programmatic audio.play() calls in
+  // useEffects are not blocked by the browser autoplay policy.
+  const unlockAudioContext = () => {
+    if (audioUnlockedRef.current) return;
+    audioUnlockedRef.current = true;
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.start(0);
+      // Also create + play a silent HTML Audio to unlock the media element path
+      const silentAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+      silentAudio.volume = 0;
+      silentAudio.play().catch(() => {});
+    } catch (e) {
+      // AudioContext not available — not critical
+    }
+  };
 
   // Listen for speech synthesis voices changed to ensure mobile compatibility
   useEffect(() => {
@@ -558,13 +582,17 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
-      if (narrationAudioRef.current) {
-        narrationAudioRef.current.pause();
-        narrationAudioRef.current = null;
+      if (fadeIntervalRef.current) {
+        clearInterval(fadeIntervalRef.current);
+        fadeIntervalRef.current = null;
       }
       if (bgAudioRef.current) {
         bgAudioRef.current.pause();
         bgAudioRef.current = null;
+      }
+      if (narrationAudioRef.current) {
+        narrationAudioRef.current.pause();
+        narrationAudioRef.current = null;
       }
       if (activeTimersRef.current) {
         activeTimersRef.current.forEach(id => window.clearTimeout(id));
@@ -578,98 +606,115 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
   const videoUrl = mediaConfig?.videoUrl || '';
   const customSlides = systemConfig.moduleSlides?.[moduleId];
 
+  const isTwoPresetModule = useMemo(() => [2, 3, 4, 5, 6].includes(moduleId), [moduleId]);
+  const defaultTone = isTwoPresetModule ? 'formal' : 'conversational';
+
   useEffect(() => {
     if (!mediaConfig || !mediaConfig.hasPresets) {
-      setSelectedTone(moduleId === 2 ? 'formal' : 'conversational');
+      setSelectedTone(isTwoPresetModule ? 'formal' : 'conversational');
     }
-  }, [mediaConfig, moduleId]);
+  }, [mediaConfig, moduleId, isTwoPresetModule]);
 
-  let slidesForSelectedTone: any[] = [];
-  if (customSlides) {
-    if (Array.isArray(customSlides)) {
-      slidesForSelectedTone = customSlides;
-    } else {
-      const toneKey = selectedTone || (moduleId === 2 ? 'formal' : 'conversational');
-      slidesForSelectedTone = (customSlides as any)[toneKey] || 
-                              (moduleId === 2 
-                                ? (customSlides as any).formal || (customSlides as any).genz 
-                                : (customSlides as any).conversational) || [];
+  const totalSlides = useMemo(() => {
+    let slidesForSelectedTone: any[] = [];
+    if (customSlides) {
+      if (Array.isArray(customSlides)) {
+        slidesForSelectedTone = customSlides;
+      } else {
+        const toneKey = selectedTone || defaultTone;
+        slidesForSelectedTone = (customSlides as any)[toneKey] || 
+                                (isTwoPresetModule 
+                                  ? (customSlides as any).formal || (customSlides as any).genz 
+                                  : (customSlides as any).conversational) || [];
+      }
     }
-  }
-  const rawCoreSlides = getSlidesForModule(moduleId, slidesForSelectedTone) || [];
-  const filteredRawCoreSlides = rawCoreSlides.filter(s => s && s.type && s.type !== 'tone_selector');
+    const rawCoreSlides = getSlidesForModule(moduleId, slidesForSelectedTone) || [];
+    const filteredRawCoreSlides = rawCoreSlides.filter(s => s && s.type && s.type !== 'tone_selector');
 
-  // Expand quiz engine slides
-  const coreSlides: any[] = [];
-  filteredRawCoreSlides.forEach((slide) => {
-    if (!slide) return;
-    if (slide.type === 'interactive_quiz_engine') {
-      if (slide.quiz_ui_package?.multiple_choice_items) {
-        coreSlides.push({
-          title: slide.title || 'Module Assessment: Quiz', subtitle: 'Questions 1–10 of 11 (Multiple Choice)', type: 'quiz',
-          questions: slide.quiz_ui_package.multiple_choice_items.map((item: any) => ({
-            question: item.text, options: item.choices.map((c: any) => `${c.value}. ${c.text}`),
-            answer: item.choices.findIndex((c: any) => c.value === item.correct_answer), explanation: item.explanation
-          })), narration: slide.narration || ''
-        });
-      } else if (Array.isArray(slide.questions)) {
-        coreSlides.push({
-          title: slide.title || 'Module Assessment: Quiz',
-          subtitle: slide.subtitle || 'Module Assessment (Multiple Choice)',
-          type: 'quiz',
-          questions: slide.questions.map((item: any) => ({
-            question: item.question,
-            options: item.choices || [],
-            answer: Array.isArray(item.choices) ? item.choices.indexOf(item.correct_answer) : -1,
-            explanation: item.explanation || ''
-          })),
-          narration: slide.narration || ''
-        });
-      }
-      if (slide.quiz_ui_package?.dynamic_applied_scenario) {
-        const sc = slide.quiz_ui_package.dynamic_applied_scenario;
-        coreSlides.push({ title: 'Question 11: Applied Engineering Lab', subtitle: sc.label || 'Practical Prompt Challenge', type: 'prompt_evaluation', scenario: `${sc.context}\n\nRequirement: ${sc.requirement}`, validation: sc.logic_engine_validation, narration: 'Write an enterprise-grade prompt applying the full P.R.O.M.P.T. blueprint with security constraints.' });
-      }
-    } else { coreSlides.push(slide); }
-  });
+    const coreSlides: any[] = [];
+    filteredRawCoreSlides.forEach((slide) => {
+      if (!slide) return;
+      if (slide.type === 'interactive_quiz_engine') {
+        if (slide.quiz_ui_package?.multiple_choice_items) {
+          coreSlides.push({
+            title: slide.title || 'Module Assessment: Quiz', subtitle: 'Questions 1–10 of 11 (Multiple Choice)', type: 'quiz',
+            questions: slide.quiz_ui_package.multiple_choice_items.map((item: any) => ({
+              question: item.text, options: item.choices.map((c: any) => `${c.value}. ${c.text}`),
+              answer: item.choices.findIndex((c: any) => c.value === item.correct_answer), explanation: item.explanation
+            })), narration: slide.narration || ''
+          });
+        } else if (Array.isArray(slide.questions)) {
+          coreSlides.push({
+            title: slide.title || 'Module Assessment: Quiz',
+            subtitle: slide.subtitle || 'Module Assessment (Multiple Choice)',
+            type: 'quiz',
+            questions: slide.questions.map((item: any) => ({
+              question: item.question,
+              options: item.choices || [],
+              answer: Array.isArray(item.choices) ? item.choices.indexOf(item.correct_answer) : -1,
+              explanation: item.explanation || ''
+            })),
+            narration: slide.narration || ''
+          });
+        }
+        if (slide.quiz_ui_package?.dynamic_applied_scenario) {
+          const sc = slide.quiz_ui_package.dynamic_applied_scenario;
+          coreSlides.push({ title: 'Question 11: Applied Engineering Lab', subtitle: sc.label || 'Practical Prompt Challenge', type: 'prompt_evaluation', scenario: `${sc.context}\n\nRequirement: ${sc.requirement}`, validation: sc.logic_engine_validation, narration: 'Write an enterprise-grade prompt applying the full P.R.O.M.P.T. blueprint with security constraints.' });
+        }
+      } else { coreSlides.push(slide); }
+    });
 
-  const slides = [...coreSlides];
+    const slides = [...coreSlides];
 
-  const rawTotalSlides = hasVideo && videoUrl
-    ? [{ title: 'Intro Lecture Video', subtitle: `Module ${moduleId} Video Briefing`, type: 'video', narration: 'Please watch this introductory briefing video.' }, ...slides]
-    : slides;
-  const totalSlides = (rawTotalSlides || [])
-    .filter(s => s !== null && s !== undefined)
-    .map(s => resolveToneValue(s, selectedTone || (moduleId === 2 ? 'formal' : 'conversational')));
+    const rawTotalSlides = hasVideo && videoUrl
+      ? [{ title: 'Intro Lecture Video', subtitle: `Module ${moduleId} Video Briefing`, type: 'video', narration: 'Please watch this introductory briefing video.' }, ...slides]
+      : slides;
+    return (rawTotalSlides || [])
+      .filter(s => s !== null && s !== undefined)
+      .map(s => resolveToneValue(s, selectedTone || defaultTone));
+  }, [moduleId, customSlides, selectedTone, defaultTone, isTwoPresetModule, hasVideo, videoUrl]);
+
   const slidesCount = totalSlides.length;
 
   // Background Music player effect
   useEffect(() => {
     const slide = totalSlides[currentSlide];
-    const musicConfig = slide?.background_music;
+    const musicConfig = slide?.background_music || slide?.bg_music;
 
     const stopBgMusic = (fadeMs = 1000) => {
       const audio = bgAudioRef.current;
       if (!audio) return;
       
+      if (fadeIntervalRef.current) {
+        clearInterval(fadeIntervalRef.current);
+        fadeIntervalRef.current = null;
+      }
+      
       try {
         let volume = audio.volume;
         const interval = 50;
         const step = volume / (fadeMs / interval || 1);
-        const fadeTimer = setInterval(() => {
+        fadeIntervalRef.current = setInterval(() => {
           if (audio.volume > step) {
             audio.volume -= step;
           } else {
-            clearInterval(fadeTimer);
+            if (fadeIntervalRef.current) {
+              clearInterval(fadeIntervalRef.current);
+              fadeIntervalRef.current = null;
+            }
             audio.pause();
             audio.currentTime = 0;
-            bgAudioRef.current = null;
+            if (bgAudioRef.current === audio) {
+              bgAudioRef.current = null;
+            }
           }
         }, interval);
       } catch (e) {
         console.error("Error stopping bg music:", e);
         audio.pause();
-        bgAudioRef.current = null;
+        if (bgAudioRef.current === audio) {
+          bgAudioRef.current = null;
+        }
       }
     };
 
@@ -704,12 +749,21 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
             const targetVolume = 0.3;
             const interval = 50;
             const step = targetVolume / (fadeMs / interval || 1);
-            const fadeTimer = setInterval(() => {
+            
+            if (fadeIntervalRef.current) {
+              clearInterval(fadeIntervalRef.current);
+              fadeIntervalRef.current = null;
+            }
+
+            fadeIntervalRef.current = setInterval(() => {
               if (audio.volume < targetVolume - step) {
                 audio.volume += step;
               } else {
                 audio.volume = targetVolume;
-                clearInterval(fadeTimer);
+                if (fadeIntervalRef.current) {
+                  clearInterval(fadeIntervalRef.current);
+                  fadeIntervalRef.current = null;
+                }
                 if (isPlayingAudio && !isPausedAudio) {
                   audio.volume = (musicConfig.duck_volume_percent || 15) / 100 * targetVolume;
                 }
@@ -837,7 +891,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     
     stopAudio();
 
-    const tone = selectedTone || (moduleId === 2 ? 'formal' : 'conversational');
+    const tone = selectedTone || defaultTone;
     let voiceKey: string = tone;
     if (tone === 'genz') {
       voiceKey = 'female_genz'; 
@@ -1105,7 +1159,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
         audio.preload = 'auto';
         narrationAudioRef.current = audio;
         const speakers: Record<string, string> = { conversational: 'Maya', formal: 'Aanya', genz: 'Zo', beginner: 'Sir Ravi' };
-        setCurrentSpeaker(speakers[selectedTone || (moduleId === 2 ? 'formal' : 'conversational')] || 'Guide');
+        setCurrentSpeaker(speakers[selectedTone || defaultTone] || 'Guide');
         const done = () => {
           narrationAudioRef.current = null;
           if (activeAudioSlideRef.current !== slide) return;
@@ -1126,10 +1180,10 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       activeUtteranceRef.current = utt;
       (window as any)._activeUtterance = utt; // Prevent GC on iOS/Mobile
       
-      const voiceObj = selectVoice(selectedTone || (moduleId === 2 ? 'formal' : 'conversational'), currentVoices);
+      const voiceObj = selectVoice(selectedTone || defaultTone, currentVoices);
       if (voiceObj) utt.voice = voiceObj;
 
-      const toneKey = (selectedTone || (moduleId === 2 ? 'formal' : 'conversational')).toLowerCase();
+      const toneKey = (selectedTone || defaultTone).toLowerCase();
       const isMaleSimple = toneKey === 'beginner';
       utt.pitch = isMaleSimple
         ? (IS_MOBILE_DEVICE ? 0.65 : 0.83)
@@ -1164,7 +1218,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       utt.onstart = () => {
         if (activeAudioSlideRef.current !== slide) return;
         const speakers: Record<string, string> = { conversational: 'Maya', formal: 'Aanya', genz: 'Zo', beginner: 'Sir Ravi' };
-        setCurrentSpeaker(speakers[selectedTone || (moduleId === 2 ? 'formal' : 'conversational')] || 'Guide');
+        setCurrentSpeaker(speakers[selectedTone || defaultTone] || 'Guide');
       };
 
       utt.onerror = (e) => {
@@ -1186,6 +1240,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
   };
 
   const handleNext = () => {
+    unlockAudioContext();
     const slide = totalSlides[currentSlide];
     if (!slide) return;
 
@@ -1240,12 +1295,14 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     }
   };
   const handlePrev = () => {
+    unlockAudioContext();
     if (currentSlide > 0) {
       setSlideDirection('left');
       setCurrentSlide(p => p - 1);
     }
   };
   const toggleAudio = () => {
+    unlockAudioContext();
     if (!('speechSynthesis' in window)) return;
     
     if (isPlayingAudio) {
@@ -1346,8 +1403,6 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
 
   // Modules 2-6 are 2-preset (Formal + Gen-Z only). Module 1 + others are 4-tone.
   // Match the same list used by the tone-selector filter below to keep behavior consistent.
-  const TWO_PRESET_MODULES = [2, 3, 4, 5, 6];
-  const isTwoPresetModule = TWO_PRESET_MODULES.includes(moduleId);
   const hasUploadedSlides = !!(
     customSlides &&
     (Array.isArray(customSlides)
@@ -1476,6 +1531,104 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
         );
       }
 
+      // ─────────────── TRANSITION BRIDGE ───────────────
+      case 'transition_bridge': {
+        return (
+          <div className="flex-1 flex flex-col items-center justify-center gap-6 max-w-3xl mx-auto w-full text-center py-6 min-h-0 overflow-y-auto">
+            <div className="relative">
+              {/* Outer pulsing ring */}
+              <div className="absolute inset-0 rounded-full bg-indigo-500/10 animate-ping opacity-75" />
+              {/* Inner glowing circle */}
+              <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border-2 border-indigo-500/30 flex items-center justify-center text-indigo-400 shadow-lg shadow-indigo-500/10">
+                {RI(slide.icon || 'git-commit', 'h-10 w-10 animate-pulse')}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <span className="inline-block px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-indigo-400 bg-indigo-500/5 border border-indigo-500/10">
+                {slide.subtitle || 'Transition Bridge'}
+              </span>
+              <h2 className="text-3xl font-black bg-gradient-to-r from-[var(--text-primary)] via-indigo-200 to-[var(--text-primary)] bg-clip-text text-transparent">
+                {slide.title}
+              </h2>
+            </div>
+
+            {slide.analogy && (
+              <p className="text-xs text-[var(--text-secondary)] italic leading-relaxed max-w-lg mx-auto bg-indigo-500/5 border border-indigo-500/10 p-3 rounded-lg">
+                "{slide.analogy.text || slide.analogy}"
+              </p>
+            )}
+
+            {slide.closing_thread && (
+              <div className="w-full max-w-md p-4 rounded-xl border border-violet-500/20 bg-gradient-to-br from-violet-900/10 to-indigo-900/10 shadow-md">
+                <span className="text-[10px] font-extrabold text-violet-400 uppercase tracking-widest block mb-1">Coming Up Next</span>
+                <p className="text-xs text-[var(--text-secondary)] font-medium leading-relaxed">
+                  {slide.closing_thread}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // ─────────────── PREVIEW ───────────────
+      case 'preview': {
+        return (
+          <div className="flex-1 flex flex-col gap-4 max-w-4xl mx-auto w-full min-h-0 overflow-y-auto pr-1">
+            <div className="text-center">
+              <div className="inline-flex items-center gap-1.5 text-indigo-400 text-[10px] font-bold uppercase tracking-wider">
+                {RI(slide.icon || 'book-open', 'h-3.5 w-3.5')}
+                {slide.subtitle}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mt-1">{slide.title}</h2>
+            </div>
+
+            {((slide.items && slide.items.length > 0) || (slide.bullets && slide.bullets.length > 0)) && (
+              <div className="grid grid-cols-1 gap-2.5 my-2">
+                {(slide.items || slide.bullets).map((item: string, i: number) => {
+                  const isSpecial = item.startsWith('+') || item.includes('ALWAYS');
+                  return (
+                    <div
+                      key={i}
+                      className={`rounded-xl border p-3 flex gap-3 items-center hover:scale-[1.01] transition-all duration-200 ${
+                        isSpecial
+                          ? 'border-violet-500/30 bg-violet-500/5 shadow-sm shadow-violet-500/5'
+                          : 'border-[var(--border-color)] bg-[var(--bg-card)]'
+                      }`}
+                    >
+                      <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${
+                        isSpecial ? 'bg-violet-500/20 text-violet-400' : 'bg-indigo-500/10 text-indigo-400'
+                      }`}>
+                        {isSpecial ? <Sparkles className="h-3.5 w-3.5" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
+                      </div>
+                      <span className={`text-xs leading-relaxed ${isSpecial ? 'text-[var(--text-primary)] font-medium' : 'text-[var(--text-secondary)]'}`}>
+                        {item}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {slide.memory_hook && (
+              <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-4 py-2.5 flex items-center gap-2 mt-auto">
+                <Sparkles className="h-3.5 w-3.5 text-indigo-400 shrink-0" />
+                <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed italic">
+                  <span className="font-bold text-indigo-400 uppercase tracking-wider mr-1">Remember:</span>
+                  {slide.memory_hook}
+                </p>
+              </div>
+            )}
+
+            {slide.closing_thread && (
+              <p className="text-[11px] text-[var(--text-secondary)] text-center font-medium mt-2">
+                🎯 {slide.closing_thread}
+              </p>
+            )}
+          </div>
+        );
+      }
+
       // ─────────────── VIDEO ───────────────
       case 'video': {
         const getYoutubeEmbedUrl = (url: string) => {
@@ -1573,9 +1726,9 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
               </div>
             )}
 
-            {slide.bullets && slide.bullets.length > 0 && (
+            {((slide.bullets && slide.bullets.length > 0) || (slide.items && slide.items.length > 0)) && (
               <div className="grid grid-cols-1 gap-2">
-                {slide.bullets.map((b: string, i: number) => (
+                {(slide.bullets || slide.items).map((b: string, i: number) => (
                   <div key={i} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-3 flex gap-3 items-center hover:border-indigo-500/25 transition-all">
                     <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
                     <span className="text-xs text-[var(--text-secondary)] leading-relaxed">{b}</span>
@@ -3046,10 +3199,12 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       );
 
       // ─────────────── MODULE COMPLETE ───────────────
+      // ─────────────── MODULE COMPLETE ───────────────
       case 'module_complete': {
-        const quizSlideIdx = totalSlides.findIndex(s => s.type === 'quiz');
+        const quizSlideIdx = totalSlides.findIndex((s: any) => s.type === 'quiz');
+        const hasQuiz = quizSlideIdx !== -1;
         let quizScore = currentUser?.progress?.quizScores?.[moduleId] || 0;
-        if (quizSlideIdx !== -1 && quizSubmitted[quizSlideIdx]) {
+        if (hasQuiz && quizSubmitted[quizSlideIdx]) {
           const Qs = getQuizQuestions(totalSlides[quizSlideIdx]);
           const answers = quizAnswers[quizSlideIdx] || {};
           const correct = Qs.reduce((a: number, q: any, i: number) => a + (answers[i] === q.answer ? 1 : 0), 0);
@@ -3058,7 +3213,10 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
         }
 
         const passThreshold = slide.score_display?.pass_threshold || 80;
-        const isPassed = quizScore >= passThreshold;
+        const isPassed = hasQuiz ? quizScore >= passThreshold : true;
+
+        // Support both bullets and summary_bullets list keys
+        const rawBullets = slide.summary_bullets || slide.bullets || [];
 
         return (
           <div className="flex-1 flex flex-col gap-5 max-w-4xl mx-auto w-full min-h-0 overflow-y-auto p-4 sm:p-5">
@@ -3068,56 +3226,82 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                 <span>{slide.subtitle || 'Module Complete'}</span>
               </div>
               <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">
-                {isPassed ? (slide.title || 'You Did It!') : 'Keep Practicing!'}
+                {slide.title || (isPassed ? 'You Did It!' : 'Keep Practicing!')}
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-5 items-start">
+              {/* Left Column: Circular Quiz Score OR Completion Badge */}
               <div className="glass-card p-4 rounded-2xl border border-[var(--border-color)] flex flex-col items-center text-center space-y-3.5">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
-                  {slide.score_display?.label || 'Your Quiz Score'}
-                </p>
-                
-                <div className="relative flex items-center justify-center h-28 w-28">
-                  <svg className="w-full h-full transform -rotate-90">
-                    <circle
-                      cx="56"
-                      cy="56"
-                      r="48"
-                      stroke="var(--surface-sunken)"
-                      strokeWidth="6"
-                      fill="transparent"
-                      className="text-slate-700"
-                    />
-                    <circle
-                      cx="56"
-                      cy="56"
-                      r="48"
-                      stroke={isPassed ? '#10b981' : '#f59e0b'}
-                      strokeWidth="6"
-                      fill="transparent"
-                      strokeDasharray={2 * Math.PI * 48}
-                      strokeDashoffset={2 * Math.PI * 48 * (1 - quizScore / 100)}
-                      className="transition-all duration-1000 ease-out"
-                    />
-                  </svg>
-                  <span className={`absolute text-xl font-black ${isPassed ? 'text-emerald-400' : 'text-amber-400'}`}>
-                    {quizScore}%
-                  </span>
-                </div>
+                {hasQuiz ? (
+                  <>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                      {slide.score_display?.label || 'Your Quiz Score'}
+                    </p>
+                    
+                    <div className="relative flex items-center justify-center h-28 w-28">
+                      <svg className="w-full h-full transform -rotate-90">
+                        <circle
+                          cx="56"
+                          cy="56"
+                          r="48"
+                          stroke="var(--surface-sunken)"
+                          strokeWidth="6"
+                          fill="transparent"
+                          className="text-slate-700"
+                        />
+                        <circle
+                          cx="56"
+                          cy="56"
+                          r="48"
+                          stroke={isPassed ? '#10b981' : '#f59e0b'}
+                          strokeWidth="6"
+                          fill="transparent"
+                          strokeDasharray={2 * Math.PI * 48}
+                          strokeDashoffset={2 * Math.PI * 48 * (1 - quizScore / 100)}
+                          className="transition-all duration-1000 ease-out"
+                        />
+                      </svg>
+                      <span className={`absolute text-xl font-black ${isPassed ? 'text-emerald-400' : 'text-amber-400'}`}>
+                        {quizScore}%
+                      </span>
+                    </div>
 
-                <div className={`p-2.5 rounded-xl border text-[10px] leading-relaxed font-semibold ${
-                  isPassed 
-                    ? 'border-emerald-500/25 bg-emerald-500/5 text-emerald-400' 
-                    : 'border-amber-500/25 bg-amber-500/5 text-amber-400'
-                }`}>
-                  {isPassed 
-                    ? (slide.score_display?.pass_message || 'You passed. Module 2 is unlocked.') 
-                    : (slide.score_display?.retry_message || 'Review the recap and retake the quiz.')
-                  }
-                </div>
+                    <div className={`p-2.5 rounded-xl border text-[10px] leading-relaxed font-semibold ${
+                      isPassed 
+                        ? 'border-emerald-500/25 bg-emerald-500/5 text-emerald-400' 
+                        : 'border-amber-500/25 bg-amber-500/5 text-amber-400'
+                    }`}>
+                      {isPassed 
+                        ? (slide.score_display?.pass_message || `You passed. Module ${moduleId + 1} is unlocked.`) 
+                        : (slide.score_display?.retry_message || 'Review the recap and retake the quiz.')
+                      }
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                      Module Status
+                    </p>
+                    
+                    <div className="relative flex flex-col items-center justify-center p-4 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-violet-500/10 border border-indigo-500/20 shadow-inner w-32 h-32">
+                      <Award className="h-10 w-10 text-indigo-400 animate-bounce mb-1" style={{ animationDuration: '3s' }} />
+                      <span className="text-xl font-black bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
+                        {slide.hero_stat?.value || 'Completed'}
+                      </span>
+                      <span className="text-[8px] text-[var(--text-muted)] font-extrabold uppercase tracking-wider mt-0.5">
+                        Success
+                      </span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl border border-indigo-500/25 bg-indigo-500/5 text-[10px] text-indigo-300 leading-relaxed font-semibold">
+                      {slide.hero_stat?.label || 'Congratulations on completing this stage of the training!'}
+                    </div>
+                  </>
+                )}
               </div>
 
+              {/* Right Column: Details & Proceed Button */}
               <div className="space-y-4">
                 {slide.milestone_banner && (
                   <div className="border border-indigo-500/25 bg-indigo-500/5 p-3.5 rounded-xl text-xs font-bold text-indigo-300 leading-relaxed">
@@ -3125,16 +3309,20 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                   </div>
                 )}
 
-                {slide.summary_bullets && slide.summary_bullets.length > 0 && (
+                {rawBullets && rawBullets.length > 0 && (
                   <div className="space-y-1.5">
                     <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">What You Locked In</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {slide.summary_bullets.map((b: any, idx: number) => (
-                        <div key={idx} className="flex gap-2 items-start p-2 rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]">
-                          <div className="text-indigo-400 mt-0.5 shrink-0">{RI(b.icon || 'check-circle-2', 'h-3.5 w-3.5')}</div>
-                          <span className="text-[10px] text-[var(--text-secondary)] leading-relaxed font-medium">{b.text}</span>
-                        </div>
-                      ))}
+                      {rawBullets.map((b: any, idx: number) => {
+                        const itemText = typeof b === 'string' ? b : (b.text || '');
+                        const itemIcon = typeof b === 'object' && b.icon ? b.icon : 'check-circle-2';
+                        return (
+                          <div key={idx} className="flex gap-2 items-start p-2 rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]">
+                            <div className="text-indigo-400 mt-0.5 shrink-0">{RI(itemIcon, 'h-3.5 w-3.5')}</div>
+                            <span className="text-[10px] text-[var(--text-secondary)] leading-relaxed font-medium">{itemText}</span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -3171,7 +3359,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                       }}
                       className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-black shadow-lg hover:scale-[1.02] transition-all cursor-pointer"
                     >
-                      {slide.cta_button || 'Proceed to Module 2'}
+                      {slide.cta_button || (moduleId === 6 ? 'Finish & View Certificate' : `Proceed to Module ${moduleId + 1}`)}
                     </button>
                   ) : (
                     <button
@@ -3195,9 +3383,9 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
         <div className="flex-1 flex flex-col items-center justify-center gap-4 max-w-2xl mx-auto text-center">
           <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mx-auto">{RI(slide.icon || 'sparkles', 'h-8 w-8')}</div>
           <div><div className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 mb-1">{slide.subtitle}</div><h2 className="text-2xl font-extrabold text-[var(--text-primary)]">{slide.title}</h2></div>
-          {slide.bullets?.length > 0 && (
+          {((slide.bullets && slide.bullets.length > 0) || (slide.items && slide.items.length > 0)) && (
             <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 text-left space-y-2.5 w-full">
-              {slide.bullets.map((b: string, i: number) => <div key={i} className="flex gap-2.5 items-start text-[11px] text-[var(--text-secondary)]"><CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" /><span>{b}</span></div>)}
+              {(slide.bullets || slide.items).map((b: string, i: number) => <div key={i} className="flex gap-2.5 items-start text-[11px] text-[var(--text-secondary)]"><CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" /><span>{b}</span></div>)}
             </div>
           )}
         </div>
@@ -3207,10 +3395,10 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
 
   const isModuleCompleteAllowed = (() => {
     if (moduleId === 1) return labPassed;
-    if (moduleId === 2) {
-      const quizSlideIdx = totalSlides.findIndex(s => s.type === 'quiz');
-      let quizScore = currentUser?.progress?.quizScores?.[2] || 0;
-      if (quizSlideIdx !== -1 && quizSubmitted[quizSlideIdx]) {
+    const quizSlideIdx = totalSlides.findIndex((s: any) => s.type === 'quiz');
+    if (quizSlideIdx !== -1) {
+      let quizScore = currentUser?.progress?.quizScores?.[moduleId] || 0;
+      if (quizSubmitted[quizSlideIdx]) {
         const Qs = getQuizQuestions(totalSlides[quizSlideIdx]);
         const answers = quizAnswers[quizSlideIdx] || {};
         const correct = Qs.reduce((a: number, q: any, i: number) => a + (answers[i] === q.answer ? 1 : 0), 0);
@@ -3269,12 +3457,11 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                 }
               ].filter(t => {
                 // Module 1 supports all 4 presets. Modules 2-6 restrict to Formal + Gen-Z only.
-                const twoPresetModules = [2, 3, 4, 5, 6];
-                return !twoPresetModules.includes(moduleId) || t.key === 'formal' || t.key === 'genz';
+                return !isTwoPresetModule || t.key === 'formal' || t.key === 'genz';
               }).map((t) => (
                 <button
                   key={t.key}
-                  onClick={() => setSelectedTone(t.key as any)}
+                  onClick={() => { unlockAudioContext(); setSelectedTone(t.key as any); }}
                   className="glass-card p-5 rounded-2xl border border-[var(--border-color)] hover:border-purple-500/40 hover:bg-purple-500/5 text-left transition-all duration-300 hover:scale-[1.02] flex flex-col justify-between h-full group cursor-pointer"
                 >
                   <div>

@@ -1,0 +1,626 @@
+{
+  "module": "Module 4 — Foundation Build · Auth, Shell, Dashboard",
+  "preset": "genz",
+  "format": "two_voice_dialogue",
+  "speakers": {
+    "Sara":  { "voice_key": "female_genz", "gender": "female", "persona": "Sara — energetic, expressive co-host. Asks the real-world questions." },
+    "Arjun": { "voice_key": "male_genz",   "gender": "male",   "persona": "Arjun — upbeat, grounded co-host. Gives the structured method." }
+  },
+  "tts_field_priority": ["text_expressive", "text_ssml", "text"],
+  "schema_version": "v8_interactive_with_music",
+  "last_updated": "2026-06-24T00:00:00Z",
+  "acts": [
+    { "id": "act_1", "name": "Day 1 — Manual Foundation",      "slide_start": 1,  "slide_end": 3  },
+    { "id": "act_2", "name": "Day 2 — Auth & JWT",             "slide_start": 4,  "slide_end": 8  },
+    { "id": "act_3", "name": "The Application Shell",          "slide_start": 9,  "slide_end": 12 },
+    { "id": "act_4", "name": "The Dashboard",                  "slide_start": 13, "slide_end": 16 },
+    { "id": "act_5", "name": "Your Manual Checkpoint",         "slide_start": 17, "slide_end": 23 }
+  ],
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "act": "Day 1 — Manual Foundation",
+      "title": "Module 4 — Foundation Build",
+      "subtitle": "Where the first lines of real code go live",
+      "icon": "rocket",
+      "estimated_duration_seconds": 70,
+      "opening_hook": "Module 3 was the bible. Module 4 is the first commit. We build the foundation of an actual app — together.",
+      "bullets": [
+        "5 acts. 23 slides. Two days of build effort, compressed into 60 minutes of you watching how it actually went down.",
+        "Auth, application shell, dashboard — the three foundations every web app needs.",
+        "The Issue Tracker at projectissuetracker.vthinkdeveloper.com is what we're building. You'll log in at the end.",
+        "Key takeaway: AI generates code, but YOU type the install commands. Learning happens in your hands."
+      ],
+      "closing_thread": "First thing first — Day 1 is mostly manual. Get used to it.",
+      "narration": "Module 4. Foundation Build. Where the first lines of real code go live. Auth, application shell, dashboard. The live Issue Tracker is what we're building. AI generates the code — you type the install commands. That's the rule.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed",     "text": "Module 4. Hands-on starts here." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk",  "text": "Module 3 was the bible. Now we make the first commit. Two days of actual build effort, compressed into the next hour of you watching how it really went." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Three foundations. Auth — so people can log in. Shell — so they have a place to land. Dashboard — so they see something meaningful immediately." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing",    "text": "And the cardinal rule of this module — AI writes the code, but YOU type the install commands. Learning happens in your hands, not the AI's." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "stats_hero",
+      "act": "Day 1 — Manual Foundation",
+      "title": "Day 1 — Mostly Manual, Mostly You",
+      "subtitle": "Resist the urge to automate. Type the commands.",
+      "icon": "user-cog",
+      "estimated_duration_seconds": 105,
+      "hero_stat": {
+        "value": "6 installs",
+        "label": "you do by hand on Day 1 — Node, PostgreSQL, Docker, Git, IDE, browser dev tools",
+        "icon": "user-cog"
+      },
+      "analogy": {
+        "title": "Learning to drive on the highway? No.",
+        "text": "Nobody learns to drive by being chauffeured. You sit in the driver's seat for the boring stuff — parking lot first. Day 1 of an OrchestrAI build is the parking lot. Type. Every. Command."
+      },
+      "bullets": [
+        "Day 1 = 6 manual installs + 4 AI prompts. The ratio is on purpose.",
+        "Why YOU install Node and Postgres yourself — so when something breaks at 2 AM in production, you know what to check.",
+        "AI's role on Day 1 is to EXPLAIN each step (free ChatGPT/Claude is perfect here). Not to do it for you.",
+        "If you outsource the installs to AI now, you'll be blind to the whole runtime. Don't trade learning for laziness."
+      ],
+      "closing_thread": "Let's name the 6 things you install yourself.",
+      "narration": "Day 1 — six installs you do by hand, four prompts you give AI. The ratio is on purpose. AI explains each step; you do it. If you outsource installs now, you'll be blind to the runtime forever.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Day 1 of every OrchestrAI build is six manual installs and four AI prompts. That ratio is on purpose." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed",    "text": "Why six manual installs? Because the day something breaks at 2 AM in production, you need to know what to check. You can't debug what you didn't install." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing",   "text": "AI's job on Day 1 is to EXPLAIN. Not to do. Free ChatGPT or Claude works fine here. Ask 'explain like I'm five why I need Docker for this'." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Resist the urge to let AI automate the setup. Learning happens in your fingertips. Type. Every. Command." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "competencies",
+      "act": "Day 1 — Manual Foundation",
+      "title": "The 6 Things You Install Yourself",
+      "subtitle": "Manual setup · ~2 hours · you and the AI explaining each one",
+      "icon": "list-checks",
+      "estimated_duration_seconds": 165,
+      "list": [
+        { "name": "Node.js (LTS)",  "icon": "code-2",      "desc": "The JavaScript runtime. Powers both React (frontend) and NestJS (backend). Ask AI: 'explain LTS vs current'." },
+        { "name": "PostgreSQL 15+", "icon": "grid-3x3",    "desc": "The database. Open-source, enterprise-grade, what every serious app uses. Local install or Docker — either works." },
+        { "name": "Docker Desktop", "icon": "layout-template","desc": "Containerises Postgres so you don't pollute your machine. Optional but recommended — and worth learning anyway." },
+        { "name": "Git",            "icon": "git-commit",  "desc": "Source control. Without Git, you have no history, no rollback, no Observability. Pillar 1 of OGE starts here." },
+        { "name": "IDE (VS Code or Cursor)", "icon": "edit-3", "desc": "Cursor is the AI-native IDE that hosts your licensed AI tool. VS Code if you prefer the classic." },
+        { "name": "Browser dev tools","icon": "search",    "desc": "Chrome or Firefox dev tools. You'll inspect every API call. Non-negotiable for debugging AI-generated frontend code." }
+      ],
+      "memory_hook": "Six installs. Ask AI to explain each. Type each command yourself. Two hours, done. Now you can BUILD.",
+      "closing_thread": "Installs done. Time for Day 2 — first AI code goes live.",
+      "narration": "Six installs. Node, PostgreSQL, Docker, Git, IDE — Cursor or VS Code, browser dev tools. Ask AI to explain each. Type each command yourself. Two hours, done.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Six installs. In order." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Node-dot-js LTS — JavaScript runtime, powers both React and NestJS. PostgreSQL 15-plus — the database. Docker Desktop — containerises Postgres so you don't pollute your local machine." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Git for source control — observability pillar starts HERE. An IDE — Cursor if you want AI built-in, VS Code if you prefer the classic. And browser dev tools — Chrome or Firefox." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Two hours total. For each one, ask AI 'explain like I'm five why I need this'. Type the install command yourself. Now you can actually build." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "welcome",
+      "act": "Day 2 — Auth & JWT",
+      "title": "Day 2 — First AI Code Goes Live",
+      "subtitle": "Authentication. The thing your client cares about most.",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 90,
+      "opening_hook": "Auth is where most AI builds fall apart. The prompt has to be tight or you ship a security hole.",
+      "bullets": [
+        "Auth = the first feature on Day 2. Why? Because every other feature needs it.",
+        "We use JWT — token-based auth. Industry standard. Works for SPAs.",
+        "The auth prompt MUST hit all 8 components (remember Module 3's intent anatomy).",
+        "Today we show you the actual prompt that produced our Issue Tracker's auth — and what AI got wrong on first try."
+      ],
+      "closing_thread": "Here's the prompt that went into the AI tool.",
+      "narration": "Day 2 — first AI code goes live. Auth. The thing your client cares about most. JWT-based, token-based, industry standard. The prompt has to hit all 8 intent components or you ship a security hole.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Day 2. The first piece of AI-generated code goes into the repo." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "And we start with AUTH. Why? Because every other feature in the app needs it. Issues, comments, dashboards — all gated by login." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "We use JWT. Token-based authentication. Industry standard. Works perfectly for single-page apps like React." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Coming up — the actual prompt we used to build the Issue Tracker's auth. AND what the AI got wrong on first try. Because it did get something wrong." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "stats_hero",
+      "act": "Day 2 — Auth & JWT",
+      "title": "The Auth Prompt — All 8 Components",
+      "subtitle": "Real prompt · from the Issue Tracker engagement",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 175,
+      "hero_stat": {
+        "value": "8/8",
+        "label": "intent components present — outcome, actor, validation, security, stack, acceptance, edge cases, data model",
+        "icon": "message-square-text"
+      },
+      "analogy": {
+        "title": "A locksmith's spec sheet",
+        "text": "You don't tell a locksmith 'make me a door'. You tell them: width, swing, lock type, key cuts, fire rating, frame material. That's an auth prompt — every dimension explicit, or the door's wrong."
+      },
+      "bullets": [
+        "OUTCOME: Users with email + password can log in; protected routes require a valid JWT.",
+        "ACTOR: Admin, Manager, Reporter — three roles with different menu access.",
+        "VALIDATION: Email format, password ≥ 8 chars with mixed case, account-locked after 5 failed attempts.",
+        "SECURITY: Bcrypt hash (cost 12), JWT with 24h expiry, refresh tokens, server-side guards on EVERY protected route.",
+        "STACK: NestJS @nestjs/jwt + Passport, Prisma User model, React Context for auth state.",
+        "ACCEPTANCE: Valid login → 200 + token, invalid → 401, token expired → 401 with redirect to /login.",
+        "EDGE CASES: Empty fields, malformed email, brute force, expired token mid-action.",
+        "DATA MODEL: User { id, email UNIQUE, passwordHash, role ENUM, createdAt, lastLoginAt }."
+      ],
+      "memory_hook": "Eight components. Each one closes an ambiguity that AI would otherwise resolve with assumptions.",
+      "closing_thread": "What did AI generate? And what did we need to re-prompt?",
+      "narration": "The Auth Prompt — all 8 intent components present. Outcome, actor with three roles, validation rules, bcrypt security, NestJS plus Passport stack, acceptance criteria, edge cases, and the User data model. Eight components. Each closes an ambiguity AI would otherwise guess.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "The auth prompt. All eight intent components from Module 3 — present. Real prompt, real engagement." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Outcome — JWT-based auth with three roles. Validation — email format, password complexity, account lockout after five fails. Security — bcrypt cost 12, twenty-four hour JWT expiry, refresh tokens, server-side guards." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "playful_intrigue", "text": "Stack — NestJS jwt module plus Passport, Prisma User model, React Context for auth state. Acceptance — valid login returns two hundred with token, invalid returns four oh one." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Edge cases — empty fields, malformed email, brute force, token expiring mid-action. Data model — User entity with email unique, passwordHash, role enum. Locksmith's spec sheet." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "competencies",
+      "act": "Day 2 — Auth & JWT",
+      "title": "What the AI Generated — First Pass",
+      "subtitle": "What landed in the repo after 1 prompt + ~3 minutes of generation",
+      "icon": "code-2",
+      "estimated_duration_seconds": 145,
+      "list": [
+        { "name": "POST /auth/login",     "icon": "rocket",      "desc": "Controller + service + DTO. Validates body, looks up user, compares bcrypt hash, issues JWT. Clean." },
+        { "name": "JwtStrategy + AuthGuard","icon": "shield-alert","desc": "Passport JWT strategy. Used as a route guard everywhere. Server-side enforcement — exactly as specced." },
+        { "name": "Prisma User model",    "icon": "grid-3x3",    "desc": "Migration created. email UNIQUE, passwordHash, role enum, createdAt, lastLoginAt. Matches the prompt's data model exactly." },
+        { "name": "React AuthContext",    "icon": "users",       "desc": "Provider, login/logout actions, persisted to localStorage. Wired to a Login page with email + password fields." }
+      ],
+      "memory_hook": "First pass: 4 files (controller, strategy, model, context) + login page UI. Compiles. Login works.",
+      "closing_thread": "But — three things needed re-prompting. Let's see them.",
+      "narration": "What the AI generated on first pass. Login controller plus service plus DTO. Passport JWT strategy with route guard. Prisma User model with the exact fields specced. React AuthContext with login and logout actions. Four files plus the login page UI. Compiles. Login works.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "What the AI generated on first pass. We prompted once. About three minutes later, this came back." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "POST slash auth slash login — controller, service, DTO. Body validation, bcrypt compare, JWT issued. Clean." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "JwtStrategy plus AuthGuard. Passport-based. Route guard wired everywhere. Server-side enforcement, exactly as specced." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Prisma User model — email unique, passwordHash, role enum, createdAt, lastLoginAt. Matches the prompt's data model exactly. React AuthContext on the frontend, localStorage-backed. It compiled. Login worked. But — three things needed re-prompting." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "comparison_table",
+      "act": "Day 2 — Auth & JWT",
+      "title": "What AI Got Right vs What Needed Re-Prompting",
+      "subtitle": "Honest review · first-pass quality breakdown",
+      "icon": "scale",
+      "estimated_duration_seconds": 145,
+      "analogy": {
+        "title": "Hiring a brilliant junior",
+        "text": "A brilliant junior on day one nails the framework parts. They miss the company-specific stuff because nobody told them. Re-prompts are the second-day brief."
+      },
+      "table": [
+        { "icon": "check-circle",  "pain": "JWT issuing + validation",      "trad": "✅ Got it right first try",          "orch": "Standard Passport JWT pattern — well-trained territory" },
+        { "icon": "check-circle",  "pain": "Bcrypt hashing",                 "trad": "✅ Got it right first try",          "orch": "Cost 12 used as specced, salt generated correctly" },
+        { "icon": "check-circle",  "pain": "Prisma schema",                  "trad": "✅ Got it right first try",          "orch": "Migration generated cleanly; matched data model word-for-word" },
+        { "icon": "alert-triangle","pain": "Account lockout after 5 fails",  "trad": "⚠️ Missing — re-prompted",          "orch": "Added failedAttempts column + middleware. 1 re-prompt." },
+        { "icon": "alert-triangle","pain": "Refresh token rotation",         "trad": "⚠️ Naive — re-prompted",            "orch": "First version reused same refresh forever. 1 re-prompt to rotate properly." },
+        { "icon": "alert-triangle","pain": "401 redirect handling in UI",    "trad": "⚠️ Missed — re-prompted",           "orch": "Frontend swallowed 401s. 1 re-prompt to add interceptor." }
+      ],
+      "memory_hook": "3 of 6 first try. 3 re-prompts. Each re-prompt was 1–2 sentences referencing the exact gap.",
+      "closing_thread": "Validation step — open the app, log in, test each path manually.",
+      "narration": "Honest review. JWT, bcrypt, Prisma schema — all right first try. Account lockout, refresh token rotation, four-oh-one UI handling — all needed re-prompting. Three of six clean. Three re-prompts, each one or two sentences pointing to the exact gap.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Honest breakdown. What AI got right. What needed re-prompts." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "RIGHT first try — JWT issuing and validation, bcrypt hashing at cost twelve, the Prisma schema. Standard framework territory, well-trained." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "RE-PROMPTED — account lockout after five fails. Refresh token rotation — first version reused the same refresh token forever. And the frontend's four-oh-one handling — it swallowed errors instead of redirecting to login." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Three re-prompts. Each one was ONE to two sentences pointing to the exact gap. Quick. Surgical. Done. That's how re-prompting should feel." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "welcome",
+      "act": "Day 2 — Auth & JWT",
+      "title": "Manual Validation — You Test Auth Yourself",
+      "subtitle": "Don't trust the AI's word — run it, click it, watch the network tab.",
+      "icon": "search",
+      "estimated_duration_seconds": 130,
+      "bullets": [
+        "Step 1: npm run start:dev — backend up. Visit localhost:3000/auth/login in browser, see 401.",
+        "Step 2: npm run dev — frontend up. Visit localhost:5173, see login page.",
+        "Step 3: Try a wrong password — should see error toast. Open browser dev tools → Network tab. Confirm 401 response.",
+        "Step 4: Try correct admin login — should redirect to dashboard. Confirm JWT in localStorage.",
+        "Step 5: Try hitting /api/issues with no token (use curl or Postman). Should see 401. Server-side guard works.",
+        "All 5 green? Auth is solid. If any fails — re-prompt with the specific error message."
+      ],
+      "memory_hook": "5-step manual smoke test. Takes 5 minutes. You can't skip this and call it done.",
+      "closing_thread": "Auth shipped. Now the shell that wraps every other screen.",
+      "narration": "Manual validation. Five steps. Backend up. Frontend up. Wrong password — confirm 401. Right password — confirm redirect and JWT in localStorage. Curl the API without a token — confirm 401. Five minutes. You can't skip this and call it done.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Now the part most people skip — manual validation. You actually USE what the AI built." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Five steps. Backend up — npm run start dev. Frontend up — npm run dev. Both running on localhost." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Try a wrong password — should error. Open dev tools network tab — confirm four-oh-one. Try the right password — should redirect to dashboard, JWT in localStorage." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Last step — curl slash API slash issues with NO token. Should get four-oh-one. If you skip that one, you might've shipped a UI-only check. Server-side enforcement matters." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "welcome",
+      "act": "The Application Shell",
+      "title": "Day 3 Morning — The Shell",
+      "subtitle": "The frame that holds every screen the user will ever see",
+      "icon": "layout-template",
+      "estimated_duration_seconds": 85,
+      "bullets": [
+        "Shell = sidebar + main content area + theme toggle + page header pattern.",
+        "Every Issue Tracker page lives inside this frame. Get it right once, every screen inherits it.",
+        "UI Specs doc (from Module 3) is the contract — vThink purple, Sen font, split-view login, sidebar collapsible.",
+        "AI builds the shell off those specs. We're not designing — we're enforcing."
+      ],
+      "closing_thread": "Here's the shell prompt.",
+      "narration": "Day 3 morning. The shell. Sidebar plus main content plus theme toggle plus PageHeader pattern. Every page lives inside this frame. Get it right once, every screen inherits it.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Day 3 morning. Auth shipped. Time for the shell — the frame that holds every screen." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Shell equals sidebar plus main content plus theme toggle plus PageHeader. Every Issue Tracker page lives inside this frame." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "playful_intrigue", "text": "Get it right ONCE, every screen inherits it. UI Specs from Module 3 are the contract — vThink purple, Sen font, split-view login, sidebar collapsible. We're enforcing, not designing." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "stats_hero",
+      "act": "The Application Shell",
+      "title": "The Shell Prompt",
+      "subtitle": "References the UI Specs doc · uses MUI · theme-toggle baked in",
+      "icon": "layout-template",
+      "estimated_duration_seconds": 155,
+      "hero_stat": {
+        "value": "1 prompt",
+        "label": "produced sidebar + layout + theme toggle + PageHeader component + light/dark CSS tokens",
+        "icon": "layout-template"
+      },
+      "analogy": {
+        "title": "Stage rigging, not the play",
+        "text": "The shell is the stage. It doesn't act — it holds. Get the rigging right and the play looks effortless. Get it wrong and every scene fights the set."
+      },
+      "bullets": [
+        "Prompt referenced UI Specs doc explicitly: vThink purple #5A00EE, Sen font, MUI components, sidebar collapsible.",
+        "Required: NO duplicate page title bar — contextual titles via PageHeader inside content (per spec).",
+        "Required: light/dark theme toggle in sidebar, persisted to localStorage, applied via MUI ThemeProvider.",
+        "Required: RBAC-aware menu — Reporters don't see admin links. Server-side route guard separate.",
+        "Generated: ~12 files (layout, sidebar, theme provider, PageHeader, navigation hooks). All cleanly composable."
+      ],
+      "memory_hook": "Reference the UI Specs doc IN the prompt. AI honors it. Skip that line, AI invents a theme.",
+      "closing_thread": "What the shell now includes.",
+      "narration": "The shell prompt — one prompt, twelve files. Referenced UI Specs explicitly. vThink purple, Sen font, MUI, sidebar collapsible. No duplicate title bar. Theme toggle persisted. RBAC-aware menu. AI honored every spec because the spec was in the kit.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "One prompt. About a dozen files generated. Sidebar, layout, theme provider, PageHeader component, navigation hooks — all cleanly composable." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Critical move — the prompt referenced the UI Specs doc EXPLICITLY. vThink purple hex five A zero zero E E. Sen font. MUI components. Sidebar collapsible." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Required no duplicate page title bar — contextual titles via the PageHeader pattern. Theme toggle persisted to localStorage. RBAC-aware menu — Reporters don't see admin links." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Reference the UI Specs doc IN the prompt. AI honors it. Skip that one line and AI invents a whole new theme. That's the lesson — your prompts pull from your kit." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "competencies",
+      "act": "The Application Shell",
+      "title": "What the Shell Includes",
+      "subtitle": "Generated in one session · clean composability",
+      "icon": "grid-3x3",
+      "estimated_duration_seconds": 135,
+      "list": [
+        { "name": "Sidebar with grouping",  "icon": "list-checks",     "desc": "Collapsible left sidebar. Issue group expandable. Active route highlights. Mobile-aware." },
+        { "name": "Main content area",      "icon": "layout-template", "desc": "Pages render here. No duplicate app bar — PageHeader inside each page provides context. Background #F8F9FC." },
+        { "name": "Theme toggle (sidebar)", "icon": "sparkles",        "desc": "Light ↔ Dark. Persisted. MUI ThemeProvider switches all colours in unison. No flash on reload." },
+        { "name": "RBAC menu filter",       "icon": "shield-alert",    "desc": "Reporter role hides Project Setup, Employee Setup, User Management, Reports. UI-only — server-side still guards every route." }
+      ],
+      "memory_hook": "Sidebar + content + theme + RBAC menu. The 4 pieces every web app shell needs.",
+      "closing_thread": "Shell complete. Onto the first real screen — the Dashboard.",
+      "narration": "What the shell includes. Sidebar with grouping. Main content area with PageHeader pattern. Theme toggle persisted. RBAC menu filter. Four pieces every web app shell needs.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Four pieces. Sidebar with grouping — collapsible, active route highlighting, mobile-aware." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Main content area — pages render here. NO duplicate app bar — PageHeader inside each page provides context. Background is hex F8F9FC." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "amazed", "text": "Theme toggle in the sidebar — light to dark, persisted to localStorage, MUI ThemeProvider switches all colours together. No flash on reload." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "RBAC menu filter — Reporter role doesn't see Project Setup, Employee Setup, User Management, or Reports. UI-only — server-side route guards still apply. Belt AND suspenders." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "transition_bridge",
+      "act": "The Application Shell",
+      "title": "Shell complete. The first screen everyone sees comes next.",
+      "subtitle": "The Dashboard",
+      "icon": "rocket",
+      "estimated_duration_seconds": 55,
+      "closing_thread": "The Dashboard — where AI shone, and where it tripped.",
+      "narration": "Shell complete. The first screen every user lands on comes next — the Dashboard.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Shell done. Auth done. The frame is up." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "playful_intrigue", "text": "Now we build the first screen every user sees. The Dashboard." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Where AI shone — and where it tripped. Both lessons worth showing." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "welcome",
+      "act": "The Dashboard",
+      "title": "Day 3 Afternoon — The Dashboard",
+      "subtitle": "The first thing every logged-in user sees",
+      "icon": "bar-chart-2",
+      "estimated_duration_seconds": 85,
+      "bullets": [
+        "Dashboard = 4 metric cards + recent activity feed + project filter dropdown.",
+        "Metrics: Total Issues, My Open, My Closed This Week, Overdue.",
+        "Real-time-ish — re-fetches on filter change, on visibility regain, on push (if SSE/sockets present).",
+        "FDD called for 'simple, glanceable, no charts on the first version' — we honored that constraint."
+      ],
+      "closing_thread": "Here's the dashboard prompt.",
+      "narration": "Day 3 afternoon. The dashboard. First thing every logged-in user sees. Four metric cards plus recent activity feed plus project filter. Glanceable, no charts on first version — FDD said so.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Day 3 afternoon. Dashboard time." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Four metric cards plus a recent activity feed plus a project filter dropdown. Total Issues. My Open. My Closed This Week. Overdue." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "FDD called for SIMPLE and GLANCEABLE — no charts on the first version. We honored that. Restraint is a feature." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "stats_hero",
+      "act": "The Dashboard",
+      "title": "The Dashboard Prompt",
+      "subtitle": "Same 8-component pattern · references FDD section 4",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 145,
+      "hero_stat": {
+        "value": "8/8",
+        "label": "intent components again — outcome, actor, validation, security, stack, acceptance, edge cases, data model",
+        "icon": "message-square-text"
+      },
+      "bullets": [
+        "OUTCOME: Logged-in user lands on /dashboard, sees 4 metric cards + activity feed + project filter.",
+        "ACTOR: Any logged-in user. All four cards show their scoped data based on JWT user.id.",
+        "VALIDATION: Project filter must be in user's accessible projects; else 403.",
+        "SECURITY: Server-side filtering via Prisma where-clauses + Postgres indexes on assigneeId, status, dueDate.",
+        "STACK: NestJS dashboard controller, Prisma aggregations, React Query for caching on the frontend.",
+        "ACCEPTANCE: 4 cards load < 500ms; activity feed shows last 20 events ordered desc.",
+        "EDGE CASES: Empty tenant (no issues yet) — show zero states; offline — cache-only mode.",
+        "DATA MODEL: No new tables; queries against existing Issue + ActivityLog + ProjectAccess."
+      ],
+      "closing_thread": "What AI shone at vs struggled with — eye-opening.",
+      "narration": "The dashboard prompt. Same 8-component pattern. Logged-in user, four metric cards, activity feed, project filter. Server-side filtering with Prisma plus Postgres indexes. React Query on the frontend. Acceptance — four cards under 500 milliseconds.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Eight components again. Same pattern. Different feature." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Outcome — user lands on dashboard, sees four cards. Actor — any logged-in user, scoped to THEIR data via JWT user-dot-id." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Security — server-side filtering via Prisma where-clauses, Postgres indexes on assigneeId, status, dueDate. Stack — NestJS controller, Prisma aggregations, React Query for caching." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Acceptance — four cards load under 500 milliseconds. That's an EXPLICIT performance budget. Without it, AI happily ships an N-plus-one query." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "comparison_table",
+      "act": "The Dashboard",
+      "title": "Where AI Shone vs Where It Struggled",
+      "subtitle": "Pattern: framework-y stuff = good. Domain logic + perf = needs help.",
+      "icon": "scale",
+      "estimated_duration_seconds": 140,
+      "table": [
+        { "icon": "check-circle",  "pain": "React Query setup",         "trad": "✅ First try",                    "orch": "Cache keys, invalidation hooks — all idiomatic" },
+        { "icon": "check-circle",  "pain": "MUI Card layout",            "trad": "✅ First try",                    "orch": "Grid responsive, follows UI Specs colors" },
+        { "icon": "check-circle",  "pain": "Empty state component",       "trad": "✅ First try",                    "orch": "Friendly message + CTA to create first issue" },
+        { "icon": "alert-triangle","pain": "Aggregation query",            "trad": "❌ N+1 problem",                  "orch": "First version did 4 queries instead of 1 grouped — re-prompted" },
+        { "icon": "alert-triangle","pain": "Project filter scoping",       "trad": "⚠️ Client-side only",            "orch": "First version filtered in React — re-prompted for server-side" },
+        { "icon": "alert-triangle","pain": "Index hints",                  "trad": "❌ Forgot to add",                "orch": "Re-prompted to add indexes on (assigneeId, status) + (dueDate)" }
+      ],
+      "memory_hook": "Framework patterns = AI gold. Domain-specific perf + security = AI's blind spot. Re-prompt is normal.",
+      "closing_thread": "Two re-prompts later — Dashboard ships.",
+      "narration": "Where AI shone — React Query setup, MUI cards, empty states. Where AI struggled — aggregation query had an N-plus-one, project filter was client-side only, missing database indexes. Framework patterns AI nails. Domain-specific performance and security need help.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Honest review of the dashboard generation." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "SHONE — React Query setup, MUI Card layout, empty state component. All first try. Framework-y stuff, well-trained territory." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "STRUGGLED — the aggregation query had an N-plus-one problem. Four queries instead of one grouped. Project filter was client-side only — easy to bypass." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "And — classic AI miss — it forgot to add database indexes. Re-prompted explicitly to add them on assigneeId-status and dueDate. Performance and security are the blind spots. Not framework patterns." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "welcome",
+      "act": "The Dashboard",
+      "title": "The Re-Prompt That Fixed the N+1",
+      "subtitle": "Surgical, 2 sentences, references the exact file",
+      "icon": "edit-3",
+      "estimated_duration_seconds": 110,
+      "bullets": [
+        "Bad re-prompt: 'fix performance' — vague, AI guesses. Don't do this.",
+        "Good re-prompt: 'In dashboard.service.ts, getDashboardMetrics() is making 4 separate Prisma calls. Combine into 1 query using groupBy + raw aggregations.'",
+        "AI returns: a single Prisma $queryRaw with COUNT/SUM groupings, drops query count from 4 → 1.",
+        "Add: 'Also add @@index([assigneeId, status]) and @@index([dueDate]) to schema.prisma.' Two re-prompts. Done.",
+        "Total dashboard time including re-prompts: ~90 minutes. From zero to shipped + indexed."
+      ],
+      "memory_hook": "Re-prompts are SURGICAL. Name the file. Name the function. Name the gap. Reference the fix shape.",
+      "closing_thread": "Auth, shell, dashboard — all live. Time for YOU to see it.",
+      "narration": "The re-prompt that fixed the N-plus-one. Bad — fix performance, vague. Good — name the file, name the function, name the gap, suggest the shape of the fix. Two re-prompts, ninety minutes total, dashboard ships indexed.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Re-prompt anatomy. Critical skill." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "BAD re-prompt — 'fix performance'. Vague. AI guesses. You waste a turn." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "GOOD re-prompt — in dashboard-dot-service-dot-ts, getDashboardMetrics is making four separate Prisma calls. Combine into one query using groupBy plus raw aggregations." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "AI returns a single Prisma queryRaw with COUNT and SUM groupings. Drops query count from four to one. Add the index re-prompt right after — two re-prompts total. Dashboard shipped in ninety minutes including iterations." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "welcome",
+      "act": "Your Manual Checkpoint",
+      "title": "Now You Open the Live Build",
+      "subtitle": "Time to go from spectator to operator",
+      "icon": "rocket",
+      "estimated_duration_seconds": 90,
+      "opening_hook": "You just watched two days of build effort. Now you click into it for real.",
+      "bullets": [
+        "The Issue Tracker is live at: projectissuetracker.vthinkdeveloper.com",
+        "Admin credentials: admin@vthink.co.in / Admin@123",
+        "Open it in a new tab. Log in. Land on the dashboard.",
+        "You're now standing inside the result of everything we just walked. Auth, shell, dashboard — all there.",
+        "Next slide: a guided tour of what to click first."
+      ],
+      "closing_thread": "Tap each card next to see what to explore.",
+      "narration": "Now you open the live build. URL — projectissuetracker dot vthinkdeveloper dot com. Credentials — admin at vthink dot co dot in, password Admin one two three with capital A. Open in a new tab. Log in. Land on the dashboard.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Spectator mode off. Operator mode on." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Open in a new browser tab — projectissuetracker dot vthinkdeveloper dot com. Login is admin at vthink dot co dot in. Password — Admin at one two three." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Log in. You should land on the dashboard. You're now STANDING inside the result of everything we just walked through. Auth, shell, dashboard — all live, in production, for real." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Next slide — a guided tour. Tap each card to see what to explore. We're not done yet." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "tap_reveal",
+      "act": "Your Manual Checkpoint",
+      "title": "Your guided tour — tap each card",
+      "subtitle": "5 things to notice in the live build that prove what we covered",
+      "icon": "search",
+      "estimated_duration_seconds": 110,
+      "cards": [
+        { "label": "Login page — split view",        "reveal": "Look at the layout. Left hero panel with vThink wordmark. Right card with form. THIS is what 'UI Specs in the kit' produces — AI honored the split-view rule exactly." },
+        { "label": "Sidebar — collapse it",            "reveal": "Click the collapse icon. Sidebar shrinks to icons only. Tooltips appear on hover. That's MUI Drawer with the 'mini variant' pattern — straight out of the shell prompt." },
+        { "label": "Theme toggle — switch it",         "reveal": "Bottom of sidebar — Appearance toggle. Light → Dark. Watch every color in the app update at once. That's MUI ThemeProvider doing its job. Refresh — your choice persists." },
+        { "label": "Dashboard — 4 cards + feed",       "reveal": "The 4 cards you see are exactly what the prompt specced. Total / My Open / Closed This Week / Overdue. Activity feed below. No charts on the first version — restraint." },
+        { "label": "Try /api/issues without token",    "reveal": "Open dev tools. Network tab. Visit /api/issues. You'll see 401. Server-side guard is the real fence — what you SEE is just the UI." }
+      ],
+      "narration": "Five things to notice in the live build. Login split view. Sidebar collapse. Theme toggle. Dashboard four cards. API four oh one without token. Tap each card to see why each one proves something we covered.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Five things to look at in the live build. Tap each card." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Login split view. Sidebar collapse. Theme toggle. Dashboard four cards. API guard test. Each one proves a piece of what we just covered." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Do them in order. Five minutes. Then come back here." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "spot_the_flaw",
+      "act": "Your Manual Checkpoint",
+      "title": "Spot the gaps in this auth prompt",
+      "subtitle": "Click each clause that breaks the 8-component rule",
+      "icon": "alert-triangle",
+      "estimated_duration_seconds": 110,
+      "text": "Add login to the app. Use JWT. Make sure the password is secure. Roles are admin and user. Block bad logins.",
+      "flaws": [
+        { "phrase": "Make sure the password is secure", "explanation": "Vague. Secure how? Bcrypt cost? Argon2? Length minimum? Complexity rules? Without a specific algorithm and cost, AI picks SHA-256 and ships a CVE-ready system." },
+        { "phrase": "Roles are admin and user",         "explanation": "Two roles only? The FDD says three — Admin, Manager, Reporter. AND missing the action map — who can do WHAT. Roles without permission scope = useless." },
+        { "phrase": "Block bad logins",                  "explanation": "After how many? With what cool-down? Account lockout? Captcha? IP throttle? 'Bad' has zero shape — AI ships a token check and calls it done." }
+      ],
+      "narration": "Spot the gaps. This auth prompt looks reasonable. It isn't. Click each clause that breaks the eight-component rule. Three flaws.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Real prompt sent by a real practitioner. Looks reasonable. Isn't." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Three clauses break the eight-component rule. Each one leaves AI to invent the missing piece." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Tap them. We'll wait." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "mini_match",
+      "act": "Your Manual Checkpoint",
+      "title": "Match the foundation piece to its tech",
+      "subtitle": "Pick a piece, then pick its implementation. Wrong matches shake.",
+      "icon": "sparkles",
+      "estimated_duration_seconds": 85,
+      "pairs": [
+        { "left": "Auth token issue + validate",   "right": "NestJS + Passport JWT strategy" },
+        { "left": "Password storage",               "right": "Bcrypt with cost 12" },
+        { "left": "Frontend auth state",            "right": "React Context + localStorage" },
+        { "left": "Sidebar + collapse",             "right": "MUI Drawer (mini variant)" },
+        { "left": "Theme persistence",              "right": "ThemeProvider + localStorage" },
+        { "left": "Dashboard data caching",         "right": "React Query (TanStack)" }
+      ],
+      "narration": "Match each foundation piece to its real tech. Six pairs.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Six foundation pieces. Six tech choices. Match them." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Wrong matches shake. Right ones lock green. Go." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "confidence_slider",
+      "act": "Your Manual Checkpoint",
+      "title": "Could you fire the auth prompt yourself?",
+      "icon": "help-circle",
+      "estimated_duration_seconds": 65,
+      "prompt": "Honestly — if your client said Monday 'add login to our app', could you write that 8-component auth prompt cold, attach your kit, and ship a JWT auth flow in a day?",
+      "scale": { "min_label": "Not yet", "max_label": "Let's go" },
+      "narration": "Could you fire the auth prompt yourself? If the client said add login Monday, could you write the eight-component prompt, attach your kit, and ship a JWT flow in a day? Pick a number.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Real check. Could you do this Monday?" },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Auth prompt cold, your kit attached, JWT flow shipped in a day. Pick a number. No wrong answer." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "recap",
+      "act": "Your Manual Checkpoint",
+      "title": "Module 4 — What you can now do",
+      "subtitle": "5 sentence summary",
+      "icon": "check-circle",
+      "estimated_duration_seconds": 90,
+      "items": [
+        "You can list the 6 Day-1 manual installs AND explain why each is yours to type, not AI's to automate.",
+        "You can fire an 8-component auth prompt that produces JWT auth, bcrypt hashing, and route guards.",
+        "You can fire a shell prompt that references your UI Specs and produces sidebar + theme + RBAC menu.",
+        "You can write surgical re-prompts that name the file, the function, the gap, and the fix-shape.",
+        "You can open a live build, log in, and run a 5-step manual smoke test in 5 minutes."
+      ],
+      "memory_hook": "Day 1 installs + Auth prompt + Shell prompt + Dashboard prompt + Manual smoke. Foundation = repeatable.",
+      "closing_thread": "Module 5 next — the workflow engine. Where the app gets its personality.",
+      "narration": "Module 4 takeaways. You can name the six manual installs. Fire an eight-component auth prompt. Fire a shell prompt that references UI Specs. Write surgical re-prompts. Run a five-step manual smoke test in five minutes.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Module 4 — what you can now do." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Six manual installs — you know them. Auth prompt — you can fire it. Shell prompt — you can fire it. Re-prompts — surgical, named, fix-shape included." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "And the five-step manual smoke test. That's how you VALIDATE what AI built without trusting AI's word for it." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "act": "Your Manual Checkpoint",
+      "title": "Module 4 — Complete. Foundation Is Yours.",
+      "subtitle": "Up next · Module 5 — The Workflow Engine",
+      "icon": "rocket",
+      "estimated_duration_seconds": 75,
+      "hero_stat": {
+        "value": "4 / 6",
+        "label": "modules done · the app stands up",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "Auth — shipped. JWT, bcrypt, route guards, frontend Context.",
+        "Shell — shipped. Sidebar, PageHeader, theme, RBAC menu.",
+        "Dashboard — shipped. Cards, activity feed, indexed queries.",
+        "Live build experienced — you logged in, clicked through, ran the smoke test.",
+        "Module 5 next: status workflows. Where vague prompts produce the worst bugs. We show you how to nail it."
+      ],
+      "closing_thread": "See you in Module 5.",
+      "narration": "Module 4 complete. Auth, shell, dashboard all shipped. You experienced the live build. Module 5 next — status workflows. Where vague prompts produce the worst bugs.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Module 4 done. The app STANDS UP." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Auth, shell, dashboard — all shipped. You logged into the live build. You ran the smoke test." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Module 5 is where it gets SPICY. Status workflows. Where vague prompts produce the absolute worst bugs. We show you how to nail it." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "See you in Module 5. Bring receipts." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    }
+  ]
+}

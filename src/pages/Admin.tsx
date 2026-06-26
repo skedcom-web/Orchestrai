@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import type { UserProfile, Submission } from '../context/AppContext';
+import type { UserProfile } from '../context/AppContext';
+import { getFirebaseApp } from '../firebase';
+import { CapstoneReviewsAdmin } from './CapstoneReviewsAdmin';
 import {
   Shield, Settings, Mail, List, CheckCircle,
-  Trash2, Award, ExternalLink, Save,
+  Trash2, Award, Save,
   BarChart2, TrendingUp, Users, Activity, Search, Filter, Clock,
   BookOpen, Upload, HelpCircle, Eye, EyeOff, Ban, UserCheck, Radar,
   Star, Sparkles, Download
@@ -24,7 +26,6 @@ export const Admin: React.FC = () => {
     clearNotificationLogs,
     addNotificationLog,
     submissions,
-    updateSubmissionStatus,
     addToast,
     confirmAction,
     dbStatus,
@@ -40,8 +41,8 @@ export const Admin: React.FC = () => {
     seedSampleCohort
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'submissions' | 'logs' | 'reports' | 'audit' | 'modules' | 'candidates'>('reports');
-  const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'gating' | 'verification' | 'emailjs' | 'maintenance'>('connection');
+  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'logs' | 'reports' | 'audit' | 'modules' | 'candidates' | 'capstoneReviews'>('reports');
+  const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'gating' | 'verification' | 'emailjs' | 'aireview' | 'maintenance'>('connection');
   const [requireEmailVerifVal, setRequireEmailVerifVal] = useState(systemConfig.requireEmailVerification !== false);
   const [requirePhoneVerifVal, setRequirePhoneVerifVal] = useState(!!systemConfig.requirePhoneVerification);
   const [freeModulesLimitVal, setFreeModulesLimitVal] = useState(systemConfig.freeModulesLimit || 2);
@@ -254,6 +255,9 @@ export const Admin: React.FC = () => {
   const [templateId, setTemplateId] = useState(systemConfig.emailjsTemplateId || '');
   const [publicKey, setPublicKey] = useState(systemConfig.emailjsPublicKey || '');
   const [adminEmail, setAdminEmail] = useState(systemConfig.adminEmail || '');
+  const [templateIdSmeWelcome, setTemplateIdSmeWelcome] = useState(systemConfig.emailjsTemplateIdSmeWelcome || '');
+  const [templateIdFeedback, setTemplateIdFeedback] = useState(systemConfig.emailjsTemplateIdFeedback || '');
+  const [templateIdCertification, setTemplateIdCertification] = useState(systemConfig.emailjsTemplateIdCertification || '');
 
   // Synchronize local states with global systemConfig (needed when RTDB config listener loads values asynchronously)
   useEffect(() => {
@@ -261,6 +265,9 @@ export const Admin: React.FC = () => {
     setTemplateId(systemConfig.emailjsTemplateId || '');
     setPublicKey(systemConfig.emailjsPublicKey || '');
     setAdminEmail(systemConfig.adminEmail || '');
+    setTemplateIdSmeWelcome(systemConfig.emailjsTemplateIdSmeWelcome || '');
+    setTemplateIdFeedback(systemConfig.emailjsTemplateIdFeedback || '');
+    setTemplateIdCertification(systemConfig.emailjsTemplateIdCertification || '');
     setRequireEmailVerifVal(systemConfig.requireEmailVerification !== false);
     setRequirePhoneVerifVal(!!systemConfig.requirePhoneVerification);
     setFreeModulesLimitVal(systemConfig.freeModulesLimit || 2);
@@ -270,6 +277,9 @@ export const Admin: React.FC = () => {
     systemConfig.emailjsTemplateId,
     systemConfig.emailjsPublicKey,
     systemConfig.adminEmail,
+    systemConfig.emailjsTemplateIdSmeWelcome,
+    systemConfig.emailjsTemplateIdFeedback,
+    systemConfig.emailjsTemplateIdCertification,
     systemConfig.requireEmailVerification,
     systemConfig.requirePhoneVerification,
     systemConfig.freeModulesLimit,
@@ -288,9 +298,20 @@ export const Admin: React.FC = () => {
   }, [systemConfig.templates, selectedTemplateKey]);
 
   // Manual project evaluation states
-  const [evaluationScores, setEvaluationScores] = useState<{ [key: string]: number }>({});
+  // evaluationScores removed — Capstone Reviews owns scoring now
 
-  if (!currentUser || currentUser.role !== 'ADMIN') {
+  const isSme = currentUser?.role === 'SME' || (currentUser as any)?.reviewerRole === 'sme';
+  const isReviewer = currentUser?.role === 'ADMIN' || currentUser?.role === 'SME' || (currentUser as any)?.isReviewer;
+
+  // Force SMEs to land on their queue
+  useEffect(() => {
+    if (isSme && activeTab !== 'capstoneReviews') {
+      setActiveTab('capstoneReviews');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSme]);
+
+  if (!currentUser || !isReviewer) {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-red-500/10 border border-red-500/20 text-red-500 mb-4">
@@ -328,7 +349,10 @@ export const Admin: React.FC = () => {
       emailjsServiceId: serviceId,
       emailjsTemplateId: templateId,
       emailjsPublicKey: publicKey,
-      adminEmail: adminEmail
+      adminEmail: adminEmail,
+      emailjsTemplateIdSmeWelcome: templateIdSmeWelcome,
+      emailjsTemplateIdFeedback: templateIdFeedback,
+      emailjsTemplateIdCertification: templateIdCertification
     });
     alert("EmailJS API settings saved!");
   };
@@ -391,6 +415,7 @@ export const Admin: React.FC = () => {
           channel: 'EmailJS API',
           status: 'Sent'
         });
+        addToast(`Approval email successfully sent to ${student.email}`, 'success');
       } catch (err: any) {
         addNotificationLog({
           type: 'Candidate Approval Confirmation',
@@ -399,6 +424,7 @@ export const Admin: React.FC = () => {
           channel: 'EmailJS API',
           status: 'Failed'
         });
+        addToast(`Approval email failed to send: ${err?.message || err}`, 'error');
       }
     } else {
       addNotificationLog({
@@ -408,6 +434,7 @@ export const Admin: React.FC = () => {
         channel: 'EmailJS API (Simulated)',
         status: 'Sent'
       });
+      addToast(`Candidate approved (Email simulated - EmailJS keys missing)`, 'info');
     }
   };
 
@@ -417,74 +444,6 @@ export const Admin: React.FC = () => {
     alert(`Candidate ${user.name} approved! Access unlocked.`);
   };
 
-  const handleCertifySubmission = async (sub: Submission, isEligible: boolean) => {
-    const score = evaluationScores[sub.id] || 90;
-    const status = isEligible ? 'HIRE_ELIGIBLE' : 'CERTIFIED';
-    
-    updateSubmissionStatus(sub.id, status, score);
-
-    // Trigger Certified template
-    const emailVariables = {
-      name: sub.userName,
-      email: sub.userEmail,
-      score: score.toString(),
-      status: status === 'HIRE_ELIGIBLE' ? 'Hire Eligible (High-Priority IT Referral)' : 'Certified Lead'
-    };
-
-    const config = systemConfig;
-    const template = config.templates.certified;
-    const emailBody = template.body
-      .replace(/{{name}}/g, sub.userName)
-      .replace(/{{email}}/g, sub.userEmail)
-      .replace(/{{score}}/g, emailVariables.score)
-      .replace(/{{status}}/g, emailVariables.status);
-
-    const emailSubject = template.subject
-      .replace(/{{name}}/g, sub.userName)
-      .replace(/{{email}}/g, sub.userEmail);
-
-    const hasKeys = config.emailjsServiceId && config.emailjsTemplateId && config.emailjsPublicKey;
-
-    if (hasKeys) {
-      try {
-        await emailjs.send(
-          config.emailjsServiceId,
-          config.emailjsTemplateId,
-          {
-            to_email: sub.userEmail,
-            subject: emailSubject,
-            message: emailBody
-          },
-          config.emailjsPublicKey
-        );
-        addNotificationLog({
-          type: 'Certification Result Notice',
-          recipient: sub.userEmail,
-          subject: emailSubject,
-          channel: 'EmailJS API',
-          status: 'Sent'
-        });
-      } catch (e) {
-        addNotificationLog({
-          type: 'Certification Result Notice',
-          recipient: sub.userEmail,
-          subject: emailSubject,
-          channel: 'EmailJS API',
-          status: 'Failed'
-        });
-      }
-    } else {
-      addNotificationLog({
-        type: 'Certification Result Notice (Mocked)',
-        recipient: sub.userEmail,
-        subject: emailSubject,
-        channel: 'EmailJS API (Simulated)',
-        status: 'Sent'
-      });
-    }
-
-    alert(`Candidate certified successfully with a score of ${score}%!`);
-  };
 
   const getTemplatePlaceholders = () => {
     switch (selectedTemplateKey) {
@@ -496,6 +455,16 @@ export const Admin: React.FC = () => {
         return '{{name}} (student name), {{email}} (student email), {{githubRepoUrl}} (repo), {{promptLogUrl}} (logs)';
       case 'certified':
         return '{{name}} (student name), {{email}} (student email), {{score}} (grade score), {{status}} (referral status)';
+      case 'sme_welcome':
+        return '{{name}} (SME name), {{email}} (SME email), {{password}} (generated password), {{loginUrl}} (SME portal link), {{adminEmail}} (admin contact email)';
+      case 'reviewer_reenabled':
+        return '{{name}} (SME name), {{email}} (SME email), {{password}} (new generated password), {{loginUrl}} (SME portal link), {{adminEmail}} (admin contact email)';
+      case 'reviewer_password_reset':
+        return '{{name}} (SME name), {{email}} (SME email), {{password}} (new reset password), {{loginUrl}} (SME portal link), {{adminEmail}} (admin contact email)';
+      case 'decision_feedback':
+        return '{{name}} (student name), {{email}} (student email), {{capstoneId}} (capstone ID), {{capstoneTitle}} (capstone title), {{decision}} (OUTSTANDING/PASS/REWORK/REBUILD), {{score}} (total score), {{scoreBreakdown}} (category-by-category scores), {{strengths}} (strengths comments), {{gaps}} (gaps comments), {{reworkChecklist}} (rework requirements), {{nextSteps}} (instructions based on decision), {{reviewerName}} (reviewer name), {{reviewedAt}} (reviewed date/time)';
+      case 'certification_issued':
+        return '{{name}} (student name), {{email}} (student email), {{capstoneId}} (capstone ID), {{capstoneTitle}} (capstone title), {{capstoneDomain}} (capstone domain), {{decision}} (OUTSTANDING/PASS), {{score}} (total score), {{certificateUrl}} (live certificate URL), {{certifiedAt}} (issued date/time), {{certifiedBy}} (signing authority name)';
       default:
         return '';
     }
@@ -800,33 +769,52 @@ export const Admin: React.FC = () => {
 
         {/* Left Side Tab Navigation */}
         <div className="space-y-1">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-1 pb-1.5">Overview</p>
+          {!isSme && (
+            <>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-1 pb-1.5">Overview</p>
+              <button
+                onClick={() => setActiveTab('reports')}
+                className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === 'reports'
+                    ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+                }`}
+              >
+                <BarChart2 className="h-4 w-4" />
+                <span>Reports & Insights</span>
+              </button>
+            </>
+          )}
+
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-3 pb-1.5">{isSme ? 'My Work' : 'Training Ops'}</p>
+
+          {!isSme && (
+            <button
+              onClick={() => setActiveTab('modules')}
+              className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'modules'
+                  ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+              }`}
+            >
+              <BookOpen className="h-4 w-4" />
+              <span>Manage Modules</span>
+            </button>
+          )}
+
           <button
-            onClick={() => setActiveTab('reports')}
+            onClick={() => setActiveTab('capstoneReviews')}
             className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'reports'
+              activeTab === 'capstoneReviews'
                 ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
             }`}
           >
-            <BarChart2 className="h-4 w-4" />
-            <span>Reports & Insights</span>
+            <Award className="h-4 w-4" />
+            <span>Capstone Reviews</span>
           </button>
 
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-3 pb-1.5">Training Ops</p>
-
-          <button
-            onClick={() => setActiveTab('modules')}
-            className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'modules'
-                ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
-            }`}
-          >
-            <BookOpen className="h-4 w-4" />
-            <span>Manage Modules</span>
-          </button>
-
+          {!isSme && (<>
           <button
             onClick={() => setActiveTab('approvals')}
             className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-xs font-bold transition-all ${
@@ -846,24 +834,7 @@ export const Admin: React.FC = () => {
             )}
           </button>
 
-          <button
-            onClick={() => setActiveTab('submissions')}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'submissions'
-                ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
-                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
-            }`}
-          >
-            <div className="flex items-center space-x-2">
-              <Award className="h-4 w-4" />
-              <span>Project Submissions</span>
-            </div>
-            {submissions.filter(s => s.status === 'SUBMITTED').length > 0 && (
-              <span className="bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                {submissions.filter(s => s.status === 'SUBMITTED').length}
-              </span>
-            )}
-          </button>
+          {/* Project Submissions tab removed — superseded by Capstone Reviews (Module 7 workflow) */}
 
           <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-3 pb-1.5">Talent</p>
 
@@ -923,6 +894,7 @@ export const Admin: React.FC = () => {
             <Settings className="h-4 w-4" />
             <span>System Settings</span>
           </button>
+          </>)}
         </div>
 
         {/* Right Side Content Pane */}
@@ -1078,8 +1050,8 @@ export const Admin: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-                  {Array.from({ length: 8 }).map((_, idx) => {
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+                  {Array.from({ length: 7 }).map((_, idx) => {
                     const modId = idx + 1;
                     const completions = usersList.filter(u => u.email !== 'vthinkorchestrai@gmail.com' && u.progress?.modulesCompleted?.includes(modId)).length;
                     const totalLearners = Math.max(1, usersList.filter(u => u.email !== 'vthinkorchestrai@gmail.com').length);
@@ -1314,6 +1286,13 @@ export const Admin: React.FC = () => {
             </div>
           )}
 
+          {/* TAB: CAPSTONE REVIEWS */}
+          {activeTab === 'capstoneReviews' && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-250">
+              <CapstoneReviewsAdmin />
+            </div>
+          )}
+
           {/* TAB: MANAGE MODULES */}
           {activeTab === 'modules' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
@@ -1347,16 +1326,17 @@ export const Admin: React.FC = () => {
                     onChange={(e) => setSelectedModId(parseInt(e.target.value))}
                     className="w-full px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-xs focus:outline-none cursor-pointer"
                   >
-                    {Array.from({ length: 8 }).map((_, idx) => (
+                    {/* Module 7 (Practical Demo) is built as a programmatic workflow, not a slide deck —
+                        it does not appear in this JSON-upload dropdown. */}
+                    {Array.from({ length: 6 }).map((_, idx) => (
                       <option key={idx + 1} value={idx + 1}>
                         Module {idx + 1}: {
                           idx === 0 ? 'The Mindset Shift' :
                           idx === 1 ? 'Framework Architecture' :
-                          idx === 2 ? 'Intent Mastery' :
-                          idx === 3 ? 'Roles & Governance' :
-                          idx === 4 ? 'Running Iterations' :
-                          idx === 5 ? 'Observability' :
-                          idx === 6 ? 'Guardrails' : 'Evaluation & KPIs'
+                          idx === 2 ? 'The OrchestrAI Bible (Governance-First Setup)' :
+                          idx === 3 ? 'Foundation Build (Auth · Shell · Dashboard)' :
+                          idx === 4 ? 'The Workflow Engine (Issues · Status · Comments · Git)' :
+                          'Admin · Reports · Going Live (Capstone & GitHub Submission)'
                         }
                       </option>
                     ))}
@@ -1660,7 +1640,7 @@ export const Admin: React.FC = () => {
               <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
                 {/* Sub-Tab navigation bar */}
                 <div className="flex flex-wrap gap-2 border-b border-[var(--border-color)] pb-4 mb-6">
-                  {(['connection', 'gating', 'verification', 'emailjs', 'maintenance'] as const).map((subTab) => (
+                  {(['connection', 'gating', 'verification', 'emailjs', 'aireview', 'maintenance'] as const).map((subTab) => (
                     <button
                       key={subTab}
                       type="button"
@@ -1675,6 +1655,7 @@ export const Admin: React.FC = () => {
                       {subTab === 'gating' && '🚪 Access Gating'}
                       {subTab === 'verification' && '🛡️ Sign-Up Verification'}
                       {subTab === 'emailjs' && '📧 Email Config'}
+                      {subTab === 'aireview' && '🤖 AI Review (Tier B)'}
                       {subTab === 'maintenance' && '⚙️ Maintenance'}
                     </button>
                   ))}
@@ -2099,17 +2080,55 @@ export const Admin: React.FC = () => {
                           </div>
                         </div>
 
-                        <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
-                            Notification Administrator Email
-                          </label>
-                          <input
-                            type="email"
-                            placeholder="skedcom@gmail.com"
-                            value={adminEmail}
-                            onChange={(e) => setAdminEmail(e.target.value)}
-                            className="max-w-md w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
-                          />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Notification Administrator Email
+                            </label>
+                            <input
+                              type="email"
+                              placeholder="skedcom@gmail.com"
+                              value={adminEmail}
+                              onChange={(e) => setAdminEmail(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              SME Welcome Template ID (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="template_sme_welcome"
+                              value={templateIdSmeWelcome}
+                              onChange={(e) => setTemplateIdSmeWelcome(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Learner Feedback Template ID (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="template_feedback"
+                              value={templateIdFeedback}
+                              onChange={(e) => setTemplateIdFeedback(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              Certification Issued Template ID (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="template_cert_issued"
+                              value={templateIdCertification}
+                              onChange={(e) => setTemplateIdCertification(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
                         </div>
 
                         <div className="pt-2">
@@ -2145,6 +2164,11 @@ export const Admin: React.FC = () => {
                               <option value="account_approved">Student Alert: Account Access Approved</option>
                               <option value="project_submitted">Admin Alert: Project Submission Received</option>
                               <option value="certified">Student Alert: Certification Granted</option>
+                              <option value="sme_welcome">SME Welcome: Credentials & Portal Access</option>
+                              <option value="reviewer_reenabled">SME Re-enabled: Notice & New Credentials</option>
+                              <option value="reviewer_password_reset">SME Password Reset: New Credentials</option>
+                              <option value="decision_feedback">Student Notice: Capstone Decision & Rubric Feedback</option>
+                              <option value="certification_issued">Student Notice: Lead Certification Granted</option>
                             </select>
                           </div>
 
@@ -2189,6 +2213,11 @@ export const Admin: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                  )}
+
+                  {/* SUB-TAB: AI REVIEW (TIER B — OpenRouter → Qwen) */}
+                  {settingsSubTab === 'aireview' && (
+                    <AIReviewPanel />
                   )}
 
                   {/* SUB-TAB: SYSTEM MAINTENANCE */}
@@ -2274,7 +2303,7 @@ export const Admin: React.FC = () => {
                           <td className="p-4 text-right">
                             <button
                               onClick={() => handleApproveUser(user)}
-                              className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-650 hover:to-teal-750 text-white rounded text-[11px] font-bold shadow transition-all"
+                              className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded text-[11px] font-bold shadow transition-all"
                             >
                               Approve Candidate
                             </button>
@@ -2289,129 +2318,6 @@ export const Admin: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 4: PORTFOLIO SUBMISSIONS REVIEW */}
-          {activeTab === 'submissions' && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
-              {/* Hero header */}
-              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-cyan-500/5 via-[var(--bg-card)]/40 to-blue-500/5 border border-[var(--border-color)]">
-                <div className="flex items-start justify-between gap-4 flex-wrap">
-                  <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-cyan-500/25">
-                      <Award className="h-6 w-6" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Project Submissions</h3>
-                        <span className="text-[10px] font-extrabold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Portfolio Review</span>
-                      </div>
-                      <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
-                        Inspect candidate GitHub repos and AI prompt logs. Award certification — Hire-Eligible (≥90%) or Standard Certified — and trigger their result email.
-                      </p>
-                    </div>
-                  </div>
-                  {submissions.filter(s => s.status === 'SUBMITTED').length > 0 && (
-                    <span className="px-3 py-1.5 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-300 text-xs font-extrabold shrink-0">
-                      {submissions.filter(s => s.status === 'SUBMITTED').length} awaiting review
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Content card */}
-              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
-              {submissions.length === 0 ? (
-                <div className="py-12 text-center text-[var(--text-secondary)]">
-                  <Award className="h-10 w-10 text-indigo-500/30 mx-auto mb-2" />
-                  <p className="text-xs font-bold text-[var(--text-primary)]">No submissions received yet</p>
-                  <p className="text-[11px] mt-1">Once candidates complete the curriculum, their repos will appear here.</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {submissions.map(sub => (
-                    <div key={sub.id} className="border border-[var(--border-color)] p-4 rounded-lg bg-slate-500/5 space-y-3.5">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-[var(--border-color)] pb-2.5">
-                        <div>
-                          <h4 className="text-sm font-bold text-[var(--text-primary)]">{sub.userName}</h4>
-                          <p className="text-[11px] text-[var(--text-secondary)]">{sub.userEmail}</p>
-                        </div>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wider self-start sm:self-center ${
-                          sub.status === 'SUBMITTED' 
-                            ? 'bg-blue-500/10 border-blue-500/20 text-blue-400'
-                            : sub.status === 'HIRE_ELIGIBLE'
-                              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                              : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'
-                        }`}>
-                          {sub.status.replace('_', ' ')}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                        <a 
-                          href={sub.githubRepoUrl} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="flex items-center space-x-1.5 p-2 border border-[var(--border-color)] rounded bg-[var(--bg-card)] text-indigo-400 hover:text-indigo-650"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                          <span>View GitHub Repository</span>
-                        </a>
-                        <a 
-                          href={sub.promptLogUrl} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="flex items-center space-x-1.5 p-2 border border-[var(--border-color)] rounded bg-[var(--bg-card)] text-indigo-400 hover:text-indigo-650"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                          <span>Inspect AI Prompt Logs</span>
-                        </a>
-                      </div>
-
-                      {sub.status === 'SUBMITTED' ? (
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-xs font-bold">Tally Score:</span>
-                            <input
-                              type="number"
-                              min="0"
-                              max="100"
-                              placeholder="90"
-                              value={evaluationScores[sub.id] || ''}
-                              onChange={(e) => setEvaluationScores({
-                                ...evaluationScores,
-                                [sub.id]: parseInt(e.target.value) || 0
-                              })}
-                              className="w-16 px-2 py-1 rounded border border-[var(--border-color)] bg-transparent text-xs text-center focus:outline-none"
-                            />
-                            <span className="text-xs">%</span>
-                          </div>
-
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleCertifySubmission(sub, true)}
-                              className="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-650 hover:to-teal-750 text-white text-[11px] font-bold rounded shadow transition-all"
-                            >
-                              Certify as High-Priority (Score ≥ 90%)
-                            </button>
-                            <button
-                              onClick={() => handleCertifySubmission(sub, false)}
-                              className="px-3 py-1.5 border border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-400 text-[11px] font-semibold rounded"
-                            >
-                              Standard Certification
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-[11px] text-[var(--text-secondary)] font-semibold">
-                          Final Score Registered: <strong className="text-[var(--text-primary)]">{sub.automatedTotal}%</strong>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-              </div>
-            </div>
-          )}
 
           {/* TAB 5: NOTIFICATION DELIVERY LOG */}
           {activeTab === 'logs' && (
@@ -3200,7 +3106,7 @@ export const Admin: React.FC = () => {
                       setFeedbackMessage('');
                     }}
                     disabled={isSendingFeedback || !feedbackMessage.trim()}
-                    className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-650 hover:brightness-110 text-white text-xs font-bold rounded-lg shadow disabled:opacity-50 transition-all flex items-center justify-center space-x-1.5"
+                    className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-700 hover:brightness-110 text-white text-xs font-bold rounded-lg shadow disabled:opacity-50 transition-all flex items-center justify-center space-x-1.5"
                   >
                     {isSendingFeedback ? (
                       <span>Sending...</span>
@@ -3219,6 +3125,213 @@ export const Admin: React.FC = () => {
 
       </div>
 
+    </div>
+  );
+};
+
+// ───────────────────────────────────────────────────────────────────────────
+// AI Review (Tier B) Settings Panel
+// Configures the Cloud Function → OpenRouter → Qwen pipeline for capstone scoring.
+// The OPENROUTER_API_KEY is set on the function side (firebase functions:secrets:set),
+// NEVER in the browser. This panel only configures display preferences + tests connectivity.
+// ───────────────────────────────────────────────────────────────────────────
+const AIReviewPanel: React.FC = () => {
+  const { systemConfig, updateSystemConfig, addToast } = useApp();
+
+  const [enabled, setEnabled] = useState(!!systemConfig.aiReviewEnabled);
+  const [model, setModel] = useState(systemConfig.aiReviewModel || 'qwen/qwen-2.5-72b-instruct');
+  const [autoOnSubmit, setAutoOnSubmit] = useState(!!systemConfig.aiReviewAutoOnSubmit);
+  const [functionName, setFunctionName] = useState(systemConfig.aiReviewFunctionName || 'scoreCapstoneTierB');
+  const [pinging, setPinging] = useState(false);
+  const [pingResult, setPingResult] = useState<{ ok?: boolean; reply?: string; error?: string; model?: string } | null>(null);
+
+  useEffect(() => {
+    setEnabled(!!systemConfig.aiReviewEnabled);
+    setModel(systemConfig.aiReviewModel || 'qwen/qwen-2.5-72b-instruct');
+    setAutoOnSubmit(!!systemConfig.aiReviewAutoOnSubmit);
+    setFunctionName(systemConfig.aiReviewFunctionName || 'scoreCapstoneTierB');
+  }, [systemConfig.aiReviewEnabled, systemConfig.aiReviewModel, systemConfig.aiReviewAutoOnSubmit, systemConfig.aiReviewFunctionName]);
+
+  const save = () => {
+    updateSystemConfig({
+      aiReviewEnabled: enabled,
+      aiReviewModel: model.trim(),
+      aiReviewAutoOnSubmit: autoOnSubmit,
+      aiReviewFunctionName: functionName.trim()
+    });
+    addToast('AI Review settings saved.', 'success');
+  };
+
+  const testConnection = async () => {
+    setPinging(true);
+    setPingResult(null);
+    try {
+      const app = getFirebaseApp();
+      if (!app) {
+        setPingResult({ ok: false, error: 'Firebase app not initialized. Check Database & Auth tab.' });
+        return;
+      }
+      const { getFunctions, httpsCallable } = await import('firebase/functions');
+      const functions = getFunctions(app);
+      const ping = httpsCallable(functions, 'pingTierBProvider');
+      const res = await ping({ modelOverride: model.trim() });
+      setPingResult(res.data as any);
+    } catch (err: any) {
+      const code = err?.code || '';
+      let friendly = err?.message || String(err);
+      if (code === 'functions/not-found' || /not found/i.test(friendly)) {
+        friendly = 'Function "pingTierBProvider" is not deployed yet. Deploy the functions/ directory once your Blaze plan is active (see functions/README.md).';
+      } else if (code === 'functions/failed-precondition') {
+        friendly = err?.message || 'OPENROUTER_API_KEY secret is not set on the deployed function. See functions/README.md.';
+      }
+      setPingResult({ ok: false, error: friendly });
+    } finally {
+      setPinging(false);
+    }
+  };
+
+  const MODEL_PRESETS = [
+    { value: 'qwen/qwen-2.5-72b-instruct', label: 'Qwen 2.5 72B Instruct (recommended · cheapest)', costPer100: '~$0.08' },
+    { value: 'anthropic/claude-3.5-haiku', label: 'Claude 3.5 Haiku (premium · clearer rationale)', costPer100: '~$0.50' },
+    { value: 'openai/gpt-4o-mini', label: 'GPT-4o Mini (balanced)', costPer100: '~$0.10' },
+    { value: 'meta-llama/llama-3.3-70b-instruct', label: 'Llama 3.3 70B (open-weight)', costPer100: '~$0.05' }
+  ];
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-200">
+      <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">🤖</span>
+            <h3 className="text-sm font-bold text-[var(--text-primary)]">Tier B AI Rubric Scoring (Cloud Function → OpenRouter → Qwen)</h3>
+          </div>
+          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
+            systemConfig.aiReviewEnabled
+              ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400'
+              : 'bg-slate-500/15 border border-slate-500/30 text-slate-400'
+          }`}>{systemConfig.aiReviewEnabled ? 'Enabled' : 'Disabled'}</span>
+        </div>
+
+        <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 p-3 mb-5 text-[11px] text-indigo-300 leading-relaxed">
+          <strong className="text-indigo-400">How this works:</strong> The browser calls the deployed Cloud Function via Firebase SDK. The function reads the submission from RTDB, fetches the GitHub README + file list, then calls OpenRouter (which routes to your selected model — Qwen by default). The model returns a JSON rubric score that gets written to <code className="font-mono text-indigo-200">/reviews/{'{submissionId}'}/tierBSuggestion</code>. The OpenRouter API key lives ONLY on the function side — never in the browser.
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Enable toggle */}
+          <div className="md:col-span-2 flex items-start gap-3 p-3 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40">
+            <input
+              type="checkbox"
+              id="aireview-enabled"
+              checked={enabled}
+              onChange={(e) => setEnabled(e.target.checked)}
+              className="mt-0.5 h-4 w-4"
+            />
+            <label htmlFor="aireview-enabled" className="cursor-pointer flex-1">
+              <div className="text-xs font-bold text-[var(--text-primary)]">Enable Tier B AI scoring</div>
+              <div className="text-[11px] text-[var(--text-secondary)] mt-0.5 leading-relaxed">When enabled, reviewers see a "Run AI Tier B Scoring" button in Review Detail. Disabled = button is hidden, reviewers score manually only.</div>
+            </label>
+          </div>
+
+          {/* Auto-on-submit toggle */}
+          <div className="md:col-span-2 flex items-start gap-3 p-3 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40">
+            <input
+              type="checkbox"
+              id="aireview-auto"
+              checked={autoOnSubmit}
+              onChange={(e) => setAutoOnSubmit(e.target.checked)}
+              disabled={!enabled}
+              className="mt-0.5 h-4 w-4"
+            />
+            <label htmlFor="aireview-auto" className={`cursor-pointer flex-1 ${!enabled ? 'opacity-50' : ''}`}>
+              <div className="text-xs font-bold text-[var(--text-primary)]">Auto-run on every new submission</div>
+              <div className="text-[11px] text-[var(--text-secondary)] mt-0.5 leading-relaxed">When ON, each new submission triggers Tier B scoring immediately so the reviewer sees suggestions when they open it. When OFF, reviewers click the button on-demand (saves money during testing).</div>
+            </label>
+          </div>
+
+          {/* Model */}
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">OpenRouter Model</label>
+            <select
+              value={MODEL_PRESETS.some(p => p.value === model) ? model : 'custom'}
+              onChange={(e) => { if (e.target.value !== 'custom') setModel(e.target.value); }}
+              className="w-full px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs text-[var(--text-primary)] focus:outline-none focus:border-purple-500/40 mb-2"
+            >
+              {MODEL_PRESETS.map(p => (
+                <option key={p.value} value={p.value}>{p.label} · {p.costPer100} per 100 reviews</option>
+              ))}
+              <option value="custom">Custom (enter slug below)</option>
+            </select>
+            <input
+              type="text"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              placeholder="provider/model-slug"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-purple-500/40"
+            />
+            <p className="text-[10px] text-[var(--text-secondary)] mt-1">Browse all available models at <a href="https://openrouter.ai/models" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">openrouter.ai/models</a>.</p>
+          </div>
+
+          {/* Function name */}
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">Cloud Function Name</label>
+            <input
+              type="text"
+              value={functionName}
+              onChange={(e) => setFunctionName(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-purple-500/40"
+            />
+            <p className="text-[10px] text-[var(--text-secondary)] mt-1">Default: <code className="font-mono">scoreCapstoneTierB</code>. Matches the function exported in <code className="font-mono">functions/src/index.ts</code>.</p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 mt-5 pt-5 border-t border-[var(--border-color)]">
+          <button
+            onClick={save}
+            className="px-5 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 hover:brightness-110 text-white text-xs font-extrabold shadow-md transition-all"
+          >
+            Save AI Review Settings
+          </button>
+          <button
+            onClick={testConnection}
+            disabled={pinging}
+            className="px-5 py-2 rounded-lg border border-purple-500/30 hover:bg-purple-500/10 text-purple-400 text-xs font-extrabold transition-all disabled:opacity-50"
+          >
+            {pinging ? 'Testing…' : 'Test Connection'}
+          </button>
+        </div>
+
+        {pingResult && (
+          <div className={`mt-4 rounded-lg p-3 border text-xs leading-relaxed ${
+            pingResult.ok
+              ? 'border-emerald-500/30 bg-emerald-500/5 text-emerald-300'
+              : 'border-rose-500/30 bg-rose-500/5 text-rose-300'
+          }`}>
+            {pingResult.ok ? (
+              <>
+                <strong className="text-emerald-400">Connected.</strong> Model <code className="font-mono">{pingResult.model}</code> replied: "{pingResult.reply}"
+              </>
+            ) : (
+              <>
+                <strong className="text-rose-400">Not reachable.</strong> {pingResult.error}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Deployment checklist */}
+      <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5">
+        <h3 className="text-sm font-bold mb-3">📋 Deployment Checklist (when you upgrade to Blaze)</h3>
+        <ol className="space-y-2 text-xs text-[var(--text-secondary)]">
+          <li><strong className="text-[var(--text-primary)]">1.</strong> Upgrade Firebase project to Blaze plan (required for outbound HTTP calls from Cloud Functions).</li>
+          <li><strong className="text-[var(--text-primary)]">2.</strong> Get your OpenRouter API key from <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">openrouter.ai/keys</a>.</li>
+          <li><strong className="text-[var(--text-primary)]">3.</strong> From repo root: <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">cd functions && npm install && npm run build</code></li>
+          <li><strong className="text-[var(--text-primary)]">4.</strong> Set the OpenRouter secret: <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">firebase functions:secrets:set OPENROUTER_API_KEY</code></li>
+          <li><strong className="text-[var(--text-primary)]">5.</strong> Deploy: <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">firebase deploy --only functions</code></li>
+          <li><strong className="text-[var(--text-primary)]">6.</strong> Come back here, click <strong>Test Connection</strong> — should show ✓ Connected.</li>
+          <li><strong className="text-[var(--text-primary)]">7.</strong> Update Storage rules for capstone uploads (see <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">capstoneSubmissions/&lt;*&gt;/**</code> path in the rules block I provided).</li>
+        </ol>
+      </div>
     </div>
   );
 };

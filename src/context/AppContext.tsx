@@ -32,7 +32,7 @@ export interface UserProfile {
   uid: string;
   email: string;
   name: string;
-  role: 'USER' | 'ADMIN';
+  role: 'USER' | 'ADMIN' | 'SME';
   accountStatus: 'FREE_TIER' | 'PENDING_APPROVAL' | 'APPROVED';
   quizPassed: boolean;
   paymentId?: string;
@@ -41,6 +41,8 @@ export interface UserProfile {
   emailVerified?: boolean;
   mobileVerified?: boolean;
   disabled?: boolean;
+  isReviewer?: boolean;
+  reviewerRole?: string;
 }
 
 // Badge metadata — id, label, description, lucide icon name (UI maps icons in Change #2)
@@ -152,6 +154,15 @@ export interface SystemConfig {
   emailjsTemplateId: string;
   emailjsPublicKey: string;
   adminEmail: string;
+  // Tier B AI rubric scoring (Cloud Function → OpenRouter → Qwen)
+  aiReviewEnabled?: boolean;
+  aiReviewModel?: string;
+  aiReviewAutoOnSubmit?: boolean;
+  aiReviewFunctionName?: string;
+  // SME credentials email template — falls back to emailjsTemplateId if blank
+  emailjsTemplateIdSmeWelcome?: string;
+  emailjsTemplateIdFeedback?: string;
+  emailjsTemplateIdCertification?: string;
   firebaseApiKey?: string;
   firebaseAuthDomain?: string;
   firebaseProjectId?: string;
@@ -213,6 +224,10 @@ export interface VisitorRecord {
   lastActive: string;
   viewedModule1: boolean;
   viewedModule2: boolean;
+  viewedModule3?: boolean;
+  viewedModule4?: boolean;
+  viewedModule5?: boolean;
+  viewedModule6?: boolean;
   registered: boolean;
   registeredEmail?: string;
 }
@@ -329,6 +344,13 @@ const DEFAULT_CONFIG: SystemConfig = {
   emailjsTemplateId: '',
   emailjsPublicKey: '',
   adminEmail: 'vthinkorchestrai@gmail.com',
+  aiReviewEnabled: false,
+  aiReviewModel: 'qwen/qwen-2.5-72b-instruct',
+  aiReviewAutoOnSubmit: false,
+  aiReviewFunctionName: 'scoreCapstoneTierB',
+  emailjsTemplateIdSmeWelcome: '',
+  emailjsTemplateIdFeedback: '',
+  emailjsTemplateIdCertification: '',
   firebaseApiKey: 'AIzaSyDb2WxO-sGsKEHWGYwBaSSCI058F8gcwB0',
   firebaseAuthDomain: 'vthinkorchestrai-auth.firebaseapp.com',
   firebaseProjectId: 'vthinkorchestrai-auth',
@@ -355,6 +377,26 @@ const DEFAULT_CONFIG: SystemConfig = {
     certified: {
       subject: "[OrchestrAI] Congratulations on Your Certification!",
       body: "Hi {{name}},\n\nYour portfolio review is complete. You scored {{score}}% and have been certified as an OrchestrAI Lead!\n\nStatus: {{status}}\n\nKeep up the great work!\nProduct Owner, Sithanandham R."
+    },
+    sme_welcome: {
+      subject: "[OrchestrAI] You have been added as a Capstone Reviewer",
+      body: "Hi {{name}},\n\nYou have been added to the OrchestrAI Capstone Reviewer pool by the admin.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews. Change your password after first login if the SME portal exposes that option.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
+    },
+    reviewer_reenabled: {
+      subject: "[OrchestrAI] Your reviewer account has been re-activated",
+      body: "Hi {{name}},\n\nYour previously disabled OrchestrAI reviewer account has been re-activated. A fresh password has been generated.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
+    },
+    reviewer_password_reset: {
+      subject: "[OrchestrAI] Your reviewer password has been reset by admin",
+      body: "Hi {{name}},\n\nYour OrchestrAI reviewer password has been reset by the admin. Use the new credentials below.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
+    },
+    decision_feedback: {
+      subject: "[OrchestrAI] Your capstone review — {{decision}} ({{score}}/100)",
+      body: "Hi {{name}},\n\nYour OrchestrAI capstone review is complete.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nSCORE BREAKDOWN\n{{scoreBreakdown}}\n\nSTRENGTHS\n{{strengths}}\n\nGAPS\n{{gaps}}\n\nREWORK CHECKLIST\n{{reworkChecklist}}\n\nNEXT STEPS\n{{nextSteps}}\n\nReviewed by: {{reviewerName}}\nReviewed on: {{reviewedAt}}\n\n— OrchestrAI Academy"
+    },
+    certification_issued: {
+      subject: "🎓 OrchestrAI Lead Certification — {{capstoneTitle}}",
+      body: "Congratulations, {{name}}!\n\nYou have been certified as an OrchestrAI Lead.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nYour certificate is now available in your account:\n  {{certificateUrl}}\n\nFrom the Certification page you can download a printable HTML copy.\n\nCertified on: {{certifiedAt}}\nCertified by: {{certifiedBy}}\n\nWelcome to the OrchestrAI Lead alumni network.\n\n— OrchestrAI Academy"
     }
   },
   moduleMedia: {
@@ -365,7 +407,7 @@ const DEFAULT_CONFIG: SystemConfig = {
       captions: [
         "Welcome to Module 1. I am your OrchestrAI Lead avatar guide.",
         "In this module, you will learn the core mindset shift of AI orchestration.",
-        "Remember: the Lead orchestrates intent, while the AI builds the code."
+        "Remember: the Lead orchestrates intent, while your Twin (AI builder) builds the code."
       ],
       externalLink: '',
       hasPresets: false
@@ -1112,6 +1154,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     mutate: (p: LearnerProgress) => { progress: LearnerProgress; xpGained?: number; reason?: string; silent?: boolean }
   ) => {
     if (!currentUser) return;
+    if (currentUser.isReviewer || currentUser.role === 'SME' || currentUser.role === 'ADMIN') return;
 
     // Read freshest record from the synced states to avoid stale data
     const dbUser = usersList.find((u) => u.uid === currentUser.uid) || currentUser;
@@ -1208,6 +1251,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Called on app open / login. Increments streak once per calendar day; resets if a day is missed.
   const touchStreak = () => {
+    if (!currentUser || currentUser.isReviewer || currentUser.role === 'SME' || currentUser.role === 'ADMIN') return;
     const today = new Date().toISOString().slice(0, 10);
     const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
     applyProgressUpdate((p) => {
@@ -1223,7 +1267,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Run the daily streak check once whenever a user becomes active (login or session restore).
   useEffect(() => {
-    if (currentUser?.uid) touchStreak();
+    if (currentUser?.uid && !currentUser.isReviewer && currentUser.role !== 'SME' && currentUser.role !== 'ADMIN') {
+      touchStreak();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser?.uid]);
 
@@ -1411,6 +1457,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const existing = visitorsList.find(v => v.id === visitorId);
     const viewedModule1 = moduleId === 1 || (existing ? existing.viewedModule1 : false);
     const viewedModule2 = moduleId === 2 || (existing ? existing.viewedModule2 : false);
+    const viewedModule3 = moduleId === 3 || (existing ? existing.viewedModule3 : false);
+    const viewedModule4 = moduleId === 4 || (existing ? existing.viewedModule4 : false);
+    const viewedModule5 = moduleId === 5 || (existing ? existing.viewedModule5 : false);
+    const viewedModule6 = moduleId === 6 || (existing ? existing.viewedModule6 : false);
     const registered = currentUser ? true : (existing ? existing.registered : false);
     const registeredEmail = currentUser?.email || existing?.registeredEmail;
 
@@ -1420,6 +1470,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       lastActive: timestamp,
       viewedModule1,
       viewedModule2,
+      viewedModule3,
+      viewedModule4,
+      viewedModule5,
+      viewedModule6,
       registered
     };
     if (registeredEmail) {

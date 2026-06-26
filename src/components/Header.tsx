@@ -3,15 +3,23 @@ import { useApp } from '../context/AppContext';
 import { Sun, Moon, Sparkles, LogOut, Shield, Award, BookOpen, LogIn, Mail, ArrowRight, X, Phone, CheckCircle2, AlertCircle, RefreshCw, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { XPWidget } from './XPWidget';
-import { getFirebaseAuth } from '../firebase';
+import { getFirebaseAuth, getFirebaseDb } from '../firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { ref, get, update } from 'firebase/database';
 import emailjs from '@emailjs/browser';
+
+const hashPassword = async (password: string, salt: string): Promise<string> => {
+  const enc = new TextEncoder().encode(`${salt}::${password}`);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+};
 
 export const Header: React.FC = () => {
   const { 
     theme, 
     setTheme, 
     currentUser, 
+    setCurrentUser,
     login, 
     logout, 
     seedAdminAccount,
@@ -30,10 +38,16 @@ export const Header: React.FC = () => {
   const [loginName, setLoginName] = useState('');
   const [loginMobile, setLoginMobile] = useState('');
   const loginMobileCountry = '+91';
-  const [loginStep, setLoginStep] = useState<'input' | 'admin_password' | 'email_otp' | 'mobile_otp' | 'success'>('input');
+  const [loginStep, setLoginStep] = useState<'input' | 'admin_password' | 'sme_password' | 'sme_change_password' | 'email_otp' | 'mobile_otp' | 'success'>('input');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [adminPasswordInput, setAdminPasswordInput] = useState('');
   const [showAdminPassword, setShowAdminPassword] = useState(false);
+  const [smePasswordInput, setSmePasswordInput] = useState('');
+  const [showSmePassword, setShowSmePassword] = useState(false);
+  const [smeReviewerInfo, setSmeReviewerInfo] = useState<any | null>(null);
+  const [smeNewPassword, setSmeNewPassword] = useState('');
+  const [smeConfirmPassword, setSmeConfirmPassword] = useState('');
+  const [showSmeNewPassword, setShowSmeNewPassword] = useState(false);
   
   const [emailOtp, setEmailOtp] = useState(['', '', '', '', '', '']);
   const [mobileOtp, setMobileOtp] = useState(['', '', '', '', '', '']);
@@ -117,6 +131,39 @@ export const Header: React.FC = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formattedEmail)) {
       setErrorMessage('Invalid email format. Please check your email address and make sure it has a valid domain extension (e.g. learner@gmail.com).');
+      setLoading(false);
+      return;
+    }
+
+    // Reviewer password check
+    const db = getFirebaseDb();
+    let reviewerEntry: [string, any] | null = null;
+    if (db) {
+      try {
+        const revSnap = await get(ref(db, 'reviewers'));
+        if (revSnap.exists()) {
+          const allRevs = revSnap.val() as Record<string, any>;
+          const entry = Object.entries(allRevs).find(
+            ([, r]: [string, any]) => (r.email || '').toLowerCase() === formattedEmail
+          );
+          if (entry) {
+            reviewerEntry = entry;
+          }
+        }
+      } catch (revErr) {
+        console.warn('[Header] Failed to check reviewers database:', revErr);
+      }
+    }
+
+    if (reviewerEntry) {
+      const [revUid, revData] = reviewerEntry;
+      if (revData.disabled) {
+        setErrorMessage('Your reviewer account is disabled. Contact the admin to re-enable it.');
+        setLoading(false);
+        return;
+      }
+      setSmeReviewerInfo({ uid: revUid, email: revData.email, name: revData.name, data: revData });
+      setLoginStep('sme_password');
       setLoading(false);
       return;
     }
@@ -279,6 +326,7 @@ export const Header: React.FC = () => {
         channel: 'EmailJS API',
         status: 'Sent'
       });
+      addToast(`Verification code sent to ${email}`, 'success');
     } else {
       console.log(`[SIMULATION MODE] Email OTP sent to ${email}: ${otpCode}`);
       addToast(`🔑 [Simulation Mode] Sent Email OTP: ${otpCode}`, 'success');
@@ -379,6 +427,139 @@ export const Header: React.FC = () => {
       setErrorMessage('Incorrect admin password. Please try again.');
     }
     setLoading(false);
+  };
+
+  const verifySmePassword = async () => {
+    if (!smeReviewerInfo) return;
+    setLoading(true);
+    setErrorMessage('');
+    
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    try {
+      const r = smeReviewerInfo.data;
+      if (!r.passwordHash || !r.passwordSalt) {
+        setErrorMessage('No password is set on this account. Ask the admin to send credentials.');
+        setLoading(false);
+        return;
+      }
+
+      const computed = await hashPassword(smePasswordInput, r.passwordSalt);
+      if (computed !== r.passwordHash) {
+        setErrorMessage('Incorrect password.');
+        setLoading(false);
+        return;
+      }
+
+      if (r.mustChangePassword !== false) {
+        setErrorMessage('');
+        setLoginStep('sme_change_password');
+        setLoading(false);
+        return;
+      }
+
+      // Set session user just like in SmeLogin.tsx
+      const sessionUser: any = {
+        uid: smeReviewerInfo.uid,
+        email: r.email,
+        name: r.name,
+        role: r.role === 'admin' ? 'ADMIN' : 'SME',
+        accountStatus: 'APPROVED',
+        emailVerified: true,
+        mobileVerified: false,
+        quizPassed: true,
+        progress: { slidesViewed: {}, modulesCompleted: [], quizScores: {}, labsPassed: [], streakDays: 0, lastActiveDate: '', level: 1, xp: 0 },
+        isReviewer: true,
+        reviewerRole: r.role
+      };
+
+      setLoginStep('success');
+      setTimeout(() => {
+        setCurrentUser(sessionUser);
+        try {
+          sessionStorage.setItem('orchestrai_session_user', JSON.stringify(sessionUser));
+          localStorage.setItem('orchestrai_db_currentUser', JSON.stringify(sessionUser));
+        } catch { /* ignore */ }
+        setShowLoginModal(false);
+        setSmePasswordInput('');
+        setSmeReviewerInfo(null);
+        addToast(`Welcome back, ${r.name}.`, 'success');
+        navigate('/admin');
+      }, 1500);
+    } catch (err: any) {
+      setErrorMessage(`Login failed: ${err?.message || err}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSmeChangePassword = async () => {
+    if (!smeReviewerInfo) return;
+    if (smeNewPassword.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
+      return;
+    }
+    if (smeNewPassword !== smeConfirmPassword) {
+      setErrorMessage('Passwords do not match.');
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
+      const db = getFirebaseDb();
+      if (!db) throw new Error('Database connection unavailable.');
+      
+      const generateSalt = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const salt = generateSalt();
+      const hash = await hashPassword(smeNewPassword, salt);
+
+      const updatePayload: any = {
+        passwordHash: hash,
+        passwordSalt: salt,
+        mustChangePassword: false,
+        lastPasswordResetAt: Date.now()
+      };
+
+      await update(ref(db, `reviewers/${smeReviewerInfo.uid}`), updatePayload);
+
+      // Log in
+      const r = smeReviewerInfo.data;
+      const sessionUser: any = {
+        uid: smeReviewerInfo.uid,
+        email: r.email,
+        name: r.name,
+        role: r.role === 'admin' ? 'ADMIN' : 'SME',
+        accountStatus: 'APPROVED',
+        emailVerified: true,
+        mobileVerified: false,
+        quizPassed: true,
+        progress: { slidesViewed: {}, modulesCompleted: [], quizScores: {}, labsPassed: [], streakDays: 0, lastActiveDate: '', level: 1, xp: 0 },
+        isReviewer: true,
+        reviewerRole: r.role
+      };
+
+      setLoginStep('success');
+      setTimeout(() => {
+        setCurrentUser(sessionUser);
+        try {
+          sessionStorage.setItem('orchestrai_session_user', JSON.stringify(sessionUser));
+          localStorage.setItem('orchestrai_db_currentUser', JSON.stringify(sessionUser));
+        } catch { /* ignore */ }
+        setShowLoginModal(false);
+        setSmePasswordInput('');
+        setSmeNewPassword('');
+        setSmeConfirmPassword('');
+        setSmeReviewerInfo(null);
+        addToast(`Password updated. Welcome back, ${r.name}.`, 'success');
+        navigate('/admin');
+      }, 1500);
+    } catch (err: any) {
+      setErrorMessage(`Failed to update password: ${err?.message || err}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Verify Email code
@@ -645,7 +826,7 @@ export const Header: React.FC = () => {
               </Link>
             )}
 
-            {currentUser?.role === 'ADMIN' && (
+            {(currentUser?.role === 'ADMIN' || currentUser?.role === 'SME' || currentUser?.isReviewer) && (
               <Link
                 to="/admin"
                 className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -664,7 +845,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-3">
 
             {/* Gamification progress widget */}
-            {currentUser && <XPWidget />}
+            {currentUser && !currentUser.isReviewer && currentUser.role !== 'SME' && currentUser.role !== 'ADMIN' && <XPWidget />}
 
             {/* Database Sync Status pill */}
             <div className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-bold uppercase tracking-wider ${
@@ -776,7 +957,7 @@ export const Header: React.FC = () => {
               Certification
             </Link>
           )}
-          {currentUser?.role === 'ADMIN' && (
+          {(currentUser?.role === 'ADMIN' || currentUser?.role === 'SME' || currentUser?.isReviewer) && (
             <Link to="/admin" className={`text-xs font-semibold ${isActive('/admin') ? 'text-purple-500' : 'text-[var(--text-secondary)]'}`}>
               Admin Settings
             </Link>
@@ -977,6 +1158,171 @@ export const Header: React.FC = () => {
                   We verify your details to keep your certification progress secure.
                 </p>
               </>
+            )}
+
+            {/* Step: SME Change Password */}
+            {loginStep === 'sme_change_password' && (
+              <div className="space-y-4">
+                <div className="text-center">
+                  <h3 className="text-sm font-bold text-[var(--text-primary)]">Change Temporary Password</h3>
+                  <p className="text-xs text-yellow-500 mt-1.5 leading-normal">
+                    ⚠️ You are logging in with a temporary password. You must set a new password before you can access the admin dashboard.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                      New Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showSmeNewPassword ? "text" : "password"}
+                        placeholder="New Password (min 6 chars)"
+                        value={smeNewPassword}
+                        onChange={(e) => setSmeNewPassword(e.target.value)}
+                        className="w-full pl-3 pr-10 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowSmeNewPassword(!showSmeNewPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none"
+                      >
+                        {showSmeNewPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Confirm New Password"
+                      value={smeConfirmPassword}
+                      onChange={(e) => setSmeConfirmPassword(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleSmeChangePassword();
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 p-2.5 rounded-lg border border-red-500/20">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleSmeChangePassword}
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-700 disabled:opacity-50 text-white rounded-lg text-sm font-bold shadow hover:brightness-110 transition-all cursor-pointer"
+                >
+                  {loading ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Save & Login'}
+                </button>
+
+                <div className="text-center text-xs mt-4 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginStep('input');
+                      setErrorMessage('');
+                      setSmePasswordInput('');
+                      setSmeNewPassword('');
+                      setSmeConfirmPassword('');
+                      setSmeReviewerInfo(null);
+                    }}
+                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Step: SME Reviewer Password */}
+            {loginStep === 'sme_password' && (
+              <div className="space-y-4">
+                <div className="text-center">
+                  <p className="text-xs text-[var(--text-secondary)] font-medium">
+                    Reviewer Account Detected. Please enter your password for:
+                  </p>
+                  <p className="text-sm font-bold text-[var(--text-primary)] mt-0.5 break-all">{loginEmail}</p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showSmePassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={smePasswordInput}
+                      onChange={(e) => setSmePasswordInput(e.target.value)}
+                      className="w-full pl-3 pr-10 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          verifySmePassword();
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowSmePassword(!showSmePassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none"
+                    >
+                      {showSmePassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 p-2.5 rounded-lg border border-red-500/20">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={verifySmePassword}
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-700 disabled:opacity-50 text-white rounded-lg text-sm font-bold shadow hover:brightness-110 transition-all cursor-pointer"
+                >
+                  {loading ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Verify Password & Login'}
+                </button>
+
+                <div className="text-center text-xs mt-4 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginStep('input');
+                      setErrorMessage('');
+                      setSmePasswordInput('');
+                      setSmeReviewerInfo(null);
+                    }}
+                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  >
+                    Back to email
+                  </button>
+                </div>
+              </div>
             )}
 
             {/* Step: Admin Password Bypass */}

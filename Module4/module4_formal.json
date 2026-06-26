@@ -1,0 +1,626 @@
+{
+  "module": "Module 4 — Foundation Build · Auth, Shell, Dashboard",
+  "preset": "formal",
+  "format": "two_voice_dialogue",
+  "speakers": {
+    "Vikram": { "voice_key": "male_formal",   "gender": "male",   "persona": "Vikram — Senior OrchestrAI Architect. Authoritative, precise, frames concepts in enterprise terms." },
+    "Anjali": { "voice_key": "female_formal", "gender": "female", "persona": "Anjali — Principal Consultant. Methodical, asks for clarification, brings implications to the surface." }
+  },
+  "tts_field_priority": ["text_expressive", "text_ssml", "text"],
+  "schema_version": "v8_interactive_with_music",
+  "last_updated": "2026-06-24T00:00:00Z",
+  "acts": [
+    { "id": "act_1", "name": "Day 1 — Manual Foundation",      "slide_start": 1,  "slide_end": 3  },
+    { "id": "act_2", "name": "Day 2 — Auth & JWT",             "slide_start": 4,  "slide_end": 8  },
+    { "id": "act_3", "name": "The Application Shell",          "slide_start": 9,  "slide_end": 12 },
+    { "id": "act_4", "name": "The Dashboard",                  "slide_start": 13, "slide_end": 16 },
+    { "id": "act_5", "name": "Your Manual Checkpoint",         "slide_start": 17, "slide_end": 23 }
+  ],
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "act": "Day 1 — Manual Foundation",
+      "title": "Module 4 — Foundation Build",
+      "subtitle": "The first production code commits",
+      "icon": "rocket",
+      "estimated_duration_seconds": 75,
+      "opening_hook": "Module 3 established the discipline. Module 4 produces the first commits — authentication, application shell, and dashboard.",
+      "bullets": [
+        "Five acts. Twenty-three slides. Two days of build effort presented as a structured retrospective.",
+        "Coverage — authentication, application shell, dashboard. The three foundations every web application requires.",
+        "The case study remains the vThink Issue Tracker, available at projectissuetracker.vthinkdeveloper.com.",
+        "Cardinal principle — AI generates code; the practitioner executes installation commands manually. Learning resides in practice."
+      ],
+      "closing_thread": "We begin with Day 1 — predominantly manual work.",
+      "narration": "Module four. Foundation Build. The first production code commits. Authentication, application shell, dashboard. The vThink Issue Tracker engagement remains our reference. AI generates the code. The practitioner executes the installation commands manually.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Welcome to Module 4 of the OrchestrAI Lead Certification." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Module 3 established the discipline. Module 4 produces the first commits — authentication, application shell, and dashboard." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Two days of build effort, presented as a structured retrospective. We continue with the vThink Issue Tracker as our case study throughout." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "The cardinal principle of this module — AI generates the code; the practitioner executes installation commands manually. Learning resides in practice, not in delegation." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "stats_hero",
+      "act": "Day 1 — Manual Foundation",
+      "title": "Day 1 — Predominantly Manual",
+      "subtitle": "Resist the temptation to automate. Execute the commands directly.",
+      "icon": "user-cog",
+      "estimated_duration_seconds": 110,
+      "hero_stat": {
+        "value": "6 installations",
+        "label": "executed by hand on Day 1 — Node, PostgreSQL, Docker, Git, IDE, browser developer tools",
+        "icon": "user-cog"
+      },
+      "analogy": {
+        "title": "The driver's seat principle",
+        "text": "Aviation training begins in a cockpit, not in the passenger cabin. Day 1 of an OrchestrAI engagement is the cockpit. The Lead executes every command — the muscle memory acquired here is what enables debugging at 2 AM in production."
+      },
+      "bullets": [
+        "Day 1 — six manual installations and four AI prompts. The ratio is intentional.",
+        "Rationale for manual execution — when production issues arise, the Lead must understand each component's role and behaviour.",
+        "AI's function on Day 1 is explanation, not execution. Free-tier ChatGPT or Claude is fully sufficient for this purpose.",
+        "Delegating installation now produces operational blindness later. This trade-off is non-negotiable in OrchestrAI engagements."
+      ],
+      "closing_thread": "We enumerate the six installations.",
+      "narration": "Day 1 — six manual installations, four AI prompts. The ratio is intentional. Rationale — operational understanding cannot be delegated. AI explains; the practitioner executes. Delegating installation now produces operational blindness later.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Day 1 of every OrchestrAI engagement comprises six manual installations and four AI prompts. The ratio is intentional." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed",    "text": "The rationale for manual execution is operational understanding. When a production issue arises, the Lead must comprehend each component's role and behaviour." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "AI's function on Day 1 is explanation, not execution. Free-tier ChatGPT or Claude is fully sufficient. The practitioner asks 'explain in detail why I require this component'." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Delegating installation now produces operational blindness later. This trade-off is non-negotiable. Execute the commands directly." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "competencies",
+      "act": "Day 1 — Manual Foundation",
+      "title": "The Six Manual Installations",
+      "subtitle": "Approximately two hours · AI explains each component as it is installed",
+      "icon": "list-checks",
+      "estimated_duration_seconds": 170,
+      "list": [
+        { "name": "Node.js (LTS)",  "icon": "code-2",      "desc": "The JavaScript runtime. Required for both React (frontend) and NestJS (backend). The LTS designation indicates long-term support." },
+        { "name": "PostgreSQL 15+", "icon": "grid-3x3",    "desc": "The relational database. Open-source, enterprise-grade, the standard for serious applications. Local installation or Docker — either acceptable." },
+        { "name": "Docker Desktop", "icon": "layout-template","desc": "Containerises PostgreSQL to isolate it from the host system. Optional but strongly recommended; worth learning regardless." },
+        { "name": "Git",            "icon": "git-commit",  "desc": "Source control. Without Git there is no history, no rollback capability, no Observability. The first pillar of OGE begins here." },
+        { "name": "IDE — VS Code or Cursor", "icon": "edit-3", "desc": "Cursor is the AI-native IDE that integrates a licensed AI tool. VS Code is the established alternative." },
+        { "name": "Browser developer tools","icon": "search",    "desc": "Chrome or Firefox developer tools. Required for inspecting every API call. Non-negotiable for debugging AI-generated frontend code." }
+      ],
+      "memory_hook": "Six installations. AI explains each. Practitioner executes each. Approximately two hours. Construction may now commence.",
+      "closing_thread": "Installations complete. We proceed to Day 2 — first AI-generated code.",
+      "narration": "Six installations. Node-dot-js LTS, PostgreSQL 15-plus, Docker Desktop, Git, an IDE — Cursor or VS Code, and browser developer tools. AI explains each component. The practitioner executes each command. Approximately two hours total.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "The six installations, in sequence." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Node-dot-js LTS — the JavaScript runtime, required for both React and NestJS. PostgreSQL 15-plus — the relational database. Docker Desktop — containerisation for PostgreSQL." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Git for source control — the first pillar of OGE begins here. An IDE — Cursor if integration with a licensed AI tool is desired, VS Code as the established alternative. Browser developer tools — Chrome or Firefox." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Approximately two hours total. For each installation, the practitioner requests an explanation from AI. The command is then executed manually. Construction may now commence." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "welcome",
+      "act": "Day 2 — Auth & JWT",
+      "title": "Day 2 — First AI-Generated Code",
+      "subtitle": "Authentication. The feature with the highest client visibility.",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 95,
+      "opening_hook": "Authentication is the feature where AI-generated code most commonly fails. A precise prompt is essential to avoid shipping security vulnerabilities.",
+      "bullets": [
+        "Authentication is the Day 2 priority — all subsequent features depend upon it.",
+        "We implement JWT-based authentication. Industry standard. Suitable for single-page applications.",
+        "The authentication prompt must include all eight intent components introduced in Module 3.",
+        "We will examine the actual prompt that produced the Issue Tracker's authentication — including the AI's first-pass deficiencies."
+      ],
+      "closing_thread": "We examine the prompt directly.",
+      "narration": "Day 2 — first AI-generated code. Authentication. Highest client visibility. JWT-based. Suitable for single-page applications. The prompt must include all eight intent components or a security vulnerability ships.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Day 2. The first AI-generated code enters the repository." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed",    "text": "Authentication is the Day 2 priority. All subsequent features — issues, comments, dashboards — depend upon it." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "playful_intrigue", "text": "We implement JWT-based authentication. Industry standard. Suitable for single-page applications such as the Issue Tracker." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing",   "text": "We will examine the actual prompt that produced this implementation — including the deficiencies the AI exhibited on first pass. Those deficiencies are instructive." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "stats_hero",
+      "act": "Day 2 — Auth & JWT",
+      "title": "The Authentication Prompt — All Eight Components",
+      "subtitle": "Production prompt · from the Issue Tracker engagement",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 180,
+      "hero_stat": {
+        "value": "8 / 8",
+        "label": "intent components present — outcome, actor, validation, security, stack, acceptance, edge cases, data model",
+        "icon": "message-square-text"
+      },
+      "analogy": {
+        "title": "A locksmith's specification",
+        "text": "A locksmith is not commissioned to 'build a door'. They are provided width, swing direction, lock type, key cuts, fire rating, and frame material. The authentication prompt operates by the same principle — every dimension explicit, or the product is incorrect."
+      },
+      "bullets": [
+        "OUTCOME — authenticated users access protected routes via valid JWT; unauthenticated requests receive 401.",
+        "ACTOR — three roles: Admin, Manager, Reporter — each with distinct menu visibility.",
+        "VALIDATION — email format, password minimum eight characters with mixed case, account lockout after five failed attempts.",
+        "SECURITY — bcrypt hashing at cost 12, JWT expiry 24 hours, refresh token rotation, server-side guards on every protected route.",
+        "STACK — NestJS @nestjs/jwt with Passport, Prisma User model, React Context for client-side authentication state.",
+        "ACCEPTANCE — successful login returns 200 with token; invalid credentials return 401; expired tokens trigger redirect to /login.",
+        "EDGE CASES — empty fields, malformed email, brute force attempts, token expiry during active session.",
+        "DATA MODEL — User entity: id, email UNIQUE, passwordHash, role ENUM, createdAt, lastLoginAt."
+      ],
+      "memory_hook": "Eight components. Each closes an ambiguity AI would otherwise resolve via assumption.",
+      "closing_thread": "We examine what the AI produced — and what required re-prompting.",
+      "narration": "The authentication prompt — all eight intent components present. Outcome, three actor roles, validation rules, bcrypt security, NestJS plus Passport stack, acceptance criteria, edge cases, and the User data model.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The authentication prompt. All eight intent components from Module 3 — present. This is the production prompt from the Issue Tracker engagement." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Outcome — JWT-based authentication, three roles. Validation — email format, password minimum eight characters mixed case, account lockout after five failures. Security — bcrypt at cost 12, JWT 24-hour expiry, refresh token rotation, server-side guards." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "playful_intrigue", "text": "Stack — NestJS jwt module with Passport, Prisma User model, React Context for client-side state. Acceptance — successful login returns 200 with token, invalid credentials return 401." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Edge cases — empty fields, malformed email, brute force attempts, token expiry during active session. Data model — User entity with email unique, passwordHash, role enum. The locksmith's specification, fully articulated." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "competencies",
+      "act": "Day 2 — Auth & JWT",
+      "title": "AI Output — First Pass",
+      "subtitle": "Generated within approximately three minutes of issuing the prompt",
+      "icon": "code-2",
+      "estimated_duration_seconds": 150,
+      "list": [
+        { "name": "POST /auth/login",     "icon": "rocket",      "desc": "Controller, service, DTO. Validates request body, retrieves user, compares bcrypt hash, issues JWT. Clean implementation." },
+        { "name": "JwtStrategy + AuthGuard","icon": "shield-alert","desc": "Passport JWT strategy. Applied as a route guard across protected endpoints. Server-side enforcement as specified." },
+        { "name": "Prisma User model",    "icon": "grid-3x3",    "desc": "Migration generated. Email unique, passwordHash, role enum, createdAt, lastLoginAt. Matches the data model specification precisely." },
+        { "name": "React AuthContext",    "icon": "users",       "desc": "Provider with login and logout actions, persisted to localStorage. Connected to a Login page with email and password fields." }
+      ],
+      "memory_hook": "First pass — four files plus the login page UI. Compiles. Login operational.",
+      "closing_thread": "Three elements required re-prompting. We examine these.",
+      "narration": "AI output — first pass. POST slash auth slash login controller plus service plus DTO. Passport JWT strategy with route guard. Prisma User model matching specification. React AuthContext with localStorage persistence. Four files plus login page UI. Compiles. Login operational.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "The AI output, first pass. One prompt issued. Approximately three minutes elapsed before generation completed." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "POST slash auth slash login — controller, service, DTO. Body validation, bcrypt comparison, JWT issuance. Clean implementation." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "JwtStrategy with AuthGuard — Passport-based. Route guard applied across all protected endpoints. Server-side enforcement as specified in the prompt." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Prisma User model — email unique, passwordHash, role enum, timestamps. Matches the data model word-for-word. React AuthContext with localStorage persistence. The code compiled. Authentication functioned. Three elements, however, required re-prompting." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "comparison_table",
+      "act": "Day 2 — Auth & JWT",
+      "title": "First-Pass Quality Breakdown",
+      "subtitle": "Where AI succeeded · where re-prompting was required",
+      "icon": "scale",
+      "estimated_duration_seconds": 150,
+      "analogy": {
+        "title": "A capable junior engineer on first day",
+        "text": "A capable junior engineer addresses framework-level concerns competently on first day. Organisation-specific concerns are omitted because they were not yet conveyed. Re-prompts function as the second-day brief."
+      },
+      "table": [
+        { "icon": "check-circle",  "pain": "JWT issuance and validation",   "trad": "✅ Correct first pass",        "orch": "Standard Passport JWT pattern — well-represented in training data" },
+        { "icon": "check-circle",  "pain": "Bcrypt hashing",                 "trad": "✅ Correct first pass",        "orch": "Cost 12 applied as specified; salt generation correct" },
+        { "icon": "check-circle",  "pain": "Prisma schema",                  "trad": "✅ Correct first pass",        "orch": "Migration generated cleanly; matched data model verbatim" },
+        { "icon": "alert-triangle","pain": "Account lockout (5 failures)",    "trad": "⚠️ Omitted — re-prompted",     "orch": "Added failedAttempts column plus middleware. One re-prompt." },
+        { "icon": "alert-triangle","pain": "Refresh token rotation",         "trad": "⚠️ Naive — re-prompted",        "orch": "Initial implementation reused tokens indefinitely. One re-prompt for proper rotation." },
+        { "icon": "alert-triangle","pain": "401 handling in UI",              "trad": "⚠️ Omitted — re-prompted",     "orch": "Frontend suppressed 401 responses. One re-prompt added an interceptor." }
+      ],
+      "memory_hook": "Three of six correct on first pass. Three re-prompts. Each re-prompt was a single sentence referencing the specific gap.",
+      "closing_thread": "Manual validation follows.",
+      "narration": "First-pass quality. JWT, bcrypt, Prisma schema — correct first pass. Account lockout, refresh token rotation, 401 UI handling — required re-prompting. Three of six correct. Each re-prompt was a single sentence referencing the specific gap.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "An honest breakdown of first-pass quality." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Correct first pass — JWT issuance and validation, bcrypt hashing at cost twelve, the Prisma schema. Standard framework territory — well-represented in AI training data." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Required re-prompting — account lockout after five failures. Refresh token rotation — the initial implementation reused tokens indefinitely. And 401 handling on the frontend — the UI suppressed errors instead of redirecting to login." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Three re-prompts in total. Each was a single sentence referencing the specific gap. Surgical, brief, effective. This is the correct pattern for re-prompting." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "welcome",
+      "act": "Day 2 — Auth & JWT",
+      "title": "Manual Validation — Practitioner-Executed",
+      "subtitle": "Independent verification of AI output. Five steps. Approximately five minutes.",
+      "icon": "search",
+      "estimated_duration_seconds": 135,
+      "bullets": [
+        "Step 1 — Execute npm run start:dev. Verify backend operation. Visit localhost:3000/auth/login; confirm 401 response.",
+        "Step 2 — Execute npm run dev. Verify frontend operation. Visit localhost:5173; confirm login page renders.",
+        "Step 3 — Submit incorrect credentials. Confirm error message display. Open browser dev tools — Network tab — confirm 401 response.",
+        "Step 4 — Submit valid admin credentials. Confirm redirect to dashboard. Confirm JWT presence in localStorage.",
+        "Step 5 — Issue curl request to /api/issues without authorisation header. Confirm 401 response. Server-side enforcement validated.",
+        "All five passing — authentication is considered shipped. Any failure — re-prompt with the specific error message."
+      ],
+      "memory_hook": "Five-step smoke test. Five minutes. This validation cannot be omitted.",
+      "closing_thread": "Authentication shipped. We proceed to the application shell.",
+      "narration": "Manual validation. Five steps. Backend operational. Frontend operational. Incorrect credentials produce 401. Valid credentials produce redirect with JWT. API request without token produces 401. Five minutes. This validation cannot be omitted.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "We now turn to a step most practitioners regrettably omit — manual validation." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Five steps. Backend operational — npm run start dev. Frontend operational — npm run dev. Both services on localhost." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Submit incorrect credentials — confirm error display. Open developer tools Network tab — confirm 401 response. Submit valid credentials — confirm redirect to dashboard and JWT presence in localStorage." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Final step — issue a curl request to slash API slash issues without an authorisation header. The response must be 401. If this step is omitted, a UI-only check may have been shipped. Server-side enforcement is the actual security boundary." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "welcome",
+      "act": "The Application Shell",
+      "title": "Day 3 Morning — The Application Shell",
+      "subtitle": "The structural frame that contains every subsequent screen",
+      "icon": "layout-template",
+      "estimated_duration_seconds": 90,
+      "bullets": [
+        "Shell composition — sidebar, main content area, theme toggle, PageHeader pattern.",
+        "Every Issue Tracker screen renders within this frame. Construction is non-repeated; every subsequent screen inherits.",
+        "The UI Specifications document from Module 3 constitutes the contract — vThink purple, Sen font family, split-view login, collapsible sidebar.",
+        "AI implements per the specifications. The Lead's role is enforcement, not design."
+      ],
+      "closing_thread": "We examine the shell prompt.",
+      "narration": "Day 3 morning. The application shell. Sidebar plus main content plus theme toggle plus PageHeader pattern. Every screen renders within this frame. Construction is non-repeated; subsequent screens inherit.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Day 3 morning. Authentication is shipped. We proceed to the application shell — the structural frame containing every subsequent screen." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Shell composition — sidebar, main content area, theme toggle, and PageHeader pattern. Every Issue Tracker screen renders within this frame." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "playful_intrigue", "text": "Construction is performed once; subsequent screens inherit the structure. The UI Specifications document constitutes the contract — vThink purple, Sen font family, split-view login, collapsible sidebar. The Lead's role is enforcement of these specifications, not design." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "stats_hero",
+      "act": "The Application Shell",
+      "title": "The Shell Prompt",
+      "subtitle": "References UI Specifications · MUI component library · theme toggle integrated",
+      "icon": "layout-template",
+      "estimated_duration_seconds": 160,
+      "hero_stat": {
+        "value": "1 prompt",
+        "label": "produced sidebar, layout, theme toggle, PageHeader, and light/dark CSS tokens",
+        "icon": "layout-template"
+      },
+      "analogy": {
+        "title": "Stage architecture, not performance",
+        "text": "Stage architecture provides structure for performance to occur within. Correct stage construction enables effortless performance; incorrect construction causes every scene to struggle against the structure. The application shell functions identically."
+      },
+      "bullets": [
+        "Prompt referenced the UI Specifications document explicitly — vThink purple #5A00EE, Sen font family, MUI components, sidebar collapsibility.",
+        "Required — absence of duplicate page title bar; contextual titles via PageHeader within content area per specification.",
+        "Required — light and dark theme toggle in sidebar, persisted to localStorage, applied via MUI ThemeProvider.",
+        "Required — RBAC-aware menu visibility — Reporters omit administrative links. Server-side route guard separate.",
+        "Generated — approximately twelve files: layout, sidebar, theme provider, PageHeader, navigation hooks. Cleanly composable."
+      ],
+      "memory_hook": "Reference the UI Specifications document within the prompt. AI honours specifications when explicitly invoked.",
+      "closing_thread": "We examine the shell's constituent elements.",
+      "narration": "The shell prompt — one prompt, twelve files generated. Referenced UI Specifications explicitly. vThink purple, Sen font, MUI components, collapsible sidebar. No duplicate title bar. Theme toggle persisted. RBAC-aware menu. AI honoured every specification because the specification was in the kit.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "One prompt. Approximately twelve files generated. Sidebar, layout, theme provider, PageHeader, navigation hooks — cleanly composable." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "A critical practice — the prompt referenced the UI Specifications document explicitly. vThink purple, hex five A zero zero E E. Sen font family. MUI components. Sidebar collapsible." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Required — absence of duplicate page title bar. Contextual titles via the PageHeader pattern per specification. Theme toggle persisted to localStorage. RBAC-aware menu visibility — Reporters omit administrative links." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Reference the UI Specifications document within the prompt. AI honours specifications when explicitly invoked. Omit that reference and AI will invent a complete alternative theme. The lesson — prompts must draw from the kit." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "competencies",
+      "act": "The Application Shell",
+      "title": "Shell Composition",
+      "subtitle": "Generated within one session · cleanly composable architecture",
+      "icon": "grid-3x3",
+      "estimated_duration_seconds": 140,
+      "list": [
+        { "name": "Sidebar with grouping",  "icon": "list-checks",     "desc": "Collapsible left sidebar. Issue group expandable. Active route highlighting. Mobile-responsive." },
+        { "name": "Main content area",      "icon": "layout-template", "desc": "Page rendering region. No duplicate application bar — the PageHeader within each page provides context. Background hex F8F9FC." },
+        { "name": "Theme toggle (sidebar)", "icon": "sparkles",        "desc": "Light to dark transition. Persisted. MUI ThemeProvider transitions all colours in unison. No flash on reload." },
+        { "name": "RBAC menu filtering",    "icon": "shield-alert",    "desc": "Reporter role omits Project Setup, Employee Setup, User Management, Reports. UI-level filtering — server-side route guards remain active." }
+      ],
+      "memory_hook": "Sidebar plus content area plus theme plus RBAC menu. The four elements required by every web application shell.",
+      "closing_thread": "Shell complete. We proceed to the first user-facing screen.",
+      "narration": "Shell composition. Sidebar with grouping. Main content area with PageHeader pattern. Theme toggle persisted. RBAC menu filtering. Four elements required by every web application shell.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Four elements. Sidebar with grouping — collapsible, active route highlighting, mobile-responsive." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Main content area — page rendering occurs here. Absence of duplicate application bar — the PageHeader within each page provides context. Background colour hex F8F9FC per specification." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "amazed", "text": "Theme toggle in the sidebar — light to dark transition, persisted to localStorage, MUI ThemeProvider transitions all colours in unison. No flash on reload." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "RBAC menu filtering — the Reporter role omits Project Setup, Employee Setup, User Management, and Reports. UI-level filtering only — server-side route guards remain active. Defence in depth." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "transition_bridge",
+      "act": "The Application Shell",
+      "title": "Shell complete. The first user-facing screen follows.",
+      "subtitle": "The Dashboard",
+      "icon": "rocket",
+      "estimated_duration_seconds": 55,
+      "closing_thread": "The Dashboard — both AI's strengths and weaknesses are visible.",
+      "narration": "Shell complete. The first screen every user encounters follows — the Dashboard.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Shell complete. Authentication complete. The structural frame is in place." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "playful_intrigue", "text": "We now construct the first screen every user encounters — the Dashboard." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Where AI's strengths and weaknesses both become visible. Both observations carry instructional value." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "welcome",
+      "act": "The Dashboard",
+      "title": "Day 3 Afternoon — The Dashboard",
+      "subtitle": "The landing screen for every authenticated user",
+      "icon": "bar-chart-2",
+      "estimated_duration_seconds": 90,
+      "bullets": [
+        "Composition — four metric cards, recent activity feed, project filter dropdown.",
+        "Metrics displayed — Total Issues, My Open, My Closed This Week, Overdue.",
+        "Near-real-time — re-fetch occurs on filter change, visibility regain, and server-push events where present.",
+        "FDD specified 'simple, glanceable, no charts in the first version'. This constraint was honoured."
+      ],
+      "closing_thread": "We examine the dashboard prompt.",
+      "narration": "Day 3 afternoon. The Dashboard. Landing screen for every authenticated user. Four metric cards plus activity feed plus project filter. Glanceable, no charts in the first version per FDD specification.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Day 3 afternoon. The Dashboard." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Composition — four metric cards, recent activity feed, project filter dropdown. Total Issues. My Open. My Closed This Week. Overdue." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "The FDD specified — simple, glanceable, no charts in the first version. This constraint was honoured. Restraint is itself a feature." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "stats_hero",
+      "act": "The Dashboard",
+      "title": "The Dashboard Prompt",
+      "subtitle": "Same eight-component pattern · references FDD Section 4",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 150,
+      "hero_stat": {
+        "value": "8 / 8",
+        "label": "intent components again — outcome, actor, validation, security, stack, acceptance, edge cases, data model",
+        "icon": "message-square-text"
+      },
+      "bullets": [
+        "OUTCOME — authenticated user lands on /dashboard; four metric cards plus activity feed plus project filter rendered.",
+        "ACTOR — any authenticated user. All cards display data scoped to the JWT-derived user.id.",
+        "VALIDATION — project filter must reference projects accessible to the user; otherwise 403.",
+        "SECURITY — server-side filtering via Prisma where-clauses with PostgreSQL indexes on assigneeId, status, dueDate.",
+        "STACK — NestJS dashboard controller, Prisma aggregations, React Query for client-side caching.",
+        "ACCEPTANCE — four cards load within 500ms; activity feed displays last 20 events in descending order.",
+        "EDGE CASES — empty tenant (no issues present) — zero-state display; offline — cache-only mode.",
+        "DATA MODEL — no new tables; queries against existing Issue, ActivityLog, and ProjectAccess entities."
+      ],
+      "closing_thread": "AI's strengths and weaknesses become visible here.",
+      "narration": "The dashboard prompt. Eight-component pattern. Authenticated user, four metric cards, activity feed, project filter. Server-side filtering with Prisma and PostgreSQL indexes. React Query on the frontend. Acceptance — four cards under 500 milliseconds.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Eight components again. Identical pattern. A different feature." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Outcome — user lands on dashboard; four cards render. Actor — any authenticated user, with data scoped via JWT user-dot-id." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Security — server-side filtering via Prisma where-clauses with PostgreSQL indexes on assigneeId, status, and dueDate. Stack — NestJS controller, Prisma aggregations, React Query for client-side caching." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Acceptance — four cards load within 500 milliseconds. This is an explicit performance budget. Without it, AI will ship an N-plus-one query without recognising the problem." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "comparison_table",
+      "act": "The Dashboard",
+      "title": "AI Strengths and Weaknesses",
+      "subtitle": "Pattern — framework-level work is reliable; domain-specific performance is not.",
+      "icon": "scale",
+      "estimated_duration_seconds": 145,
+      "table": [
+        { "icon": "check-circle",  "pain": "React Query configuration",    "trad": "✅ First pass",                     "orch": "Cache keys, invalidation hooks — idiomatic implementation" },
+        { "icon": "check-circle",  "pain": "MUI Card layout",                "trad": "✅ First pass",                     "orch": "Responsive grid; UI Specifications colours honoured" },
+        { "icon": "check-circle",  "pain": "Empty-state component",          "trad": "✅ First pass",                     "orch": "Constructive message with call-to-action to create first issue" },
+        { "icon": "alert-triangle","pain": "Aggregation query",              "trad": "❌ N+1 issue",                       "orch": "Initial implementation issued four queries instead of one grouped query — re-prompted" },
+        { "icon": "alert-triangle","pain": "Project filter scoping",         "trad": "⚠️ Client-side only",                "orch": "Initial implementation filtered in React — re-prompted for server-side enforcement" },
+        { "icon": "alert-triangle","pain": "Database index hints",           "trad": "❌ Omitted",                          "orch": "Re-prompted to add indexes on (assigneeId, status) and (dueDate)" }
+      ],
+      "memory_hook": "Framework patterns are AI's strength. Domain-specific performance and security are AI's recurring blind spots. Re-prompting is the standard remediation.",
+      "closing_thread": "Two re-prompts later — the Dashboard ships.",
+      "narration": "Where AI succeeded — React Query configuration, MUI cards, empty-state component. Where AI required re-prompting — aggregation query exhibited N-plus-one behaviour, project filter was client-side only, database indexes were omitted.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "An honest review of the dashboard generation." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "AI succeeded — React Query configuration, MUI Card layout, empty-state component. All correct on first pass. Framework-level territory, well-represented in training data." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "AI required re-prompting — the aggregation query exhibited N-plus-one behaviour. Four queries issued instead of one grouped query. Project filter operated client-side only, which is trivially bypassable." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "And a recurring AI omission — database indexes. Re-prompted explicitly to add indexes on assigneeId-status and dueDate. Performance and security are the recurring blind spots. Framework patterns are not." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "welcome",
+      "act": "The Dashboard",
+      "title": "Re-Prompt That Resolved the N+1 Issue",
+      "subtitle": "Surgical · two sentences · references the specific file",
+      "icon": "edit-3",
+      "estimated_duration_seconds": 115,
+      "bullets": [
+        "Ineffective re-prompt — 'fix performance'. Vague; AI guesses. This approach should be avoided.",
+        "Effective re-prompt — 'In dashboard.service.ts, getDashboardMetrics() issues four separate Prisma calls. Combine into one query using groupBy with raw aggregations.'",
+        "AI response — a single Prisma $queryRaw with COUNT and SUM groupings; query count reduced from four to one.",
+        "Subsequent re-prompt — 'Add @@index([assigneeId, status]) and @@index([dueDate]) to schema.prisma.' Two re-prompts; complete.",
+        "Total elapsed time including re-prompts — approximately 90 minutes. From inception to shipped with indexes."
+      ],
+      "memory_hook": "Re-prompts must be surgical. Name the file. Name the function. Name the gap. Reference the shape of the fix.",
+      "closing_thread": "Authentication, shell, dashboard — all operational. The practitioner now experiences the result.",
+      "narration": "The re-prompt that resolved the N-plus-one. Ineffective — 'fix performance', vague. Effective — name the file, name the function, name the gap, suggest the fix shape. Two re-prompts, ninety minutes total, dashboard ships with indexes.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Re-prompt construction. A critical skill." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Ineffective re-prompt — 'fix performance'. Vague. AI guesses. A turn is wasted." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Effective re-prompt — in dashboard-dot-service-dot-ts, getDashboardMetrics issues four separate Prisma calls. Combine into one query using groupBy with raw aggregations." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "AI returns a single Prisma queryRaw with COUNT and SUM groupings. Query count reduced from four to one. The subsequent index re-prompt completes the work. Two re-prompts total — dashboard ships in approximately ninety minutes including iterations." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "welcome",
+      "act": "Your Manual Checkpoint",
+      "title": "The Practitioner Now Operates the Live Build",
+      "subtitle": "Transition from observer to operator",
+      "icon": "rocket",
+      "estimated_duration_seconds": 95,
+      "opening_hook": "Two days of build effort have been observed. The practitioner now interacts with the result directly.",
+      "bullets": [
+        "The Issue Tracker is operational at projectissuetracker.vthinkdeveloper.com",
+        "Administrative credentials — admin@vthink.co.in / Admin@123",
+        "Open the URL in a new browser tab. Authenticate. Land on the dashboard.",
+        "The practitioner is now standing within the artefact of everything just examined. Authentication, shell, dashboard — all operational.",
+        "The next slide provides a guided tour of significant interactions."
+      ],
+      "closing_thread": "The guided tour follows.",
+      "narration": "The practitioner now operates the live build. URL — projectissuetracker-dot-vthinkdeveloper-dot-com. Credentials — admin at vthink dot co dot in. Password — Admin at one two three. Authenticate. Land on the dashboard.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Observation ends. Operation begins." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Open in a new browser tab — projectissuetracker dot vthinkdeveloper dot com. Login is admin at vthink dot co dot in. Password — Admin at one two three." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Authenticate. Land on the dashboard. The practitioner is now standing within the artefact of everything just examined. Authentication, shell, dashboard — all operational, in production." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "The next slide provides a guided tour of significant interactions. The exercise is not yet complete." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "tap_reveal",
+      "act": "Your Manual Checkpoint",
+      "title": "Guided tour — examine each element",
+      "subtitle": "Five interactions in the live build that demonstrate the material covered",
+      "icon": "search",
+      "estimated_duration_seconds": 115,
+      "cards": [
+        { "label": "Login page — split-view layout",         "reveal": "Note the layout — left hero panel with vThink wordmark, right card with form. This is the result of UI Specifications being present in the kit; AI honoured the split-view rule exactly." },
+        { "label": "Sidebar — exercise the collapse",         "reveal": "Activate the collapse control. Sidebar reduces to icons only with hover tooltips. This is the MUI Drawer mini variant pattern — directly from the shell prompt." },
+        { "label": "Theme toggle — exercise the switch",      "reveal": "Located at the foot of the sidebar — Appearance toggle. Transition from light to dark. Every colour transitions in unison via MUI ThemeProvider. The preference persists after reload." },
+        { "label": "Dashboard — four cards plus feed",        "reveal": "The four cards displayed are those specified by the prompt — Total Issues, My Open, Closed This Week, Overdue. Activity feed below. No charts in the first version; restraint was honoured." },
+        { "label": "Issue /api/issues request without token", "reveal": "Open developer tools. Network tab. Visit /api/issues. The response is 401. The server-side guard is the true enforcement boundary; the UI represents merely the surface." }
+      ],
+      "narration": "Five interactions in the live build. Login split view. Sidebar collapse. Theme toggle. Dashboard four cards. API request without token. Activate each card to understand the principle each interaction demonstrates.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Five interactions in the live build. Activate each card." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Login split view. Sidebar collapse. Theme toggle. Dashboard four cards. API authorisation test. Each demonstrates a principle from this module." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Execute in sequence. Approximately five minutes. Return to this presenter when complete." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "spot_the_flaw",
+      "act": "Your Manual Checkpoint",
+      "title": "Identify the gaps in this authentication prompt",
+      "subtitle": "Indicate each clause that violates the eight-component rule",
+      "icon": "alert-triangle",
+      "estimated_duration_seconds": 115,
+      "text": "Add login to the app. Use JWT. Make sure the password is secure. Roles are admin and user. Block bad logins.",
+      "flaws": [
+        { "phrase": "Make sure the password is secure", "explanation": "Imprecise. Secure by what mechanism? Bcrypt cost? Argon2? Length minimum? Complexity rules? Without specifying algorithm and parameters, AI will default to SHA-256 and ship a vulnerability." },
+        { "phrase": "Roles are admin and user",         "explanation": "Only two roles? The FDD specifies three — Admin, Manager, Reporter. Additionally, the action map is absent — who is permitted to perform what. Roles without permission scope are inoperative." },
+        { "phrase": "Block bad logins",                  "explanation": "After how many attempts? With what cool-down? Account lockout? CAPTCHA? IP throttling? The term 'bad' has no defined shape — AI will ship a token check and consider the requirement satisfied." }
+      ],
+      "narration": "Identify the gaps. This authentication prompt appears reasonable. It is not. Indicate each clause violating the eight-component rule. Three flaws are present.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "An actual prompt submitted by a practitioner. Appears reasonable. Is not." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Three clauses violate the eight-component rule. Each leaves AI to invent the missing element." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Indicate each clause. We await your responses." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "mini_match",
+      "act": "Your Manual Checkpoint",
+      "title": "Map each foundation element to its implementation",
+      "subtitle": "Select an element, then select the corresponding technology",
+      "icon": "sparkles",
+      "estimated_duration_seconds": 90,
+      "pairs": [
+        { "left": "Auth token issuance and validation", "right": "NestJS with Passport JWT strategy" },
+        { "left": "Password storage",                    "right": "Bcrypt at cost 12" },
+        { "left": "Frontend authentication state",       "right": "React Context with localStorage" },
+        { "left": "Sidebar with collapse",                "right": "MUI Drawer (mini variant)" },
+        { "left": "Theme persistence",                    "right": "ThemeProvider with localStorage" },
+        { "left": "Dashboard data caching",               "right": "React Query (TanStack)" }
+      ],
+      "narration": "Map each foundation element to its implementation technology. Six pairs.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Six foundation elements. Six technology choices. Map them." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Incorrect selections indicate visually. Correct selections lock confirmed. Proceed." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "confidence_slider",
+      "act": "Your Manual Checkpoint",
+      "title": "Could you issue the authentication prompt independently?",
+      "icon": "help-circle",
+      "estimated_duration_seconds": 70,
+      "prompt": "If a client requested authentication implementation Monday morning, could you compose the eight-component prompt, attach your kit, and ship a JWT-based authentication flow within one day?",
+      "scale": { "min_label": "Not yet", "max_label": "Confidently" },
+      "narration": "Could you issue the authentication prompt independently? Eight-component prompt composed cold, kit attached, JWT flow shipped within one day. Select a number. No selection is incorrect.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "A readiness check. Could this be executed Monday morning?" },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Authentication prompt composed cold, kit attached, JWT-based flow shipped within one day. Select a number. No selection is incorrect." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "recap",
+      "act": "Your Manual Checkpoint",
+      "title": "Module 4 — Capabilities Acquired",
+      "subtitle": "Five-sentence summary",
+      "icon": "check-circle",
+      "estimated_duration_seconds": 95,
+      "items": [
+        "Capable of enumerating the six Day-1 manual installations and articulating why each is the practitioner's responsibility, not AI's.",
+        "Capable of issuing an eight-component authentication prompt that produces JWT authentication, bcrypt hashing, and route guards.",
+        "Capable of issuing a shell prompt referencing the UI Specifications document, producing sidebar, theme, and RBAC menu.",
+        "Capable of composing surgical re-prompts that name the file, the function, the gap, and the fix shape.",
+        "Capable of operating a live build, authenticating, and executing a five-step manual smoke test within five minutes."
+      ],
+      "memory_hook": "Day-1 installations · Authentication prompt · Shell prompt · Dashboard prompt · Manual smoke test. Foundation construction is now repeatable.",
+      "closing_thread": "Module 5 follows — the Workflow Engine. The component where vague prompts produce the most consequential defects.",
+      "narration": "Module 4 capabilities. Enumerate the six manual installations. Issue an eight-component authentication prompt. Issue a shell prompt referencing UI Specifications. Compose surgical re-prompts. Execute a five-step manual smoke test within five minutes.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Module 4 — capabilities acquired." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Six manual installations — comprehended. Authentication prompt — composable. Shell prompt — composable. Re-prompts — surgical with file, function, gap, and fix shape specified." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "And the five-step manual smoke test. This is how AI output is validated independently — without relying on AI's self-report." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "act": "Your Manual Checkpoint",
+      "title": "Module 4 Complete — Foundation Established",
+      "subtitle": "Next · Module 5 — The Workflow Engine",
+      "icon": "rocket",
+      "estimated_duration_seconds": 80,
+      "hero_stat": {
+        "value": "4 / 6",
+        "label": "modules complete · the application is operational",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "Authentication — shipped. JWT, bcrypt, route guards, frontend Context.",
+        "Application shell — shipped. Sidebar, PageHeader, theme, RBAC menu.",
+        "Dashboard — shipped. Metric cards, activity feed, indexed queries.",
+        "Live build experienced — authenticated, navigated, smoke test executed.",
+        "Module 5 follows — status workflows. The area where vague prompts produce the most consequential defects. The correct approach will be demonstrated."
+      ],
+      "closing_thread": "We continue in Module 5.",
+      "narration": "Module 4 complete. Authentication, shell, dashboard — all shipped. Live build experienced. Module 5 follows — status workflows. The area where vague prompts produce the most consequential defects.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Module 4 is complete. The application is operational." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Authentication, shell, dashboard — all shipped. The practitioner has authenticated against the live build and executed the manual smoke test." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Module 5 addresses status workflows — the area where vague prompts produce the most consequential defects. The correct approach will be demonstrated." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "We continue in Module 5." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    }
+  ]
+}

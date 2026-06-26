@@ -1,0 +1,637 @@
+{
+  "module": "Module 6 — Admin, Reports, Going Live · Your Capstone & GitHub Submission",
+  "preset": "genz",
+  "format": "two_voice_dialogue",
+  "speakers": {
+    "Sara":  { "voice_key": "female_genz", "gender": "female", "persona": "Sara — energetic, expressive co-host. Asks the real-world questions." },
+    "Arjun": { "voice_key": "male_genz",   "gender": "male",   "persona": "Arjun — upbeat, grounded co-host. Gives the structured method." }
+  },
+  "tts_field_priority": ["text_expressive", "text_ssml", "text"],
+  "schema_version": "v8_interactive_with_music",
+  "last_updated": "2026-06-26T00:00:00Z",
+  "acts": [
+    { "id": "act_1", "name": "Day 6 — Admin Surfaces",            "slide_start": 1,  "slide_end": 4  },
+    { "id": "act_2", "name": "Reports — The Client Trust Signal", "slide_start": 5,  "slide_end": 8  },
+    { "id": "act_3", "name": "Co-Working with QA & UAT",          "slide_start": 9,  "slide_end": 13 },
+    { "id": "act_4", "name": "Going Live — Repository Submission","slide_start": 14, "slide_end": 18 },
+    { "id": "act_5", "name": "Graduation — You're an OrchestrAI Lead", "slide_start": 19, "slide_end": 23 }
+  ],
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "act": "Day 6 — Admin Surfaces",
+      "title": "Module 6 — The Capstone",
+      "subtitle": "Admin · Reports · QA co-working · Going Live · YOUR submission",
+      "icon": "rocket",
+      "estimated_duration_seconds": 80,
+      "opening_hook": "Five modules ago you were a developer. Today you graduate as an OrchestrAI Lead.",
+      "bullets": [
+        "5 acts. 23 slides. The capstone of the entire programme.",
+        "Day 6 + 7 of the build — Admin surfaces, Reports, QA + UAT handoff, GitHub push for review.",
+        "Then — the graduation moment. Your capstone challenge. Your repo submission. Your certification path.",
+        "By slide 23 you'll have everything you need to do this on your own engagement starting Monday."
+      ],
+      "closing_thread": "First — Day 6. The 'last 20%' that separates a demo from a product.",
+      "narration": "Module 6. The capstone. Five modules ago you were a developer — today you graduate as an OrchestrAI Lead. Days 6 and 7 — Admin surfaces, Reports, QA co-working, the final GitHub push. Then your capstone challenge and certification path.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Module 6. The LAST one. The capstone." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Five modules ago you were a developer. By the end of today you graduate as an OrchestrAI Lead. That's the actual stakes here." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Days 6 and 7 of the build. Admin surfaces, Reports, QA co-working, the final GitHub push. THEN your capstone challenge. Your repo submission. Your cert." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "By slide 23 you'll have everything you need to do this on your own engagement starting Monday morning. Let's go." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "stats_hero",
+      "act": "Day 6 — Admin Surfaces",
+      "title": "The Last 20% — Where Most AI Builds Die",
+      "subtitle": "80% to demo is easy. The last 20% is where real engineering lives.",
+      "icon": "alert-triangle",
+      "estimated_duration_seconds": 120,
+      "hero_stat": {
+        "value": "80 / 20",
+        "label": "first 80% takes 2 days · last 20% takes 5 — and that's where the OrchestrAI advantage really shows",
+        "icon": "alert-triangle"
+      },
+      "analogy": {
+        "title": "Building a house",
+        "text": "Framing and roof — 2 weeks, looks like a house. Plumbing, wiring, insulation, finish, permits — 4 months, and it's where everyone almost gives up. AI builders quit at 80%. OrchestrAI Leads finish the 20%."
+      },
+      "bullets": [
+        "Days 1-5 — auth, shell, dashboard, workflow, comments. The 'demo-able' build.",
+        "Days 6-7 — Admin surfaces, Reports, QA, UAT, deploy. The 'shippable' build.",
+        "Most AI-only builds STOP at demo-able. Their team can't take it from there.",
+        "OrchestrAI Leads carry it all the way to shippable — that's why your skill is worth what it is."
+      ],
+      "closing_thread": "First territory of the last 20% — Admin surfaces. Where RBAC always needs humans.",
+      "narration": "The last 20% — where most AI builds die. First 80% takes 2 days. Last 20% takes 5. That's where the OrchestrAI advantage really shows. Most AI builders quit at demo-able. OrchestrAI Leads carry it to shippable.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Real talk about the curve. First 80 percent of an AI build takes about 2 days. Last 20 percent takes about 5. And that 20 is where most AI builders quit." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Days 1 to 5 — auth, shell, dashboard, workflow, comments. The 'demo-able' build. Shiny. Convincing. Not actually shippable." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Days 6 and 7 — Admin surfaces, Reports, QA, UAT, deploy. THIS is the 'shippable' build. Most AI-only teams stop at demo-able. Their engineers can't take it from there." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "OrchestrAI Leads carry it ALL the way. That's why this skill is worth what it is. Today you learn the part nobody else teaches." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "competencies",
+      "act": "Day 6 — Admin Surfaces",
+      "title": "The 3 Admin Surfaces — Why RBAC Always Needs Humans",
+      "subtitle": "Project Setup · Employee Setup · User Management",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 165,
+      "list": [
+        { "name": "Project Setup",  "icon": "layout-template", "desc": "Create / edit / archive projects. Define the project taxonomy YOUR client uses. AI doesn't know if your client groups by client-name, by domain, or by cost-center. You decide, then prompt." },
+        { "name": "Employee Setup", "icon": "users",           "desc": "Employee directory — the canonical 'who works here'. Includes employee number, name, email, active flag. Drives every Issue's assignee and reporter pickers." },
+        { "name": "User Management","icon": "user-cog",        "desc": "Login accounts mapped to Employees. Role assignment. Activate / deactivate. Reset password. AI doesn't know your org chart — YOU map it." },
+        { "name": "RBAC matrix",    "icon": "shield-alert",    "desc": "The cross-product. Which role does what across these three surfaces. Reporters can't delete projects. Managers can. Admin can do everything including delete users (per FDD §17)." }
+      ],
+      "memory_hook": "3 surfaces + RBAC = the org chart in code. AI can build the surfaces. You decide the RBAC.",
+      "closing_thread": "Here's the admin prompt approach.",
+      "narration": "Three admin surfaces. Project Setup, Employee Setup, User Management. Plus RBAC — which role does what. AI doesn't know your org chart — you map it. AI doesn't know your project taxonomy — you decide it. The surfaces are framework work; the rules are domain work.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Three admin surfaces. Each one is mostly framework work — AI nails the CRUD. But the RULES on top? That's your job." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Project Setup — create, edit, archive. AI doesn't know if your client groups projects by client-name, domain, or cost-center. YOU decide, then prompt." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Employee Setup — the canonical 'who works here'. Employee number, name, email, active flag. Drives every Issue's assignee and reporter pickers." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "User Management — login accounts mapped to Employees. Role assignment. Activate, deactivate, reset password." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "And the RBAC matrix — the cross-product. Which role does what. Reporters can't delete projects. Managers can. Admin can do everything including delete users — per FDD section seventeen. AI builds the surfaces. YOU decide the RBAC." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "welcome",
+      "act": "Day 6 — Admin Surfaces",
+      "title": "The Admin Prompt — One Prompt Per Surface",
+      "subtitle": "Same 8-component intent · RBAC clause is non-negotiable",
+      "icon": "edit-3",
+      "estimated_duration_seconds": 130,
+      "bullets": [
+        "Unlike Workflow (ONE long prompt), admin surfaces work best as 3 focused prompts — one per surface.",
+        "Why? Each surface has different RBAC, different validation, different list/detail UX. Splitting keeps each tight.",
+        "EVERY admin prompt must include: 'RBAC: which role can do what (matrix below). Server enforces on every endpoint. UI hides actions a role cannot perform.'",
+        "Example RBAC clause for Project Setup: 'Admin: full CRUD. Manager: full CRUD on their accessible projects. Reporter: read-only on their accessible projects. Server-side check at controller layer.'",
+        "Commit after EACH surface validates. 3 surfaces = 3 commits = 3 push events on Day 6."
+      ],
+      "memory_hook": "3 surfaces · 3 prompts · 3 RBAC clauses · 3 commits. Tight, focused, auditable.",
+      "closing_thread": "Day 6 afternoon — Reports.",
+      "narration": "The admin prompt. One prompt per surface. Unlike workflow, admin works best split into three. Why? Each surface has different RBAC, validation, UX. Every admin prompt MUST include the RBAC clause — which role can do what, server enforces, UI hides. Commit after each surface validates.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Unlike workflow which was ONE long prompt — admin surfaces work BETTER as three focused prompts. One per surface." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Why? Each surface has different RBAC, different validation, different list-and-detail UX. Splitting keeps each prompt tight and the AI focused." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "EVERY admin prompt must include the RBAC clause. Which role can do what — matrix included. Server enforces on every endpoint. UI hides actions a role cannot perform. Both, always." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Example for Project Setup — Admin full CRUD. Manager full CRUD on accessible projects. Reporter read-only on accessible projects. Server-side check at the controller layer. Commit after each surface validates — three surfaces, three commits, three pushes on Day 6." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "welcome",
+      "act": "Reports — The Client Trust Signal",
+      "title": "Day 6 Afternoon — Reports",
+      "subtitle": "The first artifact your client's CEO will actually look at",
+      "icon": "bar-chart-2",
+      "estimated_duration_seconds": 90,
+      "opening_hook": "Dashboards are for users. Reports are for executives. The exec opens ONE Excel file from the email — make it land.",
+      "bullets": [
+        "8 reports in the Issue Tracker FDD — exec summary, by project, by reporter, by assignee, overdue aging, full register, weekly trend, priority matrix.",
+        "Every report has TWO outputs: Excel + PDF. Both must render. Both must look executive-grade.",
+        "Filters on every report: project, date range, status, type. Server applies them; results never leak across tenants.",
+        "Reports = the artifact your client's CEO opens. They tell the story your dashboard couldn't fit on one screen."
+      ],
+      "closing_thread": "Here's the reports prompt approach.",
+      "narration": "Day 6 afternoon — Reports. Dashboards are for users. Reports are for executives. Eight reports in the FDD. Every one has Excel and PDF outputs. Filters on every report. Reports tell the story the dashboard couldn't fit on one screen.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Day 6 afternoon. Reports." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Dashboards are for daily users. Reports are for executives. The exec opens ONE Excel file from the email. Make it land." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Eight reports in the FDD. Exec summary. By project. By reporter. By assignee. Overdue aging. Full register. Weekly trend. Priority matrix." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Every report has TWO outputs — Excel and PDF. Both must look executive-grade. Filters on every report. Reports tell the story your dashboard couldn't fit on one screen." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "stats_hero",
+      "act": "Reports — The Client Trust Signal",
+      "title": "The Reports Prompt — Excel + PDF in One Pass",
+      "subtitle": "References FDD §18 · uses exceljs + pdfkit · cached by query hash",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 160,
+      "hero_stat": {
+        "value": "8 reports",
+        "label": "× 2 formats (Excel + PDF) × 4 filters each = 64 report variations · generated from 1 reports module prompt",
+        "icon": "message-square-text"
+      },
+      "bullets": [
+        "OUTCOME: Logged-in Admin/Manager runs a report → previews table → downloads Excel OR PDF.",
+        "STACK: NestJS reports module · Prisma aggregation queries · exceljs for .xlsx · pdfkit for .pdf · React Query for caching.",
+        "ACCEPTANCE: Each report < 3s for 10k issues. Excel opens cleanly in MS Excel + Google Sheets + LibreOffice. PDF prints landscape with vThink branding.",
+        "EDGE CASES: Empty result set → friendly 'no data' state, NOT a broken empty file. Large dataset → server streams response, no memory bloat.",
+        "RBAC: Reporters CANNOT access /reports (route guard + UI hide). Admins + Managers can. Tenant isolation enforced via Prisma where-clauses."
+      ],
+      "memory_hook": "8 reports + 2 formats + 4 filters = 64 variations from ONE module prompt. AI's leverage at its peak.",
+      "closing_thread": "Where reports break — and how to catch it.",
+      "narration": "The reports prompt. Eight reports times two formats times four filters equals sixty-four variations from one module prompt. Outcome — Admin or Manager runs report, previews, downloads Excel or PDF. Stack — NestJS, Prisma, exceljs, pdfkit, React Query. Acceptance — each report under three seconds for ten thousand issues.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "The reports prompt. One module prompt. Sixty-four total variations come out — eight reports times two formats times four filter combos." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Outcome — Admin or Manager runs a report, previews the table, downloads Excel OR PDF. Stack — NestJS reports module, Prisma aggregation, exceljs for xlsx, pdfkit for PDF, React Query for caching." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Acceptance — each report under three seconds for ten thousand issues. Excel opens cleanly in MS Excel, Google Sheets, AND LibreOffice. PDF prints landscape with vThink branding." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Edge cases — empty result set shows friendly 'no data' state, NOT a broken empty file. Large dataset streams the response, no memory bloat." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "RBAC — Reporters CANNOT access slash reports. Route guard plus UI hide. Admins and Managers can. Tenant isolation via Prisma where-clauses. This is AI's leverage at its absolute peak. Sixty-four artifacts from one prompt." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "comparison_table",
+      "act": "Reports — The Client Trust Signal",
+      "title": "Where Reports Break — And How to Catch It Pre-QA",
+      "subtitle": "5 common AI report bugs · each one caught by manual spot-check",
+      "icon": "scale",
+      "estimated_duration_seconds": 140,
+      "table": [
+        { "icon": "alert-triangle", "pain": "Excel column types",   "trad": "❌ Everything stored as text",          "orch": "✅ Date columns formatted as dates, numbers as numbers, currency formatted" },
+        { "icon": "alert-triangle", "pain": "PDF page breaks",       "trad": "❌ Rows split across pages mid-cell",   "orch": "✅ Repeat header on each page, no orphan rows" },
+        { "icon": "alert-triangle", "pain": "Tenant leakage",        "trad": "❌ Manager sees all projects globally", "orch": "✅ Prisma where-clause scopes by user.tenantId on every report query" },
+        { "icon": "alert-triangle", "pain": "Internal IDs exposed",  "trad": "❌ UUIDs in client-facing columns",     "orch": "✅ Reporter names, assignee names, project names — never UUIDs in exec reports" },
+        { "icon": "alert-triangle", "pain": "Performance",            "trad": "❌ 30s for 10k rows",                   "orch": "✅ Prisma raw SQL + indexes + LIMIT cap (e.g. 50k) with note in subtitle" }
+      ],
+      "memory_hook": "Open EVERY report in Excel + PDF before saying done. AI is great at structure, weak at finish.",
+      "closing_thread": "Reports shipped. Now the BIG handoff — to QA.",
+      "narration": "Five common AI report bugs. Excel column types — everything stored as text. PDF page breaks — rows split mid-cell. Tenant leakage — Manager sees all projects. Internal IDs exposed — UUIDs in client-facing columns. Performance — thirty seconds for ten thousand rows. Open every report manually in Excel and PDF before saying done.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Five common AI report bugs. Each one — caught by manual spot-check before QA finds them." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "One — Excel column types. AI ships everything as text by default. Re-prompt — date columns formatted as dates, numbers as numbers, currency with currency formatting." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Two — PDF page breaks. Rows split across pages mid-cell. Repeat header on each page. No orphan rows. Three — tenant leakage. Manager sees all projects globally. Re-prompt the where-clause scoping." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Four — internal IDs exposed. UUIDs in client-facing columns. Never. Use reporter names, assignee names, project names." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Five — performance. Thirty seconds for ten thousand rows. Prisma raw SQL plus indexes plus a LIMIT cap with a note in the subtitle. AI is great at structure. Weak at finish. You finish." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "welcome",
+      "act": "Reports — The Client Trust Signal",
+      "title": "Manual Validation — Open Every Report Yourself",
+      "subtitle": "10 minutes · the cheapest QA you'll ever do",
+      "icon": "search",
+      "estimated_duration_seconds": 110,
+      "bullets": [
+        "Run each of the 8 reports with default filters. Spot check the numbers against the dashboard. They should match.",
+        "Download each as Excel. Open in MS Excel. Open in Google Sheets. Open in LibreOffice. ALL THREE should render cleanly.",
+        "Download each as PDF. Open in Preview / Adobe. Print preview — landscape, branded, no orphan rows.",
+        "Try one report as a Reporter user — should get 403. Try one report with a 5-year date range — should not crash.",
+        "All green? git add . && git commit -m 'feat(reports): 8 reports validated end-to-end' && git push. Day 6 done."
+      ],
+      "memory_hook": "10-minute report smoke test. Cheapest QA in the world. Catches 80% of report bugs before they hit a client.",
+      "closing_thread": "Day 7 — handoff to QA. The collaboration mindset shifts.",
+      "narration": "Manual validation. Open every report yourself. Ten minutes. Cheapest QA you'll do. Run all eight reports. Download as Excel — open in three apps. Download as PDF — print preview check. Try a Reporter and get 403. Try a five-year range and don't crash. Green? Commit. Push. Day 6 done.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Manual validation. Open EVERY report yourself. Ten minutes. Cheapest QA you'll ever do." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Run each of the eight reports. Spot check numbers against the dashboard — should match. Download each as Excel — open in MS Excel, Google Sheets, AND LibreOffice. All three render cleanly." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "playful_intrigue", "text": "Download each as PDF. Open in Preview or Adobe. Print preview. Landscape. Branded. No orphan rows. Try one report as a Reporter user — should get four-oh-three. Try one with a five-year date range — should not crash." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "All green? Git add. Git commit dash m feat reports eight reports validated end-to-end. Git push. Day 6 done. Tomorrow — the BIG handoff." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "welcome",
+      "act": "Co-Working with QA & UAT",
+      "title": "Day 7 — Handoff to QA",
+      "subtitle": "The collaboration mindset. You're not a wall. You're a teammate.",
+      "icon": "users",
+      "estimated_duration_seconds": 95,
+      "opening_hook": "Most engineering hands off to QA like throwing trash over a fence. OrchestrAI Leads sit with QA. Bring coffee.",
+      "bullets": [
+        "Day 7 morning. The app is 95% there. QA's job: find the 5%.",
+        "Old model: dev throws build over wall, QA logs 47 bugs, week of pain.",
+        "OrchestrAI model: dev SITS with QA. Watches them test. Re-prompts in real-time as bugs surface. Bugs close in minutes, not days.",
+        "The QA Handbook (250 test IDs from your AI in 20 min — remember Module 3?) is your shared script. QA runs cases, you fix in flight."
+      ],
+      "closing_thread": "The QA Handbook is the bridge. Here's how to use it.",
+      "narration": "Day 7. Handoff to QA. The collaboration mindset. You're not a wall — you're a teammate. Old model — dev throws build over wall, QA logs 47 bugs, week of pain. OrchestrAI model — dev SITS with QA, watches them test, re-prompts in real-time. Bugs close in minutes.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Day 7. Handoff to QA. And THIS is where most engineering organisations fail." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Old model — dev throws build over the wall. QA logs forty-seven bugs. Week of pain. Nobody happy." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "OrchestrAI model — dev SITS with QA. Watches them test live. Re-prompts in REAL TIME as bugs surface. Bugs close in minutes, not days." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "The QA Handbook — remember Module 3? AI generated 250 test IDs in 20 minutes from the FDD. THAT becomes your shared script with QA. They run cases. You fix in flight. Together." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "competencies",
+      "act": "Co-Working with QA & UAT",
+      "title": "The QA Handbook — Your Shared Script",
+      "subtitle": "26 sections · ~250 test IDs · generated by AI in 20 minutes",
+      "icon": "list-checks",
+      "estimated_duration_seconds": 145,
+      "list": [
+        { "name": "Smoke (§21 — 9 cases)",     "icon": "rocket",       "desc": "AUTH-001 + DASH-001 + ISSA-001 + ISNEW-001 + CMT-002 + CMT-003 + PWD-001 + RBAC + RPT-006. Every build. 15 min." },
+        { "name": "Status transitions (§13 — 16 cases)","icon": "git-commit","desc": "TRN-001 through TRN-016. The matrix in test form. Run every release. ~30 min." },
+        { "name": "Comments & workflow (§11 — 12 cases)","icon": "message-square-text","desc": "CMT-001 through CMT-012. Mandatory comment rules. Resolution + reason required. ~20 min." },
+        { "name": "Security & abuse (§25 — 4 cases)",  "icon": "shield-alert", "desc": "CSRF, horizontal privilege, rate limit, password not in response. Run before any external deploy." },
+        { "name": "Non-functional (§20 — 4 cases)",    "icon": "gauge",        "desc": "Performance, concurrent edit, XSS, mobile width. Run weekly during stabilisation." }
+      ],
+      "memory_hook": "Handbook = shared language with QA. Each test ID = a precise re-prompt scope when something fails.",
+      "closing_thread": "The smoke checklist — your daily ritual.",
+      "narration": "The QA Handbook. Your shared script. 26 sections, 250 test IDs, AI-generated in 20 minutes. Smoke checklist 9 cases, 15 minutes every build. Status transitions 16 cases, 30 minutes per release. Comments and workflow 12 cases, 20 minutes. Security and abuse before any external deploy. Non-functional weekly during stabilisation.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "The QA Handbook. Your shared script with QA. Twenty-six sections. About two hundred fifty test IDs. AI generated all of it in twenty minutes from the FDD." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Smoke checklist — section twenty-one, nine cases. Run every build. Fifteen minutes. Status transitions — section thirteen, sixteen cases, the matrix in test form. Thirty minutes per release." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Comments and workflow — section eleven, twelve cases. Mandatory comment rules. Resolution plus reason required. Twenty minutes." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Security and abuse — section twenty-five, four cases. CSRF. Horizontal privilege. Rate limit. Run before ANY external deploy. Non-functional — section twenty, four cases. Performance, concurrent edit, XSS, mobile. Weekly during stabilisation." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "stats_hero",
+      "act": "Co-Working with QA & UAT",
+      "title": "The Smoke Checklist — Your 15-Minute Daily Ritual",
+      "subtitle": "9 cases. Every build. Pre-deploy. Sacred.",
+      "icon": "shield-check",
+      "estimated_duration_seconds": 145,
+      "hero_stat": {
+        "value": "15 min",
+        "label": "the daily smoke checklist · 9 cases · catches 80% of regressions before anyone deploys",
+        "icon": "shield-check"
+      },
+      "bullets": [
+        "AUTH-001 — Login (valid email + password → dashboard, JWT stored)",
+        "DASH-001 — Dashboard loads, 4 cards populated, no console errors",
+        "ISSA-001 + ISSA-007 — Issue list loads + detail opens with correct ID",
+        "ISNEW-001 — Create issue (happy path), defect number assigned, appears in list",
+        "CMT-002 — Post comment with current status (no transition record)",
+        "CMT-003 — Post comment with new status (transition fires, audit log records)",
+        "PWD-001 — Change password works, login with new password works",
+        "RBAC — Reporter visits /reports → redirected (route guard works)",
+        "RPT-006 — Full issue register opens, exports to Excel + PDF cleanly"
+      ],
+      "memory_hook": "9 cases. 15 minutes. EVERY build. If anything fails — STOP deploy, re-prompt, smoke again.",
+      "closing_thread": "Bugs WILL surface. How you handle them defines your reputation.",
+      "narration": "The smoke checklist. Your 15-minute daily ritual. Nine cases. Every build. Pre-deploy. Sacred. Login, dashboard loads, issue list and detail, create issue, comment with current status, comment with new status, change password, RBAC redirect for Reporter, full register exports cleanly. If anything fails — STOP deploy.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "The smoke checklist. Nine cases. Fifteen minutes. EVERY build. SACRED." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "AUTH-zero-zero-one — login works. DASH-zero-zero-one — dashboard loads, four cards. ISSA-zero-zero-one and zero-zero-seven — issue list and detail." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "ISNEW-zero-zero-one — create issue. CMT-zero-zero-two — comment with current status. CMT-zero-zero-three — comment with new status. Audit log records." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "PWD-zero-zero-one — password change. RBAC — Reporter visits slash reports, gets redirected. RPT-zero-zero-six — full register exports cleanly. NINE cases. If anything fails — STOP DEPLOY. Re-prompt. Smoke again. Non-negotiable." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "welcome",
+      "act": "Co-Working with QA & UAT",
+      "title": "The Real-Time Defect Loop",
+      "subtitle": "QA finds a bug · you re-prompt while they watch · validate together · commit",
+      "icon": "refresh-cw",
+      "estimated_duration_seconds": 130,
+      "bullets": [
+        "QA finds bug → reads the test ID + observed behaviour aloud (e.g. 'TRN-011, expected dialog, got inline form').",
+        "You open the file referenced in your re-prompt notes from Module 5. Compose surgical re-prompt.",
+        "AI generates fix in ~3 min. You hot-reload. QA re-runs the test case. Live. Together.",
+        "If green: git add → commit 'fix(workflow): TRN-011 reopen dialog' → push. ONE bug, ~10 min, closed.",
+        "If still red: you and QA debug together. Read the diff. Identify what AI mis-interpreted. Tighter re-prompt. Repeat."
+      ],
+      "memory_hook": "Find → re-prompt → fix → validate → commit. 5 steps. ~10 min per bug. Loop with QA in the room.",
+      "closing_thread": "Same energy with the client during UAT.",
+      "narration": "The real-time defect loop. QA finds bug, reads test ID and observed behaviour. You open the file. Compose surgical re-prompt. AI generates fix in three minutes. Hot reload. QA re-runs the test case. Green — git add, commit, push. Red — debug together. Ten minutes per bug.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "The real-time defect loop. Five steps. Watch this." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "QA finds bug. Reads test ID and observed behaviour aloud. Example — TRN zero-one-one, expected dialog, got inline form." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "You open the file referenced in your re-prompt notes from Module 5. Compose surgical re-prompt. AI generates fix in about three minutes. You hot-reload. QA re-runs the test case. LIVE. TOGETHER." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "If GREEN — git add, commit fix workflow TRN dash zero-one-one reopen dialog, push. One bug, ten minutes, closed. If still RED — you and QA debug TOGETHER. Read the diff. Identify what AI mis-interpreted. Tighter re-prompt. Repeat. Most bugs close inside one session." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "welcome",
+      "act": "Co-Working with QA & UAT",
+      "title": "UAT With the Client — Collaboration, Not Gatekeeping",
+      "subtitle": "The client isn't validating your work · they're shaping the product",
+      "icon": "users",
+      "estimated_duration_seconds": 115,
+      "bullets": [
+        "UAT happens with the CLIENT in the room (in person or screen-share). You drive. They watch + react.",
+        "Real client feedback in OrchestrAI engagements isn't 'this is broken' — it's 'this is right but I want it differently'.",
+        "Hot tip: when a client says 'can it do X?' and X is in scope — answer in the moment with a re-prompt. Show them in 5 min.",
+        "When X is out of scope — log it, propose phase 2. Don't say no. Don't say yes. Say 'great idea, here's how we sequence it.'",
+        "UAT sign-off = your client champions you internally. They tell THEIR boss 'this team delivered in 7 days what we've waited 7 months for.'"
+      ],
+      "memory_hook": "UAT is collaboration. In scope → fix in 5 min. Out of scope → sequence. Never say no.",
+      "closing_thread": "Build accepted. Time to ship for review.",
+      "narration": "UAT with the client. Collaboration, not gatekeeping. The client isn't validating your work — they're shaping the product. In scope → re-prompt and show in five minutes. Out of scope → log, sequence, propose phase 2. Never say no. UAT sign-off equals your client championing you internally.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "UAT. Same energy as QA but with the CLIENT in the room. In person or screen-share. You drive. They watch and react." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Real client feedback isn't usually 'this is broken'. It's 'this is right but I want it differently'. Subtle. Conversational. Iterative." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Hot tip — when client says 'can it do X' and X is in scope, answer with a re-prompt. Show them in five minutes. That moment is what they tell their boss about." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "When X is OUT of scope — log it, propose phase two. Don't say no. Don't say yes. 'Great idea, here's how we sequence it.' UAT sign-off equals your client championing you internally. They tell THEIR boss 'this team delivered in seven days what we've waited seven months for.' That's how you get the next engagement." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "welcome",
+      "act": "Going Live — Repository Submission",
+      "title": "Final Push — Polish the Repo Before You Share",
+      "subtitle": "Your GitHub repo IS your submission · make it land",
+      "icon": "git-commit",
+      "estimated_duration_seconds": 110,
+      "opening_hook": "QA passed. UAT signed off. Time to put a bow on it.",
+      "bullets": [
+        "Clean up: delete commented-out code, unused files, .env.local junk. AI accumulates cruft — sweep it now.",
+        "Squash commit history? NO. Your commits ARE your audit trail. The story of HOW you built this is part of the value.",
+        "README polish: project intro, tech stack, setup steps, env vars, screenshots, demo URL. AI can draft from your repo — re-prompt for it.",
+        "Add: LICENSE, CONTRIBUTING.md (if open-source), CODEOWNERS for clarity on review.",
+        "Final smoke test on staging URL. Last 'git push' goes out. Tag the release: git tag -a v1.0.0 -m 'first production release' && git push --tags."
+      ],
+      "memory_hook": "Clean repo · polished README · semver tag · pushed. Now you can share.",
+      "closing_thread": "Here's the README prompt that makes the difference.",
+      "narration": "Final push. Polish the repo before you share. Clean up cruft. Don't squash — your commits are the audit trail. README polish — project intro, tech stack, setup, env vars, screenshots, demo URL. AI can draft from your repo. Add LICENSE and CONTRIBUTING. Final smoke on staging. Last git push. Tag v1.0.0.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "QA passed. UAT signed off. Time to put a bow on it." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Clean up — delete commented-out code, unused files, dot env dot local junk. AI accumulates cruft. Sweep it now." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Should you squash the commit history? NO. Your commits ARE your audit trail. The story of HOW you built this is part of the VALUE. Don't erase it." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "README polish — project intro, tech stack, setup steps, env vars, screenshots, demo URL. AI can draft from your repo. Re-prompt for it." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Add LICENSE, CONTRIBUTING dot md if open-source, CODEOWNERS for review clarity. Final smoke on staging URL. Last git push. Tag the release — git tag dash a v one dot zero dot zero dash m first production release. Git push dash dash tags. Done." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "stats_hero",
+      "act": "Going Live — Repository Submission",
+      "title": "The README Prompt — Make Reviewers Smile",
+      "subtitle": "A README is the first thing a reviewer reads · prompt for it like it matters",
+      "icon": "book-open",
+      "estimated_duration_seconds": 140,
+      "hero_stat": {
+        "value": "8 sections",
+        "label": "great READMEs · title + badges · quickstart · features · tech stack · env vars · scripts · screenshots · contact",
+        "icon": "book-open"
+      },
+      "bullets": [
+        "Prompt: 'Generate a README.md for this repo. Sections: title with project tagline, build/test badges, 30-second quickstart (clone → install → env → run), feature list with one-line each, tech stack table, env var table with descriptions, npm scripts table, 3 inline screenshots from /docs/screenshots, contact info.'",
+        "Constraints: 'Use GitHub-flavoured Markdown. No emojis except in headings. Code blocks have language tags. Tables have alignment.'",
+        "AI returns: a 300-line README that reads like a senior engineer wrote it. Edit lightly for accuracy, commit, push.",
+        "Bonus prompt: 'Add a one-paragraph DESIGN.md explaining the architectural decisions and OGE compliance.' Reviewers LOVE this."
+      ],
+      "memory_hook": "8-section README + 1 DESIGN.md = your repo reads like senior engineering. Reviewers smile.",
+      "closing_thread": "Push it. Share the URL. Submission complete.",
+      "narration": "The README prompt. Eight sections — title with tagline, badges, 30-second quickstart, features, tech stack, env vars, npm scripts, screenshots, contact. Use GitHub Markdown, no emojis except headings, code blocks with language tags. Bonus — DESIGN.md explaining architectural decisions and OGE compliance.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "The README prompt. Eight sections. Make reviewers SMILE." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Prompt — generate a README dot md for this repo. Sections — title with tagline, build slash test badges, thirty-second quickstart, feature list, tech stack table, env var table, npm scripts table, three inline screenshots from slash docs slash screenshots, contact info." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Constraints — GitHub-flavoured Markdown. No emojis except in headings. Code blocks have language tags. Tables aligned. AI returns three hundred lines that read like a senior engineer wrote it." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Bonus prompt — add a one-paragraph DESIGN dot md explaining the architectural decisions and OGE compliance. Reviewers LOVE this. They see Observability, Guardrails, Evaluation explicitly addressed. Trust builds in seconds." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "welcome",
+      "act": "Going Live — Repository Submission",
+      "title": "Push & Share — Your Submission Artifact",
+      "subtitle": "Your GitHub URL IS your certificate evidence",
+      "icon": "rocket",
+      "estimated_duration_seconds": 125,
+      "bullets": [
+        "Final commit: git add . && git commit -m 'docs: README + DESIGN polish for review submission' && git push",
+        "Make your repo accessible to reviewers: Settings → Collaborators → invite as Reader OR flip to Public if comfortable.",
+        "Copy your repo URL: https://github.com/YOUR-USERNAME/YOUR-REPO",
+        "This URL goes into your OrchestrAI certification submission form (link in the course resources).",
+        "What reviewers look for: commit cadence (per-validated-component evident?), README quality, OGE compliance in DESIGN.md, working app at the demo URL, smoke checklist passes from their machine."
+      ],
+      "memory_hook": "Final commit · share URL · submit. That URL = your evidence you can do this work.",
+      "closing_thread": "Two reference builds to inspect — both built this way.",
+      "narration": "Push and share. Your GitHub URL is your submission artifact. Final commit — docs README plus DESIGN polish for review. Make repo accessible — invite as Reader or flip to Public. Copy URL. Submit via the certification form. Reviewers look at commit cadence, README quality, OGE compliance, working demo, smoke checklist pass on their machine.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Final commit. Git add. Git commit dash m docs README plus DESIGN polish for review submission. Git push. Done." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Make your repo accessible to reviewers. Settings — Collaborators — invite as Reader. OR flip to Public if you're comfortable. Copy the URL — github dot com slash your username slash your repo." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "This URL goes into your OrchestrAI certification submission form. Link in the course resources." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "What reviewers look for — commit cadence is per-validated-component evident? README quality. OGE compliance in DESIGN dot md. Working app at the demo URL. Smoke checklist passes from their machine. Five things. All visible. Your evidence." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "tap_reveal",
+      "act": "Going Live — Repository Submission",
+      "title": "Two Reference Builds — Both Built This Way",
+      "subtitle": "Tap each card · open the live URL · see what your submission can become",
+      "icon": "sparkles",
+      "estimated_duration_seconds": 130,
+      "cards": [
+        { "label": "🔧 Issue Tracker (this entire course's case study)", "reveal": "URL: projectissuetracker.vthinkdeveloper.com  ·  Login: admin@vthink.co.in / Admin@123  ·  What to inspect: workflow transitions, comment audit trail, reports export, admin RBAC. You've seen every prompt that built this." },
+        { "label": "⏱️ Timesheet Management Portal",                     "reveal": "URL: timesheet.vthinkdeveloper.com  ·  Login: admin@vthink.co.in / Admin@123  ·  Different domain, same method. 27 APIs, multi-role RBAC, timesheet validation grids. Built in 7 days using the same OGE-anchored playbook." },
+        { "label": "🧬 What both share",                                  "reveal": "FDD/TDD/DB/UI/Test docs generated up front. 8-component prompts. Surgical re-prompts. Commit per validated component. README + DESIGN that name OGE. Smoke checklist passes. These are what 'shipped under OrchestrAI' looks like." },
+        { "label": "🎯 Your target",                                       "reveal": "Your capstone repo should look and feel like these. Clean commits. Clear README. Working demo. Reviewable in 10 minutes. If a stranger can clone it and run smoke in 15 min — you've passed the bar." }
+      ],
+      "narration": "Two reference builds. Both built this way. Issue Tracker — this course's case study. Timesheet portal — different domain, same method. Both share FDD up front, 8-component prompts, surgical re-prompts, commit per validated component, README and DESIGN that name OGE. Your capstone should feel like these.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Two reference builds. BOTH built using exactly the method you just learned. Tap each card." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Issue Tracker — you've seen every prompt that built this. Timesheet portal — different domain, same playbook." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Your capstone repo should look and feel like these. Clean commits. Clear README. Working demo. Reviewable in ten minutes. If a stranger can clone it and run smoke in fifteen minutes — you've passed the bar." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "transition_bridge",
+      "act": "Going Live — Repository Submission",
+      "title": "Build shipped. Repo submitted. One thing left.",
+      "subtitle": "Your graduation",
+      "icon": "rocket",
+      "estimated_duration_seconds": 60,
+      "closing_thread": "Welcome to your OrchestrAI Lead graduation.",
+      "narration": "Build shipped. Repo submitted. One thing left. Your graduation.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Build shipped. Repo submitted." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "playful_intrigue", "text": "One thing left." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Welcome to your graduation." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "recap",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "What You've Actually Learned — 6-Module Recap",
+      "subtitle": "From beginner to OrchestrAI Lead in 6 hours",
+      "icon": "check-circle",
+      "estimated_duration_seconds": 170,
+      "items": [
+        "Module 1 · The Mindset — orchestration over coding. AI builds, you direct. The conductor analogy.",
+        "Module 2 · The Framework — 6 lifecycle stages: Intent → Orchestrate → Generate → Validate → Evolve → Deploy.",
+        "Module 3 · The Bible — OGE (Observability · Guardrails · Evaluation), Approach A vs B, the 2 master prompts (T1 + T2).",
+        "Module 4 · Foundation Build — 6 manual installs, 8-component auth prompt, shell + dashboard with UI specs honored.",
+        "Module 5 · Workflow Engine — 16-transition matrix, structured workflow prompt, surgical re-prompts, Git discipline.",
+        "Module 6 · Going Live — admin surfaces, reports, QA + UAT co-working, README + DESIGN, GitHub submission. (You are here.)"
+      ],
+      "memory_hook": "6 modules · ~6 hours · 1 reusable playbook for every AI-accelerated build you'll ever run.",
+      "closing_thread": "What this actually qualifies you to do.",
+      "narration": "What you've actually learned. Module 1 the mindset. Module 2 the framework. Module 3 the bible — OGE plus master prompts. Module 4 foundation build. Module 5 workflow engine and Git discipline. Module 6 going live, QA co-working, submission. Six modules. One reusable playbook for every AI build you'll ever run.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Sixty-second recap. What you actually learned." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Module 1 — the mindset. Orchestration over coding. AI builds, you direct. Module 2 — the framework. Six-stage lifecycle." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Module 3 — the bible. OGE plus the two master prompts T1 and T2. Module 4 — foundation build. Six installs, auth prompt, shell, dashboard." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Module 5 — workflow engine. Sixteen-transition matrix. Surgical re-prompts. Git discipline. Module 6 — going live. Admin, reports, QA, UAT, README plus DESIGN, GitHub submission. You are here." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Six modules. About six hours. ONE reusable playbook for every AI-accelerated build you'll ever run. That's the trade you made. Decent value." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "stats_hero",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "Your Capstone Challenge — Build Your Own",
+      "subtitle": "One app. Your domain. 7 days. Submit the repo.",
+      "icon": "rocket",
+      "estimated_duration_seconds": 130,
+      "hero_stat": {
+        "value": "7 days",
+        "label": "from blank repo to working app · your domain · your stack choice · your OGE compliance",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "Pick an app from YOUR work or life: a leave tracker, a recipe organiser, a client invoice system, a workout logger — anything real.",
+        "Apply the playbook end-to-end: discovery → T2 governance doc → T1 + 5 design docs → 6 manual installs → build through workflow → admin → reports → QA → UAT → README + DESIGN → GitHub push.",
+        "Time-box: 7 days. If you stretch it, OK — but the discipline is the value.",
+        "Submit your repo URL via the OrchestrAI certification form. Reviewer feedback in 5 business days.",
+        "Pass = certified OrchestrAI Lead. You can list it on LinkedIn. You can take real client engagements."
+      ],
+      "memory_hook": "Your domain. 7 days. Your repo. Submit. Certified.",
+      "closing_thread": "What happens after you submit.",
+      "narration": "Your capstone challenge. One app. Your domain. Seven days. Submit the repo. Pick something real from YOUR work or life. Apply the playbook end-to-end. Submit via the certification form. Pass equals certified OrchestrAI Lead. LinkedIn-ready. Real engagements unlocked.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Your capstone. One app. YOUR domain. Seven days. Submit the repo." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Pick from your real life or work — a leave tracker, a recipe organiser, an invoice system, a workout logger. Doesn't matter what — has to be REAL." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Apply the playbook end to end. Discovery. T2 governance. T1 plus five design docs. Six installs. Build through workflow. Admin. Reports. QA. UAT. README plus DESIGN. GitHub push." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Submit your repo URL via the OrchestrAI certification form. Reviewer feedback in five business days. Pass equals certified OrchestrAI Lead. LinkedIn ready. Real engagements unlocked. Your professional level just leveled up." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "competencies",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "Where to Get Help After Today",
+      "subtitle": "You don't graduate alone · the OrchestrAI community has your back",
+      "icon": "users",
+      "estimated_duration_seconds": 130,
+      "list": [
+        { "name": "vThink OrchestrAI team",  "icon": "users",     "desc": "Direct line — info@vthink.co.in. For capstone questions, blocked engagements, or framework clarifications." },
+        { "name": "Reference repos",         "icon": "git-commit","desc": "Issue Tracker + Timesheet codebases are open for inspection. Steal patterns. Steal the README structure. Steal the DESIGN.md format." },
+        { "name": "GitHub Docs",             "icon": "book-open", "desc": "https://docs.github.com — for any Git workflow you're unsure about. Bookmarked since Module 5." },
+        { "name": "Your own commits",        "icon": "git-commit","desc": "Your repo's commit log IS your training journal. When you get stuck on the next engagement, your commits will show you what worked." },
+        { "name": "Next cohort",             "icon": "rocket",    "desc": "Future learners will need YOU as a peer reviewer. The cycle continues — once you certify, you can pay forward." }
+      ],
+      "memory_hook": "5 channels of support after you graduate. You're never building alone.",
+      "closing_thread": "Quick reflection before the credits roll.",
+      "narration": "Where to get help after today. vThink OrchestrAI team direct — info at vthink dot co dot in. Reference repos — Issue Tracker and Timesheet. GitHub Docs for Git workflows. Your own commit log as training journal. Future cohort where you'll peer-review newer learners. Five channels. Never building alone.",
+      "narration_script": [
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "You don't graduate alone. Five channels of support after today." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "vThink OrchestrAI team — direct line, info at vthink dot co dot in. For capstone questions, blocked engagements, or framework clarifications." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Reference repos — Issue Tracker and Timesheet codebases are open for inspection. Steal patterns. Steal the README structure. Steal the DESIGN dot md format." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "GitHub Docs — bookmarked since Module 5. Your own commit log IS your training journal. When you get stuck on the next engagement, your commits show you what worked." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Next cohort — future learners will need YOU as peer reviewer. The cycle continues. Once you certify, you can pay forward. Welcome to the bigger thing." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "confidence_slider",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "Honest final check — are you Lead-ready?",
+      "icon": "help-circle",
+      "estimated_duration_seconds": 75,
+      "prompt": "On Monday morning, with no notes — could you sit a stakeholder down, capture intent, fire T2 + T1, walk through OGE, build a foundation, ship a workflow engine, run QA + UAT, and submit a clean repo for review? Honestly.",
+      "scale": { "min_label": "Not yet — going to re-watch", "max_label": "Yes — Monday, I'm in" },
+      "narration": "Honest final check. Are you Lead-ready? Monday morning, no notes, sit a stakeholder down, capture intent, fire T2 plus T1, walk OGE, build foundation, ship workflow, run QA plus UAT, submit clean repo. Honestly. Pick a number.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Final honest check. Where are you at?" },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Monday morning. No notes. Sit a stakeholder down. Capture intent. Fire T2 plus T1. Walk OGE. Build foundation. Ship workflow. QA. UAT. Repo." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Pick a number. No wrong answer. The honest answer is the useful one." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "🎓 Module 6 Complete · You're Certified-Track",
+      "subtitle": "Capstone submission is your final step · we'll see you in the alumni channel",
+      "icon": "rocket",
+      "estimated_duration_seconds": 100,
+      "hero_stat": {
+        "value": "6 / 6",
+        "label": "modules complete · capstone next · the work that gets you hired begins now",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "🎓 All 6 modules complete. You've covered every component of the OrchestrAI playbook.",
+        "🛠️  Capstone challenge — pick a domain, run the playbook, push to GitHub, submit the URL.",
+        "📩 Submission: certification form link in the course resources. Reviewer feedback in 5 business days.",
+        "🤝 Alumni — info@vthink.co.in for capstone help, blocked engagements, peer-review opportunities.",
+        "🎤 One ask — leave honest feedback on this course. What landed, what didn't, what you'd add. We'll evolve the curriculum with you."
+      ],
+      "closing_thread": "Quality is not a service. It is a mandate. Go ship.",
+      "narration": "Module 6 complete. You're certified track. All six modules done. Capstone next. Submit your repo URL via the certification form. Five business days for review feedback. Alumni channel info at vthink dot co dot in. One ask — leave honest feedback on this course. Quality is not a service. It is a mandate. Go ship.",
+      "narration_script": [
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Module 6. Complete." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "All six modules done. You've covered every component of the OrchestrAI playbook. From the mindset shift in Module 1 all the way to GitHub submission today." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Capstone next. Pick a domain. Run the playbook. Push to GitHub. Submit the URL. Feedback in five business days." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Alumni — info at vthink dot co dot in. Capstone help. Blocked engagements. Peer review. We're a community now." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "One ask — leave honest feedback on this course. What landed. What didn't. What you'd add. We evolve the curriculum WITH you." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Final line. The one we opened with. Quality is not a service. It is a mandate. Go ship." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    }
+  ]
+}

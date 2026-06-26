@@ -1,0 +1,637 @@
+{
+  "module": "Module 6 — Admin, Reports, Going Live · Your Capstone & GitHub Submission",
+  "preset": "formal",
+  "format": "two_voice_dialogue",
+  "speakers": {
+    "Vikram": { "voice_key": "male_formal",   "gender": "male",   "persona": "Vikram — Senior OrchestrAI Architect. Authoritative, precise, frames concepts in enterprise terms." },
+    "Anjali": { "voice_key": "female_formal", "gender": "female", "persona": "Anjali — Principal Consultant. Methodical, asks for clarification, brings implications to the surface." }
+  },
+  "tts_field_priority": ["text_expressive", "text_ssml", "text"],
+  "schema_version": "v8_interactive_with_music",
+  "last_updated": "2026-06-26T00:00:00Z",
+  "acts": [
+    { "id": "act_1", "name": "Day 6 — Admin Surfaces",            "slide_start": 1,  "slide_end": 4  },
+    { "id": "act_2", "name": "Reports — The Client Trust Signal", "slide_start": 5,  "slide_end": 8  },
+    { "id": "act_3", "name": "Co-Working with QA & UAT",          "slide_start": 9,  "slide_end": 13 },
+    { "id": "act_4", "name": "Going Live — Repository Submission","slide_start": 14, "slide_end": 18 },
+    { "id": "act_5", "name": "Graduation — You're an OrchestrAI Lead", "slide_start": 19, "slide_end": 23 }
+  ],
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "act": "Day 6 — Admin Surfaces",
+      "title": "Module 6 — The Capstone",
+      "subtitle": "Admin · Reports · QA co-working · Going Live · Your submission",
+      "icon": "rocket",
+      "estimated_duration_seconds": 85,
+      "opening_hook": "Five modules established the practitioner's foundation. This module completes the transition to certified OrchestrAI Lead.",
+      "bullets": [
+        "Five acts. Twenty-three slides. The capstone of the programme.",
+        "Days 6 and 7 of the build — Admin surfaces, Reports, QA and UAT handoff, GitHub push for review.",
+        "Followed by the graduation step — capstone challenge, repository submission, certification pathway.",
+        "By slide twenty-three, the practitioner possesses the complete capability to lead an OrchestrAI engagement independently."
+      ],
+      "closing_thread": "We begin with Day 6 — the 'last 20%' that distinguishes a demo from a product.",
+      "narration": "Module 6. The capstone. Five modules established the practitioner's foundation. This module completes the transition to certified OrchestrAI Lead. Days 6 and 7 — Admin, Reports, QA, UAT, GitHub push. Followed by the capstone challenge and certification pathway.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Welcome to Module 6 of the OrchestrAI Lead Certification — the capstone." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed",    "text": "Five modules established the practitioner's foundation. This module completes the transition to certified OrchestrAI Lead." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Days 6 and 7 of the build cover Admin surfaces, Reports, the QA and UAT handoff, and the final GitHub push for review." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Followed by the graduation step — capstone challenge, repository submission, certification pathway. By slide twenty-three, the practitioner possesses the complete capability to lead an OrchestrAI engagement independently." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "stats_hero",
+      "act": "Day 6 — Admin Surfaces",
+      "title": "The Last 20% — Where AI-Only Builds Fail",
+      "subtitle": "The first 80% is straightforward. The remaining 20% is engineering.",
+      "icon": "alert-triangle",
+      "estimated_duration_seconds": 125,
+      "hero_stat": {
+        "value": "80 / 20",
+        "label": "first 80% requires 2 days · final 20% requires 5 — this is the differentiating territory",
+        "icon": "alert-triangle"
+      },
+      "analogy": {
+        "title": "Construction of a building",
+        "text": "Structural frame and roof — two weeks; the building is recognisable. Plumbing, electrical, insulation, finishes, certification — four months; this is where most projects falter. AI-only practitioners terminate at the recognisable stage. OrchestrAI Leads complete the remaining 20%."
+      },
+      "bullets": [
+        "Days 1 through 5 — authentication, shell, dashboard, workflow, comments. The demonstrable build.",
+        "Days 6 and 7 — Admin surfaces, Reports, QA, UAT, deployment. The shippable build.",
+        "AI-only engagements typically terminate at the demonstrable stage. Their teams cannot complete the remaining work.",
+        "OrchestrAI Leads carry the build to shippable. This capability accounts for the differential market value of the skill."
+      ],
+      "closing_thread": "First territory of the final 20% — Admin surfaces, where RBAC always requires human intervention.",
+      "narration": "The last 20% — where AI-only builds fail. First 80% requires 2 days. Final 20% requires 5. AI-only practitioners terminate at the demonstrable stage. OrchestrAI Leads complete the shippable build. This capability accounts for the market value of the skill.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "An honest analysis of the engagement curve. The first 80 percent of an AI build requires approximately 2 days. The final 20 percent requires approximately 5. The latter is where most AI-only practitioners terminate." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed",    "text": "Days 1 through 5 — authentication, shell, dashboard, workflow, comments. The demonstrable build. Visually convincing. Not, however, shippable." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Days 6 and 7 — Admin surfaces, Reports, QA, UAT, deployment. This is the shippable build. AI-only engagements typically terminate at demonstrable. Their teams cannot complete the remaining work." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing",   "text": "OrchestrAI Leads carry the build to shippable. This capability accounts for the differential market value of the skill. Today the practitioner acquires the component most curricula omit." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "competencies",
+      "act": "Day 6 — Admin Surfaces",
+      "title": "Three Admin Surfaces — Why RBAC Requires Human Decision",
+      "subtitle": "Project Setup · Employee Setup · User Management",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 170,
+      "list": [
+        { "name": "Project Setup",  "icon": "layout-template", "desc": "Create, edit, archive projects. Defines the project taxonomy. AI cannot determine whether the client organisation groups by client name, by domain, or by cost centre. The Lead decides, then prompts." },
+        { "name": "Employee Setup", "icon": "users",           "desc": "Employee directory — the canonical 'personnel of record'. Includes employee number, name, email, active flag. Drives every issue's assignee and reporter selectors." },
+        { "name": "User Management","icon": "user-cog",        "desc": "Login accounts mapped to Employees. Role assignment. Activation and deactivation. Password reset. AI has no knowledge of the organisational chart; the Lead maps it." },
+        { "name": "RBAC matrix",    "icon": "shield-alert",    "desc": "The cross-product. Which role exercises which capability across these surfaces. Reporters cannot delete projects. Managers can. Admin retains full authority including user deletion (per FDD §17)." }
+      ],
+      "memory_hook": "Three surfaces plus RBAC equal the organisational chart in code. AI implements the surfaces. The Lead defines the RBAC.",
+      "closing_thread": "The admin prompt approach follows.",
+      "narration": "Three admin surfaces. Project Setup, Employee Setup, User Management. Plus the RBAC matrix — which role exercises which capability. AI cannot determine the organisational structure — the Lead specifies it. The surfaces are framework work; the rules are domain work.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Three admin surfaces. Each is principally framework work — AI handles CRUD competently. The RULES that overlay these surfaces, however, require human decision." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Project Setup — create, edit, archive. AI cannot determine whether the client organisation groups projects by client name, domain, or cost centre. The Lead decides, then prompts." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Employee Setup — the canonical 'personnel of record'. Employee number, name, email, active flag. Drives every issue's assignee and reporter selectors." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "User Management — login accounts mapped to Employees. Role assignment. Activation, deactivation, password reset." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "The RBAC matrix — the cross-product. Which role exercises which capability. Reporters cannot delete projects. Managers can. Admin retains full authority including user deletion per FDD section seventeen. AI implements the surfaces. The Lead defines the RBAC." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "welcome",
+      "act": "Day 6 — Admin Surfaces",
+      "title": "The Admin Prompt — One Prompt Per Surface",
+      "subtitle": "Same eight-component intent · RBAC clause is invariant",
+      "icon": "edit-3",
+      "estimated_duration_seconds": 135,
+      "bullets": [
+        "Unlike the workflow engine (a single extended prompt), admin surfaces are best produced via three focused prompts — one per surface.",
+        "Rationale — each surface presents distinct RBAC, validation, and list/detail UX. Decomposition maintains prompt tightness.",
+        "Every admin prompt must include — 'RBAC: which role performs which action (matrix below). Server enforces at every endpoint. UI conceals actions a role cannot perform.'",
+        "Sample RBAC clause for Project Setup — 'Admin: full CRUD. Manager: full CRUD on accessible projects. Reporter: read-only on accessible projects. Server-side check at the controller layer.'",
+        "Commit after each surface validates. Three surfaces — three commits — three push events on Day 6."
+      ],
+      "memory_hook": "Three surfaces · three prompts · three RBAC clauses · three commits. Tight, focused, auditable.",
+      "closing_thread": "Day 6 afternoon addresses Reports.",
+      "narration": "The admin prompt. One prompt per surface. Unlike workflow, admin operates best as three focused prompts. Each surface presents distinct RBAC, validation, UX. Every admin prompt must include the RBAC clause — which role performs which action, server enforces, UI conceals. Commit after each surface validates.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Unlike the workflow engine, which used one extended prompt, admin surfaces operate optimally as three focused prompts — one per surface." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "The rationale — each surface presents distinct RBAC, validation, and UX. Decomposition maintains prompt tightness and AI focus." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Every admin prompt must include the RBAC clause. Which role performs which action — matrix included. Server enforces at every endpoint. UI conceals actions a role cannot perform. Both, invariably." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Sample for Project Setup — Admin full CRUD. Manager full CRUD on accessible projects. Reporter read-only on accessible projects. Server-side check at the controller layer. Commit after each surface validates — three surfaces, three commits, three pushes on Day 6." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "welcome",
+      "act": "Reports — The Client Trust Signal",
+      "title": "Day 6 Afternoon — Reports",
+      "subtitle": "The first artefact the client's executive will examine",
+      "icon": "bar-chart-2",
+      "estimated_duration_seconds": 95,
+      "opening_hook": "Dashboards serve operational users. Reports serve executives. The executive opens a single Excel attachment — the report must perform.",
+      "bullets": [
+        "Eight reports specified in the Issue Tracker FDD — executive summary, by project, by reporter, by assignee, overdue aging, full register, weekly trend, priority matrix.",
+        "Every report produces TWO outputs — Excel and PDF. Both must render. Both must meet executive standards.",
+        "Filters available on every report — project, date range, status, type. Server applies filters; results do not leak across tenants.",
+        "Reports are the artefact the client's executive examines. They convey the narrative the dashboard cannot present on a single screen."
+      ],
+      "closing_thread": "We examine the reports prompt approach.",
+      "narration": "Day 6 afternoon. Reports. Dashboards serve operational users. Reports serve executives. Eight reports in the FDD. Every report produces Excel and PDF outputs. Filters available on every report. Reports convey the narrative the dashboard cannot present on a single screen.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Day 6 afternoon. Reports." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Dashboards serve operational users. Reports serve executives. The executive opens a single Excel attachment. The report must perform." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Eight reports in the FDD. Executive summary. By project. By reporter. By assignee. Overdue aging. Full register. Weekly trend. Priority matrix." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Every report produces TWO outputs — Excel and PDF. Both must meet executive standards. Filters available on every report. Reports convey the narrative the dashboard cannot present on a single screen." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "stats_hero",
+      "act": "Reports — The Client Trust Signal",
+      "title": "The Reports Prompt — Excel and PDF in One Pass",
+      "subtitle": "References FDD §18 · uses exceljs + pdfkit · cached by query hash",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 170,
+      "hero_stat": {
+        "value": "8 reports",
+        "label": "× 2 formats (Excel and PDF) × 4 filters each = 64 report variations · produced from one reports module prompt",
+        "icon": "message-square-text"
+      },
+      "bullets": [
+        "OUTCOME — authenticated Admin or Manager executes a report → previews table → downloads Excel or PDF.",
+        "STACK — NestJS reports module · Prisma aggregation queries · exceljs for xlsx · pdfkit for pdf · React Query for caching.",
+        "ACCEPTANCE — each report completes within 3 seconds for 10,000 issues. Excel opens cleanly in Microsoft Excel, Google Sheets, and LibreOffice. PDF renders landscape with vThink branding.",
+        "EDGE CASES — empty result set yields a friendly 'no data' state, not a corrupt empty file. Large datasets — server streams the response, eliminating memory pressure.",
+        "RBAC — Reporters CANNOT access /reports (route guard plus UI concealment). Admins and Managers retain access. Tenant isolation enforced via Prisma where-clauses."
+      ],
+      "memory_hook": "Eight reports × two formats × four filters = 64 variations from ONE module prompt. AI leverage at its highest.",
+      "closing_thread": "Common report defects and their pre-QA detection follows.",
+      "narration": "The reports prompt. Eight reports times two formats times four filters equals sixty-four variations from one module prompt. Outcome — Admin or Manager runs report, previews, downloads. Stack — NestJS, Prisma, exceljs, pdfkit, React Query. Acceptance — each report under three seconds for ten thousand issues.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The reports prompt. One module prompt. Sixty-four total variations produced — eight reports times two formats times four filter combinations." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Outcome — Admin or Manager executes a report, previews the table, downloads as Excel or PDF. Stack — NestJS reports module, Prisma aggregation, exceljs for xlsx, pdfkit for PDF, React Query for caching." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Acceptance — each report completes within three seconds for ten thousand issues. Excel opens cleanly in Microsoft Excel, Google Sheets, AND LibreOffice. PDF renders landscape with vThink branding." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Edge cases — empty result yields a friendly 'no data' state, not a corrupt empty file. Large datasets stream the response, eliminating memory pressure." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "RBAC — Reporters cannot access /reports. Route guard plus UI concealment. Admins and Managers retain access. Tenant isolation via Prisma where-clauses. This is AI leverage at its peak. Sixty-four artefacts from a single prompt." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "comparison_table",
+      "act": "Reports — The Client Trust Signal",
+      "title": "Common Report Defects — Pre-QA Detection",
+      "subtitle": "Five recurring AI report defects · each preventable via manual inspection",
+      "icon": "scale",
+      "estimated_duration_seconds": 145,
+      "table": [
+        { "icon": "alert-triangle", "pain": "Excel column types",   "trad": "❌ All values stored as text",         "orch": "✅ Date columns formatted as dates, numbers as numbers, currency with currency formatting" },
+        { "icon": "alert-triangle", "pain": "PDF page breaks",       "trad": "❌ Rows split across pages mid-cell", "orch": "✅ Header repeated on each page; no orphan rows" },
+        { "icon": "alert-triangle", "pain": "Tenant leakage",        "trad": "❌ Manager observes all projects globally","orch": "✅ Prisma where-clause scopes by user.tenantId on every report query" },
+        { "icon": "alert-triangle", "pain": "Internal IDs exposed",  "trad": "❌ UUIDs visible in client-facing columns","orch": "✅ Reporter names, assignee names, project names — UUIDs never appear in executive reports" },
+        { "icon": "alert-triangle", "pain": "Performance",            "trad": "❌ 30 seconds for 10,000 rows",        "orch": "✅ Prisma raw SQL + indexes + LIMIT cap (e.g. 50k) with annotation in subtitle" }
+      ],
+      "memory_hook": "Manually open every report in Excel and PDF before declaring complete. AI handles structure competently; finish requires human verification.",
+      "closing_thread": "Reports shipped. The handoff to QA follows.",
+      "narration": "Five common AI report defects. Excel column types stored as text. PDF page breaks splitting rows. Tenant leakage exposing all projects. Internal IDs exposed in client-facing columns. Performance — thirty seconds for ten thousand rows. Open every report manually in Excel and PDF before declaring complete.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Five recurring AI report defects. Each is preventable via manual inspection prior to QA discovery." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "First — Excel column types. AI defaults to storing all values as text. Re-prompt — date columns formatted as dates, numbers as numbers, currency with currency formatting." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Second — PDF page breaks. Rows split across pages mid-cell. Header repeated on each page. No orphan rows. Third — tenant leakage. Manager observes all projects globally. Re-prompt the where-clause scoping." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Fourth — internal IDs exposed. UUIDs visible in client-facing columns. Unacceptable. Use reporter names, assignee names, project names." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Fifth — performance. Thirty seconds for ten thousand rows. Prisma raw SQL plus indexes plus a LIMIT cap with annotation in the subtitle. AI handles structure competently; finish requires human verification." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "welcome",
+      "act": "Reports — The Client Trust Signal",
+      "title": "Manual Validation — Open Each Report Personally",
+      "subtitle": "Ten minutes · the most efficient quality verification available",
+      "icon": "search",
+      "estimated_duration_seconds": 115,
+      "bullets": [
+        "Execute each of the eight reports with default filters. Verify the figures against the dashboard. They must reconcile.",
+        "Download each as Excel. Open in Microsoft Excel. Open in Google Sheets. Open in LibreOffice. All three must render cleanly.",
+        "Download each as PDF. Open in Preview or Adobe. Print preview — landscape, branded, no orphan rows.",
+        "Execute one report as a Reporter user — must return 403. Execute one report with a five-year date range — must not produce errors.",
+        "All passing — stage and commit — git add . && git commit -m 'feat(reports): 8 reports validated end-to-end' && git push. Day 6 is complete."
+      ],
+      "memory_hook": "Ten-minute report smoke test. The most efficient quality verification available. Detects 80% of report defects pre-client.",
+      "closing_thread": "Day 7 begins with the QA handoff. The collaboration model shifts.",
+      "narration": "Manual validation. Open each report personally. Ten minutes. The most efficient quality verification available. Execute all eight reports. Download as Excel — open in three applications. Download as PDF — print preview. Execute as Reporter and verify 403. Execute with five-year range and verify no errors. All passing — commit, push. Day 6 complete.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Manual validation. Open each report personally. Ten minutes. The most efficient quality verification available." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Execute each of the eight reports with default filters. Verify figures against the dashboard. They must reconcile. Download each as Excel — open in Microsoft Excel, Google Sheets, AND LibreOffice. All three must render cleanly." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "playful_intrigue", "text": "Download each as PDF. Open in Preview or Adobe. Print preview. Landscape. Branded. No orphan rows. Execute one report as Reporter user — must return 403. Execute one with five-year date range — must not produce errors." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "All passing — git add, git commit dash m feat reports eight reports validated end-to-end, git push. Day 6 complete. The following day — the principal handoff." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "welcome",
+      "act": "Co-Working with QA & UAT",
+      "title": "Day 7 — The Handoff to QA",
+      "subtitle": "The collaboration model — not a transfer, a partnership",
+      "icon": "users",
+      "estimated_duration_seconds": 100,
+      "opening_hook": "Conventional engineering transfers builds to QA as if discharging responsibility. OrchestrAI Leads sit with QA throughout testing.",
+      "bullets": [
+        "Day 7 morning. The application is 95% complete. QA's responsibility — identify the remaining 5%.",
+        "Conventional model — engineer transfers build, QA logs 47 defects, one week of remediation pain.",
+        "OrchestrAI model — engineer SITS with QA. Observes testing. Re-prompts in real time as defects surface. Defects close in minutes, not days.",
+        "The QA Handbook (250 test IDs AI-generated in 20 minutes — recall Module 3) is the shared script. QA executes cases; the Lead remediates concurrently."
+      ],
+      "closing_thread": "The QA Handbook serves as the bridge. We examine its use.",
+      "narration": "Day 7. The handoff to QA. The collaboration model — not a transfer, a partnership. Conventional model — engineer transfers build, QA logs 47 defects, one week of pain. OrchestrAI model — engineer sits with QA, observes testing, re-prompts in real time. Defects close in minutes.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Day 7. The handoff to QA. This is the point at which most engineering organisations fail." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Conventional model — engineer transfers the build to QA as if discharging responsibility. QA logs forty-seven defects. One week of remediation pain. No party satisfied." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "OrchestrAI model — the engineer SITS with QA. Observes testing live. Re-prompts in REAL TIME as defects surface. Defects close in minutes rather than days." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "The QA Handbook — recall Module 3. AI-generated 250 test IDs in 20 minutes from the FDD. This becomes the shared script with QA. QA executes cases. The Lead remediates concurrently. Together." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "competencies",
+      "act": "Co-Working with QA & UAT",
+      "title": "The QA Handbook — The Shared Script",
+      "subtitle": "26 sections · approximately 250 test IDs · AI-generated in 20 minutes",
+      "icon": "list-checks",
+      "estimated_duration_seconds": 150,
+      "list": [
+        { "name": "Smoke (§21 — 9 cases)",          "icon": "rocket",       "desc": "AUTH-001 plus DASH-001 plus ISSA-001 plus ISNEW-001 plus CMT-002 plus CMT-003 plus PWD-001 plus RBAC plus RPT-006. Every build. 15 minutes." },
+        { "name": "Status transitions (§13 — 16 cases)","icon": "git-commit","desc": "TRN-001 through TRN-016. The matrix expressed as test cases. Execute every release. Approximately 30 minutes." },
+        { "name": "Comments and workflow (§11 — 12 cases)","icon": "message-square-text","desc": "CMT-001 through CMT-012. Mandatory comment rules. Resolution note plus reason requirements. Approximately 20 minutes." },
+        { "name": "Security and abuse (§25 — 4 cases)","icon": "shield-alert", "desc": "CSRF, horizontal privilege, rate limiting, password absence in response. Execute prior to any external deployment." },
+        { "name": "Non-functional (§20 — 4 cases)",    "icon": "gauge",        "desc": "Performance, concurrent edit, XSS, mobile viewport. Execute weekly during stabilisation." }
+      ],
+      "memory_hook": "The Handbook is the shared language with QA. Each test ID provides a precise re-prompt scope when a defect is identified.",
+      "closing_thread": "The smoke checklist constitutes the daily discipline.",
+      "narration": "The QA Handbook. The shared script. 26 sections, 250 test IDs, AI-generated in 20 minutes. Smoke checklist 9 cases, 15 minutes every build. Status transitions 16 cases, 30 minutes per release. Comments and workflow 12 cases, 20 minutes. Security and abuse before external deployment. Non-functional weekly during stabilisation.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The QA Handbook. The shared script with QA. Twenty-six sections. Approximately 250 test IDs. AI-generated in 20 minutes from the FDD." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Smoke checklist — section 21, nine cases. Execute every build. 15 minutes. Status transitions — section 13, sixteen cases, the matrix expressed as test cases. 30 minutes per release." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Comments and workflow — section 11, twelve cases. Mandatory comment rules. Resolution and reason requirements. 20 minutes." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Security and abuse — section 25, four cases. CSRF. Horizontal privilege. Rate limiting. Execute prior to ANY external deployment. Non-functional — section 20, four cases. Performance, concurrent edit, XSS, mobile viewport. Weekly during stabilisation." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "stats_hero",
+      "act": "Co-Working with QA & UAT",
+      "title": "The Smoke Checklist — Daily 15-Minute Discipline",
+      "subtitle": "Nine cases. Every build. Pre-deployment. Invariant.",
+      "icon": "shield-check",
+      "estimated_duration_seconds": 150,
+      "hero_stat": {
+        "value": "15 min",
+        "label": "the daily smoke checklist · 9 cases · detects 80% of regressions prior to deployment",
+        "icon": "shield-check"
+      },
+      "bullets": [
+        "AUTH-001 — Login (valid email plus password → dashboard, JWT stored)",
+        "DASH-001 — Dashboard loads, four cards populated, no console errors",
+        "ISSA-001 + ISSA-007 — Issue list loads + detail opens with correct identifier",
+        "ISNEW-001 — Create issue (happy path), defect number assigned, appears in list",
+        "CMT-002 — Post comment with current status (no transition record)",
+        "CMT-003 — Post comment with new status (transition triggered, audit log recorded)",
+        "PWD-001 — Change password functions, login with new password succeeds",
+        "RBAC — Reporter visits /reports → redirected (route guard functions)",
+        "RPT-006 — Full issue register opens, exports to Excel and PDF cleanly"
+      ],
+      "memory_hook": "Nine cases. 15 minutes. Every build. If any case fails — halt deployment, re-prompt, smoke again.",
+      "closing_thread": "Defects will surface. The response method defines the engagement's reputation.",
+      "narration": "The smoke checklist. The daily 15-minute discipline. Nine cases. Every build. Pre-deployment. Invariant. Login, dashboard, list and detail, create, current-status comment, new-status comment, password change, RBAC redirect, register export. If any case fails — halt deployment.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "The smoke checklist. Nine cases. 15 minutes. Every build. Invariant." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "AUTH-001 — login functions. DASH-001 — dashboard loads, four cards. ISSA-001 and ISSA-007 — issue list and detail." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "ISNEW-001 — create issue. CMT-002 — comment with current status. CMT-003 — comment with new status. Audit log recorded." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "PWD-001 — password change. RBAC — Reporter visits /reports, is redirected. RPT-006 — full register exports cleanly. Nine cases. If any fails — HALT DEPLOYMENT. Re-prompt. Smoke again. Non-negotiable." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "welcome",
+      "act": "Co-Working with QA & UAT",
+      "title": "The Real-Time Defect Loop",
+      "subtitle": "QA identifies defect · Lead re-prompts while QA observes · validate together · commit",
+      "icon": "refresh-cw",
+      "estimated_duration_seconds": 135,
+      "bullets": [
+        "QA identifies defect → reads the test ID and observed behaviour aloud (e.g. 'TRN-011, expected dialog, observed inline form').",
+        "Lead opens the file referenced in the re-prompt notes from Module 5. Composes a surgical re-prompt.",
+        "AI generates remediation in approximately 3 minutes. Lead hot-reloads. QA re-executes the test case. Live, together.",
+        "If passing — git add → commit 'fix(workflow): TRN-011 reopen dialog' → push. One defect, approximately 10 minutes, resolved.",
+        "If failing — Lead and QA debug together. Review the diff. Identify the AI's misinterpretation. Tighter re-prompt. Repeat."
+      ],
+      "memory_hook": "Identify → re-prompt → remediate → validate → commit. Five steps. Approximately 10 minutes per defect. QA in the room.",
+      "closing_thread": "The same engagement pattern applies during UAT with the client.",
+      "narration": "The real-time defect loop. QA identifies defect, reads test ID and observed behaviour. Lead opens the file. Composes surgical re-prompt. AI generates remediation in three minutes. Hot reload. QA re-executes. Pass — git add, commit, push. Fail — debug together. Ten minutes per defect.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The real-time defect loop. Five steps. Observe the pattern." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "QA identifies defect. Reads test ID and observed behaviour aloud. Example — TRN-011, expected dialog, observed inline form." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Lead opens the file referenced in the re-prompt notes from Module 5. Composes a surgical re-prompt. AI generates remediation in approximately three minutes. Lead hot-reloads. QA re-executes the test case. LIVE. TOGETHER." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "If passing — git add, git commit dash m fix workflow TRN-011 reopen dialog, git push. One defect, ten minutes, resolved. If failing — Lead and QA debug TOGETHER. Review the diff. Identify the AI's misinterpretation. Tighter re-prompt. Repeat. Most defects close within one session." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "welcome",
+      "act": "Co-Working with QA & UAT",
+      "title": "UAT With the Client — Collaboration, Not Gatekeeping",
+      "subtitle": "The client is not validating completed work; the client is shaping the product",
+      "icon": "users",
+      "estimated_duration_seconds": 120,
+      "bullets": [
+        "UAT occurs with the CLIENT in attendance (in person or screen-share). The Lead operates the application; the client observes and reacts.",
+        "Authentic client feedback in OrchestrAI engagements is rarely 'this is broken'. It is more commonly 'this is correct but I prefer it differently'.",
+        "Practitioner note — when the client requests capability X that is in scope, respond in the moment with a re-prompt. Demonstrate within five minutes.",
+        "When capability X is out of scope — log it; propose phase 2. Avoid both refusal and over-commitment. 'This is a valuable addition; here is how we sequence it.'",
+        "UAT sign-off equates to internal client championship. The client communicates to executive leadership — 'this team delivered in seven days what we had awaited for seven months'."
+      ],
+      "memory_hook": "UAT is collaboration. In scope → remediate within five minutes. Out of scope → sequence. Avoid refusal.",
+      "closing_thread": "Build accepted. The repository submission process follows.",
+      "narration": "UAT with the client. Collaboration, not gatekeeping. The client is not validating completed work — the client is shaping the product. In scope → re-prompt and demonstrate within five minutes. Out of scope → log, sequence, propose phase 2. Never refuse. UAT sign-off equates to internal client championship.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "UAT. The same engagement pattern as QA — but with the CLIENT in attendance. In person or screen-share. The Lead operates. The client observes and reacts." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Authentic client feedback is rarely 'this is broken'. It is more commonly 'this is correct but I prefer it differently'. Subtle. Conversational. Iterative." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Practitioner note — when the client requests capability X that is in scope, respond in the moment with a re-prompt. Demonstrate within five minutes. That moment is the one the client reports to executive leadership." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "When capability X is out of scope — log it; propose phase two. Avoid both refusal and over-commitment. 'This is a valuable addition; here is how we sequence it.' UAT sign-off equates to internal client championship. The client communicates to leadership — 'this team delivered in seven days what we had awaited for seven months.' This generates the subsequent engagement." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "welcome",
+      "act": "Going Live — Repository Submission",
+      "title": "Final Push — Polish the Repository Prior to Sharing",
+      "subtitle": "The GitHub repository IS the submission · ensure it lands",
+      "icon": "git-commit",
+      "estimated_duration_seconds": 115,
+      "opening_hook": "QA has passed. UAT has signed off. The work warrants presentation.",
+      "bullets": [
+        "Cleanup — remove commented-out code, unused files, .env.local artefacts. AI accumulates incidental content; clear it now.",
+        "Squash commit history? NO. The commits ARE the audit trail. The narrative of HOW the build was produced is part of the engagement value.",
+        "README polish — project introduction, tech stack, setup steps, environment variables, screenshots, demo URL. AI can draft from the repository; re-prompt explicitly.",
+        "Additions — LICENSE, CONTRIBUTING.md (if open-source), CODEOWNERS for review clarity.",
+        "Final smoke verification on staging URL. Final git push executed. Tag the release — git tag -a v1.0.0 -m 'first production release' && git push --tags."
+      ],
+      "memory_hook": "Clean repository · polished README · semver tag · pushed. The repository is now suitable for sharing.",
+      "closing_thread": "The README prompt that produces a polished result follows.",
+      "narration": "Final push. Polish the repository prior to sharing. Cleanup. Do not squash — commits constitute the audit trail. README polish — project introduction, tech stack, setup, environment variables, screenshots, demo URL. AI can draft from the repository. Additions — LICENSE, CONTRIBUTING. Final smoke on staging. Final git push. Tag v1.0.0.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "QA has passed. UAT has signed off. The work warrants presentation." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Cleanup — remove commented-out code, unused files, dot env dot local artefacts. AI accumulates incidental content. Clear it now." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Should the commit history be squashed? No. The commits ARE the audit trail. The narrative of HOW the build was produced constitutes part of the engagement value. Do not eliminate it." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "README polish — project introduction, tech stack, setup steps, environment variables, screenshots, demo URL. AI can draft from the repository. Re-prompt explicitly." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Additions — LICENSE, CONTRIBUTING dot md if open-source, CODEOWNERS for review clarity. Final smoke verification on staging URL. Final git push executed. Tag the release — git tag dash a v one dot zero dot zero dash m first production release. Git push dash dash tags. Complete." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "stats_hero",
+      "act": "Going Live — Repository Submission",
+      "title": "The README Prompt — Reviewer-Friendly Output",
+      "subtitle": "The README is the reviewer's first artefact · the prompt warrants effort proportional to that significance",
+      "icon": "book-open",
+      "estimated_duration_seconds": 145,
+      "hero_stat": {
+        "value": "8 sections",
+        "label": "comprehensive READMEs · title plus badges · quickstart · features · tech stack · env vars · scripts · screenshots · contact",
+        "icon": "book-open"
+      },
+      "bullets": [
+        "Prompt — 'Generate a README.md for this repository. Sections — title with project tagline, build and test badges, 30-second quickstart (clone → install → env → run), feature list with one-line each, tech stack table, environment variable table with descriptions, npm scripts table, three inline screenshots from /docs/screenshots, contact information.'",
+        "Constraints — 'Use GitHub-flavoured Markdown. Restrict emoji usage to headings. Code blocks include language tags. Tables are aligned.'",
+        "AI produces — approximately 300 lines of README that reads as senior-engineered. Edit lightly for accuracy; commit; push.",
+        "Bonus prompt — 'Add a one-paragraph DESIGN.md explaining the architectural decisions and OGE compliance.' Reviewers respond favourably to this addition."
+      ],
+      "memory_hook": "Eight-section README plus one DESIGN.md = repository presentation reads as senior engineering. Reviewer response is favourable.",
+      "closing_thread": "Push the repository. Share the URL. Submission is complete.",
+      "narration": "The README prompt. Eight sections — title with tagline, badges, 30-second quickstart, features, tech stack, env vars, npm scripts, screenshots, contact. Use GitHub Markdown, restrict emojis to headings, code blocks with language tags. Bonus — DESIGN.md explaining architectural decisions and OGE compliance.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "The README prompt. Eight sections. Reviewer-friendly output." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Prompt — generate a README dot md for this repository. Sections — title with tagline, build slash test badges, 30-second quickstart, feature list, tech stack table, environment variable table, npm scripts table, three inline screenshots from /docs/screenshots, contact information." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Constraints — GitHub-flavoured Markdown. Restrict emoji usage to headings. Code blocks include language tags. Tables are aligned. AI produces approximately 300 lines that reads as senior-engineered." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Bonus prompt — add a one-paragraph DESIGN dot md explaining the architectural decisions and OGE compliance. Reviewers respond favourably to this addition. They observe Observability, Guardrails, Evaluation explicitly addressed. Trust establishes immediately." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "welcome",
+      "act": "Going Live — Repository Submission",
+      "title": "Push and Share — The Submission Artefact",
+      "subtitle": "The GitHub URL constitutes the certification evidence",
+      "icon": "rocket",
+      "estimated_duration_seconds": 130,
+      "bullets": [
+        "Final commit — git add . && git commit -m 'docs: README plus DESIGN polish for review submission' && git push",
+        "Make the repository accessible to reviewers — Settings → Collaborators → invite as Reader OR set Public if appropriate.",
+        "Copy the repository URL — https://github.com/USER/REPO",
+        "Submit this URL via the OrchestrAI certification submission form (link in course resources).",
+        "Reviewer focus areas — commit cadence (per-validated-component evident?), README quality, OGE compliance in DESIGN.md, operational application at the demo URL, smoke checklist execution on the reviewer's environment."
+      ],
+      "memory_hook": "Final commit · share URL · submit. The URL constitutes evidence of capability.",
+      "closing_thread": "Two reference builds for inspection — both produced via this method.",
+      "narration": "Push and share. The GitHub URL constitutes the submission artefact. Final commit — docs README plus DESIGN polish. Make repository accessible — invite as Reader or set Public. Copy URL. Submit via certification form. Reviewers focus on commit cadence, README quality, OGE compliance, working demo, smoke checklist on their environment.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Final commit. Git add. Git commit dash m docs README plus DESIGN polish for review submission. Git push. Complete." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Make the repository accessible to reviewers. Settings — Collaborators — invite as Reader. Or set Public if appropriate to the engagement. Copy the URL — github dot com slash user slash repository." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Submit this URL via the OrchestrAI certification submission form. Link located in the course resources." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Reviewer focus areas — commit cadence with per-validated-component evidence. README quality. OGE compliance in DESIGN dot md. Operational application at the demo URL. Smoke checklist execution on the reviewer's environment. Five criteria. All visible. The evidence is complete." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "tap_reveal",
+      "act": "Going Live — Repository Submission",
+      "title": "Two Reference Builds — Both Produced Via This Method",
+      "subtitle": "Activate each card · open the live URL · observe what the capstone may resemble",
+      "icon": "sparkles",
+      "estimated_duration_seconds": 135,
+      "cards": [
+        { "label": "🔧 Issue Tracker (this programme's case study)", "reveal": "URL — projectissuetracker.vthinkdeveloper.com  ·  Login — admin@vthink.co.in / Admin@123  ·  Inspection points — workflow transitions, comment audit trail, reports export, admin RBAC. Every prompt that produced this has been examined in this programme." },
+        { "label": "⏱️ Timesheet Management Portal",               "reveal": "URL — timesheet.vthinkdeveloper.com  ·  Login — admin@vthink.co.in / Admin@123  ·  Distinct domain, identical method. 27 APIs, multi-role RBAC, timesheet validation grids. Produced in 7 days via the same OGE-anchored playbook." },
+        { "label": "🧬 Common characteristics",                     "reveal": "FDD, TDD, DB Design, UI Specs, Test Plan produced upfront. Eight-component prompts. Surgical re-prompts. Commit per validated component. README and DESIGN.md naming OGE explicitly. Smoke checklist passing. These exemplify 'shipped under OrchestrAI'." },
+        { "label": "🎯 The capstone target",                         "reveal": "The capstone repository should resemble these examples. Clean commits. Clear README. Operational demo. Reviewable in 10 minutes. If an independent reviewer can clone and execute smoke testing in 15 minutes — the bar has been met." }
+      ],
+      "narration": "Two reference builds. Both produced via this method. Issue Tracker — this programme's case study. Timesheet portal — distinct domain, identical method. Both share FDD upfront, eight-component prompts, surgical re-prompts, commit per validated component, README and DESIGN.md naming OGE. The capstone should resemble these examples.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Two reference builds. Both produced via precisely the method just examined. Activate each card." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Issue Tracker — every prompt that produced this build has been examined in this programme. Timesheet portal — distinct domain, identical playbook." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "The capstone repository should resemble these examples. Clean commits. Clear README. Operational demo. Reviewable in 10 minutes. If an independent reviewer can clone and execute smoke testing in 15 minutes — the bar has been met." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "transition_bridge",
+      "act": "Going Live — Repository Submission",
+      "title": "Build shipped. Repository submitted. One step remains.",
+      "subtitle": "The graduation",
+      "icon": "rocket",
+      "estimated_duration_seconds": 60,
+      "closing_thread": "Welcome to the OrchestrAI Lead graduation.",
+      "narration": "Build shipped. Repository submitted. One step remains. The graduation.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Build shipped. Repository submitted." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "playful_intrigue", "text": "One step remains." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Welcome to the graduation." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "recap",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "Six-Module Recap — Capabilities Acquired",
+      "subtitle": "From practitioner to OrchestrAI Lead in approximately six hours",
+      "icon": "check-circle",
+      "estimated_duration_seconds": 180,
+      "items": [
+        "Module 1 · The Mindset — orchestration over execution. AI implements; the Lead directs. The conductor analogy.",
+        "Module 2 · The Framework — six lifecycle stages: Intent → Orchestrate → Generate → Validate → Evolve → Deploy.",
+        "Module 3 · The Bible — OGE (Observability · Guardrails · Evaluation), Approach A versus B, the two master prompts (T1 plus T2).",
+        "Module 4 · Foundation Build — six manual installations, eight-component authentication prompt, shell and dashboard with UI Specifications honoured.",
+        "Module 5 · Workflow Engine — sixteen-transition matrix, structured workflow prompt, surgical re-prompts, Git discipline.",
+        "Module 6 · Going Live — admin surfaces, reports, QA and UAT co-working, README and DESIGN, GitHub submission. (Current position.)"
+      ],
+      "memory_hook": "Six modules · approximately six hours · one reusable playbook for every AI-accelerated build.",
+      "closing_thread": "We address the capability set this certification provides.",
+      "narration": "Capabilities acquired. Module 1 the mindset. Module 2 the framework. Module 3 the bible — OGE plus master prompts. Module 4 foundation build. Module 5 workflow engine and Git discipline. Module 6 going live, QA co-working, submission. Six modules. One reusable playbook for every AI-accelerated build.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Sixty-second recap. The capabilities acquired." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Module 1 — the mindset. Orchestration over execution. AI implements; the Lead directs. Module 2 — the framework. Six-stage lifecycle." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Module 3 — the bible. OGE plus the two master prompts T1 and T2. Module 4 — foundation build. Six installations, authentication prompt, shell, dashboard." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Module 5 — workflow engine. Sixteen-transition matrix. Surgical re-prompts. Git discipline. Module 6 — going live. Admin, reports, QA, UAT, README plus DESIGN, GitHub submission. The current position." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Six modules. Approximately six hours. ONE reusable playbook for every AI-accelerated build the practitioner will conduct. A meaningful exchange." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "stats_hero",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "Capstone Challenge — Independent Build",
+      "subtitle": "One application. The practitioner's domain. Seven days. Submit the repository.",
+      "icon": "rocket",
+      "estimated_duration_seconds": 135,
+      "hero_stat": {
+        "value": "7 days",
+        "label": "from empty repository to operational application · practitioner's domain · stack selection · OGE compliance",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "Select an application from the practitioner's professional or personal context — leave tracker, recipe organiser, client invoice system, training log — anything authentic.",
+        "Apply the playbook end-to-end — discovery → T2 governance document → T1 plus five design documents → six manual installations → build through workflow → admin → reports → QA → UAT → README plus DESIGN → GitHub push.",
+        "Time-box — seven days. Extensions are acceptable; the discipline is the value.",
+        "Submit the repository URL via the OrchestrAI certification submission form. Reviewer feedback within five business days.",
+        "Successful completion — certified OrchestrAI Lead. Suitable for LinkedIn designation. Authorisation for production client engagements."
+      ],
+      "memory_hook": "Practitioner's domain. Seven days. Practitioner's repository. Submit. Certified.",
+      "closing_thread": "We address post-submission resources.",
+      "narration": "Capstone challenge. Independent build. One application. The practitioner's domain. Seven days. Submit the repository. Select something authentic. Apply the playbook end-to-end. Submit via certification form. Successful completion equals certified OrchestrAI Lead. LinkedIn-suitable. Production client engagements authorised.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Capstone challenge. One application. The practitioner's domain. Seven days. Submit the repository." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Select from professional or personal context — leave tracker, recipe organiser, invoice system, training log. The specific domain is unimportant — the requirement is that it must be authentic." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Apply the playbook end-to-end. Discovery. T2 governance. T1 plus five design documents. Six installations. Build through workflow. Admin. Reports. QA. UAT. README plus DESIGN. GitHub push." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Submit the repository URL via the OrchestrAI certification submission form. Reviewer feedback within five business days. Successful completion equals certified OrchestrAI Lead. LinkedIn-suitable designation. Production client engagements authorised. The professional level has advanced materially." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "competencies",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "Post-Graduation Support Channels",
+      "subtitle": "The practitioner does not graduate in isolation · the OrchestrAI community provides ongoing support",
+      "icon": "users",
+      "estimated_duration_seconds": 135,
+      "list": [
+        { "name": "vThink OrchestrAI team",  "icon": "users",     "desc": "Direct contact — info@vthink.co.in. For capstone enquiries, engagement obstacles, or framework clarifications." },
+        { "name": "Reference repositories",  "icon": "git-commit","desc": "Issue Tracker and Timesheet codebases remain available for inspection. Adopt patterns. Adopt the README structure. Adopt the DESIGN.md format." },
+        { "name": "GitHub documentation",    "icon": "book-open", "desc": "docs.github.com — for Git workflow uncertainty. Bookmarked since Module 5." },
+        { "name": "The practitioner's commits","icon": "git-commit","desc": "The repository commit log functions as a training journal. When subsequent engagements present challenges, the commits indicate the prior successful approach." },
+        { "name": "Subsequent cohorts",       "icon": "rocket",    "desc": "Future practitioners will require peer reviewers. The cycle continues — once certified, the practitioner may serve as a reviewer for subsequent cohorts." }
+      ],
+      "memory_hook": "Five support channels post-graduation. The practitioner does not operate in isolation.",
+      "closing_thread": "A brief reflection prior to conclusion follows.",
+      "narration": "Post-graduation support channels. vThink OrchestrAI team direct — info at vthink dot co dot in. Reference repositories — Issue Tracker and Timesheet. GitHub documentation for Git workflows. The practitioner's commit log as training journal. Subsequent cohorts where the practitioner may serve as peer reviewer. Five channels. The practitioner does not operate in isolation.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The practitioner does not graduate in isolation. Five support channels post-graduation." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "vThink OrchestrAI team — direct contact, info at vthink dot co dot in. For capstone enquiries, engagement obstacles, or framework clarifications." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Reference repositories — Issue Tracker and Timesheet codebases remain available for inspection. Adopt patterns. Adopt the README structure. Adopt the DESIGN dot md format." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "GitHub documentation — bookmarked since Module 5. The practitioner's commit log functions as a training journal. When subsequent engagements present challenges, the commits indicate the prior successful approach." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Subsequent cohorts — future practitioners will require peer reviewers. The cycle continues. Once certified, the practitioner may serve as reviewer for subsequent cohorts. The community is now extended." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "confidence_slider",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "Final readiness verification — Lead-ready?",
+      "icon": "help-circle",
+      "estimated_duration_seconds": 80,
+      "prompt": "Without reference materials on Monday morning — could the practitioner conduct a stakeholder interview, capture intent, issue T2 followed by T1, articulate OGE, construct the foundation, ship the workflow engine, conduct QA and UAT, and submit a polished repository for review?",
+      "scale": { "min_label": "Not yet — will review modules", "max_label": "Yes — Monday, capable" },
+      "narration": "Final readiness verification. Lead-ready? Monday morning, without reference, conduct stakeholder interview, capture intent, issue T2 plus T1, articulate OGE, construct foundation, ship workflow, conduct QA plus UAT, submit polished repository. Select a number.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Final readiness verification. Current position assessment." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Monday morning. Without reference materials. Conduct stakeholder interview. Capture intent. Issue T2 plus T1. Articulate OGE. Construct foundation. Ship workflow. Conduct QA. UAT. Repository." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Select a number. No selection is incorrect. The honest selection is the useful one." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "act": "Graduation — You're an OrchestrAI Lead",
+      "title": "🎓 Module 6 Complete · Certification Track Confirmed",
+      "subtitle": "Capstone submission is the final step · welcome to the alumni community",
+      "icon": "rocket",
+      "estimated_duration_seconds": 105,
+      "hero_stat": {
+        "value": "6 / 6",
+        "label": "modules complete · capstone follows · the work that produces engagement begins now",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "🎓 All six modules complete. The practitioner has covered every component of the OrchestrAI playbook.",
+        "🛠️  Capstone challenge — select a domain, execute the playbook, push to GitHub, submit the URL.",
+        "📩 Submission — certification form link located in course resources. Reviewer feedback within five business days.",
+        "🤝 Alumni — info@vthink.co.in for capstone enquiries, engagement obstacles, peer-review opportunities.",
+        "🎤 Request — provide honest feedback on this programme. What was effective. What was insufficient. What would be added. The curriculum evolves in collaboration with the practitioners."
+      ],
+      "closing_thread": "Quality is not a service. It is a mandate. Proceed to ship.",
+      "narration": "Module 6 complete. Certification track confirmed. All six modules complete. Capstone follows. Submit repository URL via certification form. Feedback within five business days. Alumni channel info at vthink dot co dot in. Request — provide honest feedback. Quality is not a service. It is a mandate. Proceed to ship.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Module 6. Complete." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "All six modules complete. The practitioner has covered every component of the OrchestrAI playbook. From the mindset shift in Module 1 through to GitHub submission today." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Capstone follows. Select a domain. Execute the playbook. Push to GitHub. Submit the URL. Reviewer feedback within five business days." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Alumni — info at vthink dot co dot in. Capstone enquiries. Engagement obstacles. Peer review. The practitioner is now part of a community." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "One request — provide honest feedback on this programme. What was effective. What was insufficient. What would be added. The curriculum evolves in collaboration with the practitioners." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "The closing line. The same one with which we opened. Quality is not a service. It is a mandate. Proceed to ship." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    }
+  ]
+}

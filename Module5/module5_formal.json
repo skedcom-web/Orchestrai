@@ -1,0 +1,625 @@
+{
+  "module": "Module 5 — The Workflow Engine · Issues, Status, Comments, Git Discipline",
+  "preset": "formal",
+  "format": "two_voice_dialogue",
+  "speakers": {
+    "Vikram": { "voice_key": "male_formal",   "gender": "male",   "persona": "Vikram — Senior OrchestrAI Architect. Authoritative, precise, frames concepts in enterprise terms." },
+    "Anjali": { "voice_key": "female_formal", "gender": "female", "persona": "Anjali — Principal Consultant. Methodical, asks for clarification, brings implications to the surface." }
+  },
+  "tts_field_priority": ["text_expressive", "text_ssml", "text"],
+  "schema_version": "v8_interactive_with_music",
+  "last_updated": "2026-06-25T00:00:00Z",
+  "acts": [
+    { "id": "act_1", "name": "The Status Transition Problem", "slide_start": 1,  "slide_end": 3  },
+    { "id": "act_2", "name": "The Structured Workflow Prompt", "slide_start": 4,  "slide_end": 8  },
+    { "id": "act_3", "name": "Comments & Attachments",         "slide_start": 9,  "slide_end": 12 },
+    { "id": "act_4", "name": "Re-Prompt & Git Discipline",     "slide_start": 13, "slide_end": 17 },
+    { "id": "act_5", "name": "What You Don't Delegate",        "slide_start": 18, "slide_end": 23 }
+  ],
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "type": "welcome",
+      "act": "The Status Transition Problem",
+      "title": "Module 5 — The Workflow Engine",
+      "subtitle": "Where vague prompts produce the most consequential defects",
+      "icon": "git-commit",
+      "estimated_duration_seconds": 80,
+      "opening_hook": "Authentication and shell were the simpler components. Workflows require explicit structure or AI fabricates rules.",
+      "bullets": [
+        "Five acts. Twenty-three slides. The most demanding content in the programme.",
+        "Days 4 and 5 of the seven-day Issue Tracker build. Issue CRUD, status transitions, comments, attachments.",
+        "Additionally — the Git discipline that should have commenced on Day 1, and the surgical re-prompt pattern that preserves engagements.",
+        "Note — if 'git init' has not yet been executed on the project folder, this module addresses that omission."
+      ],
+      "closing_thread": "We begin with why workflows are the high-risk territory.",
+      "narration": "Module 5. The Workflow Engine. Where vague prompts produce the most consequential defects. Days 4 and 5 of the seven-day Issue Tracker build. Plus Git discipline that should have commenced on Day 1.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Welcome to Module 5 of the OrchestrAI Lead Certification." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Authentication and shell were the simpler components. Workflows require explicit structure, or AI fabricates rules. This module addresses that risk directly." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Days 4 and 5 of the seven-day Issue Tracker build. Issue CRUD, status transitions, comments, attachments — the operational core of the application." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "We also introduce Git discipline that should have commenced on Day 1. If the omission applies, this module remediates it before Module 6 requires it." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_02",
+      "type": "stats_hero",
+      "act": "The Status Transition Problem",
+      "title": "Sixteen Transitions. One Prompt. No Margin.",
+      "subtitle": "The status matrix is where imprecise prompts result in multi-week remediation",
+      "icon": "alert-triangle",
+      "estimated_duration_seconds": 115,
+      "hero_stat": {
+        "value": "16",
+        "label": "valid transitions across 6 states — every transition must be specified in the prompt or AI will invent incorrect rules",
+        "icon": "alert-triangle"
+      },
+      "analogy": {
+        "title": "Chess versus draughts",
+        "text": "Draughts permits informal specification. Chess does not — castling, en passant, promotion all require explicit rules before play commences. Status workflows operate at chess complexity; ad hoc specification produces incorrect outputs."
+      },
+      "bullets": [
+        "Six states — Open, InProgress, InReview, Resolved, Closed, Reopened.",
+        "Thirteen valid transitions, two explicitly prohibited transitions, and one same-status-comment pattern — sixteen total.",
+        "Omission of any element produces transitions AI invents — breaking the audit trail.",
+        "Quantified cost — two to three days of remediation after launch when QA identifies the defects."
+      ],
+      "closing_thread": "Four reasons account for why workflows are AI's most challenging domain.",
+      "narration": "Sixteen transitions across six states. Every legal move must be specified in the prompt or AI will invent incorrect rules. Cost of omission — two to three days of remediation when QA identifies defects after launch.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Sixteen transitions. Six states. The headline figure for Module 5." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Six states — Open, InProgress, InReview, Resolved, Closed, Reopened. Thirteen valid transitions, two explicitly prohibited, one same-status-comment pattern. Sixteen total." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Omission of any element in the prompt produces transitions AI will invent. An issue may be closed without resolution. An issue may be reopened without justification. The audit trail breaks. QA identifies the defect. Two to three days of remediation follow." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Chess versus draughts. Chess does not permit ad hoc specification — every move must be explicit before play commences. Workflows operate at chess complexity. The same rule applies." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_03",
+      "type": "competencies",
+      "act": "The Status Transition Problem",
+      "title": "Why Workflows Are AI's Most Challenging Domain",
+      "subtitle": "Four causes — each one a failure mode if unaddressed",
+      "icon": "brain",
+      "estimated_duration_seconds": 150,
+      "list": [
+        { "name": "Domain-specific rules",  "icon": "shield-alert", "desc": "No standardised workflow exists. The organisation's workflow is unique. AI has no training data for it. Without explicit specification, AI fabricates plausible alternatives." },
+        { "name": "State combinatorial expansion","icon": "git-commit","desc": "Six states permit thirty possible transitions (6 × 5). Most must be prohibited. AI defaults to permissive behaviour unless prohibitions are stated explicitly." },
+        { "name": "Side-effects per transition", "icon": "zap",     "desc": "Each transition may trigger emails, audit log entries, or field locking. AI omits side-effects unless explicitly required. Omitted side-effects produce silent defects." },
+        { "name": "UI–API parity",           "icon": "layout-template","desc": "The dropdown must display only permitted next states. The API must enforce the identical matrix. AI commonly implements one and omits the other. UI is not enforcement." }
+      ],
+      "memory_hook": "Domain rules · state expansion · side-effects · UI-API parity. Four failure modes. Each requires explicit prompt language.",
+      "closing_thread": "All four are addressed by a single structured prompt.",
+      "narration": "Four causes. Domain-specific rules without training data. State combinatorial expansion. Side-effects per transition. UI to API parity. Each requires explicit prompt language to prevent failure.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Four causes. Each is a failure mode if left unaddressed." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "First — domain-specific rules. No standardised workflow exists. The organisation's workflow is unique. AI has no training data for it. Without explicit specification, AI fabricates plausible alternatives." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Second — state combinatorial expansion. Six states permit thirty possible transitions. Most must be prohibited. AI defaults to permissive behaviour. Prohibitions must be stated explicitly." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Third — side-effects per transition. Each transition may trigger emails, audit log entries, or field locking. AI omits side-effects unless required. Omitted side-effects produce silent defects." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Fourth — UI to API parity. The dropdown displays permitted next states. The API enforces the identical matrix. AI commonly implements one and omits the other. UI is not enforcement." }
+      ],
+      "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_04",
+      "type": "welcome",
+      "act": "The Structured Workflow Prompt",
+      "title": "Day 4 — The Workflow Engine",
+      "subtitle": "A single long prompt — properly structured — saves weeks of remediation",
+      "icon": "edit-3",
+      "estimated_duration_seconds": 90,
+      "bullets": [
+        "Day 4 of the seven-day build. Authentication, shell, dashboard previously shipped.",
+        "We compose ONE extended, structured prompt rather than several smaller ones.",
+        "Rationale — workflows are interconnected. Splitting the prompt causes AI to lose context between calls.",
+        "Prompt composition — state diagram in ASCII, sixteen-row transition matrix, side-effects, validation, UI rules, API guards."
+      ],
+      "closing_thread": "We examine the prompt directly.",
+      "narration": "Day 4. The workflow engine. ONE extended structured prompt. Not several smaller ones. Workflows are interconnected — splitting the prompt causes AI to lose context. The prompt includes state diagram in ASCII, sixteen-row transition matrix, side-effects, validation, UI rules, API guards.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Day 4. The workflow engine. Authentication, shell, and dashboard shipped previously." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "We compose ONE extended, structured prompt rather than several smaller prompts. The rationale — workflows are interconnected. Splitting the prompt causes AI to lose context between calls." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Prompt composition — state diagram in ASCII, sixteen-row transition matrix, side-effects per transition, validation rules, UI behaviour, API guards. We examine it next." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_05",
+      "type": "stats_hero",
+      "act": "The Structured Workflow Prompt",
+      "title": "The Workflow Prompt — The Marker Pillar Operationalised",
+      "subtitle": "ASCII state diagram · transition matrix · side-effects per transition",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 180,
+      "hero_stat": {
+        "value": "1 prompt",
+        "label": "produced 8 entities · workflow service · state machine guard · 4 controllers · 12 endpoints — all in one session",
+        "icon": "shield-alert"
+      },
+      "analogy": {
+        "title": "Air traffic control briefing",
+        "text": "A pilot does not request guidance from the tower in flight. A flight plan is provided in advance — waypoints, altitudes, restricted zones, escalation procedures. The workflow prompt functions as the flight plan; every permitted move is explicit, every prohibited move is named."
+      },
+      "bullets": [
+        "Section 1 — state diagram in ASCII — Open → InProgress → InReview → (Resolved → Closed) ↺ Reopened.",
+        "Section 2 — transition matrix table — sixteen rows, columns From / To / Allowed Roles / Required Fields / Side-effects.",
+        "Section 3 — prohibited transitions — Open → Resolved (must traverse InReview); InProgress → Resolved (identical). Returns 400 with message.",
+        "Section 4 — comment rules — every status change requires a non-empty comment. Resolved requires resolution note. Reopened requires reason.",
+        "Section 5 — UI–API parity — status dropdown displays current plus permitted next only. Backend enforces the identical matrix in middleware."
+      ],
+      "memory_hook": "ASCII diagram · sixteen-row matrix · prohibition list · comment rules · UI-API parity. Five sections — eliminates AI drift.",
+      "closing_thread": "We compare vague specification against structured specification.",
+      "narration": "The workflow prompt operationalises the Marker pillar. Five sections — ASCII state diagram, sixteen-row transition matrix, prohibited transitions with 400 response, comment rules with resolution requirement, UI-API parity in middleware. One prompt, eight entities, twelve endpoints — all in one session.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "The workflow prompt. Five sections." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Section one — state diagram in ASCII. Open to InProgress to InReview, then Resolved to Closed, with Reopened returning to the cycle. AI interprets the diagram as specification." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Section two — the transition matrix as a table. Sixteen rows. Columns — From, To, Allowed Roles, Required Fields, Side-effects. The Marker pillar from OGE, fully operationalised." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Section three — prohibited transitions. Open to Resolved must traverse InReview. InProgress to Resolved — identical rule. AI must return 400 with a specific message. Naming the prohibitions is as important as naming the permissions." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Section four — comment rules. Every status change requires a non-empty comment. Resolved requires a resolution note. Reopened requires a reason. Section five — UI-API parity. Dropdown displays current plus permitted next only. Backend enforces the identical matrix in middleware." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_06",
+      "type": "comparison_table",
+      "act": "The Structured Workflow Prompt",
+      "title": "Imprecise Specification Versus Structured Specification",
+      "subtitle": "Identical intent. Substantially different output.",
+      "icon": "scale",
+      "estimated_duration_seconds": 140,
+      "table": [
+        { "icon": "alert-triangle", "pain": "States",            "trad": "❌ 'add status field with a few values'", "orch": "✅ Explicit six-state enumeration, ordered, with role assignments" },
+        { "icon": "alert-triangle", "pain": "Transitions",        "trad": "❌ 'users may change status'",            "orch": "✅ Sixteen-row matrix — From / To / Roles / Fields / Effects" },
+        { "icon": "alert-triangle", "pain": "Prohibited transitions","trad": "❌ (entirely omitted)",                "orch": "✅ 'Open→Resolved and InProgress→Resolved return 400'" },
+        { "icon": "alert-triangle", "pain": "Comments",            "trad": "❌ 'permit comments on issues'",         "orch": "✅ 'Every status change requires non-empty comment; resolution and reason for specific transitions'" },
+        { "icon": "alert-triangle", "pain": "UI behaviour",         "trad": "❌ 'dropdown for status'",               "orch": "✅ 'Dropdown filters to current plus permitted next; backend re-validates'" }
+      ],
+      "memory_hook": "Imprecise prompts cause AI to default to five-plus assumptions. Structured prompts produce exactly the specified output.",
+      "closing_thread": "We examine the prompt contents in detail.",
+      "narration": "Imprecise versus structured specification. Identical intent. Substantially different output. Imprecise produces a status field with assumed transitions, no prohibitions, no comment rules, basic dropdown. Structured produces a six-state enumeration, sixteen-row matrix, named prohibitions returning 400, mandatory comments with resolution requirements, dropdown filtered with backend re-validation.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Identical intent. Two prompts. Substantially different output." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Imprecise — 'add status field with a few values'. AI assumes three or four values. No matrix, no prohibitions, permissive defaults. Closed becomes magically reversible. The audit position is untenable." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Structured — explicit six-state enumeration, ordered, with role assignments. Sixteen-row matrix with From, To, Roles, Required Fields, Side-effects. Prohibited transitions named — Open to Resolved returns 400." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Mandatory comments. Resolution note required for Resolved. Reopen reason required. Dropdown filtered. Backend re-validates. AI produces exactly the specified output — no drift." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_07",
+      "type": "competencies",
+      "act": "The Structured Workflow Prompt",
+      "title": "Workflow Prompt Composition",
+      "subtitle": "Five explicit sections · none optional",
+      "icon": "list-checks",
+      "estimated_duration_seconds": 145,
+      "list": [
+        { "name": "State enumeration plus diagram", "icon": "git-commit",   "desc": "Each state named, ordered. ASCII diagram of valid transitions. AI interprets the diagram as specification text." },
+        { "name": "Transition matrix",              "icon": "grid-3x3",     "desc": "Table format. From, To, Allowed Roles, Required Fields, Side-effects. Each row constitutes a contract." },
+        { "name": "Prohibited transitions",         "icon": "shield-alert", "desc": "Named explicitly. HTTP status (400) specified. Error message specified. AI must reject — not redirect or conceal." },
+        { "name": "Comment and field rules",        "icon": "message-square-text","desc": "Mandatory elements per transition. Resolution note for Resolved. Reason for Reopened. Audit log entry invariably." },
+        { "name": "UI–API parity contract",         "icon": "layout-template","desc": "Explicit clause — 'dropdown displays permitted next; API re-validates'. Without this clause, AI implements one and omits the other." }
+      ],
+      "memory_hook": "Five sections. Omission of any one ships an entire category of defects.",
+      "closing_thread": "All five operate as the Marker pillar.",
+      "narration": "Five sections compose the workflow prompt. State enumeration with diagram. Transition matrix as table. Prohibited transitions with HTTP status. Comment and field rules per transition. UI-API parity contract. None optional.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Five sections. We examine each." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "First — state enumeration with diagram. Each state named, ordered. ASCII diagram of valid transitions. AI interprets the diagram as specification text." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Second — transition matrix as table. From, To, Allowed Roles, Required Fields, Side-effects. Each row constitutes a contract." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Third — prohibited transitions, named with HTTP 400 and error message. AI must reject. Fourth — comment and field rules per transition. Resolution note for Resolved. Reason for Reopened. Audit log entry invariably." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Fifth — UI to API parity contract. The most commonly omitted section. Without this clause, AI implements one and omits the other. Do not omit this." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_08",
+      "type": "welcome",
+      "act": "The Structured Workflow Prompt",
+      "title": "The Marker Pillar — In Practice",
+      "subtitle": "From Module 3 — the practical realisation of P.R.O.M.P.T.'s M",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 100,
+      "bullets": [
+        "Marker — the boundaries within which AI may operate.",
+        "In a workflow prompt, the Marker is the prohibited-transition list, the comment-required rules, and the role allow-list.",
+        "Without Marker — AI fabricates a permissive workflow. 200 response on all requests.",
+        "With Marker — AI returns 400 on Open → Resolved, requires resolution note, blocks Reporters from Closing — precisely as the FDD specifies."
+      ],
+      "closing_thread": "Workflow shipped. We proceed to the collaboration layer.",
+      "narration": "The Marker pillar in practice. Marker — the boundaries within which AI may operate. In a workflow prompt, the Marker is the prohibited-transition list, the comment-required rules, the role allow-list. With Marker, AI returns 400 on prohibited transitions precisely as the FDD specifies.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Recall the M in P.R.O.M.P.T. from Module 3. This is its practical realisation in production engagements." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Marker — the boundaries within which AI may operate. In a workflow prompt, the Marker is the prohibited-transition list, the comment-required rules, and the role allow-list." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Without Marker, AI fabricates a permissive workflow. 200 responses on all requests. With Marker, AI returns 400 on Open to Resolved, requires resolution note, blocks Reporters from Closing — precisely as the FDD specifies." }
+      ],
+      "background_music": { "track_key": "pillars_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_09",
+      "type": "welcome",
+      "act": "Comments & Attachments",
+      "title": "Day 5 — The Collaboration Layer",
+      "subtitle": "Comments and attachments — the audit-bearing spine of every issue tracker",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 90,
+      "bullets": [
+        "Comments are not merely textual content — they constitute the audit trail of issue progression.",
+        "Each comment is associated with the status active at the time of posting. Some comments effect status transitions; both are first-class events.",
+        "Attachments introduce additional concerns — file size constraints, MIME-type allow-listing, virus scanning hooks, signed URLs.",
+        "Either omission produces — at minimum — a compromised audit trail; at worst, an XSS or RCE vector via the upload pipeline."
+      ],
+      "closing_thread": "The comments and status prompt follows.",
+      "narration": "Day 5. The collaboration layer. Comments are the audit trail of issue progression. Each comment is associated with the status at posting time. Attachments introduce file size, MIME, virus, and signed URL concerns. Either omission compromises audit or security.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Day 5. The collaboration layer. Comments. Attachments. The audit-bearing spine of every issue tracker." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Comments are not merely text. They constitute the audit trail of issue progression. Each is associated with the status active at posting time. Some effect status transitions. Both events are first-class." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Attachments introduce additional concerns. File size constraints. MIME-type allow-listing. Virus scanning hooks. Signed URLs. Either omission produces — at minimum — a compromised audit trail; at worst, an XSS or RCE vector via the upload pipeline." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_10",
+      "type": "stats_hero",
+      "act": "Comments & Attachments",
+      "title": "The Comments and Status Prompt",
+      "subtitle": "Status dropdown · mandatory comment · resolution and reason requirements",
+      "icon": "message-square-text",
+      "estimated_duration_seconds": 170,
+      "hero_stat": {
+        "value": "1 + 12 + 4",
+        "label": "1 component (CommentBox) · 12 endpoint behaviours · 4 mandatory field rules",
+        "icon": "message-square-text"
+      },
+      "bullets": [
+        "Status dropdown — displays CURRENT status plus PERMITTED next statuses only, per the matrix. No 'no-change' option permitted.",
+        "Posting with current status — comment saved; no transition record. Audit log records a comment event only.",
+        "Posting with new status — comment saved; transition record written; side-effects executed (emails, notifications).",
+        "Resolved — requires resolution note in a separate field. Reopened — requires reason in a separate field. Both server-validated.",
+        "Attachments on comment — maximum five files per comment, ten megabytes each, MIME allow-list (pdf, png, jpg, txt, docx). Server-validated."
+      ],
+      "memory_hook": "Status plus Comment — ONE form, TWO outcomes (transition or comment-only). Both paths server-enforced.",
+      "closing_thread": "Comment rules generated in code follow.",
+      "narration": "The comments and status prompt. Status dropdown displays current plus permitted next only. No 'no-change' option. Posting with current status saves comment without transition record. Posting with new status executes the transition and side-effects. Resolved requires resolution note. Reopened requires reason. Attachments capped at five files, ten megabytes each, MIME allow-list.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The comments and status prompt. One component — CommentBox. Twelve endpoint behaviours. Four mandatory field rules." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Status dropdown displays CURRENT plus PERMITTED next statuses only — derived from the matrix. No 'no-change' option. The user must select a status explicitly, even if identical to current." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Posting with CURRENT status — comment saved, no transition record. Audit log records a comment event only. Posting with NEW status — comment saved, transition record written, side-effects executed — emails, notifications." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Resolved transition requires a RESOLUTION NOTE in a separate field. Reopened transition requires a REASON in a separate field. Both server-validated. UI cannot bypass." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Attachments — maximum five files per comment, ten megabytes each, MIME allow-list of PDF, PNG, JPG, TXT, DOCX. Server-validated. UI provides user experience only — never trust the client." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_11",
+      "type": "competencies",
+      "act": "Comments & Attachments",
+      "title": "Comment Rules — The Audit Trail Specification",
+      "subtitle": "Each rule corresponds to a QA test case (CMT-001 through CMT-012)",
+      "icon": "list-checks",
+      "estimated_duration_seconds": 150,
+      "list": [
+        { "name": "Dropdown displays permitted next", "icon": "grid-3x3", "desc": "Derived from the matrix. UI test — only valid transitions visible. (CMT-001)" },
+        { "name": "Comment is mandatory",             "icon": "message-square-text","desc": "Submission rejected without non-empty body. Server returns 400. (CMT-004)" },
+        { "name": "Same-status posting preserves audit", "icon": "shield-check", "desc": "Posting with current status creates a comment-only event; no transition record. (CMT-002, TRN-016)" },
+        { "name": "Resolution note required",         "icon": "clipboard-check","desc": "Transition to Resolved without resolution note returns 400. (CMT-007)" },
+        { "name": "Reopen reason required",            "icon": "edit-3", "desc": "Transition to Reopened without reason returns 400. (CMT-008, CLS-003)" }
+      ],
+      "memory_hook": "Comment rules constitute audit trail rules. Omission of any compromises audit integrity.",
+      "closing_thread": "Attachments — where security becomes operationally significant.",
+      "narration": "Comment rules — the audit trail specification. Dropdown displays permitted next. Comment is mandatory. Same-status posting preserves audit. Resolution note required for Resolved. Reopen reason required for Reopened. Each rule corresponds to a QA test case.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Comment rules. Each corresponds to a QA test case from the handbook — CMT zero zero one through CMT zero one two." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Dropdown displays permitted next — UI test. Comment is mandatory — server returns 400 without non-empty body. Same-status posting preserves audit — comment-only event, no transition record." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Resolution note required on Resolved — 400 without it. Reopen reason required on Reopened — 400 without it. Audit integrity is non-negotiable." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_12",
+      "type": "comparison_table",
+      "act": "Comments & Attachments",
+      "title": "File Upload Security — Safe Versus Unsafe Patterns",
+      "subtitle": "AI defaults to UNSAFE unless boundaries are explicitly defined",
+      "icon": "shield-alert",
+      "estimated_duration_seconds": 145,
+      "table": [
+        { "icon": "alert-triangle", "pain": "MIME validation",    "trad": "❌ Trusts the Content-Type header",  "orch": "✅ Magic-byte verification server-side (libmagic / file-type)" },
+        { "icon": "alert-triangle", "pain": "File size",           "trad": "❌ 'reasonable size'",              "orch": "✅ Hard cap 10 MB per file, enforced before disk write" },
+        { "icon": "alert-triangle", "pain": "Filename storage",    "trad": "❌ Original filename written to disk", "orch": "✅ UUID rename; original retained as metadata only" },
+        { "icon": "alert-triangle", "pain": "Storage location",    "trad": "❌ Common folder, predictable URL", "orch": "✅ Signed URL with expiry; non-guessable path; outside web root" },
+        { "icon": "alert-triangle", "pain": "Virus scanning",      "trad": "❌ Omitted",                         "orch": "✅ ClamAV integration or S3 + Lambda scanner before serving" }
+      ],
+      "memory_hook": "Trust no input from the client. Validate everything server-side. AI defaults to unsafe — boundaries must be explicit.",
+      "closing_thread": "Manual validation follows.",
+      "narration": "File upload security. Safe versus unsafe. AI defaults to unsafe. MIME validation — magic-byte verification server-side, not the Content-Type header. File size — hard cap before disk write. Filename — UUID rename. Storage — signed URL with expiry. Virus scanning — ClamAV or S3 plus Lambda.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "File upload security. AI's defaults are unsafe. Boundaries must be defined explicitly." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "MIME validation — do NOT trust the Content-Type header. DO perform magic-byte verification server-side using libmagic or file-type. File size — hard cap, ten megabytes per file, enforced BEFORE disk write." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Filename storage — do NOT write the original filename to disk. DO rename to UUID and retain original as metadata. Storage location — do NOT place files in a predictable web-root path." }
+      ],
+      "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_13",
+      "type": "welcome",
+      "act": "Re-Prompt & Git Discipline",
+      "title": "The Defect AI Reliably Produces — Closed → Reopen",
+      "subtitle": "First-pass behaviour contrasted with FDD requirements",
+      "icon": "alert-triangle",
+      "estimated_duration_seconds": 115,
+      "bullets": [
+        "FDD requirement — closed issues are locked. No inline comments permitted. Reopen occurs only via a dedicated dialog requiring a reason.",
+        "AI first-pass behaviour — permits inline comments on closed issues. Permits reopening without a reason.",
+        "Cause — Closed → Reopen is one of sixteen transitions but carries a SPECIAL UI rule (dialog-only) that imprecise prompts omit.",
+        "Symptoms identified by QA — closed issues displaying new comments; reopened issues with no reason in the audit log."
+      ],
+      "closing_thread": "The re-prompt that resolved the defect follows.",
+      "narration": "The defect AI reliably produces. Closed arrow Reopen. FDD requires closed issues are locked — no inline comments, only a Reopen dialog with mandatory reason. AI first pass permits inline comments on closed issues and reopening without reason. Cause — special UI rule omitted from imprecise prompts.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "The defect AI reliably produces on first pass. Closed to Reopen." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "FDD requirement — closed issues are locked. No inline comments. Reopen via a dedicated dialog with mandatory reason." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "AI first-pass behaviour — permits inline comments on closed issues. Permits reopening without a reason. QA-identified symptoms — closed issues with new comments; reopened issues with no audit-log reason." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Cause — Closed to Reopen is one of the sixteen transitions but carries a special UI rule, dialog-only, omitted from imprecise prompts. Even well-formed prompts fail here without explicit instruction." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_14",
+      "type": "stats_hero",
+      "act": "Re-Prompt & Git Discipline",
+      "title": "The Surgical Re-Prompt That Resolved It",
+      "subtitle": "Three sentences · specifies the exact files · specifies the exact remediation",
+      "icon": "edit-3",
+      "estimated_duration_seconds": 160,
+      "hero_stat": {
+        "value": "3 sentences",
+        "label": "remediated 4 files · 1 component, 1 dialog, 1 service, 1 test — approximately 15 minutes elapsed",
+        "icon": "edit-3"
+      },
+      "bullets": [
+        "Ineffective re-prompt — 'fix the Closed issue thing'. Vague; AI guesses; a turn is wasted.",
+        "Effective re-prompt (three sentences):",
+        "→ \"In CommentSection.tsx, when issue.status equals 'Closed', do not render the inline comment form. Render a locked message and Reopen button instead.\"",
+        "→ \"On Reopen button click, open ReopenDialog with a required 'reason' textarea (minimum 10 characters).\"",
+        "→ \"In issue.service.ts, transition to Reopened must reject if reason is missing or under 10 characters — return 400 with message.\"",
+        "Result — 4 files modified, 1 component plus 1 dialog plus 1 service plus 1 unit test added. Approximately 15 minutes elapsed."
+      ],
+      "memory_hook": "Surgical re-prompt — specify the file, specify the function or component, specify the remediation shape. Three sentences maximum.",
+      "closing_thread": "Next — the practice most learners omit. Commit the work.",
+      "narration": "The surgical re-prompt. Three sentences. Specifies exact files and exact remediation. In CommentSection.tsx when status equals Closed, do not render the form — render locked message plus Reopen button. On Reopen click, open dialog with required reason textarea. In issue.service.ts, reject transition if reason missing or under 10 chars — return 400.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The surgical re-prompt. Three sentences. Specifies the exact files and the exact remediation." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Sentence one — in CommentSection dot tsx, when issue dot status equals Closed, do not render the inline comment form. Render a locked message plus Reopen button instead." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Sentence two — on Reopen button click, open ReopenDialog with a required reason textarea, minimum ten characters." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Sentence three — in issue dot service dot ts, transition to Reopened must reject if reason is missing or under ten characters. Return 400 with message." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Result — four files modified. One component, one dialog, one service, one unit test added. Approximately fifteen minutes elapsed. Surgical. We now address the practice most learners omit. Commit the work." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_15",
+      "type": "welcome",
+      "act": "Re-Prompt & Git Discipline",
+      "title": "Commit Per Validated Component — The Discipline That Preserves Engagements",
+      "subtitle": "The practice that should have commenced on Day 1 — remediated here",
+      "icon": "git-commit",
+      "estimated_duration_seconds": 140,
+      "opening_hook": "AI generates code at machine velocity. Without Git, no rollback is possible. Without commits, no history exists.",
+      "bullets": [
+        "If git init was not executed on Day 1 — execute now — cd into project folder; git init; add a .gitignore; git add .; git commit -m 'initial scaffold'.",
+        "Create a GitHub repository (private). Add as remote — git remote add origin <repository-url>. Push — git push -u origin main.",
+        "Going forward — commit per VALIDATED component. Not per AI generation. Validate first. Commit second.",
+        "Example commit messages — 'feat(auth): JWT plus bcrypt plus route guards validated'; 'fix(workflow): closed→reopen dialog reason required'.",
+        "End-of-day push — git push. GitHub now mirrors the local state. This artefact becomes your submission for review in Module 6."
+      ],
+      "memory_hook": "Commit per validated component. Push end-of-day. GitHub IS your audit trail — Pillar 1 of OGE made tangible.",
+      "closing_thread": "Standard Git command reference follows.",
+      "narration": "Commit per validated component. The discipline that preserves engagements. If git init was not executed on Day 1 — execute now. Cd into project folder. Git init. Add gitignore. Git add dot. Git commit dash m initial scaffold. Create a GitHub repository. Add remote. Push. Going forward — commit per VALIDATED component, not per AI generation.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "If git init was not executed on Day 1, this slide remediates the omission." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Execute now — cd into the project folder. Git init. Add a gitignore excluding node modules, dot env, and dist. Git add dot. Git commit dash m initial scaffold." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Create a PRIVATE GitHub repository. Add as remote — git remote add origin repository URL. Push — git push dash u origin main. The omission is remediated." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Going forward — commit per VALIDATED component. Not per AI generation. Validate first. Commit second. Example messages — feat auth JWT plus bcrypt plus route guards validated. Or fix workflow closed arrow reopen dialog reason required." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "End-of-day — git push. The GitHub repository mirrors the local state. This artefact becomes the SUBMISSION for review in Module 6. Pillar one of OGE — Observability — made tangible." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_16",
+      "type": "competencies",
+      "act": "Re-Prompt & Git Discipline",
+      "title": "Git Command Reference and External Documentation",
+      "subtitle": "Retain these references for the remainder of the programme",
+      "icon": "book-open",
+      "estimated_duration_seconds": 160,
+      "list": [
+        { "name": "git init plus first commit",  "icon": "git-commit",   "desc": "git init  ·  echo 'node_modules' > .gitignore  ·  git add .  ·  git commit -m 'initial scaffold'" },
+        { "name": "Link to GitHub",               "icon": "rocket",       "desc": "git remote add origin https://github.com/USER/REPO.git  ·  git branch -M main  ·  git push -u origin main" },
+        { "name": "Per-component commit",         "icon": "check-circle", "desc": "git add <files>  ·  git commit -m 'feat(scope): what was validated'  ·  git push" },
+        { "name": "GitHub Docs — Set up Git",     "icon": "book-open",    "desc": "https://docs.github.com/en/get-started/git-basics/set-up-git — official setup walkthrough, operating-system specific" },
+        { "name": "GitHub Docs — Hello World",    "icon": "book-open",    "desc": "https://docs.github.com/en/get-started/start-your-journey/hello-world — first repository walkthrough, approximately 10 minutes" },
+        { "name": "GitHub Docs — Pushing commits","icon": "book-open",    "desc": "https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository — the push lifecycle in detail" }
+      ],
+      "memory_hook": "Three command groups. Three documentation references. Retain. Reuse permanently.",
+      "closing_thread": "Validate the workflow remediation locally, then commit.",
+      "narration": "Git command reference. Three command groups. Three documentation references. Retain. Setup — git init, gitignore, add, commit, initial scaffold. Link — git remote add origin URL, branch dash M main, push dash u origin main. Per component — git add, git commit dash m feat scope what was validated, git push. External documentation — GitHub Docs Set up Git, Hello World walkthrough, Pushing commits to a remote repository.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Command reference. Three command groups. Three documentation references. Retain all." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Setup — git init, gitignore for node modules, git add dot, git commit dash m initial scaffold. Link — git remote add origin repository URL, git branch dash M main, git push dash u origin main." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Per-component — git add the modified files, git commit dash m feat scope what was validated, git push. The cycle is complete." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "External documentation — GitHub's official walkthroughs. Set up Git. Hello World. Pushing commits. URLs displayed. Retain as bookmarks for permanent reference." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_17",
+      "type": "welcome",
+      "act": "Re-Prompt & Git Discipline",
+      "title": "Validate the Remediation Locally — Then Commit",
+      "subtitle": "Manual smoke test for the workflow patch",
+      "icon": "search",
+      "estimated_duration_seconds": 120,
+      "bullets": [
+        "Backend operational. Frontend operational. Open an existing issue. Traverse Open → InProgress → InReview → Resolved → Closed.",
+        "Attempt to add an inline comment on the Closed issue. UI must display locked message and Reopen button. No comment form. ✓",
+        "Activate Reopen. Dialog opens. Submit without reason — rejected. ✓ Submit with reason — status becomes Reopened; audit log records the reason. ✓",
+        "Issue /api/issues/<id>/transition with target=Reopened and no reason via curl — must return 400. ✓ Server-side guard verified.",
+        "All four passing — stage and commit — git add . && git commit -m 'fix(workflow): closed→reopen dialog with mandatory reason' && git push"
+      ],
+      "memory_hook": "Four-step smoke test → commit → push. The validate-commit-push loop is the operational heartbeat of OrchestrAI iteration.",
+      "closing_thread": "Workflow, comments, attachments shipped. The non-delegable verifications follow.",
+      "narration": "Validate the remediation locally then commit. Backend up. Frontend up. Traverse Open InProgress InReview Resolved Closed. Attempt to comment on Closed — must be locked. Activate Reopen — dialog. No reason — rejected. With reason — works, reason in audit log. Curl with no reason — 400. All four passing — git add, git commit dash m fix workflow closed arrow reopen, git push.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Smoke test for the remediation. Four steps." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Traverse an issue through Open, InProgress, InReview, Resolved, Closed. Attempt to add an inline comment on the Closed issue. The UI must display a LOCKED message plus Reopen button. No comment form. Verified." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Activate Reopen. Dialog opens. Submit without reason — rejected. Submit with reason — status becomes Reopened, audit log records the reason. Verified." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Issue the curl request directly — slash API slash issues slash ID slash transition with target Reopened and no reason — must return 400. Server-side guard verified." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "All four passing — stage, commit, push. Git add dot. Git commit dash m fix workflow closed arrow reopen dialog with mandatory reason. Git push. The validate-commit-push loop. Operational heartbeat." }
+      ],
+      "background_music": { "track_key": "prompts_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_18",
+      "type": "competencies",
+      "act": "What You Don't Delegate",
+      "title": "Five Items the Lead Verifies Personally",
+      "subtitle": "Even with the most precise prompt — these are the Lead's responsibility",
+      "icon": "shield-check",
+      "estimated_duration_seconds": 170,
+      "list": [
+        { "name": "Database indexes",     "icon": "grid-3x3",      "desc": "AI commonly omits indexes on (status, projectId), (assigneeId), (dueDate). The Lead runs EXPLAIN ANALYZE and adds missing indexes." },
+        { "name": "RLS or scoped queries","icon": "shield-alert",  "desc": "Row-level security, or service-layer scoping by user.tenantId. Re-verify every list endpoint excludes cross-tenant data. AI defaults to permissive." },
+        { "name": "File upload sanitisation","icon": "alert-triangle","desc": "Magic-byte MIME verification, UUID rename, signed URL, virus scan. Even when specified, audit the implementation. Read the code." },
+        { "name": "Audit log integrity",  "icon": "list-checks",   "desc": "Audit log entries must be APPEND-ONLY (no UPDATE or DELETE from any endpoint). Verify via PostgreSQL role permissions on the table." },
+        { "name": "Workflow boundary tests","icon": "scale",       "desc": "Issue each prohibited transition via curl. All must return 400. Without exception. This is the insurance position when QA opens defects in Module 6." }
+      ],
+      "memory_hook": "Indexes · RLS · uploads · audit log · workflow boundaries. Five items AI will not self-verify. The Lead verifies.",
+      "closing_thread": "The practitioner now executes these tests against the live build.",
+      "narration": "Five items the Lead verifies personally. Database indexes — EXPLAIN ANALYZE. RLS or service-layer scoping — re-verify no tenant leaks. File upload sanitisation — read the code, audit. Audit log integrity — append-only enforced via PostgreSQL role permissions. Workflow boundary tests — issue each prohibited transition via curl, all return 400.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Five items. Even with the most precise prompt — these remain the Lead's responsibility to verify." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "First — database indexes. AI commonly omits indexes on status-plus-projectId, assigneeId, dueDate. The Lead runs EXPLAIN ANALYZE and adds missing indexes." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Second — RLS or scoped queries. Row-level security, or service-layer scoping by user dot tenantId. Re-verify every list endpoint excludes cross-tenant data. AI defaults to permissive." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Third — file upload sanitisation. Magic-byte MIME verification, UUID rename, signed URL, virus scan. Even when specified — audit the implementation. Read the code." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Fourth — audit log integrity. Append-only. No UPDATE, no DELETE. Enforce via PostgreSQL role permissions on the table. Fifth — workflow boundary tests. Issue each prohibited transition via curl. All return 400. Without exception. This is the insurance position when QA opens defects in Module 6." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_19",
+      "type": "tap_reveal",
+      "act": "What You Don't Delegate",
+      "title": "Live build — workflow paths to verify",
+      "subtitle": "Open the Issue Tracker · authenticate · activate each card for procedure",
+      "icon": "search",
+      "estimated_duration_seconds": 135,
+      "cards": [
+        { "label": "Path A — primary path",  "reveal": "Create an issue → traverse Open → InProgress → InReview → Resolved → Closed. At each step, append a comment. Verify the audit log records every transition with comment." },
+        { "label": "Path B — closed lock",    "reveal": "On the Closed issue, attempt to append an inline comment. UI must display LOCKED message plus Reopen button. No form. UI parity verified." },
+        { "label": "Path C — reopen dialog",  "reveal": "Activate Reopen. Dialog opens. Submit empty — rejected. Submit with reason — succeeds. Verify reason appears in the audit log of the issue detail." },
+        { "label": "Path D — prohibited API", "reveal": "Issue curl. POST /api/issues/<id>/transition with target='Resolved' from Open. Must return 400 with 'prohibited transition' message. A 200 response indicates the server-side guard is absent." },
+        { "label": "Path E — file upload",     "reveal": "Attach a 12 MB file — must be rejected (size constraint). Attach an .exe disguised as .pdf — must be rejected (magic-byte check). Attach a 2 MB PDF — must be accepted; verify re-download via signed URL." }
+      ],
+      "narration": "Five workflow paths to verify in the live build. Primary path. Closed lock. Reopen dialog. Prohibited API. File upload security. Activate each card for procedure. Total time approximately ten minutes.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Open projectissuetracker dot vthinkdeveloper dot com. Authenticate as admin at vthink dot co dot in, password Admin at one two three." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Five paths to verify. Activate each card for the specific procedure." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Total time approximately ten minutes. Execute in order. The prohibited API and file upload tests are the highest-priority verifications. Do not omit them." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_20",
+      "type": "spot_the_flaw",
+      "act": "What You Don't Delegate",
+      "title": "Identify the workflow prompt failures",
+      "subtitle": "Indicate each clause violating the five-section workflow prompt rule",
+      "icon": "alert-triangle",
+      "estimated_duration_seconds": 120,
+      "text": "Add a status workflow with states Open InProgress and Done. Users can change status by selecting it. Allow comments. The closed status should be final but maybe people can reopen.",
+      "flaws": [
+        { "phrase": "Open InProgress and Done",         "explanation": "Only three states — the FDD specifies six. InReview, Resolved, Reopened are omitted. AI ships an incomplete state machine; the client's process is broken at launch." },
+        { "phrase": "Users can change status by selecting it","explanation": "Who is permitted to change WHAT? No role allow-list. No matrix. AI ships permissive behaviour — Reporters may close other users' issues. RBAC is entirely absent." },
+        { "phrase": "Allow comments",                   "explanation": "Permitted how? Mandatory on status change? Resolution note required on closure? Reopen reason? None specified. The audit trail becomes flat, uninformative, and tamper-prone." },
+        { "phrase": "maybe people can reopen",           "explanation": "'Maybe' is not a specification. AI invents a permissive reopen — no reason field, no dialog, no guard. This is the exact defect addressed in Act 4. Repeats indefinitely until prompts become explicit." }
+      ],
+      "narration": "Identify the workflow prompt failures. Four clauses. Each violates a section of the five-section workflow prompt rule. Indicate each.",
+      "narration_script": [
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "An actual prompt. An actual practitioner. Four flaws — each violates one of the five workflow-prompt sections." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Indicate each. Identifying all four confirms internalisation of the workflow discipline." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_21",
+      "type": "mini_match",
+      "act": "What You Don't Delegate",
+      "title": "Map each transition to its required field",
+      "subtitle": "From the sixteen-row matrix — select a transition, then select the required field",
+      "icon": "sparkles",
+      "estimated_duration_seconds": 100,
+      "pairs": [
+        { "left": "Open → InProgress",       "right": "Non-empty comment" },
+        { "left": "InReview → Resolved",      "right": "Resolution note (separate field)" },
+        { "left": "Resolved → Closed",        "right": "Non-empty comment" },
+        { "left": "Closed → Reopened",        "right": "Reason via dialog (≥10 characters)" },
+        { "left": "Open → Resolved (prohibited)","right": "HTTP 400 with prohibited-transition message" },
+        { "left": "Same-status comment",      "right": "Comment saved; no transition record" }
+      ],
+      "narration": "Map each transition to its required field. Six pairs. Derived directly from the sixteen-row matrix in the Issue Tracker FDD.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Six transitions. Six required-field rules. Map them." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Incorrect selections indicate visually. Correct selections lock confirmed. Proceed." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_22",
+      "type": "confidence_slider",
+      "act": "What You Don't Delegate",
+      "title": "Could you compose the workflow prompt independently?",
+      "icon": "help-circle",
+      "estimated_duration_seconds": 75,
+      "prompt": "If a client requested 'add a status workflow' on Monday — could you compose the five-section structured workflow prompt — ASCII diagram, sixteen-row matrix, prohibited transitions, comment rules, UI-API parity — without reference to this module?",
+      "scale": { "min_label": "Not yet", "max_label": "Confidently" },
+      "narration": "Could you compose the workflow prompt independently? Five sections — ASCII diagram, sixteen-row matrix, prohibited transitions, comment rules, UI-API parity. Without reference to this module. Select a number.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Readiness check. Workflow prompt composed independently. All five sections from memory." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Select a number. No selection is incorrect. Module 6 builds upon this baseline." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    },
+    {
+      "slide_id": "slide_23",
+      "type": "module_complete",
+      "act": "What You Don't Delegate",
+      "title": "Module 5 Complete — The Engine Operates",
+      "subtitle": "Next · Module 6 — Admin, Reports, Going Live · Repository submission",
+      "icon": "rocket",
+      "estimated_duration_seconds": 85,
+      "hero_stat": {
+        "value": "5 / 6",
+        "label": "modules complete · the application exhibits operational behaviour",
+        "icon": "rocket"
+      },
+      "bullets": [
+        "Workflow engine — shipped. Six states, sixteen transitions, prohibited transitions rejected, audit trail intact.",
+        "Comments and attachments — shipped. Mandatory rules enforced. Secure upload pipeline.",
+        "Surgical re-prompts — mastered. Three-sentence pattern. File plus function plus remediation shape.",
+        "Git discipline — operational. Commit per validated component. End-of-day push. The GitHub repository constitutes the audit trail.",
+        "Module 6 follows — Admin surfaces, Reports, QA and UAT co-working — and the final repository submission for review."
+      ],
+      "closing_thread": "We continue in Module 6 — the final module.",
+      "narration": "Module 5 complete. Workflow engine shipped — six states, sixteen transitions, audit trail intact. Comments and attachments shipped. Surgical re-prompts mastered. Git discipline operational. Module 6 follows — Admin surfaces, Reports, QA co-working, and final repository submission for review.",
+      "narration_script": [
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Module 5 complete. The engine operates." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Workflow engine — shipped. Comments and attachments — shipped. Surgical re-prompts — mastered. Git discipline — operational. A substantial milestone." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Module 6 — the final module. Admin surfaces. Reports. QA and UAT co-working. And the final repository submission to GitHub for review. Your work becomes externally visible." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "We continue in Module 6. The GitHub repository URL should be prepared." }
+      ],
+      "background_music": { "track_key": "outro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
+    }
+  ]
+}

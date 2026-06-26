@@ -128,44 +128,37 @@ export const Modules: React.FC = () => {
     },
     {
       id: 3,
-      title: 'Module 3: Intent Mastery — The Art of the Perfect Prompt',
-      duration: '6 hours',
-      desc: 'Master the 8-component intent statement structure and learn modular prompt patterns to eliminate AI hallucination.',
+      title: 'Module 3: The OrchestrAI Bible — Governance-First Setup',
+      duration: '1 hour',
+      desc: 'Establish OGE (Observability · Guardrails · Evaluation) as your framework spine. Master the two reusable master prompts (T1 + T2). See the 5 design documents — FDD, TDD, DB Design, UI Specs, Test Plan — that produced the live Issue Tracker.',
       content: null
     },
     {
       id: 4,
-      title: 'Module 4: Roles, Governance & Stakeholder Management',
-      duration: '4 hours',
-      desc: 'Define the 4 key roles on an engagement, interface with legacy teams, and reset client expectations.',
+      title: 'Module 4: Foundation Build — Auth, Shell, Dashboard',
+      duration: '1 hour',
+      desc: 'Day 1–3 of the 7-day Issue Tracker build. 6 manual installs you do yourself, the 8-component auth prompt, the application shell honouring UI Specs, the dashboard with indexed queries. Hands-on with the live build at the end.',
       content: null
     },
     {
       id: 5,
-      title: 'Module 5: Running a Live OrchestrAI Iteration',
-      duration: '6 hours',
-      desc: 'Execute real-time generation sequences and master the Escalation Decision Matrix when AI struggles.',
+      title: 'Module 5: The Workflow Engine — Issues, Status, Comments, Git',
+      duration: '1 hour',
+      desc: 'Day 4–5 of the build. The 16-transition status matrix. The structured workflow prompt (Marker pillar in action). Comments + secure attachments. Surgical re-prompts. Git workflow: commit per validated component, end-of-day push.',
       content: null
     },
     {
       id: 6,
-      title: 'Module 6: Observability — Making AI Work Visible',
-      duration: '3 hours',
-      desc: 'Build detailed prompt logs, manage semantic version control commits, and log workflow-level audits.',
+      title: 'Module 6: Admin, Reports, Going Live — Capstone & GitHub Submission',
+      duration: '1 hour',
+      desc: 'Day 6–7 of the build. Admin surfaces (Project/Employee/User + RBAC). Reports with Excel + PDF export. QA + UAT co-working. Final repo polish — README + DESIGN.md naming OGE. Push to GitHub, share the URL — your certification submission.',
       content: null
     },
     {
       id: 7,
-      title: 'Module 7: Guardrails — Keeping AI Within Boundaries',
-      duration: '5 hours',
-      desc: 'Secure access controls, run OWASP validation rules, and sanitize external integrations before code execution.',
-      content: null
-    },
-    {
-      id: 8,
-      title: 'Module 8: Evaluation, KPIs & Client Leadership',
-      duration: '5 hours',
-      desc: 'Track metrics (TTFWV, alignment score, defects escape), manage pilots, and present outcomes to client CISOs.',
+      title: 'Module 7: Practical Demo — Your Capstone Build',
+      duration: 'Self-paced · 5 days',
+      desc: 'The final stage. Pick ONE of 30 real-world capstones, build it end-to-end in 5 days using everything from Modules 1–6, deploy to Firebase, and submit your GitHub repository for certification review.',
       content: null
     }
   ];
@@ -177,7 +170,7 @@ export const Modules: React.FC = () => {
       <div className="flex flex-col items-center text-center mb-10">
         <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 text-xs font-semibold mb-4">
           <Award className="h-4 w-4" />
-          <span>8 Certification Modules</span>
+          <span>7 Certification Modules</span>
         </div>
         <h2 className="text-3xl font-extrabold tracking-tight mb-2">Training Content & Syllabus</h2>
         <p className="text-sm text-[var(--text-secondary)] max-w-xl">
@@ -293,15 +286,26 @@ export const Modules: React.FC = () => {
                         <CheckCircle2 className="h-10 w-10 text-emerald-400 mx-auto" />
                         <h4 className="text-base font-bold text-[var(--text-primary)]">{mod.title}</h4>
                         <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                          {mod.desc} Study slides, review the architecture briefing, and complete the requirements to prepare for certification.
+                          {mod.id === 7
+                            ? 'Browse 30 real-world capstones, lock one to your profile, and build it in 5 days. This is the capstone stage — you apply everything from Modules 1–6 to your own application and submit your GitHub repository for certification review.'
+                            : `${mod.desc} Study slides, review the architecture briefing, and complete the requirements to prepare for certification.`}
                         </p>
                         <div className="flex flex-wrap items-center justify-center gap-3">
-                          <button
-                            onClick={() => setActiveTrainingModuleId(mod.id)}
-                            className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-md hover:scale-102 hover:brightness-110 transition-all"
-                          >
-                            <Play className="h-3.5 w-3.5" /> Launch Interactive Training (Web-Deck &amp; Video)
-                          </button>
+                          {mod.id === 7 ? (
+                            <button
+                              onClick={() => navigate('/capstone')}
+                              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-md hover:scale-102 hover:brightness-110 transition-all"
+                            >
+                              <Award className="h-3.5 w-3.5" /> Browse Capstone Library (30 capstones)
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => setActiveTrainingModuleId(mod.id)}
+                              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-md hover:scale-102 hover:brightness-110 transition-all"
+                            >
+                              <Play className="h-3.5 w-3.5" /> Launch Interactive Training (Web-Deck &amp; Video)
+                            </button>
+                          )}
                           {systemConfig.moduleMedia?.[mod.id]?.externalLink && (
                             <a
                               href={systemConfig.moduleMedia[mod.id].externalLink}
@@ -329,11 +333,15 @@ export const Modules: React.FC = () => {
           moduleId={activeTrainingModuleId}
           onClose={() => setActiveTrainingModuleId(null)}
           onComplete={() => {
+            const completedId = activeTrainingModuleId;
             setActiveTrainingModuleId(null);
             // Alert user of success using premium alert dialog
+            const isFinal = completedId === 6;
             alertUser(
               "Module Completed!",
-              "Congratulations! You have successfully completed Module 1! Keep pushing to unlock the rest of the syllabus.",
+              isFinal
+                ? "Congratulations! You have completed all six modules of the OrchestrAI Lead training course! Head over to the Certification page to submit your capstone portfolio."
+                : `Congratulations! You have successfully completed Module ${completedId}! Keep pushing to unlock the rest of the syllabus.`,
               "success"
             );
           }}

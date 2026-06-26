@@ -10,6 +10,10 @@ import { Quiz } from './pages/Quiz';
 import { Payment } from './pages/Payment';
 import { Admin } from './pages/Admin';
 import { Certification } from './pages/Certification';
+import { Capstone } from './pages/Capstone';
+import { CapstoneWorkspace } from './pages/CapstoneWorkspace';
+import { CapstoneSubmit } from './pages/CapstoneSubmit';
+import { SmeLogin } from './pages/SmeLogin';
 import { useApp } from './context/AppContext';
 import { CelebrationOverlay } from './components/CelebrationOverlay';
 import { Sparkles, BookOpen, Shield, Award, X, CheckCircle2, AlertTriangle, XCircle, Info } from 'lucide-react';
@@ -19,7 +23,7 @@ import './App.css';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const { toasts, removeToast, activeDialog, closeDialog } = useApp();
+  const { toasts, removeToast, activeDialog, closeDialog, currentUser } = useApp();
   const isAdminRoute = location.pathname === '/admin';
 
   React.useEffect(() => {
@@ -63,7 +67,7 @@ const AppContent: React.FC = () => {
 
   // Roadmap is shown on non-admin pages, only when a user is logged in
   // (on the landing page it shows for everyone to understand the journey)
-  const showRoadmap = !isAdminRoute;
+  const showRoadmap = !isAdminRoute && !(currentUser?.isReviewer || currentUser?.role === 'SME' || currentUser?.role === 'ADMIN');
 
   return (
     <div className="min-h-screen flex flex-col relative">
@@ -205,6 +209,10 @@ const AppContent: React.FC = () => {
           <Route path="/payment" element={<Payment />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/certification" element={<Certification />} />
+          <Route path="/capstone" element={<Capstone />} />
+          <Route path="/capstone/workspace" element={<CapstoneWorkspace />} />
+          <Route path="/capstone/submit" element={<CapstoneSubmit />} />
+          <Route path="/sme-login" element={<SmeLogin />} />
         </Routes>
       </main>
 

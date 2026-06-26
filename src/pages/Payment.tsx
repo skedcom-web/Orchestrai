@@ -88,6 +88,12 @@ export const Payment: React.FC = () => {
           channel: 'EmailJS API',
           status: 'Sent'
         });
+        addToast(
+          isAutomated 
+            ? `Confirmation email sent to ${currentUser.email}`
+            : `Payment pending notification sent to admin (${config.adminEmail})`,
+          'success'
+        );
       } catch (err: any) {
         addNotificationLog({
           type: isAutomated ? 'Candidate Approval Alert' : 'Admin Payment Pending Alert',
@@ -96,6 +102,10 @@ export const Payment: React.FC = () => {
           channel: 'EmailJS API',
           status: 'Failed'
         });
+        addToast(
+          `Notification email failed to send: ${err?.message || err}`,
+          'error'
+        );
       }
     } else {
       // Keys are missing: Mock and log it for educational walkthrough
@@ -106,6 +116,10 @@ export const Payment: React.FC = () => {
         channel: 'EmailJS API (Simulated)',
         status: 'Sent'
       });
+      addToast(
+        `Payment notification simulated (EmailJS keys missing)`,
+        'info'
+      );
     }
   };
 
