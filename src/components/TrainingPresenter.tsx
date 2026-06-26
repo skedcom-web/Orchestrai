@@ -549,7 +549,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
       const silentAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
       silentAudio.volume = 0;
       silentAudio.play().catch(() => {});
-    } catch (e) {
+    } catch {
       // AudioContext not available — not critical
     }
   };
@@ -1634,7 +1634,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
         const getYoutubeEmbedUrl = (url: string) => {
           if (!url) return '';
           let videoId = '';
-          const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+          const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
           const match = url.match(regExp);
           if (match && match[2].length === 11) {
             videoId = match[2];

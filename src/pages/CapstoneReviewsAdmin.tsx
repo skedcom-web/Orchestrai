@@ -191,8 +191,8 @@ export const CapstoneReviewsAdmin: React.FC = () => {
 
       const subsRaw = subsSnap.exists() ? subsSnap.val() : {};
       const flat: SubmissionFlat[] = [];
-      Object.entries(subsRaw).forEach(([_uid, capMap]: [string, any]) => {
-        Object.entries(capMap || {}).forEach(([_capId, sub]: [string, any]) => {
+      Object.entries(subsRaw).forEach(([, capMap]: [string, any]) => {
+        Object.entries(capMap || {}).forEach(([, sub]: [string, any]) => {
           if (!sub || !sub.submissionId) return;
           flat.push(sub as SubmissionFlat);
         });
@@ -229,7 +229,7 @@ export const CapstoneReviewsAdmin: React.FC = () => {
 
       const reviewsRaw = reviewsSnap.exists() ? reviewsSnap.val() : {};
       const reviewsMap: Record<string, ReviewRecord> = {};
-      Object.entries(reviewsRaw).forEach(([_k, v]: [string, any]) => {
+      Object.entries(reviewsRaw).forEach(([, v]: [string, any]) => {
         if (v && v.submissionId) reviewsMap[v.submissionId] = v as ReviewRecord;
       });
       setReviews(reviewsMap);
@@ -1085,6 +1085,10 @@ const ReviewDetail: React.FC<{
       await emailjs.send(serviceId, templateId, {
         name: reviewerName,
         email: reviewerEmail,
+        to_email: reviewerEmail,
+        reviewerEmail: reviewerEmail,
+        recipient: reviewerEmail,
+        to: reviewerEmail,
         subject,
         message: body,
         body,
@@ -1238,6 +1242,29 @@ const ReviewDetail: React.FC<{
   const notifyFeedback = async () => {
     const db = getFirebaseDb();
     if (!db) { addToast('Cloud database not available.', 'error'); return; }
+
+    // Validation guards
+    const hasAnyScore = RUBRIC.some(r => (scores[r.key] || 0) > 0);
+    if (!hasAnyScore) {
+      addToast('Please enter scores for at least one rubric category before notifying.', 'warning');
+      return;
+    }
+    if (total === 0) {
+      if (!window.confirm('Total score is 0/100. Are you sure you want to notify the learner with a zero score?')) return;
+    }
+    if (!strengths.trim()) {
+      addToast('Please fill in the Strengths (What Worked Well) field before notifying.', 'warning');
+      return;
+    }
+    if (!gaps.trim()) {
+      addToast('Please fill in the Gaps (What\'s Missing or Weak) field before notifying.', 'warning');
+      return;
+    }
+    if ((decision === 'rework' || decision === 'rebuild') && !reworkChecklist.trim()) {
+      addToast(`Decision is ${decision.toUpperCase()} — please fill in the Rework Checklist before notifying.`, 'warning');
+      return;
+    }
+
     if (!window.confirm(`Notify ${submission.learnerName} of the decision (${decision.toUpperCase()} · ${total}/100)? This sends them the feedback email and updates their submission status.`)) return;
 
     setNotifying(true);
@@ -1465,6 +1492,30 @@ const ReviewDetail: React.FC<{
   const submitFeedbackToAdmin = async () => {
     const db = getFirebaseDb();
     if (!db) { addToast('Cloud database not available.', 'error'); return; }
+
+    // ── Validation guards ─────────────────────────────────────────────────
+    const hasAnyScore = RUBRIC.some(r => (scores[r.key] || 0) > 0);
+    if (!hasAnyScore) {
+      addToast('⚠️ Please enter rubric scores before submitting. All scores are currently 0.', 'warning');
+      return;
+    }
+    if (total === 0) {
+      if (!window.confirm('Total score is 0/100. Are you absolutely sure you want to submit with a zero score?')) return;
+    }
+    if (!strengths.trim()) {
+      addToast('⚠️ Strengths (What Worked Well) is required. Please describe what the learner did well.', 'warning');
+      return;
+    }
+    if (!gaps.trim()) {
+      addToast('⚠️ Gaps (What\'s Missing or Weak) is required. Please describe the areas needing improvement.', 'warning');
+      return;
+    }
+    if ((decision === 'rework' || decision === 'rebuild') && !reworkChecklist.trim()) {
+      addToast(`⚠️ Rework Checklist is required when decision is ${decision.toUpperCase()}. Please list specific items the learner must address.`, 'warning');
+      return;
+    }
+    // ─────────────────────────────────────────────────────────────────────
+
     if (!window.confirm('Submit this feedback to the admin? Once submitted, the admin reviews + applies the final decision. You can still update the draft if needed.')) return;
     setSubmittingFeedback(true);
     const record: ReviewRecord = {
@@ -1740,23 +1791,106 @@ const ReviewDetail: React.FC<{
 
           {/* Feedback */}
           <div className="glass-card rounded-2xl p-5">
-            <h3 className="text-sm font-bold mb-3 flex items-center gap-2"><MessageSquare className="h-4 w-4 text-amber-400" /> Reviewer Feedback</h3>
+            <h3 className="text-sm font-bold mb-1 flex items-center gap-2"><MessageSquare className="h-4 w-4 text-amber-400" /> Reviewer Feedback</h3>
+            <p className="text-[10px] text-[var(--text-secondary)] mb-3 leading-relaxed">
+              All fields marked <span className="text-rose-400 font-bold">*</span> are required before submitting.
+              {(decision === 'rework' || decision === 'rebuild') && (
+                <span className="ml-1 text-amber-400 font-bold">Rework Checklist is required for {decision.toUpperCase()} decisions.</span>
+              )}
+            </p>
             <div className="space-y-3">
-              <Field label="Strengths (what worked well)">
-                <textarea value={strengths} onChange={(e) => setStrengths(e.target.value)} rows={3} className="form-input resize-none" placeholder="Strong workflow implementation, clean RBAC matrix, …" />
-              </Field>
-              <Field label="Gaps (what's missing or weak)">
-                <textarea value={gaps} onChange={(e) => setGaps(e.target.value)} rows={3} className="form-input resize-none" placeholder="No Excel export on reports, comments lack pagination, …" />
-              </Field>
-              <Field label="Rework Checklist (only if decision is Rework)">
-                <textarea value={reworkChecklist} onChange={(e) => setReworkChecklist(e.target.value)} rows={3} className="form-input resize-none" placeholder="1. Add Excel export to Status Report&#10;2. Fix RBAC bypass on /admin/users&#10;…" />
-              </Field>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                  Strengths (What Worked Well) <span className="text-rose-400">*</span>
+                </label>
+                <textarea
+                  value={strengths}
+                  onChange={(e) => setStrengths(e.target.value)}
+                  rows={3}
+                  className={`form-input resize-none w-full ${
+                    !strengths.trim() ? 'border-rose-500/40 focus:border-rose-500/60' : 'border-emerald-500/30'
+                  }`}
+                  placeholder="Strong workflow implementation, clean RBAC matrix, …"
+                />
+                {!strengths.trim() && (
+                  <p className="text-[10px] text-rose-400 mt-1">⚠ This field is required.</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                  Gaps (What's Missing or Weak) <span className="text-rose-400">*</span>
+                </label>
+                <textarea
+                  value={gaps}
+                  onChange={(e) => setGaps(e.target.value)}
+                  rows={3}
+                  className={`form-input resize-none w-full ${
+                    !gaps.trim() ? 'border-rose-500/40 focus:border-rose-500/60' : 'border-emerald-500/30'
+                  }`}
+                  placeholder="No Excel export on reports, comments lack pagination, …"
+                />
+                {!gaps.trim() && (
+                  <p className="text-[10px] text-rose-400 mt-1">⚠ This field is required.</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                  Rework Checklist
+                  {(decision === 'rework' || decision === 'rebuild') && (
+                    <span className="text-rose-400"> *</span>
+                  )}
+                  <span className="ml-1 text-[9px] font-normal normal-case text-[var(--text-secondary)]">
+                    (required when decision is Rework / Rebuild)
+                  </span>
+                </label>
+                <textarea
+                  value={reworkChecklist}
+                  onChange={(e) => setReworkChecklist(e.target.value)}
+                  rows={3}
+                  className={`form-input resize-none w-full ${
+                    (decision === 'rework' || decision === 'rebuild') && !reworkChecklist.trim()
+                      ? 'border-amber-500/50 focus:border-amber-500/70'
+                      : reworkChecklist.trim() ? 'border-emerald-500/30' : ''
+                  }`}
+                  placeholder={`1. Add Excel export to Status Report&#10;2. Fix RBAC bypass on /admin/users&#10;…`}
+                />
+                {(decision === 'rework' || decision === 'rebuild') && !reworkChecklist.trim() && (
+                  <p className="text-[10px] text-amber-400 mt-1">⚠ Required for {decision.toUpperCase()} — list each item the learner must address.</p>
+                )}
+              </div>
             </div>
           </div>
+
 
           {/* Actions */}
           <div className="glass-card rounded-2xl p-5">
             <h3 className="text-sm font-bold mb-3">Actions</h3>
+
+            {/* SME validation summary */}
+            {isSme && (() => {
+              const hasAnyScore = RUBRIC.some(r => (scores[r.key] || 0) > 0);
+              const missingFields: string[] = [];
+              if (!hasAnyScore) missingFields.push('Enter at least one rubric score');
+              if (!strengths.trim()) missingFields.push('Fill in Strengths');
+              if (!gaps.trim()) missingFields.push('Fill in Gaps');
+              if ((decision === 'rework' || decision === 'rebuild') && !reworkChecklist.trim()) missingFields.push(`Fill in Rework Checklist (${decision.toUpperCase()})`);
+              if (missingFields.length === 0) return null;
+              return (
+                <div className="mb-3 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
+                  <div className="text-[11px] font-bold text-amber-400 mb-1.5">⚠ Complete before submitting:</div>
+                  <ul className="space-y-0.5">
+                    {missingFields.map((f, i) => (
+                      <li key={i} className="text-[10px] text-amber-300 flex items-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />{f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })()}
+
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={saveDraft}

@@ -111,7 +111,7 @@ export const CapstoneSubmit: React.FC = () => {
         setUploading((prev) => prev.map((x) => x.file === u.file ? { ...x, error: 'File >25MB — too large' } : x));
         continue;
       }
-      const safeName = u.file.name.replace(/[^\w.\-]/g, '_');
+      const safeName = u.file.name.replace(/[^\w.-]/g, '_');
       const path = `capstoneSubmissions/${currentUser.uid}_${capstone.id}/${Date.now()}_${safeName}`;
       console.log('[CapstoneSubmit] Starting upload:', { path, size: u.file.size, type: u.file.type });
 
@@ -494,7 +494,7 @@ export const CapstoneSubmit: React.FC = () => {
         </div>
         <h1 className="text-3xl font-extrabold tracking-tight mb-2">{capstone.id} · {capstone.title}</h1>
         <p className="text-sm text-[var(--text-secondary)] max-w-2xl leading-relaxed">
-          Submit the 4 required URLs + any supporting documents you'd like the reviewer to see. We assign a reviewer automatically (round-robin within your capstone's domain) and email them the package.
+          Submit the 4 required URLs + any supporting documents you'd like the reviewer to see. The administrator is notified and will assign a reviewer.
         </p>
       </div>
 

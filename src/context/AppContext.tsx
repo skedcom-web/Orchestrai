@@ -1105,7 +1105,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 4. Update Profile
   const updateUserProfile = (uid: string, updates: Partial<UserProfile>) => {
     const db = getFirebaseDb();
-    const userToUpdate = usersList.find(u => u.uid === uid);
+    const userToUpdate = usersList.find(u => u.uid === uid) ?? (currentUser?.uid === uid ? currentUser : null);
     if (!userToUpdate) return;
 
     const result = { ...userToUpdate, ...updates };

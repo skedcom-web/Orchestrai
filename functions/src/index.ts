@@ -260,7 +260,7 @@ export const scoreCapstoneTierB = onCall(
     let parsed: { scores: Record<string, number>; rationale: Record<string, string>; overallObservations?: string };
     try {
       parsed = JSON.parse(rawContent);
-    } catch (err) {
+    } catch {
       logger.error('AI returned non-JSON content:', rawContent.slice(0, 500));
       throw new HttpsError('internal', 'AI did not return valid JSON. See function logs.');
     }

@@ -642,7 +642,7 @@ export const Header: React.FC = () => {
       try {
         await confirmationResult.confirm(enteredCode);
         completeRegistration();
-      } catch (err: any) {
+      } catch {
         setErrorMessage('Invalid SMS OTP. Please try again.');
         setLoading(false);
       }
@@ -690,7 +690,7 @@ export const Header: React.FC = () => {
       }
       setTimer(30);
       setCanResend(false);
-    } catch (err: any) {
+    } catch {
       setErrorMessage('Failed to resend email code.');
     } finally {
       setLoading(false);
@@ -706,7 +706,7 @@ export const Header: React.FC = () => {
       setTimer(30);
       setCanResend(false);
       addToast("Verification SMS resent.", "success");
-    } catch (err: any) {
+    } catch {
       setErrorMessage('Failed to resend SMS code.');
     } finally {
       setLoading(false);
@@ -1078,6 +1078,7 @@ export const Header: React.FC = () => {
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                         className="w-full pl-10 pr-3 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-indigo-500 transition-colors"
+                        autoFocus
                       />
                     </div>
                   </div>
@@ -1182,6 +1183,7 @@ export const Header: React.FC = () => {
                         value={smeNewPassword}
                         onChange={(e) => setSmeNewPassword(e.target.value)}
                         className="w-full pl-3 pr-10 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all"
+                        autoFocus
                       />
                       <button
                         type="button"
@@ -1277,6 +1279,7 @@ export const Header: React.FC = () => {
                           verifySmePassword();
                         }
                       }}
+                      autoFocus
                     />
                     <button
                       type="button"
@@ -1358,6 +1361,7 @@ export const Header: React.FC = () => {
                           verifyAdminPassword();
                         }
                       }}
+                      autoFocus
                     />
                     <button
                       type="button"
