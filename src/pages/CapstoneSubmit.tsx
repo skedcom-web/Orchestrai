@@ -239,8 +239,13 @@ export const CapstoneSubmit: React.FC = () => {
 
     try {
       await emailjs.send(serviceId, templateId, {
-        name: params.reviewerName,
-        email: params.reviewerEmail,
+        name: 'vThink OrchestrAI Admin',
+        email: 'vthinkorchestrai@gmail.com',
+        to_email: 'vthinkorchestrai@gmail.com',
+        adminEmail: 'vthinkorchestrai@gmail.com',
+        reviewerEmail: 'vthinkorchestrai@gmail.com',
+        recipient: 'vthinkorchestrai@gmail.com',
+        to: 'vthinkorchestrai@gmail.com',
         subject,
         message: body,
         body,

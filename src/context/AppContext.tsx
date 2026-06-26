@@ -109,16 +109,17 @@ export const ensureProgress = (p?: Partial<LearnerProgress>): LearnerProgress =>
 const xpForLevel = (level: number) => Math.pow(Math.max(0, level - 1), 2) * 100;
 
 export const getLevelInfo = (xp: number) => {
-  const level = Math.floor(Math.sqrt(xp / 100)) + 1;
+  const safeXp = Math.max(0, xp);
+  const level = Math.floor(Math.sqrt(safeXp / 100)) + 1;
   const curBase = xpForLevel(level);
   const nextBase = xpForLevel(level + 1);
-  const into = xp - curBase;
+  const into = safeXp - curBase;
   const span = nextBase - curBase;
   return {
     level,
     xpIntoLevel: into,
     xpForNextLevel: span,
-    xpToNext: nextBase - xp,
+    xpToNext: nextBase - safeXp,
     progressPct: span > 0 ? Math.min(100, Math.round((into / span) * 100)) : 0,
   };
 };
