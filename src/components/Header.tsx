@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { Sun, Moon, Sparkles, LogOut, Shield, Award, BookOpen, LogIn, Mail, ArrowRight, X, Phone, CheckCircle2, AlertCircle, RefreshCw, Eye, EyeOff } from 'lucide-react';
+import { Sun, Moon, Sparkles, LogOut, Shield, Award, BookOpen, LogIn, Mail, ArrowRight, X, Phone, CheckCircle2, AlertCircle, RefreshCw, Eye, EyeOff, Folder } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { XPWidget } from './XPWidget';
 import { getFirebaseAuth, getFirebaseDb } from '../firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import { ref, get, update } from 'firebase/database';
+import { ref, get, update, set } from 'firebase/database';
 import emailjs from '@emailjs/browser';
 
 const hashPassword = async (password: string, salt: string): Promise<string> => {
@@ -38,7 +38,11 @@ export const Header: React.FC = () => {
   const [loginName, setLoginName] = useState('');
   const [loginMobile, setLoginMobile] = useState('');
   const loginMobileCountry = '+91';
-  const [loginStep, setLoginStep] = useState<'input' | 'admin_password' | 'sme_password' | 'sme_change_password' | 'email_otp' | 'mobile_otp' | 'success'>('input');
+  const [loginStep, setLoginStep] = useState<
+    'input' | 'admin_password' | 'sme_password' | 'sme_change_password' | 
+    'email_otp' | 'mobile_otp' | 'password_input' | 'set_password' | 
+    'forgot_password_email' | 'forgot_password_verify' | 'success'
+  >('input');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [adminPasswordInput, setAdminPasswordInput] = useState('');
   const [showAdminPassword, setShowAdminPassword] = useState(false);
@@ -53,6 +57,19 @@ export const Header: React.FC = () => {
   const [mobileOtp, setMobileOtp] = useState(['', '', '', '', '', '']);
   const [isNewUser, setIsNewUser] = useState(false);
   const [generatedEmailOtp, setGeneratedEmailOtp] = useState('');
+
+  // User Password States
+  const [userPasswordInput, setUserPasswordInput] = useState('');
+  const [showUserPassword, setShowUserPassword] = useState(false);
+  
+  // Set New Password States (for registration or legacy migration)
+  const [newPasswordInput, setNewPasswordInput] = useState('');
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  
+  // Forgot Password States
+  const [forgotPasswordOtp, setForgotPasswordOtp] = useState(['', '', '', '', '', '']);
+  const [generatedResetOtp, setGeneratedResetOtp] = useState('');
   
   // Timers and loading indicators
   const [timer, setTimer] = useState(30);
@@ -80,8 +97,22 @@ export const Header: React.FC = () => {
       setErrorMessage('');
       setLoading(false);
       setShowAdminPassword(false);
+      setUserPasswordInput('');
+      setShowUserPassword(false);
+      setNewPasswordInput('');
+      setConfirmPasswordInput('');
+      setShowNewPassword(false);
+      setForgotPasswordOtp(['', '', '', '', '', '']);
+      setGeneratedResetOtp('');
     }
   }, [showLoginModal]);
+
+  // Listen to external triggers to open the login modal
+  useEffect(() => {
+    const handleTrigger = () => setShowLoginModal(true);
+    window.addEventListener('orchestrai_trigger_login', handleTrigger);
+    return () => window.removeEventListener('orchestrai_trigger_login', handleTrigger);
+  }, []);
 
   // Handle count down timer for verification OTPs
   useEffect(() => {
@@ -186,6 +217,12 @@ export const Header: React.FC = () => {
         setIsNewUser(false);
         setLoginName(existingUser.name);
         setLoginMobile(existingUser.mobile || '');
+
+        if (existingUser.passwordHash) {
+          setLoginStep('password_input');
+          setLoading(false);
+          return;
+        }
 
         if (systemConfig.requireEmailVerification !== false) {
           let otpCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -589,34 +626,13 @@ export const Header: React.FC = () => {
             setLoading(false);
           }
         } else {
-          // Bypass mobile SMS verification and register immediately
-          login(loginEmail, loginName, fullPhone, true, false); // emailVerified = true, mobileVerified = false
-          addToast("Account registered and email verified successfully!", "success");
-          setLoginStep('success');
-          setTimeout(() => {
-            setShowLoginModal(false);
-            setLoginStep('input');
-            setLoginEmail('');
-            setLoginName('');
-            setLoginMobile('');
-            navigate('/modules');
-            setLoading(false);
-          }, 1500);
+          // Bypass mobile SMS verification, send to set_password step
+          setLoginStep('set_password');
+          setLoading(false);
         }
       } else {
-        // Log back in existing user
-        const existingUser = usersList.find((u) => u.email === loginEmail.trim().toLowerCase());
-        login(
-          loginEmail,
-          existingUser?.name || loginName,
-          existingUser?.mobile || '',
-          true,
-          existingUser?.mobileVerified || false
-        );
-        addToast("Welcome back! Logged in successfully.", "success");
-        setShowLoginModal(false);
-        setLoginStep('input');
-        navigate('/modules');
+        // Legacy user logging in for the first time without a password
+        setLoginStep('set_password');
         setLoading(false);
       }
     } else {
@@ -653,19 +669,243 @@ export const Header: React.FC = () => {
   };
 
   const completeRegistration = () => {
-    const fullPhone = loginMobileCountry + loginMobile.trim();
-    login(loginEmail, loginName, fullPhone, true, true);
-    addToast("Account registered and verified successfully!", "success");
-    setLoginStep('success');
+    setLoginStep('set_password');
+  };
 
-    setTimeout(() => {
-      setShowLoginModal(false);
+  // New Password Setup Handler
+  const handleSetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPasswordInput.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
+      return;
+    }
+    if (newPasswordInput !== confirmPasswordInput) {
+      setErrorMessage('Passwords do not match.');
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
+      const db = getFirebaseDb();
+      const salt = Math.random().toString(36).substring(2, 11);
+      const hash = await hashPassword(newPasswordInput, salt);
+      const fullPhone = loginMobileCountry + loginMobile.trim();
+      const formattedEmail = loginEmail.trim().toLowerCase();
+
+      let profile = usersList.find((u) => u.email === formattedEmail);
+      if (!profile) {
+        profile = {
+          uid: Math.random().toString(36).substring(2, 11),
+          email: formattedEmail,
+          name: loginName || formattedEmail.split('@')[0],
+          role: 'USER',
+          accountStatus: 'FREE_TIER',
+          quizPassed: false,
+          progress: { slidesViewed: {}, modulesCompleted: [], quizScores: {}, labsPassed: [], streakDays: 0, lastActiveDate: '', level: 1, xp: 0, badges: [] },
+          mobile: fullPhone,
+          emailVerified: true,
+          mobileVerified: false,
+          passwordHash: hash,
+          passwordSalt: salt
+        };
+      } else {
+        profile = {
+          ...profile,
+          passwordHash: hash,
+          passwordSalt: salt,
+          emailVerified: true
+        };
+      }
+
+      if (db) {
+        await set(ref(db, `users/${profile!.uid}`), profile);
+      }
+
+      login(formattedEmail, profile!.name, profile!.mobile || '', true, profile!.mobileVerified || false);
+      addToast(isNewUser ? "Account registered successfully!" : "Password created successfully!", "success");
+      setLoginStep('success');
+
+      setTimeout(() => {
+        setShowLoginModal(false);
+        setLoginStep('input');
+        setLoginEmail('');
+        setLoginName('');
+        setLoginMobile('');
+        setNewPasswordInput('');
+        setConfirmPasswordInput('');
+        navigate('/modules');
+        setLoading(false);
+      }, 1500);
+    } catch (err: any) {
+      setErrorMessage(`Failed to save password: ${err.message || err}`);
+      setLoading(false);
+    }
+  };
+
+  // User Password Login Handler
+  const handleUserPasswordLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessage('');
+    const formattedEmail = loginEmail.trim().toLowerCase();
+    const existingUser = usersList.find((u) => u.email === formattedEmail);
+
+    if (!existingUser || !existingUser.passwordHash || !existingUser.passwordSalt) {
+      setErrorMessage('Account configuration mismatch. Please request a password reset.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const computed = await hashPassword(userPasswordInput, existingUser.passwordSalt);
+      if (computed !== existingUser.passwordHash) {
+        setErrorMessage('Incorrect password.');
+        setLoading(false);
+        return;
+      }
+
+      login(formattedEmail, existingUser.name, existingUser.mobile, true, existingUser.mobileVerified);
+      addToast(`Welcome back, ${existingUser.name}!`, "success");
+      setLoginStep('success');
+
+      setTimeout(() => {
+        setShowLoginModal(false);
+        setLoginStep('input');
+        setLoginEmail('');
+        setLoginName('');
+        setLoginMobile('');
+        setUserPasswordInput('');
+        navigate('/modules');
+        setLoading(false);
+      }, 1500);
+    } catch (err: any) {
+      setErrorMessage(`Login failed: ${err.message || err}`);
+      setLoading(false);
+    }
+  };
+
+  // Forgot Password Code Generator & Dispatcher
+  const handleForgotPasswordTrigger = async () => {
+    setLoading(true);
+    setErrorMessage('');
+    
+    const formattedEmail = loginEmail.trim().toLowerCase();
+    const existingUser = usersList.find((u) => u.email === formattedEmail);
+    
+    const db = getFirebaseDb();
+    let reviewerData: any = null;
+    if (db) {
+      try {
+        const revSnap = await get(ref(db, 'reviewers'));
+        if (revSnap.exists()) {
+          const allRevs = revSnap.val() as Record<string, any>;
+          const entry = Object.entries(allRevs).find(
+            ([, r]: [string, any]) => (r.email || '').toLowerCase() === formattedEmail
+          );
+          if (entry) {
+            reviewerData = entry[1];
+          }
+        }
+      } catch {}
+    }
+
+    if (!existingUser && !reviewerData) {
+      setErrorMessage('This email address is not registered.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      let otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+      setGeneratedResetOtp(otpCode);
+      const name = existingUser?.name || reviewerData?.name || 'User';
+      
+      await sendEmailOtp(formattedEmail, otpCode, name);
+      addToast("Password reset verification code sent to your email.", "success");
+      setTimer(30);
+      setCanResend(false);
+      setLoginStep('forgot_password_verify');
+    } catch (sendErr: any) {
+      console.warn("Password reset email failed, falling back to simulated OTP toast:", sendErr);
+      addToast(`🔑 [Verification Fallback] Sent Email OTP: ${generatedResetOtp}`, 'success');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Forgot Password Submit & Save
+  const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const enteredCode = forgotPasswordOtp.join('');
+    if (enteredCode.length < 6) {
+      setErrorMessage('Please enter the full 6-digit code.');
+      return;
+    }
+    if (enteredCode !== generatedResetOtp) {
+      setErrorMessage('Invalid verification code. Please try again.');
+      return;
+    }
+    if (newPasswordInput.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
+      return;
+    }
+    if (newPasswordInput !== confirmPasswordInput) {
+      setErrorMessage('Passwords do not match.');
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage('');
+    const formattedEmail = loginEmail.trim().toLowerCase();
+    const db = getFirebaseDb();
+    if (!db) {
+      setErrorMessage('Database connection unavailable.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const salt = Math.random().toString(36).substring(2, 11);
+      const hash = await hashPassword(newPasswordInput, salt);
+
+      const revSnap = await get(ref(db, 'reviewers'));
+      let reviewerUid = '';
+      if (revSnap.exists()) {
+        const allRevs = revSnap.val() as Record<string, any>;
+        const entry = Object.entries(allRevs).find(
+          ([, r]: [string, any]) => (r.email || '').toLowerCase() === formattedEmail
+        );
+        if (entry) reviewerUid = entry[0];
+      }
+
+      if (reviewerUid) {
+        await update(ref(db, `reviewers/${reviewerUid}`), {
+          passwordHash: hash,
+          passwordSalt: salt,
+          mustChangePassword: false
+        });
+      } else {
+        const existingUser = usersList.find((u) => u.email === formattedEmail);
+        if (existingUser) {
+          await update(ref(db, `users/${existingUser.uid}`), {
+            passwordHash: hash,
+            passwordSalt: salt
+          });
+        }
+      }
+
+      addToast("Password reset successfully! Please log in with your new password.", "success");
       setLoginStep('input');
-      setLoginEmail('');
-      setLoginName('');
-      setLoginMobile('');
-      navigate('/modules');
-    }, 1500);
+      setNewPasswordInput('');
+      setConfirmPasswordInput('');
+      setForgotPasswordOtp(['', '', '', '', '', '']);
+    } catch (err: any) {
+      setErrorMessage(`Failed to reset password: ${err.message || err}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleResendEmail = async () => {
@@ -812,6 +1052,18 @@ export const Header: React.FC = () => {
               <span>Modules</span>
             </Link>
 
+            <Link
+              to="/resources"
+              className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive('/resources')
+                  ? 'bg-indigo-500/10 text-indigo-500'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+              }`}
+            >
+              <Folder className="h-4 w-4" />
+              <span>Resource Vault</span>
+            </Link>
+
             {currentUser && (
               <Link
                 to="/certification"
@@ -952,6 +1204,9 @@ export const Header: React.FC = () => {
           <Link to="/modules" className={`text-xs font-semibold ${isActive('/modules') ? 'text-indigo-500' : 'text-[var(--text-secondary)]'}`}>
             Modules
           </Link>
+          <Link to="/resources" className={`text-xs font-semibold ${isActive('/resources') ? 'text-indigo-500' : 'text-[var(--text-secondary)]'}`}>
+            Vault
+          </Link>
           {currentUser && (
             <Link to="/certification" className={`text-xs font-semibold ${isActive('/certification') ? 'text-indigo-500' : 'text-[var(--text-secondary)]'}`}>
               Certification
@@ -1001,6 +1256,9 @@ export const Header: React.FC = () => {
                   {loginStep === 'input' && (authMode === 'login' ? 'Welcome back' : 'Create Account')}
                   {loginStep === 'email_otp' && 'Email Verification'}
                   {loginStep === 'mobile_otp' && 'Mobile Verification'}
+                  {loginStep === 'password_input' && 'Welcome back'}
+                  {loginStep === 'set_password' && 'Secure Your Account'}
+                  {loginStep === 'forgot_password_verify' && 'Reset Password'}
                 </h3>
                 <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-[260px]">
                   {loginStep === 'input' && (authMode === 'login' ? 'Log in with your email to access your workspace.' : 'Sign up to track certifications and milestones.')}
@@ -1010,6 +1268,13 @@ export const Header: React.FC = () => {
                       : 'Confirm the code sent to your email to verify your identity.'
                   )}
                   {loginStep === 'mobile_otp' && 'Enter the SMS code sent to your mobile phone.'}
+                  {loginStep === 'password_input' && 'Enter your password to sign in to your workspace.'}
+                  {loginStep === 'set_password' && 'Create a password for fast login next time.'}
+                  {loginStep === 'forgot_password_verify' && (
+                    !(systemConfig.emailjsServiceId && systemConfig.emailjsTemplateId && systemConfig.emailjsPublicKey)
+                      ? `[Simulation Mode] Reset OTP code: ${generatedResetOtp}`
+                      : 'Confirm the code sent to your email to complete password reset.'
+                  )}
                 </p>
               </div>
             )}
@@ -1153,6 +1418,24 @@ export const Header: React.FC = () => {
                       <Shield className="h-4 w-4 text-purple-500" /> Continue as Admin
                     </button>
                   </>
+                )}
+
+                {authMode === 'login' && (
+                  <div className="text-center mt-3 pt-1">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        if (!loginEmail.trim()) {
+                          setErrorMessage('Please enter your email address first to reset your password.');
+                          return;
+                        }
+                        handleForgotPasswordTrigger();
+                      }}
+                      className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition-colors cursor-pointer"
+                    >
+                      Forgot / Reset Password?
+                    </button>
+                  </div>
                 )}
 
                 <p className="text-[10px] text-center text-[var(--text-muted)] mt-5 leading-relaxed">
@@ -1518,6 +1801,228 @@ export const Header: React.FC = () => {
                   </p>
                 </div>
               </div>
+            )}
+
+            {/* Step: User Password Login */}
+            {loginStep === 'password_input' && (
+              <form onSubmit={handleUserPasswordLogin} className="space-y-4">
+                <div className="text-center">
+                  <p className="text-xs text-[var(--text-secondary)] font-medium">
+                    Log in with password for:
+                  </p>
+                  <p className="text-sm font-bold text-[var(--text-primary)] mt-0.5 break-all">{loginEmail}</p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showUserPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={userPasswordInput}
+                      onChange={(e) => setUserPasswordInput(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                      autoFocus
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowUserPassword(!showUserPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none"
+                    >
+                      {showUserPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 p-2.5 rounded-lg border border-red-500/20">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 text-white rounded-lg text-sm font-bold shadow hover:brightness-110 transition-all cursor-pointer"
+                >
+                  {loading ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Log In'}
+                </button>
+
+                <div className="flex items-center justify-between text-xs mt-4 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginStep('input');
+                      setErrorMessage('');
+                      setUserPasswordInput('');
+                    }}
+                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  >
+                    Back to email
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleForgotPasswordTrigger}
+                    className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors cursor-pointer"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Step: Set Password */}
+            {loginStep === 'set_password' && (
+              <form onSubmit={handleSetPassword} className="space-y-4">
+                <div className="text-center">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-[260px] mx-auto">
+                    Please create a password to log in instantly next time without waiting for email OTPs.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+                      Create Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        placeholder="Choose password (min 6 characters)"
+                        value={newPasswordInput}
+                        onChange={(e) => setNewPasswordInput(e.target.value)}
+                        className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                        autoFocus
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none"
+                      >
+                        {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+                      Confirm Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Confirm your password"
+                      value={confirmPasswordInput}
+                      onChange={(e) => setConfirmPasswordInput(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 p-2.5 rounded-lg border border-red-500/20">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-emerald-500 to-indigo-600 disabled:opacity-50 text-white rounded-lg text-sm font-bold shadow hover:brightness-110 transition-all cursor-pointer"
+                >
+                  {loading ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Save & Log In'}
+                </button>
+              </form>
+            )}
+
+            {/* Step: Forgot Password Verification */}
+            {loginStep === 'forgot_password_verify' && (
+              <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
+                <div className="text-center">
+                  <p className="text-xs text-[var(--text-secondary)]">
+                    Enter the reset verification code sent to:
+                  </p>
+                  <p className="text-sm font-bold text-[var(--text-primary)] mt-0.5 break-all">{loginEmail}</p>
+                </div>
+
+                {renderOtpInputs(forgotPasswordOtp, setForgotPasswordOtp)}
+
+                <div className="space-y-3 pt-2">
+                  <div className="space-y-1.5">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+                      New Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        placeholder="Choose new password (min 6 characters)"
+                        value={newPasswordInput}
+                        onChange={(e) => setNewPasswordInput(e.target.value)}
+                        className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors focus:outline-none"
+                      >
+                        {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Confirm new password"
+                      value={confirmPasswordInput}
+                      onChange={(e) => setConfirmPasswordInput(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 p-2.5 rounded-lg border border-red-500/20">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 text-white rounded-lg text-sm font-bold shadow hover:brightness-110 transition-all cursor-pointer"
+                >
+                  {loading ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Reset & Save Password'}
+                </button>
+
+                <div className="text-center text-xs mt-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginStep('input');
+                      setErrorMessage('');
+                      setForgotPasswordOtp(['', '', '', '', '', '']);
+                      setNewPasswordInput('');
+                      setConfirmPasswordInput('');
+                    }}
+                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  >
+                    Cancel Reset
+                  </button>
+                </div>
+              </form>
             )}
 
           </div>

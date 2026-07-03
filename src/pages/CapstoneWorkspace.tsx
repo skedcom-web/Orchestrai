@@ -404,7 +404,7 @@ All checks pass = ready to submit for OrchestrAI Lead Certification review.
 `;
 
 export const CapstoneWorkspace: React.FC = () => {
-  const { currentUser, addToast } = useApp();
+  const { currentUser, addToast, submissions } = useApp();
   const navigate = useNavigate();
 
   const [selection, setSelection] = useState<CapstoneSelection | null>(null);
@@ -412,6 +412,30 @@ export const CapstoneWorkspace: React.FC = () => {
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('brief');
   const [promptCopied, setPromptCopied] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const [meetingRequest, setMeetingRequest] = useState<any | null>(null);
+  const [showMeetingModal, setShowMeetingModal] = useState(false);
+  const isPremium = currentUser?.isPremiumUpgraded === true;
+
+  const isCurrentCapstoneCertified = useMemo(() => {
+    if (!currentUser || !selection) return false;
+    return submissions.some(s => 
+      (s.capstoneId === selection.capstoneId) &&
+      (s.learnerUid === currentUser.uid || s.userId === currentUser.uid) &&
+      (s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible')
+    );
+  }, [currentUser, selection, submissions]);
+
+  useEffect(() => {
+    if (!currentUser?.uid) return;
+    const db = getFirebaseDb();
+    if (!db) return;
+    get(ref(db, `meetingRequests/${currentUser.uid}`)).then((snap) => {
+      if (snap.exists()) {
+        setMeetingRequest(snap.val());
+      }
+    });
+  }, [currentUser]);
 
   // Load selection + checklist
   useEffect(() => {
@@ -478,6 +502,10 @@ export const CapstoneWorkspace: React.FC = () => {
   const progressPct = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
 
   const toggleTask = async (key: string) => {
+    if (isCurrentCapstoneCertified) {
+      addToast('This project is completed & certified. Progress is locked.', 'warning');
+      return;
+    }
     if (!currentUser?.uid || !selection) return;
     const next = { ...checklist, [key]: !checklist[key] };
     setChecklist(next);
@@ -636,6 +664,13 @@ export const CapstoneWorkspace: React.FC = () => {
         })}
       </div>
 
+      {isCurrentCapstoneCertified && (
+        <div className="mb-6 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold flex items-center gap-2 animate-in fade-in duration-200">
+          <CheckCircle2 className="h-4 w-4 shrink-0 animate-bounce" />
+          <span>This project is completed and certified! The workspace is in View-Only mode. Visit the <a href="/capstone" className="underline text-emerald-300 hover:text-emerald-200">Capstone Library</a> to select another capstone to start a new project.</span>
+        </div>
+      )}
+
       {/* Tab Body */}
       {activeTab === 'brief' && (
         <BriefTab cap={capstone} />
@@ -704,8 +739,9 @@ export const CapstoneWorkspace: React.FC = () => {
                         <input
                           type="checkbox"
                           checked={checked}
+                          disabled={isCurrentCapstoneCertified}
                           onChange={() => toggleTask(key)}
-                          className="mt-0.5 h-4 w-4 rounded border-[var(--border-color)] text-indigo-500 focus:ring-indigo-500/30 cursor-pointer"
+                          className="mt-0.5 h-4 w-4 rounded border-[var(--border-color)] text-indigo-500 focus:ring-indigo-500/30 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         />
                         <span className={`text-xs leading-relaxed ${checked ? 'text-[var(--text-secondary)] line-through' : 'text-[var(--text-primary)] group-hover:text-indigo-400'} transition-colors`}>
                           {task}
@@ -772,7 +808,44 @@ export const CapstoneWorkspace: React.FC = () => {
             <NextStep n={1} title="Complete the 5-day build" body="Work through the Day 1–5 checklist in your IDE. Commit per validated component (M5 discipline). Push end-of-day." />
             <NextStep n={2} title="Deploy to Firebase Hosting" body="Run firebase deploy --only hosting from your project root. Confirm your live URL returns 200." />
             <NextStep n={3} title="Polish the repository" body="README with project intent, screenshots, run instructions. DESIGN.md naming OGE + 5 design docs (already downloaded above)." />
-            <NextStep n={4} title="Submit your capstone" body="Provide GitHub URL, Firebase URL, README link, optional supporting docs and workflow diagram. We auto-assign a reviewer and email them your package." actionLabel="Open Submission Form →" onAction={() => navigate('/capstone/submit')} />
+            <li className="flex items-start gap-3">
+              <div className="shrink-0 h-7 w-7 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 text-xs font-extrabold flex items-center justify-center">4</div>
+              <div className="flex-1">
+                <div className="font-extrabold text-[var(--text-primary)] text-sm mb-0.5">Submit your capstone</div>
+                <div className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                  Provide GitHub URL, Firebase URL, README link, optional supporting docs and workflow diagram. We auto-assign a reviewer and email them your package.
+                </div>
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  {isCurrentCapstoneCertified ? (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-md text-[11px] font-extrabold">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      Completed & Certified (View-Only)
+                    </div>
+                  ) : (
+                    <>
+                      {!isPremium && (
+                        <button
+                          onClick={() => navigate(`/capstone/submit?id=${capstone.id}`)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:brightness-110 text-white rounded-md text-[11px] font-extrabold shadow-sm transition-all cursor-pointer"
+                        >
+                          Open Submission Form →
+                        </button>
+                      )}
+
+                      {isPremium && (
+                        <button
+                          onClick={() => setShowMeetingModal(true)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:brightness-110 text-white rounded-md text-[11px] font-extrabold shadow-sm transition-all cursor-pointer animate-pulse"
+                        >
+                          <Calendar className="h-3.5 w-3.5" />
+                          Set up meeting with SME
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            </li>
             <NextStep n={5} title="Review & feedback" body="Two-tier review: deterministic auto-checks (instant) + Claude-Haiku rubric scoring + human reviewer final decision. You'll get a detailed report via email." />
             <NextStep n={6} title="Certification decision" body="≥85 Outstanding · ≥70 Pass · 50–69 Rework · <50 Rebuild. Pass = certificate unlocked. Rework = resubmit after fixes." />
           </ol>
@@ -780,6 +853,16 @@ export const CapstoneWorkspace: React.FC = () => {
             <strong className="text-indigo-400">Phase 3 coming soon:</strong> The submission form, supporting-doc uploads, EmailJS routing, and reviewer assignment ship next. Your locked capstone and checklist progress carry over — no rework needed.
           </div>
         </div>
+      )}
+      {showMeetingModal && capstone && (
+        <MeetingRequestModal
+          isOpen={showMeetingModal}
+          onClose={() => setShowMeetingModal(false)}
+          currentUser={currentUser}
+          capstone={capstone}
+          existingRequest={meetingRequest}
+          onSubmitted={(req) => setMeetingRequest(req)}
+        />
       )}
     </div>
   );
@@ -877,3 +960,138 @@ const NextStep: React.FC<{ n: number; title: string; body: string; actionLabel?:
     </div>
   </li>
 );
+
+const MeetingRequestModal: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  currentUser: any;
+  capstone: CapstoneItem;
+  existingRequest: any;
+  onSubmitted: (req: any) => void;
+}> = ({ isOpen, onClose, currentUser, capstone, existingRequest, onSubmitted }) => {
+  const [notes, setNotes] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const { addToast } = useApp();
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    try {
+      const db = getFirebaseDb();
+      if (!db) return;
+      const newRequest = {
+        userId: currentUser.uid,
+        userName: currentUser.name,
+        userEmail: currentUser.email,
+        capstoneId: capstone.id,
+        capstoneTitle: capstone.title,
+        requestedAt: Date.now(),
+        status: 'PENDING',
+        notes,
+        meetingLink: '',
+        scheduledAt: ''
+      };
+      await set(ref(db, `meetingRequests/${currentUser.uid}`), newRequest);
+      onSubmitted(newRequest);
+      addToast('Meeting request submitted successfully! Admin will schedule and update you.', 'success');
+      onClose();
+    } catch (err) {
+      console.error(err);
+      addToast('Failed to submit request.', 'error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-md border border-[var(--border-color)] rounded-2xl bg-[var(--bg-card)] p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+        <h3 className="text-base font-bold text-[var(--text-primary)] mb-3 flex items-center gap-1.5">
+          <Calendar className="h-5 w-5 text-indigo-400" />
+          SME Meeting Request (Premium Users)
+        </h3>
+
+        {existingRequest ? (
+          <div className="space-y-4">
+            <div className="p-3.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Meeting Status</span>
+                <span className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider border ${
+                  existingRequest.status === 'SCHEDULED' 
+                    ? 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400' 
+                    : 'border-yellow-500/30 bg-yellow-500/5 text-yellow-500'
+                }`}>
+                  {existingRequest.status}
+                </span>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                {existingRequest.status === 'SCHEDULED' 
+                  ? `Your meeting has been scheduled! Join using the link below at the scheduled time.`
+                  : `Your request is submitted. The Admin/SME will schedule a Google Meet/Teams call and paste the link here.`}
+              </p>
+              {existingRequest.scheduledAt && (
+                <div className="text-xs text-[var(--text-primary)] font-bold">
+                  Scheduled Time: {existingRequest.scheduledAt}
+                </div>
+              )}
+              {existingRequest.meetingLink && (
+                <div className="mt-2 pt-2 border-t border-[var(--border-color)]">
+                  <a 
+                    href={existingRequest.meetingLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-bold transition-all"
+                  >
+                    Join Meeting Link
+                  </a>
+                </div>
+              )}
+            </div>
+            <button
+              onClick={onClose}
+              className="w-full py-2 bg-[var(--surface-sunken)] hover:bg-[var(--border-color)] text-[var(--text-primary)] rounded-lg text-xs font-bold transition-all cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4 font-sans text-left">
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+              As a Premium user, you can request a 1-on-1 virtual design review meeting with an SME to evaluate your codebase, architectures, and deployments.
+            </p>
+
+            <div>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                Meeting Focus &amp; Notes
+              </label>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={4}
+                className="form-input resize-none w-full border border-[var(--border-color)] bg-[var(--bg-card)] rounded-lg p-2.5 text-xs text-[var(--text-primary)] focus:outline-none"
+                placeholder="List topics or areas you would like the SME to review (e.g. database schema, auth logic, excel reports integration)..."
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={onClose}
+                className="flex-1 py-2 bg-[var(--surface-sunken)] hover:bg-[var(--border-color)] text-[var(--text-primary)] rounded-lg text-xs font-bold transition-all cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={submitting || !notes.trim()}
+                className="flex-1 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:brightness-110 text-white rounded-lg text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+              >
+                {submitting ? 'Submitting…' : 'Request Meeting'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

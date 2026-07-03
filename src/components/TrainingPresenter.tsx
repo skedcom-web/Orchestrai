@@ -3359,7 +3359,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                       }}
                       className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-black shadow-lg hover:scale-[1.02] transition-all cursor-pointer"
                     >
-                      {slide.cta_button || (moduleId === 6 ? 'Finish & View Certificate' : `Proceed to Module ${moduleId + 1}`)}
+                      {slide.cta_button || (moduleId === 6 ? 'Proceed to Module 7 (Capstone)' : `Proceed to Module ${moduleId + 1}`)}
                     </button>
                   ) : (
                     <button
@@ -3590,7 +3590,7 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                   <span className="text-[10px] text-[var(--text-secondary)] font-semibold">{currentSlide + 1} / {slidesCount}</span>
 
                   {currentSlide === slidesCount - 1 ? (
-                    <button onClick={() => { recordModuleComplete(moduleId); onClose(); }} disabled={!isModuleCompleteAllowed}
+                    <button onClick={() => { recordModuleComplete(moduleId); onComplete(); }} disabled={!isModuleCompleteAllowed}
                       className={`flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-emerald-500 to-indigo-500 text-white rounded-lg text-xs font-bold shadow-lg hover:brightness-110 transition-all ${!isModuleCompleteAllowed ? 'opacity-40 cursor-not-allowed' : ''}`}>
                       <CheckCircle2 className="h-3.5 w-3.5" /> Complete Module
                     </button>

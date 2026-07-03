@@ -14,9 +14,12 @@ import { Capstone } from './pages/Capstone';
 import { CapstoneWorkspace } from './pages/CapstoneWorkspace';
 import { CapstoneSubmit } from './pages/CapstoneSubmit';
 import { SmeLogin } from './pages/SmeLogin';
+import { FeedbackPage } from './pages/FeedbackForm';
+import { Resources } from './pages/Resources';
 import { useApp } from './context/AppContext';
 import { CelebrationOverlay } from './components/CelebrationOverlay';
-import { Sparkles, BookOpen, Shield, Award, X, CheckCircle2, AlertTriangle, XCircle, Info } from 'lucide-react';
+import { QuickHelp } from './components/QuickHelp';
+import { Sparkles, BookOpen, Shield, Award, X, CheckCircle2, AlertTriangle, XCircle, Info, Folder } from 'lucide-react';
 import { getFirebaseDb } from './firebase';
 import { ref, set } from 'firebase/database';
 import './App.css';
@@ -191,6 +194,9 @@ const AppContent: React.FC = () => {
       {/* Gamification celebration modal (level-up / badge unlock) */}
       <CelebrationOverlay />
 
+      {/* Floating Quick Help / Ask Assistant Chatbot */}
+      <QuickHelp />
+
       {/* Premium Glow Background Blobs */}
       <GlowBackground />
 
@@ -213,6 +219,8 @@ const AppContent: React.FC = () => {
           <Route path="/capstone/workspace" element={<CapstoneWorkspace />} />
           <Route path="/capstone/submit" element={<CapstoneSubmit />} />
           <Route path="/sme-login" element={<SmeLogin />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/resources" element={<Resources />} />
         </Routes>
       </main>
 
@@ -243,6 +251,7 @@ const AppContent: React.FC = () => {
               <div className="flex flex-col gap-2">
                 {[
                   { label: 'Free Modules (1 & 2)', path: '/modules', icon: BookOpen },
+                  { label: 'Reference Vault', path: '/resources', icon: Folder },
                   { label: 'Admin Console', path: '/admin', icon: Shield },
                   { label: 'My Certification', path: '/certification', icon: Award },
                 ].map(({ label, path, icon: Icon }) => (

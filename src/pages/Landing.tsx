@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight, Zap, Shield, Check, Code, Award,
   TrendingUp, Users, Star, ChevronRight, Play, Briefcase,
   BookOpen, Target, Trophy, Rocket, Layers, GitBranch,
-  GraduationCap, Building2, Sparkles
+  GraduationCap, Building2, Sparkles, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useApp } from '../context/AppContext';
 
 /* ─── Animated counter hook ─────────────────── */
 const useCounter = (target: number, duration = 1800) => {
@@ -45,15 +46,64 @@ const StatCard: React.FC<{ value: number; suffix: string; label: string; colorCl
     );
   };
 
+export const GuestGateModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-sm border border-[var(--border-color)] rounded-2xl bg-[var(--bg-card)] p-6 text-center shadow-2xl animate-in zoom-in-95 duration-200">
+        <div className="absolute top-4 right-4">
+          <button 
+            onClick={onClose}
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-450 mb-4 animate-bounce">
+          <Award className="h-6 w-6" />
+        </div>
+        
+        <h3 className="text-base font-bold text-[var(--text-primary)] mb-2">
+          Modules 1 &amp; 2 are Free! 🎓
+        </h3>
+        
+        <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 px-2 text-left">
+          Study resources and training for Modules 1 &amp; 2 are completely free. However, to track your progress, record quiz scores, and receive feedback, please register and login.
+          <br /><br />
+          Click the <strong className="text-indigo-550 dark:text-indigo-400">Register / Login</strong> button at the top right of the page to get started.
+        </p>
+        
+        <button
+          onClick={onClose}
+          className="w-full py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-lg transition-all cursor-pointer"
+        >
+          Got it, Close
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
+  const { systemConfig, currentUser } = useApp();
+  const [showGuestGateModal, setShowGuestGateModal] = useState(false);
+
+  const handleStartLearning = () => {
+    if (!currentUser) {
+      setShowGuestGateModal(true);
+    } else {
+      navigate('/modules');
+    }
+  };
 
   const journeySteps = [
     {
       step: '01',
       icon: BookOpen,
       title: 'Free Study — Modules 1 & 2',
-      desc: 'Dive into the OrchestrAI framework at zero cost. No login required. Understand the methodology, lifecycle, and AI orchestration principles at your own pace.',
+      desc: 'Dive into the OrchestrAI framework at zero cost. Register and login to track your progress, quiz scores, and feedback.',
       badge: 'FREE',
       badgeColor: 'bg-emerald-500/15 border-emerald-500/25 text-emerald-400',
       color: 'text-indigo-400',
@@ -70,9 +120,9 @@ export const Landing: React.FC = () => {
     {
       step: '03',
       icon: Rocket,
-      title: 'Commit — ₹99 Career Investment',
-      desc: 'Unlock Modules 3–8. The nominal ₹99 is not a course fee — it\'s your accountability signal. When you invest, you show up. We invest back with our full attention.',
-      badge: '₹99 ONLY',
+      title: `Commit — ₹${systemConfig.certificationPrice ?? 99} Career Investment`,
+      desc: `Unlock Modules 3–8. The nominal ₹${systemConfig.certificationPrice ?? 99} is not a course fee — it's your accountability signal. When you invest, you show up. We invest back with our full attention.`,
+      badge: `₹${systemConfig.certificationPrice ?? 99} ONLY`,
       badgeColor: 'bg-purple-500/15 border-purple-500/25 text-purple-400',
       color: 'text-purple-400',
     },
@@ -129,10 +179,10 @@ export const Landing: React.FC = () => {
         <span className="hidden sm:inline">🎓</span>
         <span>
           <strong>Modules 1 &amp; 2 are completely FREE.</strong>
-          {' '}No payment. No login. Start learning right now.
+          {' '}Register and login to track your scores, progress, and feedback!
         </span>
         <button
-          onClick={() => navigate('/modules')}
+          onClick={handleStartLearning}
           className="hidden sm:flex items-center gap-1 bg-white/20 hover:bg-white/30 rounded-full px-3 py-0.5 text-[11px] font-bold transition-all shrink-0"
         >
           Start Now <ChevronRight className="h-3 w-3" />
@@ -176,13 +226,12 @@ export const Landing: React.FC = () => {
             <p className="text-sm font-bold tracking-[0.15em] text-indigo-400 uppercase mb-7">
               "Human Orchestrates. AI Builds. Value Delivers."
             </p>
-
             <div className="flex flex-col gap-3 mb-8">
               {[
                 'Build production-grade enterprise apps — not toy projects',
                 'Own a live GitHub portfolio every recruiter can inspect',
                 'Score ≥ 90% for priority referrals to our IT hiring network',
-                'Full certification for just ₹99 — covers demo review & personalised mentor feedback',
+                `Full certification for just ₹${systemConfig.certificationPrice ?? 99} — covers demo review & personalised mentor feedback`,
               ].map((item) => (
                 <div key={item} className="flex items-start gap-2.5 text-sm text-[var(--text-secondary)]">
                   <div className="flex-shrink-0 mt-1 h-4 w-4 rounded-full bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center">
@@ -196,7 +245,7 @@ export const Landing: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 id="hero-cta-start"
-                onClick={() => navigate('/modules')}
+                onClick={handleStartLearning}
                 className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm hover:brightness-110 hover:scale-[1.03] transition-all"
                 style={{ boxShadow: 'var(--btn-shadow)' }}
               >
@@ -260,7 +309,7 @@ export const Landing: React.FC = () => {
                 <Star className="h-3.5 w-3.5 text-amber-400" />
               </div>
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                💡 <strong className="text-[var(--text-primary)]">This portal itself is the proof.</strong> Built in days using the exact OrchestrAI principles you'll master here.
+                💡 <strong className="text-[var(--text-primary)]">This portal itself is the proof.</strong> Built in just 10 days as an 80-90% production-ready application using the OrchestrAI framework. The remaining enhancements and features represent Customer QA, which we refine collaboratively with your team.
               </p>
             </div>
           </div>
@@ -271,7 +320,7 @@ export const Landing: React.FC = () => {
       <section className="w-full border-t border-b border-[var(--border-color)] bg-[var(--bg-card)]/40 backdrop-blur-sm py-10 px-4">
         <div className="mx-auto max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-[var(--border-color)]">
           <StatCard value={8} suffix="+" label="Training Modules" colorClass="gradient-text" />
-          <StatCard value={99} suffix="₹" label="Full Certification Fee" colorClass="text-amber-400" />
+          <StatCard value={systemConfig.certificationPrice ?? 99} suffix="₹" label="Full Certification Fee" colorClass="text-amber-400" />
           <StatCard value={7} suffix=" Days" label="Average POC Build" colorClass="text-emerald-400" />
           <StatCard value={90} suffix="%" label="Score → Hiring Referral" colorClass="text-indigo-400" />
         </div>
@@ -383,10 +432,10 @@ export const Landing: React.FC = () => {
               <Sparkles className="h-5 w-5 text-amber-400" />
             </div>
             <div>
-              <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">Radical Transparency: The ₹99 Commitment Signal</h4>
+              <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">Radical Transparency: The ₹{systemConfig.certificationPrice ?? 99} Commitment Signal</h4>
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-2">
                 We <em>could</em> offer everything free. But when training is entirely free, completion rates collapse. 
-                The ₹99 is your personal accountability signal — it tells us you're serious about your career.
+                The ₹{systemConfig.certificationPrice ?? 99} is your personal accountability signal — it tells us you're serious about your career.
               </p>
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                 It also covers the <strong className="text-amber-400">manual effort involved in reviewing your completed demo</strong> — 
@@ -542,7 +591,7 @@ export const Landing: React.FC = () => {
             </p>
             <button
               id="bottom-cta-start"
-              onClick={() => navigate('/modules')}
+              onClick={handleStartLearning}
               className="inline-flex items-center gap-2 px-10 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm hover:brightness-110 hover:scale-[1.03] transition-all"
               style={{ boxShadow: 'var(--btn-shadow)' }}
             >
@@ -554,6 +603,7 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
+      <GuestGateModal isOpen={showGuestGateModal} onClose={() => setShowGuestGateModal(false)} />
     </div>
   );
 };

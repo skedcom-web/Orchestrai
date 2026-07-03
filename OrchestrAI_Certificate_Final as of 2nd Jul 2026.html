@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>OrchestrAI Certificate</title>
+<style>
+@page { size: A4 landscape; margin: 0; }
+body{
+  margin:0;background:#f5f5f5;font-family:Arial,sans-serif;
+}
+.certificate{
+  width:1123px;height:794px;margin:auto;background:white;
+  border:18px solid #08285c; box-sizing:border-box; position:relative;
+}
+.inner{
+  position:absolute; inset:24px; border:4px solid #caa13a;
+  padding:0 40px 0 40px; box-sizing:border-box;
+}
+
+/* Badge: top-right, narrow, flush to right edge */
+.badge{
+  position:absolute;
+  top:0; right:0;
+  background:#08285c; color:#dcb24c;
+  padding:28px 10px 16px;
+  font-weight:700; text-align:center;
+  font-size:11.5px; line-height:1.5; letter-spacing:0.5px;
+  clip-path:polygon(0 0,100% 0,100% 82%,50% 100%,0 82%);
+  width:78px;
+  z-index:10;
+}
+
+/* Header: three-column layout — logo | org (center) | spacer for badge */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:26px;
+  padding-bottom:0;
+}
+.logo{font-size:42px;font-weight:300;flex:0 0 auto;}
+.logo .v{color:#d71920;}
+.org{
+  font-size:20px;font-weight:700;color:#08285c;
+  text-align:center;
+  flex:1;
+  padding:0 20px;
+}
+.badge-spacer{width:78px;flex:0 0 78px;}
+
+/* Title */
+.title{text-align:center;margin-top:10px;color:#08285c;}
+.title h1{font-size:92px;margin:0;font-family:Georgia,serif;line-height:1;}
+.subtitle{letter-spacing:10px;color:#b88416;font-weight:700;font-size:20px;margin-top:2px;}
+
+/* Main body */
+.main{text-align:center;margin-top:18px;}
+.name{font-size:64px;font-weight:700;color:#08285c;margin:10px 0 8px;}
+.cert{font-size:26px;font-weight:700;color:#08285c;margin-bottom:4px;}
+.meta{font-size:17px;color:#555;margin-top:6px;margin-bottom:0;}
+
+/* Footer anchored at bottom, close to yellow line */
+.footer{
+  position:absolute; left:40px; right:40px; bottom:22px;
+  border-top:3px solid #caa13a; padding-top:16px;
+}
+.grid{
+  display:grid;
+  grid-template-columns: 1.1fr 1.4fr 1fr 1.4fr;
+  gap:30px;
+  align-items:start;
+}
+.label{
+  font-size:13px;font-weight:700;color:#555;text-transform:uppercase;
+  margin-bottom:5px;
+}
+.value{
+  font-size:16px;color:#08285c;
+  word-break:break-word;
+}
+.sigblock{text-align:center;}
+.sigline{
+  border-top:2px solid #caa13a;
+  margin-bottom:8px;
+}
+.signame{font-size:17px;color:#08285c;margin-bottom:4px;}
+.sigtitle{font-size:13px;line-height:1.4;color:#555;}
+.score{font-size:20px;font-weight:700;color:#b88416;}
+</style>
+</head>
+<body>
+<div class="certificate">
+<div class="inner">
+
+  <!-- Badge: top-right corner -->
+  <div class="badge">ORCHESTRAI<br>CERTIFIED</div>
+
+  <!-- Header: logo | centered org | spacer -->
+  <div class="header">
+    <div class="logo"><span class="v">v</span>Think</div>
+    <div class="org">vThink Global Technologies Pvt Ltd · OrchestrAI Academy</div>
+    <div class="badge-spacer"></div>
+  </div>
+
+  <!-- Title -->
+  <div class="title">
+    <h1>CERTIFICATE</h1>
+    <div class="subtitle">OF ACHIEVEMENT</div>
+  </div>
+
+  <!-- Main body: pushed down closer to yellow footer line -->
+  <div class="main">
+    <div style="font-size:20px;">This certifies that</div>
+    <div class="name">{{learnerName}}</div>
+    <div style="font-size:19px;">has successfully completed the</div>
+    <div class="cert">{{certificationName}}</div>
+    <div class="meta">LEVEL: {{level}}    •    DOMAIN: {{capstoneDomain}}</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="grid">
+      <div>
+        <div class="label">Certificate No.</div>
+        <div class="value">{{certificateNumber}}</div>
+        <br>
+        <div class="label">Verify Credential</div>
+        <div class="value">{{verificationUrl}}</div>
+      </div>
+      <div>
+        <div class="label">Decision</div>
+        <div class="score">{{decision}}</div>
+      </div>
+      <div>
+        <div class="label">Score</div>
+        <div class="score">{{total}} / 100</div>
+      </div>
+      <div>
+        <div class="label">Issued On</div>
+        <div class="value">{{issuedDate}}</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:16px;">
+      <div class="sigblock">
+        <div class="sigline"></div>
+        <div class="signame">Sithanandham Radhakrishnan</div>
+        <div class="sigtitle">vThink OrchestrAI Academy · Issuing Authority</div>
+      </div>
+      <div class="sigblock">
+        <div class="sigline"></div>
+        <div class="signame">Anandabatmanaban D</div>
+        <div class="sigtitle">vThink Global Technologies Pvt Ltd - Founder/CEO</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</body>
+</html>

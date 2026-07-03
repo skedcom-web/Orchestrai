@@ -83,6 +83,7 @@ interface SubmissionFlat {
   assignedReviewerUid?: string;
   assignedReviewerName?: string;
   reviewMode?: ReviewMode;
+  certifiedAt?: number;
 }
 
 interface AutoChecks {
@@ -502,22 +503,8 @@ const ReviewerPool: React.FC<{
       purpose === 'reenabled' ? 'reviewer_reenabled' :
                                 'reviewer_password_reset';
 
-    const defaultTemplates = {
-      sme_welcome: {
-        subject: "[OrchestrAI] You have been added as a Capstone Reviewer",
-        body: "Hi {{name}},\n\nYou have been added to the OrchestrAI Capstone Reviewer pool by the admin.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews. Change your password after first login if the SME portal exposes that option.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
-      },
-      reviewer_reenabled: {
-        subject: "[OrchestrAI] Your reviewer account has been re-activated",
-        body: "Hi {{name}},\n\nYour previously disabled OrchestrAI reviewer account has been re-activated. A fresh password has been generated.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
-      },
-      reviewer_password_reset: {
-        subject: "[OrchestrAI] Your reviewer password has been reset by admin",
-        body: "Hi {{name}},\n\nYour OrchestrAI reviewer password has been reset by the admin. Use the new credentials below.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
-      }
-    };
-
-    const temp = systemConfig.templates?.[templateKey] || defaultTemplates[templateKey];
+    // Use the Admin-managed template (seeded from DEFAULT_CONFIG, editable via Admin → Settings → Email Templates)
+    const temp = systemConfig.templates?.[templateKey] || { subject: '', body: '' };
 
     const replacePlaceholders = (txt: string) => {
       if (!txt) return '';
@@ -1016,6 +1003,8 @@ const ReviewDetail: React.FC<{
   onSaved: () => void;
 }> = ({ submission, existingReview, reviewers, currentUser, isSme, onBack, onSaved }) => {
   const { systemConfig, addToast, addNotificationLog } = useApp();
+  const isCertified = submission.status?.toLowerCase() === 'certified' || submission.status?.toLowerCase() === 'hire_eligible';
+  const disableEditing = isSme && isCertified;
 
   const [scores, setScores] = useState<Record<string, number>>(
     existingReview?.scores || Object.fromEntries(RUBRIC.map(r => [r.key, 0]))
@@ -1057,9 +1046,11 @@ const ReviewDetail: React.FC<{
       return;
     }
 
-    const configTemplate = systemConfig.templates?.sme_reassigned;
-    const templateSubject = configTemplate?.subject || "[OrchestrAI Review Assigned] {{capstoneId}} · {{capstoneTitle}}";
-    const templateBody = configTemplate?.body || "Hi {{name}},\n\nYou have been assigned to review a capstone project.\n\nSTUDENT\n  Name:  {{learnerName}}\n  Email: {{learnerEmail}}\n\nCAPSTONE\n  ID:    {{capstoneId}}\n  Title: {{capstoneTitle}}\n  Domain: {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  README: {{readmeUrl}}\n\nPlease visit the Reviewer Portal to review and score this submission.\n\n— OrchestrAI Academy";
+    // Use Admin-managed template (Admin → Settings → Email Templates → sme_reassigned)
+    const smeReassignedTpl = systemConfig.templates?.sme_reassigned || { subject: '', body: '' };
+    const templateSubject = smeReassignedTpl.subject;
+    const templateBody = smeReassignedTpl.body;
+
 
     const subject = templateSubject
       .replace(/{{capstoneId}}/g, submission.capstoneId)
@@ -1269,7 +1260,7 @@ const ReviewDetail: React.FC<{
 
     setNotifying(true);
     const now = Date.now();
-    const record: ReviewRecord = {
+    const record: any = {
       submissionId: submission.submissionId,
       scores, total, decision,
       feedback: { strengths, gaps, reworkChecklist },
@@ -1277,10 +1268,14 @@ const ReviewDetail: React.FC<{
       reviewerName: currentUser?.name || 'Admin',
       savedAt: now,
       isDraft: false,
-      notifiedAt: now,
-      autoChecks: autoChecks || undefined,
-      tierBSuggestion: aiResult || undefined
+      notifiedAt: now
     };
+    if (autoChecks) {
+      record.autoChecks = autoChecks;
+    }
+    if (aiResult) {
+      record.tierBSuggestion = aiResult;
+    }
     try {
       // 1. Persist final review
       await update(ref(db, `reviews/${submission.submissionId}`), record);
@@ -1301,17 +1296,12 @@ const ReviewDetail: React.FC<{
         status: selStatusMap[decision], decisionAt: now, lastDecision: decision
       });
 
-      // 3. Email learner
+      // 3. Email learner — use Admin-managed template (Admin → Settings → Email Templates → decision_feedback)
       const serviceId = systemConfig.emailjsServiceId;
       const templateId = systemConfig.emailjsTemplateIdFeedback || systemConfig.emailjsTemplateId;
       const publicKey = systemConfig.emailjsPublicKey;
 
-      const defaultTemplate = {
-        subject: "[OrchestrAI] Your capstone review — {{decision}} ({{score}}/100)",
-        body: "Hi {{name}},\n\nYour OrchestrAI capstone review is complete.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nSCORE BREAKDOWN\n{{scoreBreakdown}}\n\nSTRENGTHS\n{{strengths}}\n\nGAPS\n{{gaps}}\n\nREWORK CHECKLIST\n{{reworkChecklist}}\n\nNEXT STEPS\n{{nextSteps}}\n\nReviewed by: {{reviewerName}}\nReviewed on: {{reviewedAt}}\n\n— OrchestrAI Academy"
-      };
-
-      const temp = systemConfig.templates?.['decision_feedback'] || defaultTemplate;
+      const temp = systemConfig.templates?.['decision_feedback'] || { subject: '', body: '' };
 
       const breakdown = RUBRIC.map((r) => `  ${r.label}: ${scores[r.key] || 0}/${r.max}`).join('\n');
       const nextSteps =
@@ -1391,7 +1381,13 @@ const ReviewDetail: React.FC<{
     }
     const db = getFirebaseDb();
     if (!db) { addToast('Cloud database not available.', 'error'); return; }
-    if (!window.confirm(`Issue OrchestrAI Lead Certification to ${submission.learnerName} for ${submission.capstoneId}? This is final — they receive the cert email and the certificate becomes downloadable from their /certification page.`)) return;
+
+    const isRedeploy = submission.status === 'certified';
+    const confirmMessage = isRedeploy
+      ? `⚠️ REDEPLOY CERTIFICATION\n\n${submission.learnerName} has already been certified for ${submission.capstoneId}.\n\nThis will resend the certificate email to ${submission.learnerEmail}. Use this only if the previous email failed to deliver.\n\nProceed with redeployment?`
+      : `Issue OrchestrAI Lead Certification to ${submission.learnerName} for ${submission.capstoneId}? This is final — they receive the cert email and the certificate becomes downloadable from their /certification page.`;
+
+    if (!window.confirm(confirmMessage)) return;
 
     setDeploying(true);
     const now = Date.now();
@@ -1423,17 +1419,12 @@ const ReviewDetail: React.FC<{
       });
       await update(ref(db, `reviews/${submission.submissionId}`), { certifiedAt: now });
 
-      // 3. Email learner
+      // 3. Email learner — use Admin-managed template (Admin → Settings → Email Templates → certification_issued)
       const serviceId = systemConfig.emailjsServiceId;
       const templateId = systemConfig.emailjsTemplateIdCertification || systemConfig.emailjsTemplateId;
       const publicKey = systemConfig.emailjsPublicKey;
 
-      const defaultTemplate = {
-        subject: "🎓 OrchestrAI Lead Certification — {{capstoneTitle}}",
-        body: "Congratulations, {{name}}!\n\nYou have been certified as an OrchestrAI Lead.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nYour certificate is now available in your account:\n  {{certificateUrl}}\n\nFrom the Certification page you can download a printable HTML copy.\n\nCertified on: {{certifiedAt}}\nCertified by: {{certifiedBy}}\n\nWelcome to the OrchestrAI Lead alumni network.\n\n— OrchestrAI Academy"
-      };
-
-      const temp = systemConfig.templates?.['certification_issued'] || defaultTemplate;
+      const temp = systemConfig.templates?.['certification_issued'] || { subject: '', body: '' };
 
       const replacePlaceholders = (txt: string) => {
         if (!txt) return '';
@@ -1556,7 +1547,9 @@ const ReviewDetail: React.FC<{
         </button>
         <div className="flex items-center gap-2">
           <span className={`px-2 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border ${STATUS_COLORS[submission.status]}`}>
-            {submission.status.replace(/_/g, ' ')}
+            {submission.status === 'certified' && submission.certifiedAt
+              ? `certified · ${new Date(submission.certifiedAt).toLocaleDateString()}`
+              : submission.status.replace(/_/g, ' ')}
           </span>
           {existingReview && (
             <span className={`px-2 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border ${DECISION_COLORS[existingReview.decision]}`}>
@@ -1565,6 +1558,12 @@ const ReviewDetail: React.FC<{
           )}
         </div>
       </div>
+
+      {isCertified && (
+        <div className="border border-emerald-500/30 rounded-xl p-4 bg-emerald-500/5 text-emerald-400 text-xs font-semibold flex items-center gap-2 animate-in fade-in duration-350">
+          <span>✅ This capstone project has already been certified and closed. {isSme ? 'It is now in read-only mode.' : 'You can review or redeploy certification below.'}</span>
+        </div>
+      )}
 
       {/* Capstone Header Card */}
       <div className="glass-card rounded-2xl p-5 border border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 to-transparent">
@@ -1770,7 +1769,10 @@ const ReviewDetail: React.FC<{
                     max={r.max}
                     value={scores[r.key] ?? 0}
                     onChange={(e) => setScore(r.key, parseInt(e.target.value, 10) || 0)}
-                    className="w-full px-3 py-1.5 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-sm font-extrabold text-center text-indigo-400 focus:outline-none focus:border-indigo-500/40"
+                    disabled={disableEditing}
+                    className={`w-full px-3 py-1.5 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-sm font-extrabold text-center text-indigo-400 focus:outline-none focus:border-indigo-500/40 ${
+                      disableEditing ? 'opacity-60 cursor-not-allowed' : ''
+                    }`}
                   />
                   <div className="mt-1.5 h-1 rounded-full bg-[var(--border-color)] overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all" style={{ width: `${((scores[r.key] || 0) / r.max) * 100}%` }} />
@@ -1807,9 +1809,10 @@ const ReviewDetail: React.FC<{
                   value={strengths}
                   onChange={(e) => setStrengths(e.target.value)}
                   rows={3}
+                  disabled={disableEditing}
                   className={`form-input resize-none w-full ${
                     !strengths.trim() ? 'border-rose-500/40 focus:border-rose-500/60' : 'border-emerald-500/30'
-                  }`}
+                  } ${disableEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
                   placeholder="Strong workflow implementation, clean RBAC matrix, …"
                 />
                 {!strengths.trim() && (
@@ -1825,9 +1828,10 @@ const ReviewDetail: React.FC<{
                   value={gaps}
                   onChange={(e) => setGaps(e.target.value)}
                   rows={3}
+                  disabled={disableEditing}
                   className={`form-input resize-none w-full ${
                     !gaps.trim() ? 'border-rose-500/40 focus:border-rose-500/60' : 'border-emerald-500/30'
-                  }`}
+                  } ${disableEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
                   placeholder="No Excel export on reports, comments lack pagination, …"
                 />
                 {!gaps.trim() && (
@@ -1849,11 +1853,12 @@ const ReviewDetail: React.FC<{
                   value={reworkChecklist}
                   onChange={(e) => setReworkChecklist(e.target.value)}
                   rows={3}
+                  disabled={disableEditing}
                   className={`form-input resize-none w-full ${
                     (decision === 'rework' || decision === 'rebuild') && !reworkChecklist.trim()
                       ? 'border-amber-500/50 focus:border-amber-500/70'
                       : reworkChecklist.trim() ? 'border-emerald-500/30' : ''
-                  }`}
+                  } ${disableEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
                   placeholder={`1. Add Excel export to Status Report\n2. Fix RBAC bypass on /admin/users\n…`}
                 />
                 {(decision === 'rework' || decision === 'rebuild') && !reworkChecklist.trim() && (
@@ -1892,22 +1897,26 @@ const ReviewDetail: React.FC<{
             })()}
 
             <div className="flex flex-wrap gap-2">
-              <button
-                onClick={saveDraft}
-                disabled={saving || submittingFeedback}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:brightness-110 text-white text-xs font-extrabold shadow-md transition-all disabled:opacity-50"
-              >
-                <Save className="h-3.5 w-3.5" /> {saving ? 'Saving…' : 'Save Draft'}
-              </button>
+              {!disableEditing && (
+                <button
+                  onClick={saveDraft}
+                  disabled={saving || submittingFeedback}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 hover:brightness-110 text-white text-xs font-extrabold shadow-md transition-all disabled:opacity-50"
+                >
+                  <Save className="h-3.5 w-3.5" /> {saving ? 'Saving…' : 'Save Draft'}
+                </button>
+              )}
 
               {isSme ? (
-                <button
-                  onClick={submitFeedbackToAdmin}
-                  disabled={saving || submittingFeedback}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:brightness-110 text-white text-xs font-extrabold shadow-md transition-all disabled:opacity-50"
-                >
-                  <Send className="h-3.5 w-3.5" /> {submittingFeedback ? 'Submitting…' : 'Submit Feedback to Admin'}
-                </button>
+                !disableEditing && (
+                  <button
+                    onClick={submitFeedbackToAdmin}
+                    disabled={saving || submittingFeedback}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:brightness-110 text-white text-xs font-extrabold shadow-md transition-all disabled:opacity-50"
+                  >
+                    <Send className="h-3.5 w-3.5" /> {submittingFeedback ? 'Submitting…' : 'Submit Feedback to Admin'}
+                  </button>
+                )
               ) : (
                 <>
                   <button
@@ -1932,7 +1941,7 @@ const ReviewDetail: React.FC<{
                     title={decision !== 'pass' && decision !== 'outstanding' ? `Decision is ${decision.toUpperCase()} — only Pass/Outstanding qualify` : 'Issue certificate + email learner + unlock in-app cert'}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:brightness-110 text-white text-xs font-extrabold shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Award className="h-3.5 w-3.5" /> {deploying ? 'Deploying…' : 'Deploy Certification'}
+                    <Award className="h-3.5 w-3.5" /> {deploying ? 'Deploying…' : (submission.status === 'certified' ? 'Redeploy Certification' : 'Deploy Certification')}
                   </button>
                 </>
               )}

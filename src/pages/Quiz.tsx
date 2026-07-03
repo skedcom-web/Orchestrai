@@ -14,6 +14,30 @@ interface Question {
 const QUESTIONS: Question[] = [
   {
     id: 1,
+    text: "In the OrchestrAI paradigm shift, how should a Lead view their primary professional role?",
+    options: [
+      "A developer who writes high-quality code manually",
+      "An architect who orchestrates intent through complete briefs and prompts",
+      "A project manager who tracks tickets and schedules meetings",
+      "A QA tester who checks final code features"
+    ],
+    correctIndex: 1,
+    studyTip: "Re-read Module 1.1 (The Mindset Shift): 'Welcome to the OrchestrAI Lead Certification... you will no longer think of yourself as a developer who writes code - you will think of yourself as an architect who orchestrates intent.'"
+  },
+  {
+    id: 2,
+    text: "For a less to medium complex workflow, what is the realistic timeframe to go from a blank page to a production-grade baseline using OrchestrAI?",
+    options: [
+      "Days",
+      "Weeks",
+      "Months",
+      "Years"
+    ],
+    correctIndex: 0,
+    studyTip: "Re-read Module 1.1 (Mindset): A less to medium complex workflow baseline can be achieved in a matter of days (e.g. the 7-day benchmark for an Issue Tracker baseline), whereas traditional approaches take weeks or months."
+  },
+  {
+    id: 3,
     text: "According to the OrchestrAI Core Principles, who is the 'Primary Builder' responsible for writing code, database schemas, and unit tests?",
     options: [
       "The Solution Architect",
@@ -25,52 +49,40 @@ const QUESTIONS: Question[] = [
     studyTip: "Re-read Module 2.1 (Six Core Principles): 'The AI engine writes all code, APIs, database schemas... The Lead never writes code themselves.'"
   },
   {
-    id: 2,
-    text: "Which of the following describes a 'STRONG INTENT' statement according to the framework guidelines?",
-    options: [
-      "A brief summary that leaves implementation patterns and library choices to the AI.",
-      "A structured, constraint-rich statement covering User Roles, Validation Rules, Stack, Acceptance Signals, and Edge Cases.",
-      "A detailed UML sequence diagram uploaded as an image.",
-      "A plain-English request asking the AI to build features similar to existing websites."
-    ],
-    correctIndex: 1,
-    studyTip: "Re-read Module 2.2 Stage 1 (Intent quality example): A strong intent covers user permissions, numbered validation rules, data isolation, and clear acceptance criteria."
-  },
-  {
-    id: 3,
-    text: "What is the targeted 'Iteration Cycle Time' for a single validated component on an OrchestrAI engagement?",
-    options: [
-      "1 to 2 working days",
-      "2 to 4 hours per component",
-      "2-week sprints",
-      "7 working days total"
-    ],
-    correctIndex: 1,
-    studyTip: "Re-read Module 8.2 (Key Performance Indicators): Target posture for Iteration Cycle Time is compressed to 2–4 hours per component."
-  },
-  {
     id: 4,
-    text: "If the AI engine output deviates from the intent statement after 3 targeted re-prompting corrections, what is the correct action to take?",
+    text: "Which of the following describes the Six-Stage Lifecycle Loop in the correct sequence?",
     options: [
-      "Manually edit the code in the editor to resolve the issue.",
-      "Reject the feature entirely and move to the next item.",
-      "Pause the session and escalate to an SME/Solution Architect for an architectural review.",
-      "Retry the exact same prompt with different capitalization to force compliance."
+      "Intent → Orchestrate → Generate → Validate → Evolve → Deploy",
+      "Orchestrate → Intent → Generate → Validate → Deploy → Evolve",
+      "Intent → Generate → Orchestrate → Evolve → Validate → Deploy",
+      "Orchestrate → Generate → Intent → Validate → Deploy → Evolve"
     ],
-    correctIndex: 2,
-    studyTip: "Re-read Module 5.3 (Escalation Decision Framework): After 3 targeted re-prompts, trigger an SME architectural review, redesign the intent, or decompose the component further."
+    correctIndex: 0,
+    studyTip: "Re-read Module 2.2 (The Six-Stage Lifecycle Loop): The lifecycle loop moves continuously from Intent to Orchestrate, Generate, Validate, Evolve, and Deploy."
   },
   {
     id: 5,
-    text: "Under the OrchestrAI framework's governance rules, how should code version control commits be managed?",
+    text: "Why does the OrchestrAI Lead never write code manually, even for a quick fix?",
     options: [
-      "Commit at the end of the day with a single 'daily cleanup' commit.",
-      "Squash all commits into a single branch merge to keep the git tree clean.",
-      "Commit after every single prompt attempt, successful or not.",
-      "Commit after each validated component individually, using a structured format referencing the feature and validator."
+      "Because they do not know how to code in modern languages",
+      "Because it breaks the single source of truth (prompts) and compromises maintainability and auditability",
+      "Because the client has forbidden human coding in the contract",
+      "Because manual code edits trigger automated database wipes"
+    ],
+    correctIndex: 1,
+    studyTip: "Re-read Module 2.1 (Core Principles): 'Why does the Lead never write code manually? It breaks the single source of truth (prompts) and compromises auditability.'"
+  },
+  {
+    id: 6,
+    text: "Which core principle states that security, guardrails, and logging must be defined as constraints on Day 1?",
+    options: [
+      "AI as Primary Builder",
+      "Human as Orchestrator",
+      "Instant Iteration",
+      "Quality by Design"
     ],
     correctIndex: 3,
-    studyTip: "Re-read Module 6.3 (Version Control Discipline): Commit frequency is one commit per validated component. Never squash commits, as the audit trail must remain intact."
+    studyTip: "Re-read Module 2.1 (Core Principles): 'Quality by Design: Security and logging are specified as constraints on Day 1.'"
   }
 ];
 
@@ -87,7 +99,7 @@ export const Quiz: React.FC = () => {
         <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
         <h3 className="text-xl font-bold mb-2">Access Denied</h3>
         <p className="text-sm text-[var(--text-secondary)] mb-6">
-          Please log in to start the Module 2 knowledge challenge quiz.
+          Please log in to start the Module 1&amp;2 knowledge challenge quiz.
         </p>
       </div>
     );
@@ -139,9 +151,9 @@ export const Quiz: React.FC = () => {
           <HelpCircle className="h-4 w-4" />
           <span>Knowledge Check Gate</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Module 2 Knowledge Challenge</h2>
+        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Module 1&amp;2 Knowledge Challenge</h2>
         <p className="text-sm text-[var(--text-secondary)] max-w-lg">
-          Answer the questions below to prove your comprehension of the OrchestrAI framework. A minimum score of 80% (4/5 correct) is required.
+          Answer the questions below to prove your comprehension of the OrchestrAI framework. A minimum score of 80% is required.
         </p>
       </div>
 

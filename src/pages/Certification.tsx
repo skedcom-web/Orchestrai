@@ -4,6 +4,7 @@ import { ref, get } from 'firebase/database';
 import { useApp } from '../context/AppContext';
 import { Award, Lock, CheckCircle, Clock, Download, AlertTriangle, ArrowRight } from 'lucide-react';
 import { getFirebaseDb } from '../firebase';
+import { CertFeedbackGate } from './FeedbackForm';
 
 interface Certification {
   capstoneId: string;
@@ -18,6 +19,30 @@ interface Certification {
   feedback?: { strengths?: string; gaps?: string };
   status: string;
 }
+
+/** Apply {{placeholder}} substitutions to a custom HTML template string. */
+const applyPlaceholders = (template: string, c: Certification): string => {
+  const certDate = new Date(c.certifiedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  const certNumber = `CERT-${c.capstoneId.toUpperCase()}-${c.certifiedAt.toString().slice(-6)}`;
+  const verificationUrl = `https://vthinkorchestrai-academy.web.app/certification`;
+
+  return template
+    .replace(/\{\{learnerName\}\}/g, c.learnerName)
+    .replace(/\{\{capstoneId\}\}/g, c.capstoneId)
+    .replace(/\{\{capstoneTitle\}\}/g, c.capstoneTitle)
+    .replace(/\{\{capstoneDomain\}\}/g, c.capstoneDomain)
+    .replace(/\{\{decision\}\}/g, c.decision.toUpperCase())
+    .replace(/\{\{total\}\}/g, String(c.total))
+    .replace(/\{\{certifiedAt\}\}/g, certDate)
+    .replace(/\{\{certifiedByName\}\}/g, c.certifiedByName)
+    .replace(/\{\{ribbonLabel\}\}/g, c.decision === 'outstanding' ? 'OUTSTANDING' : 'CERTIFIED')
+    // Support the new placeholders in the uploaded template
+    .replace(/\{\{certificationName\}\}/g, "OrchestrAI Lead Certification")
+    .replace(/\{\{level\}\}/g, "LEAD")
+    .replace(/\{\{certificateNumber\}\}/g, certNumber)
+    .replace(/\{\{issuedDate\}\}/g, certDate)
+    .replace(/\{\{verificationUrl\}\}/g, verificationUrl);
+};
 
 const buildCertHtml = (c: Certification) => `<!DOCTYPE html>
 <html lang="en">
@@ -89,7 +114,7 @@ const buildCertHtml = (c: Certification) => `<!DOCTYPE html>
 </html>`;
 
 export const Certification: React.FC = () => {
-  const { currentUser } = useApp();
+  const { currentUser, systemConfig } = useApp();
   const navigate = useNavigate();
   const [myCerts, setMyCerts] = useState<Certification[]>([]);
   const [certsLoading, setCertsLoading] = useState(true);
@@ -98,6 +123,7 @@ export const Certification: React.FC = () => {
   const [submission, setSubmission] = useState<any | null>(null);
   const [review, setReview] = useState<any | null>(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
+  const [certFeedbackDone, setCertFeedbackDone] = useState<boolean | null>(null); // null = loading
 
   useEffect(() => {
     if (!currentUser?.uid) {
@@ -150,10 +176,24 @@ export const Certification: React.FC = () => {
     };
 
     loadCapstoneStatus();
+
+    // Check if cert feedback already submitted
+    get(ref(db, `feedback/cert_feedback/${uid}`))
+      .then((snap) => {
+        if (snap.exists() && !snap.val().isDraft) {
+          setCertFeedbackDone(true);
+        } else {
+          setCertFeedbackDone(false);
+        }
+      })
+      .catch(() => setCertFeedbackDone(false));
   }, [currentUser?.uid]);
 
   const downloadCert = (c: Certification) => {
-    const html = buildCertHtml(c);
+    const customTemplate = systemConfig?.certificateTemplate;
+    const html = customTemplate
+      ? applyPlaceholders(customTemplate, c)
+      : buildCertHtml(c);
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -233,10 +273,13 @@ export const Certification: React.FC = () => {
               <p className="text-xs text-[var(--text-secondary)] mt-0.5">Track your locked capstone and view credentials.</p>
             </div>
 
-            {loadingStatus || certsLoading ? (
+            {loadingStatus || certsLoading || certFeedbackDone === null ? (
               <div className="glass-card rounded-xl p-6 text-center text-xs text-[var(--text-secondary)] animate-pulse">
                 Loading capstone status details…
               </div>
+            ) : myCerts.length > 0 && !certFeedbackDone ? (
+              // Mandatory cert feedback gate
+              <CertFeedbackGate onCompleted={() => setCertFeedbackDone(true)} />
             ) : myCerts.length > 0 ? (
               <div className="space-y-4">
                 {myCerts.map((cert) => (

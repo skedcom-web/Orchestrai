@@ -43,6 +43,13 @@ export interface UserProfile {
   disabled?: boolean;
   isReviewer?: boolean;
   reviewerRole?: string;
+  isPremiumUpgraded?: boolean;
+  premiumStatus?: 'NONE' | 'PENDING' | 'PREMIUM';
+  // Feedback auto-fill fields
+  department?: string;
+  organization?: string;
+  passwordHash?: string;
+  passwordSalt?: string;
 }
 
 // Badge metadata — id, label, description, lucide icon name (UI maps icons in Change #2)
@@ -155,6 +162,13 @@ export interface SystemConfig {
   emailjsTemplateId: string;
   emailjsPublicKey: string;
   adminEmail: string;
+  // Dynamic Pricing & Portal Settings
+  certificationPrice?: number;
+  premiumUpgradePrice?: number;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactAddress?: string;
+  academyName?: string;
   // Tier B AI rubric scoring (Cloud Function → OpenRouter → Qwen)
   aiReviewEnabled?: boolean;
   aiReviewModel?: string;
@@ -176,6 +190,8 @@ export interface SystemConfig {
   adminPassword?: string;
   requireEmailVerification?: boolean;
   requirePhoneVerification?: boolean;
+  certificateTemplate?: string;
+  certificateTemplateFileName?: string;
   templates: {
     [key: string]: { subject: string; body: string };
   };
@@ -243,8 +259,12 @@ export interface Submission {
   userEmail: string;
   githubRepoUrl: string;
   promptLogUrl: string;
-  status: 'SUBMITTED' | 'CERTIFIED' | 'HIRE_ELIGIBLE';
+  status: string;
   automatedTotal: number;
+  // Capstone submission fields
+  learnerUid?: string;
+  learnerEmail?: string;
+  capstoneId?: string;
 }
 
 // ── Talent Radar (Change #5) — outreach tags + notes per learner ──
@@ -347,6 +367,12 @@ const DEFAULT_CONFIG: SystemConfig = {
   emailjsTemplateId: '',
   emailjsPublicKey: '',
   adminEmail: 'vthinkorchestrai@gmail.com',
+  certificationPrice: 99,
+  premiumUpgradePrice: 499,
+  contactEmail: 'support@vthinkglobal.com',
+  contactPhone: '+91 98765 43210',
+  contactAddress: 'vThink Global Technologies, Chennai, India',
+  academyName: 'OrchestrAI Lead Academy',
   aiReviewEnabled: false,
   aiReviewModel: 'qwen/qwen-2.5-72b-instruct',
   aiReviewAutoOnSubmit: false,
@@ -366,6 +392,8 @@ const DEFAULT_CONFIG: SystemConfig = {
   adminPassword: '',
   requireEmailVerification: true,
   requirePhoneVerification: false,
+  certificateTemplate: '',
+  certificateTemplateFileName: '',
   templates: {
     payment_pending: {
       subject: "[OrchestrAI Alert] Payment Pending Manual Approval",
@@ -603,7 +631,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             firebaseAppId: config.firebaseAppId || localConfig.firebaseAppId || DEFAULT_CONFIG.firebaseAppId || '',
             adminPassword: config.adminPassword !== undefined ? config.adminPassword : (localConfig.adminPassword !== undefined ? localConfig.adminPassword : ''),
             requireEmailVerification: config.requireEmailVerification !== undefined ? config.requireEmailVerification : (localConfig.requireEmailVerification !== undefined ? localConfig.requireEmailVerification : true),
-            requirePhoneVerification: config.requirePhoneVerification !== undefined ? config.requirePhoneVerification : (localConfig.requirePhoneVerification !== undefined ? localConfig.requirePhoneVerification : false)
+            requirePhoneVerification: config.requirePhoneVerification !== undefined ? config.requirePhoneVerification : (localConfig.requirePhoneVerification !== undefined ? localConfig.requirePhoneVerification : false),
+            certificateTemplate: config.certificateTemplate !== undefined ? config.certificateTemplate : (localConfig.certificateTemplate !== undefined ? localConfig.certificateTemplate : ''),
+            certificateTemplateFileName: config.certificateTemplateFileName !== undefined ? config.certificateTemplateFileName : (localConfig.certificateTemplateFileName !== undefined ? localConfig.certificateTemplateFileName : ''),
+            // Deep-merge templates: DEFAULT_CONFIG seeds all keys, Firebase overrides only the ones saved
+            templates: { ...DEFAULT_CONFIG.templates, ...(config.templates || {}) }
           };
           setSystemConfig(mergedConfig);
           localStorage.setItem('orchestrai_db_config', JSON.stringify(mergedConfig));
@@ -673,9 +705,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       // 2. Listen to /submissions
       unsubscribeSubmissions = onValue(ref(db, 'submissions'), (snapshot) => {
         const val = snapshot.val() || {};
-        const subs = Object.values(val) as Submission[];
-        setSubmissions(subs);
-        localStorage.setItem('orchestrai_db_submissions', JSON.stringify(subs));
+        const flat: Submission[] = [];
+        Object.keys(val).forEach((uid) => {
+          const capMap = val[uid] || {};
+          if (capMap.id && capMap.userId) {
+            flat.push(capMap as Submission);
+          } else {
+            Object.keys(capMap).forEach((capId) => {
+              const sub = capMap[capId];
+              if (sub && typeof sub === 'object') {
+                flat.push(sub as Submission);
+              }
+            });
+          }
+        });
+        setSubmissions(flat);
+        localStorage.setItem('orchestrai_db_submissions', JSON.stringify(flat));
       });
 
       // 3. Listen to /logs
@@ -729,7 +774,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             firebaseAppId: config.firebaseAppId || localConfig.firebaseAppId || DEFAULT_CONFIG.firebaseAppId || '',
             adminPassword: config.adminPassword !== undefined ? config.adminPassword : (localConfig.adminPassword !== undefined ? localConfig.adminPassword : ''),
             requireEmailVerification: config.requireEmailVerification !== undefined ? config.requireEmailVerification : (localConfig.requireEmailVerification !== undefined ? localConfig.requireEmailVerification : true),
-            requirePhoneVerification: config.requirePhoneVerification !== undefined ? config.requirePhoneVerification : (localConfig.requirePhoneVerification !== undefined ? localConfig.requirePhoneVerification : false)
+            requirePhoneVerification: config.requirePhoneVerification !== undefined ? config.requirePhoneVerification : (localConfig.requirePhoneVerification !== undefined ? localConfig.requirePhoneVerification : false),
+            certificateTemplate: config.certificateTemplate !== undefined ? config.certificateTemplate : (localConfig.certificateTemplate !== undefined ? localConfig.certificateTemplate : ''),
+            certificateTemplateFileName: config.certificateTemplateFileName !== undefined ? config.certificateTemplateFileName : (localConfig.certificateTemplateFileName !== undefined ? localConfig.certificateTemplateFileName : ''),
+            // Deep-merge templates: DEFAULT_CONFIG seeds all keys, Firebase overrides only the ones saved
+            templates: { ...DEFAULT_CONFIG.templates, ...(config.templates || {}) }
           };
 
           setSystemConfig(mergedConfig);
@@ -1382,6 +1431,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (updates.templates !== undefined) {
       changes.push(`Email templates updated`);
     }
+    if (updates.certificationPrice !== undefined && updates.certificationPrice !== systemConfig.certificationPrice) {
+      changes.push(`Certification fee set to ${updates.certificationPrice}`);
+    }
+    if (updates.premiumUpgradePrice !== undefined && updates.premiumUpgradePrice !== systemConfig.premiumUpgradePrice) {
+      changes.push(`Premium upgrade fee set to ${updates.premiumUpgradePrice}`);
+    }
+    if (updates.academyName !== undefined && updates.academyName !== systemConfig.academyName) {
+      changes.push(`Academy name updated to ${updates.academyName}`);
+    }
+    if (updates.contactEmail !== undefined || updates.contactPhone !== undefined || updates.contactAddress !== undefined) {
+      changes.push(`Support contact details updated`);
+    }
     if (updates.firebaseDatabaseUrl !== undefined && updates.firebaseDatabaseUrl !== systemConfig.firebaseDatabaseUrl) {
       changes.push(updates.firebaseDatabaseUrl ? `Connected to Firebase database: ${updates.firebaseDatabaseUrl}` : `Disconnected from Firebase database`);
     }
@@ -1468,14 +1529,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     const timestamp = new Date().toISOString();
     const existing = visitorsList.find(v => v.id === visitorId);
-    const viewedModule1 = moduleId === 1 || (existing ? existing.viewedModule1 : false);
-    const viewedModule2 = moduleId === 2 || (existing ? existing.viewedModule2 : false);
-    const viewedModule3 = moduleId === 3 || (existing ? existing.viewedModule3 : false);
-    const viewedModule4 = moduleId === 4 || (existing ? existing.viewedModule4 : false);
-    const viewedModule5 = moduleId === 5 || (existing ? existing.viewedModule5 : false);
-    const viewedModule6 = moduleId === 6 || (existing ? existing.viewedModule6 : false);
-    const registered = currentUser ? true : (existing ? existing.registered : false);
-    const registeredEmail = currentUser?.email || existing?.registeredEmail;
+    const viewedModule1 = moduleId === 1 || !!(existing ? existing.viewedModule1 : false);
+    const viewedModule2 = moduleId === 2 || !!(existing ? existing.viewedModule2 : false);
+    const viewedModule3 = moduleId === 3 || !!(existing ? existing.viewedModule3 : false);
+    const viewedModule4 = moduleId === 4 || !!(existing ? existing.viewedModule4 : false);
+    const viewedModule5 = moduleId === 5 || !!(existing ? existing.viewedModule5 : false);
+    const viewedModule6 = moduleId === 6 || !!(existing ? existing.viewedModule6 : false);
+    const registered = currentUser ? true : !!(existing ? existing.registered : false);
+    const registeredEmail = currentUser?.email || existing?.registeredEmail || '';
 
     const newRecord: VisitorRecord = {
       id: visitorId,

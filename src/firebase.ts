@@ -2,7 +2,7 @@ import { initializeApp, getApps, getApp, deleteApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 
-const CURRENT_APP_VERSION = '1.2.1'; // Incremented to clear any old client-side local storage configs
+const CURRENT_APP_VERSION = '1.2.6'; // Incremented to clear any old client-side local storage configs
 
 // Self-executing cache-buster check on startup
 (function checkLocalStorageVersion() {

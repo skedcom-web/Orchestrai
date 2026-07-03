@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { CreditCard, ShieldCheck, Info, Loader } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 
 export const Payment: React.FC = () => {
@@ -15,6 +15,10 @@ export const Payment: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showRazorpayMock, setShowRazorpayMock] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const isPremiumUpgrade = queryParams.get('mode') === 'premium' || queryParams.get('upgrade') === 'true';
 
   if (!currentUser) {
     return (
@@ -25,7 +29,7 @@ export const Payment: React.FC = () => {
     );
   }
 
-  if (!currentUser.quizPassed) {
+  if (!isPremiumUpgrade && !currentUser.quizPassed) {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h3 className="text-xl font-bold mb-2">Quiz Verification Required</h3>
@@ -130,32 +134,60 @@ export const Payment: React.FC = () => {
     setTimeout(async () => {
       if (success) {
         const mockPaymentId = 'pay_' + Math.random().toString(36).substring(2, 12).toUpperCase();
-        const mode = systemConfig.approvalMode;
         
-        if (mode === 'AUTOMATED') {
+        if (isPremiumUpgrade) {
           updateUserProfile(currentUser.uid, {
-            accountStatus: 'APPROVED',
-            paymentId: mockPaymentId
+            premiumStatus: 'PENDING'
           });
-          // Notify Student of instant approval
-          await triggerEmailNotification(mockPaymentId, true);
+          setLoading(false);
+          addToast("Premium upgrade request submitted. Waiting for admin approval!", "success");
+          navigate('/capstone');
         } else {
-          updateUserProfile(currentUser.uid, {
-            accountStatus: 'PENDING_APPROVAL',
-            paymentId: mockPaymentId
-          });
-          // Notify Admin of pending approval
-          await triggerEmailNotification(mockPaymentId, false);
+          const mode = systemConfig.approvalMode;
+          if (mode === 'AUTOMATED') {
+            updateUserProfile(currentUser.uid, {
+              accountStatus: 'APPROVED',
+              paymentId: mockPaymentId
+            });
+            // Notify Student of instant approval
+            await triggerEmailNotification(mockPaymentId, true);
+          } else {
+            updateUserProfile(currentUser.uid, {
+              accountStatus: 'PENDING_APPROVAL',
+              paymentId: mockPaymentId
+            });
+            // Notify Admin of pending approval
+            await triggerEmailNotification(mockPaymentId, false);
+          }
+          setLoading(false);
+          navigate('/modules');
         }
-
-        setLoading(false);
-        navigate('/modules');
       } else {
         setLoading(false);
         addToast("Payment canceled or failed. Please try again.", "error");
       }
     }, 1200);
   };
+
+  const price = isPremiumUpgrade 
+    ? (systemConfig.premiumUpgradePrice ?? 499) 
+    : (systemConfig.certificationPrice ?? 99);
+
+  const title = isPremiumUpgrade 
+    ? "Premium Case Studies Upgrade" 
+    : "Accountability Verification";
+
+  const desc = isPremiumUpgrade
+    ? `Upgrade your account to Premium Access for ₹${price} INR to explore advanced case studies.`
+    : `Verify your commitment to the certification tract with a nominal ₹${price} INR fee.`;
+
+  const itemTitle = isPremiumUpgrade 
+    ? "OrchestrAI Premium Case Studies Access" 
+    : "OrchestrAI Lead Program Entry";
+
+  const itemDesc = isPremiumUpgrade 
+    ? "Unlocks post-certification Module 7 advanced labs and case studies"
+    : "Full access to Modules 3–8, labs, and certification demo";
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
@@ -166,9 +198,9 @@ export const Payment: React.FC = () => {
           <CreditCard className="h-4 w-4" />
           <span>Payment Gate</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Accountability Verification</h2>
+        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">{title}</h2>
         <p className="text-sm text-[var(--text-secondary)]">
-          Verify your commitment to the certification tract with a nominal ₹99 INR fee.
+          {desc}
         </p>
       </div>
 
@@ -179,14 +211,14 @@ export const Payment: React.FC = () => {
           <h4 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-3">Order Summary</h4>
           <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-3">
             <div>
-              <p className="text-sm font-bold text-[var(--text-primary)]">OrchestrAI Lead Program Entry</p>
-              <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">Full access to Modules 3–8, labs, and certification demo</p>
+              <p className="text-sm font-bold text-[var(--text-primary)]">{itemTitle}</p>
+              <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">{itemDesc}</p>
             </div>
-            <span className="text-base font-extrabold">₹99.00</span>
+            <span className="text-base font-extrabold">₹{price}.00</span>
           </div>
           <div className="flex items-center justify-between font-bold text-sm">
             <span>Total Payable</span>
-            <span className="text-indigo-500">₹99.00 INR</span>
+            <span className="text-indigo-500">₹{price}.00 INR</span>
           </div>
         </div>
 
@@ -194,7 +226,15 @@ export const Payment: React.FC = () => {
         <div className="flex items-start space-x-3 text-xs bg-slate-500/5 border border-[var(--border-color)] p-4 rounded-lg">
           <Info className="h-5 w-5 text-indigo-400 shrink-0 mt-0.5" />
           <div className="leading-relaxed text-[var(--text-secondary)]">
-            <strong className="text-[var(--text-primary)] font-semibold">Why ₹99 INR?</strong> As detailed in the specifications, this program is offered for a nominal fee to act as an accountability gate. It filters out casual users to ensure support is spent on candidates seeking real IT company referrals.
+            {isPremiumUpgrade ? (
+              <strong className="text-[var(--text-primary)] font-semibold">Premium Explorer Mode:</strong>
+            ) : (
+              <strong className="text-[var(--text-primary)] font-semibold">Why ₹{price} INR?</strong>
+            )}
+            {" "}
+            {isPremiumUpgrade 
+              ? "Upgrading to premium grants you full lifetime access to try other case studies, test additional architectures, package clean solution baselines, and receive continuous SME grading reviews."
+              : "As detailed in the specifications, this program is offered for a nominal fee to act as an accountability gate. It filters out casual users to ensure support is spent on candidates seeking real IT company referrals."}
           </div>
         </div>
 
@@ -234,7 +274,7 @@ export const Payment: React.FC = () => {
                   <p className="text-[10px] text-gray-400">Test Mode Integration</p>
                 </div>
               </div>
-              <span className="text-xs font-extrabold text-blue-400">₹99.00</span>
+              <span className="text-xs font-extrabold text-blue-400">₹{price}.00</span>
             </div>
 
             {/* Merchant info */}

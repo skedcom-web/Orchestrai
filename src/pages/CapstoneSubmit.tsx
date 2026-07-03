@@ -49,6 +49,7 @@ export const CapstoneSubmit: React.FC = () => {
   const [uploading, setUploading] = useState<UploadingFile[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [progressPct, setProgressPct] = useState<number | null>(null);
 
   // Load capstone selection + any prior submission
   useEffect(() => {
@@ -63,8 +64,9 @@ export const CapstoneSubmit: React.FC = () => {
 
     Promise.all([
       get(ref(db, `capstoneSelections/${uid}`)),
-      get(ref(db, `submissions/${uid}`))
-    ]).then(([selSnap, subSnap]) => {
+      get(ref(db, `submissions/${uid}`)),
+      get(ref(db, `capstoneProgress/${uid}`))
+    ]).then(([selSnap, subSnap, progSnap]) => {
       if (selSnap.exists()) {
         const remote = selSnap.val();
         setSelection(remote);
@@ -76,8 +78,19 @@ export const CapstoneSubmit: React.FC = () => {
         const latest = Object.values(all).sort((a: any, b: any) => (b.submittedAt || 0) - (a.submittedAt || 0))[0];
         if (latest) setExistingSubmission(latest);
       }
+      if (progSnap.exists() && progSnap.val().items) {
+        const prog = progSnap.val();
+        const done = Object.values(prog.items).filter(Boolean).length;
+        const pct = Math.round((done / 27) * 100);
+        setProgressPct(pct);
+      } else {
+        setProgressPct(0);
+      }
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch(() => {
+      setProgressPct(0);
+      setLoading(false);
+    });
   }, [currentUser?.uid]);
 
   const capstone = useMemo((): CapstoneItem | null => {
@@ -212,15 +225,16 @@ export const CapstoneSubmit: React.FC = () => {
   }) => {
     const serviceId = systemConfig.emailjsServiceId;
     const templateId = systemConfig.emailjsTemplateIdAdminNotification || systemConfig.emailjsTemplateId;
+    // Use Admin-managed template (Admin → Settings → Email Templates → capstone_submitted_admin)
+    const configTemplate = systemConfig.templates?.capstone_submitted_admin || { subject: '', body: '' };
+    const templateSubject = configTemplate.subject;
+    const templateBody = configTemplate.body;
+
     const publicKey = systemConfig.emailjsPublicKey;
     if (!serviceId || !templateId || !publicKey) {
       console.warn('[CapstoneSubmit] EmailJS not configured — skipping notification email.');
       return { skipped: true };
     }
-
-    const configTemplate = systemConfig.templates?.capstone_submitted_admin;
-    const templateSubject = configTemplate?.subject || "[OrchestrAI Alert] Capstone Review Initiated — {{capstoneId}} · {{learnerName}}";
-    const templateBody = configTemplate?.body || "Hi Admin,\n\nA new capstone project review has been initiated by {{learnerName}} ({{learnerEmail}}) and is awaiting review or reviewer assignment.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  README: {{readmeUrl}}\n\nPlease visit the Admin Console to assign or review this project.\n\n— OrchestrAI Academy";
 
     const subject = templateSubject
       .replace(/{{capstoneId}}/g, params.capstoneId)
@@ -266,6 +280,11 @@ export const CapstoneSubmit: React.FC = () => {
   // ─── Submit handler ────────────────────────────────────────────────────────
   const handleSubmit = async () => {
     if (!currentUser?.uid || !capstone) return;
+
+    if (progressPct !== null && progressPct < 100) {
+      addToast('You must complete 100% of the 5-day build plan checklist in the Capstone Workspace before submitting.', 'error');
+      return;
+    }
 
     const e: Record<string, string> = {};
     const ge = validateGitHubUrl(githubUrl); if (ge) e.githubUrl = ge;
@@ -498,6 +517,21 @@ export const CapstoneSubmit: React.FC = () => {
         </p>
       </div>
 
+      {progressPct !== null && progressPct < 100 && (
+        <div className="mb-6 p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-300 text-xs flex items-start gap-3 animate-in fade-in duration-200">
+          <AlertCircle className="h-5 w-5 shrink-0 text-rose-400 mt-0.5" />
+          <div className="space-y-1">
+            <strong className="block font-bold text-sm text-rose-200">Checklist Incomplete ({progressPct}%)</strong>
+            <p className="leading-relaxed">
+              You must complete all 27 tasks in the 5-Day Build Plan checklist within the Capstone Workspace before you can submit your project for review.
+            </p>
+            <p className="text-[10px] text-rose-400 font-medium">
+              Go to the <span onClick={() => navigate('/capstone/workspace')} className="underline hover:text-indigo-400 cursor-pointer">Workspace 5-Day Build Plan tab</span> to complete your checklist tasks.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Required URLs */}
       <div className="glass-card rounded-2xl p-6 mb-5 space-y-4">
         <h2 className="text-sm font-extrabold flex items-center gap-2 mb-1">
@@ -633,7 +667,7 @@ export const CapstoneSubmit: React.FC = () => {
         </div>
         <button
           onClick={handleSubmit}
-          disabled={submitting || uploading.length > 0}
+          disabled={submitting || uploading.length > 0 || (progressPct !== null && progressPct < 100)}
           className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-extrabold shadow-md transition-all"
         >
           {submitting ? <><Loader className="h-4 w-4 animate-spin" /> Submitting…</> : <><Send className="h-4 w-4" /> Submit for Review</>}

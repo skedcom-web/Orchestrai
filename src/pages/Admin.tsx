@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import type { UserProfile } from '../context/AppContext';
-import { getFirebaseApp } from '../firebase';
+import { getFirebaseApp, getFirebaseDb } from '../firebase';
+import { ref, get, set, push } from 'firebase/database';
 import { CapstoneReviewsAdmin } from './CapstoneReviewsAdmin';
+import { FeedbackAnalytics } from './FeedbackAnalytics';
+import { CAPSTONES } from '../data/capstones';
 import {
   Shield, Settings, Mail, List, CheckCircle,
-  Trash2, Award, Save,
+  Trash2, Award, Save, ListChecks,
   BarChart2, TrendingUp, Users, Activity, Search, Filter, Clock,
   BookOpen, Upload, HelpCircle, Eye, EyeOff, Ban, UserCheck, Radar,
-  Star, Sparkles, Download
+  Star, Sparkles, Download, MessageSquare, History, RotateCcw, Calendar
 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { computeLeadReadiness, scoreColor, tagColor, OUTREACH_TAGS, triggerCsvDownload } from '../utils/leadReadiness';
@@ -35,14 +38,15 @@ export const Admin: React.FC = () => {
     auditLogs,
     visitorsList,
     clearAuditLogs,
+    logAuditEvent,
     outreachData,
     setOutreachTag,
     setOutreachNotes,
     seedSampleCohort
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'logs' | 'reports' | 'audit' | 'modules' | 'candidates' | 'capstoneReviews'>('reports');
-  const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'gating' | 'verification' | 'emailjs' | 'aireview' | 'maintenance'>('connection');
+  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'logs' | 'reports' | 'audit' | 'modules' | 'candidates' | 'capstoneReviews' | 'feedbackAnalytics' | 'capstoneEditor'>('reports');
+  const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'gating' | 'pricing' | 'verification' | 'emailjs' | 'aireview' | 'maintenance'>('connection');
   const [requireEmailVerifVal, setRequireEmailVerifVal] = useState(systemConfig.requireEmailVerification !== false);
   const [requirePhoneVerifVal, setRequirePhoneVerifVal] = useState(!!systemConfig.requirePhoneVerification);
   const [freeModulesLimitVal, setFreeModulesLimitVal] = useState(systemConfig.freeModulesLimit || 2);
@@ -57,6 +61,23 @@ export const Admin: React.FC = () => {
   const [newPasswordVal, setNewPasswordVal] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [isTestingConn, setIsTestingConn] = useState(false);
+
+  // Dynamic Pricing & Contact Details States
+  const [academyNameVal, setAcademyNameVal] = useState(systemConfig.academyName || 'OrchestrAI Lead Academy');
+  const [certificationPriceVal, setCertificationPriceVal] = useState(systemConfig.certificationPrice || 99);
+  const [premiumUpgradePriceVal, setPremiumUpgradePriceVal] = useState(systemConfig.premiumUpgradePrice || 499);
+  const [contactEmailVal, setContactEmailVal] = useState(systemConfig.contactEmail || 'support@vthinkglobal.com');
+  const [contactPhoneVal, setContactPhoneVal] = useState(systemConfig.contactPhone || '+91 98765 43210');
+  const [contactAddressVal, setContactAddressVal] = useState(systemConfig.contactAddress || 'vThink Global Technologies, Chennai, India');
+  const [certTemplateUploading, setCertTemplateUploading] = useState(false);
+
+  // Capstone Progress Override Editor States
+  const [editorUid, setEditorUid] = useState('');
+  const [editorSelection, setEditorSelection] = useState<any>(null);
+  const [editorChecklist, setEditorChecklist] = useState<Record<string, boolean>>({});
+  const [tempCapstoneId, setTempCapstoneId] = useState('');
+  const [loadingEditor, setLoadingEditor] = useState(false);
+
   const [auditSearchTerm, setAuditSearchTerm] = useState('');
   const [auditCategory, setAuditCategory] = useState('ALL');
   const [auditCurrentPage, setAuditCurrentPage] = useState(1);
@@ -75,13 +96,45 @@ export const Admin: React.FC = () => {
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
   const [approvingUid, setApprovingUid] = useState<string | null>(null);
 
+  const [meetingRequests, setMeetingRequests] = useState<any[]>([]);
+  const [loadingMeetings, setLoadingMeetings] = useState(false);
+
+  const loadMeetingRequests = async () => {
+    setLoadingMeetings(true);
+    try {
+      const db = getFirebaseDb();
+      if (!db) return;
+      const snap = await get(ref(db, 'meetingRequests'));
+      if (snap.exists()) {
+        const data = snap.val();
+        const list = Object.keys(data).map(uid => ({
+          ...data[uid],
+          userId: uid
+        }));
+        setMeetingRequests(list);
+      } else {
+        setMeetingRequests([]);
+      }
+    } catch (err) {
+      console.error('Failed to load meeting requests:', err);
+    } finally {
+      setLoadingMeetings(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'approvals') {
+      loadMeetingRequests();
+    }
+  }, [activeTab]);
+
   // Candidates calculations & filtering
   const candidatesList = usersList.filter(u => u.role !== 'ADMIN');
   const totalCands = candidatesList.length;
   const m1CompleteCands = candidatesList.filter(c => c.progress?.modulesCompleted?.includes(1)).length;
   const labCompleteCands = candidatesList.filter(c => (c.progress?.labsPassed || []).includes(1)).length;
   const certifiedCands = candidatesList.filter(c => 
-    submissions.some(s => s.userEmail === c.email && (s.status === 'CERTIFIED' || s.status === 'HIRE_ELIGIBLE'))
+    submissions.some(s => (s.userEmail === c.email || s.learnerEmail === c.email) && (s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible'))
   ).length;
 
   const filteredCandidates = candidatesList.filter(c => {
@@ -109,7 +162,7 @@ export const Admin: React.FC = () => {
 
     if (filterAccountStatus !== 'all') {
       if (filterAccountStatus === 'CERTIFIED') {
-        const isCertified = submissions.some(s => s.userEmail === c.email && (s.status === 'CERTIFIED' || s.status === 'HIRE_ELIGIBLE'));
+        const isCertified = submissions.some(s => (s.userEmail === c.email || s.learnerEmail === c.email) && (s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible'));
         if (!isCertified) return false;
       } else {
         if (c.accountStatus !== filterAccountStatus) return false;
@@ -117,7 +170,7 @@ export const Admin: React.FC = () => {
     }
 
     // Talent Radar filters
-    const hasSubmission = submissions.some((s) => s.userEmail === c.email);
+    const hasSubmission = submissions.some((s) => s.userEmail === c.email || s.learnerEmail === c.email);
     const readiness = computeLeadReadiness(c, hasSubmission);
     if (showStandoutsOnly && !readiness.isStandout) return false;
     if (filterOutreachTag !== 'all') {
@@ -130,8 +183,8 @@ export const Admin: React.FC = () => {
   })
   // Sort high → low by Lead Readiness Score so the standouts surface
   .sort((a, b) => {
-    const sa = computeLeadReadiness(a, submissions.some((s) => s.userEmail === a.email)).score;
-    const sb = computeLeadReadiness(b, submissions.some((s) => s.userEmail === b.email)).score;
+    const sa = computeLeadReadiness(a, submissions.some((s) => s.userEmail === a.email || s.learnerEmail === a.email)).score;
+    const sb = computeLeadReadiness(b, submissions.some((s) => s.userEmail === b.email || s.learnerEmail === b.email)).score;
     return sb - sa;
   });
 
@@ -140,7 +193,7 @@ export const Admin: React.FC = () => {
     if (candidatesList.length === 0) return { avg: 0, standouts: 0 };
     let sum = 0, standouts = 0;
     candidatesList.forEach((c) => {
-      const r = computeLeadReadiness(c, submissions.some((s) => s.userEmail === c.email));
+      const r = computeLeadReadiness(c, submissions.some((s) => s.userEmail === c.email || s.learnerEmail === c.email));
       sum += r.score;
       if (r.isStandout) standouts++;
     });
@@ -150,7 +203,7 @@ export const Admin: React.FC = () => {
   // Export visible candidates to CSV — includes radar score + outreach metadata
   const handleExportTalentCSV = () => {
     const rows = filteredCandidates.map((c) => {
-      const hasSubmission = submissions.some((s) => s.userEmail === c.email);
+      const hasSubmission = submissions.some((s) => s.userEmail === c.email || s.learnerEmail === c.email);
       const r = computeLeadReadiness(c, hasSubmission);
       const o = outreachData[c.uid];
       const quizScores = Object.values(c.progress?.quizScores || {});
@@ -277,6 +330,12 @@ export const Admin: React.FC = () => {
     setRequirePhoneVerifVal(!!systemConfig.requirePhoneVerification);
     setFreeModulesLimitVal(systemConfig.freeModulesLimit || 2);
     setApprovalModeVal(systemConfig.approvalMode || 'MANUAL');
+    setAcademyNameVal(systemConfig.academyName || 'OrchestrAI Lead Academy');
+    setCertificationPriceVal(systemConfig.certificationPrice || 99);
+    setPremiumUpgradePriceVal(systemConfig.premiumUpgradePrice || 499);
+    setContactEmailVal(systemConfig.contactEmail || 'support@vthinkglobal.com');
+    setContactPhoneVal(systemConfig.contactPhone || '+91 98765 43210');
+    setContactAddressVal(systemConfig.contactAddress || 'vThink Global Technologies, Chennai, India');
   }, [
     systemConfig.emailjsServiceId,
     systemConfig.emailjsTemplateId,
@@ -290,7 +349,13 @@ export const Admin: React.FC = () => {
     systemConfig.requireEmailVerification,
     systemConfig.requirePhoneVerification,
     systemConfig.freeModulesLimit,
-    systemConfig.approvalMode
+    systemConfig.approvalMode,
+    systemConfig.academyName,
+    systemConfig.certificationPrice,
+    systemConfig.premiumUpgradePrice,
+    systemConfig.contactEmail,
+    systemConfig.contactPhone,
+    systemConfig.contactAddress
   ]);
 
   // Template customizer states
@@ -298,11 +363,119 @@ export const Admin: React.FC = () => {
   const [subjectTemplate, setSubjectTemplate] = useState(systemConfig.templates[selectedTemplateKey]?.subject || '');
   const [bodyTemplate, setBodyTemplate] = useState(systemConfig.templates[selectedTemplateKey]?.body || '');
 
+  // Template history states
+  const [showHistory, setShowHistory] = useState(false);
+  const [templateHistory, setTemplateHistory] = useState<Array<{
+    id: string; version: number; subject: string; body: string;
+    savedAt: number; savedBy: string; deactivatedAt?: number;
+  }>>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+
+  // Certificate template history states
+  const [showCertHistory, setShowCertHistory] = useState(false);
+  const [certHistory, setCertHistory] = useState<Array<{
+    id: string; version: number; template: string; fileName: string;
+    savedAt: number; savedBy: string; deactivatedAt?: number;
+  }>>([]);
+  const [certHistoryLoading, setCertHistoryLoading] = useState(false);
+
+  const loadCertHistory = async () => {
+    const db = getFirebaseDb();
+    if (!db) return;
+    setCertHistoryLoading(true);
+    try {
+      const snap = await get(ref(db, 'certTemplateHistory'));
+      if (snap.exists()) {
+        const raw = snap.val() as Record<string, any>;
+        const list = Object.entries(raw)
+          .map(([id, v]) => ({ id, ...v } as any))
+          .sort((a, b) => b.savedAt - a.savedAt);
+        setCertHistory(list);
+      } else {
+        setCertHistory([]);
+      }
+    } catch (e) {
+      console.error("Failed to load cert history:", e);
+      setCertHistory([]);
+    } finally {
+      setCertHistoryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showCertHistory) loadCertHistory();
+  }, [showCertHistory]);
+
   // Synchronize template customizer with global systemConfig changes
   useEffect(() => {
     setSubjectTemplate(systemConfig.templates[selectedTemplateKey]?.subject || '');
     setBodyTemplate(systemConfig.templates[selectedTemplateKey]?.body || '');
   }, [systemConfig.templates, selectedTemplateKey]);
+
+  // Load template history whenever selected key changes
+  const loadTemplateHistory = async (key: string) => {
+    const db = getFirebaseDb();
+    if (!db) return;
+    setHistoryLoading(true);
+    try {
+      const snap = await get(ref(db, `templateHistory/${key}`));
+      if (snap.exists()) {
+        const raw = snap.val() as Record<string, any>;
+        const list = Object.entries(raw)
+          .map(([id, v]) => ({ id, ...v }))
+          .sort((a, b) => b.savedAt - a.savedAt);
+        setTemplateHistory(list);
+      } else {
+        setTemplateHistory([]);
+      }
+    } catch {
+      setTemplateHistory([]);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showHistory) loadTemplateHistory(selectedTemplateKey);
+  }, [selectedTemplateKey, showHistory]);
+
+  // Load candidate capstone and checklist progress when selected
+  useEffect(() => {
+    if (!editorUid) {
+      setEditorSelection(null);
+      setEditorChecklist({});
+      setTempCapstoneId('');
+      return;
+    }
+    setLoadingEditor(true);
+    const db = getFirebaseDb();
+    if (!db) {
+      setLoadingEditor(false);
+      return;
+    }
+    Promise.all([
+      get(ref(db, `capstoneSelections/${editorUid}`)),
+      get(ref(db, `capstoneProgress/${editorUid}`))
+    ]).then(([selSnap, progSnap]) => {
+      if (selSnap.exists()) {
+        const sel = selSnap.val();
+        setEditorSelection(sel);
+        setTempCapstoneId(sel.capstoneId || '');
+      } else {
+        setEditorSelection(null);
+        setTempCapstoneId('');
+      }
+      if (progSnap.exists() && progSnap.val().items) {
+        setEditorChecklist(progSnap.val().items);
+      } else {
+        setEditorChecklist({});
+      }
+      setLoadingEditor(false);
+    }).catch((err) => {
+      console.error('[CapstoneEditor] Load failed:', err);
+      setLoadingEditor(false);
+    });
+  }, [editorUid]);
 
   // Manual project evaluation states
   // evaluationScores removed — Capstone Reviews owns scoring now
@@ -333,7 +506,7 @@ export const Admin: React.FC = () => {
   }
 
   // Filter lists
-  const pendingUsers = usersList.filter(u => u.accountStatus === 'PENDING_APPROVAL');
+  const pendingUsers = usersList.filter(u => u.accountStatus === 'PENDING_APPROVAL' || u.premiumStatus === 'PENDING');
 
   const handleSaveWorkflowConfig = () => {
     updateSystemConfig({
@@ -349,6 +522,300 @@ export const Admin: React.FC = () => {
       requirePhoneVerification: requirePhoneVerifVal
     });
     addToast("Sign-Up Verification settings saved successfully!", "success");
+  };
+
+  const handleSavePricingConfig = () => {
+    updateSystemConfig({
+      academyName: academyNameVal.trim(),
+      certificationPrice: Number(certificationPriceVal),
+      premiumUpgradePrice: Number(premiumUpgradePriceVal),
+      contactEmail: contactEmailVal.trim(),
+      contactPhone: contactPhoneVal.trim(),
+      contactAddress: contactAddressVal.trim()
+    });
+    addToast("Pricing & Contact configurations saved successfully!", "success");
+  };
+
+  // ─── Certificate Template Handlers ────────────────────────────────────
+  const DEFAULT_CERT_HTML_TEMPLATE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>OrchestrAI Lead Certification — {{capstoneId}}</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  body { font-family: 'Segoe UI', Inter, sans-serif; margin: 0; background: #f6f5ff; color: #1c1c2e; }
+  .cert { width: 1100px; max-width: 100%; margin: 40px auto; padding: 60px 80px;
+          background: white; border: 14px solid transparent;
+          background-image: linear-gradient(white,white), linear-gradient(135deg,#6366f1,#9333ea);
+          background-origin: border-box; background-clip: padding-box, border-box;
+          box-shadow: 0 20px 60px rgba(99,102,241,.15); position: relative; }
+  .ribbon { position: absolute; top: -2px; right: 60px; padding: 8px 16px;
+            background: linear-gradient(135deg,#6366f1,#9333ea); color: white;
+            font-weight: 800; letter-spacing: .15em; font-size: 11px; border-radius: 0 0 8px 8px; }
+  h1 { text-align: center; font-size: 38px; margin: 16px 0 8px; letter-spacing: .04em;
+       background: linear-gradient(135deg,#6366f1,#9333ea); -webkit-background-clip: text;
+       background-clip: text; color: transparent; }
+  .subtitle { text-align: center; color: #555; font-size: 13px; letter-spacing: .15em;
+              text-transform: uppercase; margin-bottom: 40px; }
+  .awarded-to { text-align: center; color: #666; font-size: 14px; margin: 30px 0 6px; }
+  .name { text-align: center; font-size: 48px; font-weight: 800; color: #1c1c2e; margin: 8px 0; }
+  .for-completing { text-align: center; color: #666; font-size: 14px; margin: 30px 0 8px; }
+  .capstone { text-align: center; font-size: 22px; font-weight: 700; color: #4f46e5; margin: 4px 0 8px; }
+  .domain { text-align: center; color: #888; font-size: 12px; letter-spacing: .12em;
+            text-transform: uppercase; margin-bottom: 36px; }
+  .decision-row { display: flex; justify-content: center; gap: 60px; margin: 30px 0; }
+  .stat { text-align: center; }
+  .stat-label { color: #888; font-size: 11px; letter-spacing: .15em;
+                text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-size: 32px; font-weight: 800;
+                background: linear-gradient(135deg,#6366f1,#9333ea); -webkit-background-clip: text;
+                background-clip: text; color: transparent; }
+  .signatures { display: flex; justify-content: space-between; align-items: flex-end;
+                margin-top: 60px; padding-top: 24px; border-top: 1px solid #e5e5ef; }
+  .sig { text-align: center; flex: 1; }
+  .sig-line { border-top: 2px solid #1c1c2e; width: 200px; margin: 0 auto 6px; }
+  .sig-name { font-weight: 700; font-size: 13px; }
+  .sig-role { color: #888; font-size: 11px; margin-top: 2px; }
+  .footer { text-align: center; color: #aaa; font-size: 11px; margin-top: 24px;
+            letter-spacing: .1em; text-transform: uppercase; }
+  @media print { body { background: white; } .cert { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="cert">
+  <div class="ribbon">{{ribbonLabel}}</div>
+  <div class="subtitle">vThink Technologies · OrchestrAI Academy</div>
+  <h1>OrchestrAI Lead Certification</h1>
+  <div class="awarded-to">This certifies that</div>
+  <div class="name">{{learnerName}}</div>
+  <div class="for-completing">has successfully built and shipped the capstone</div>
+  <div class="capstone">{{capstoneId}} · {{capstoneTitle}}</div>
+  <div class="domain">{{capstoneDomain}}</div>
+  <div class="decision-row">
+    <div class="stat"><div class="stat-label">Decision</div><div class="stat-value">{{decision}}</div></div>
+    <div class="stat"><div class="stat-label">Score</div><div class="stat-value">{{total}}/100</div></div>
+    <div class="stat"><div class="stat-label">Issued</div><div class="stat-value" style="font-size:18px;font-weight:600;">{{certifiedAt}}</div></div>
+  </div>
+  <div class="signatures">
+    <div class="sig"><div class="sig-line"></div><div class="sig-name">{{certifiedByName}}</div><div class="sig-role">OrchestrAI Academy · Issuing Authority</div></div>
+    <div class="sig"><div class="sig-line"></div><div class="sig-name">Sithanandham R · Founder</div><div class="sig-role">vThink Technologies</div></div>
+  </div>
+  <div class="footer">{{capstoneId}} · Verify at vthinkorchestrai-academy.web.app/certification</div>
+</div>
+</body>
+</html>`;
+
+  const handleDownloadDefaultTemplate = () => {
+    const template = systemConfig.certificateTemplate || DEFAULT_CERT_HTML_TEMPLATE;
+    const blob = new Blob([template], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = systemConfig.certificateTemplateFileName || 'orchestrai_certificate_template.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const archiveCurrentCertTemplate = async (db: any, now: number, prevFileName: string) => {
+    const currentTemplate = systemConfig.certificateTemplate;
+    if (!currentTemplate) return;
+    try {
+      const historyRef = ref(db, 'certTemplateHistory');
+      const snap = await get(historyRef);
+      const existingCount = snap.exists() ? Object.keys(snap.val()).length : 0;
+      
+      if (snap.exists()) {
+        const entries = Object.entries(snap.val() as Record<string, any>)
+          .sort((a, b) => b[1].savedAt - a[1].savedAt);
+        if (entries.length > 0) {
+          const [latestId] = entries[0];
+          await set(ref(db, `certTemplateHistory/${latestId}/deactivatedAt`), now);
+        }
+      }
+
+      const versionRef = push(historyRef);
+      const historyEntry = {
+        version: existingCount + 1,
+        template: currentTemplate,
+        fileName: prevFileName,
+        savedAt: now,
+        savedBy: currentUser?.name || 'Admin',
+      };
+      await set(versionRef, historyEntry);
+    } catch (e) {
+      console.warn('[archiveCurrentCertTemplate] failed:', e);
+    }
+  };
+
+  const handleCertTemplateUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.name.endsWith('.html')) {
+      addToast('Please upload an HTML file (.html).', 'warning');
+      return;
+    }
+    setCertTemplateUploading(true);
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const content = ev.target?.result as string;
+      if (!content) {
+        addToast('Failed to read file.', 'error');
+        setCertTemplateUploading(false);
+        return;
+      }
+
+      const db = getFirebaseDb();
+      const now = Date.now();
+
+      // Archive previous custom template if active
+      if (db && systemConfig.certificateTemplate) {
+        await archiveCurrentCertTemplate(db, now, systemConfig.certificateTemplateFileName || 'Custom Template');
+      }
+
+      await updateSystemConfig({ 
+        certificateTemplate: content,
+        certificateTemplateFileName: file.name
+      });
+
+      addToast(`Certificate template "${file.name}" uploaded and saved successfully!`, 'success');
+      setCertTemplateUploading(false);
+      if (showCertHistory) loadCertHistory();
+    };
+    reader.onerror = () => {
+      addToast('Error reading file.', 'error');
+      setCertTemplateUploading(false);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  const handleResetCertTemplate = async () => {
+    if (!window.confirm("Are you sure you want to revert to the default template? The current custom template will be archived to history.")) return;
+    const db = getFirebaseDb();
+    const now = Date.now();
+    
+    if (db && systemConfig.certificateTemplate) {
+      await archiveCurrentCertTemplate(db, now, systemConfig.certificateTemplateFileName || 'Custom Template');
+    }
+    
+    await updateSystemConfig({
+      certificateTemplate: '',
+      certificateTemplateFileName: ''
+    });
+    
+    addToast('Reverted to default template and archived custom template to history.', 'info');
+    if (showCertHistory) loadCertHistory();
+  };
+
+  const handleRestoreCertTemplate = async (v: { template: string; fileName: string }) => {
+    if (!window.confirm(`Are you sure you want to restore the template "${v.fileName}"? The current active template will be archived.`)) return;
+    const db = getFirebaseDb();
+    const now = Date.now();
+    
+    if (db && systemConfig.certificateTemplate) {
+      await archiveCurrentCertTemplate(db, now, systemConfig.certificateTemplateFileName || 'Custom Template');
+    }
+    
+    await updateSystemConfig({
+      certificateTemplate: v.template,
+      certificateTemplateFileName: v.fileName
+    });
+    
+    addToast(`Restored template "${v.fileName}" successfully.`, 'success');
+    if (showCertHistory) loadCertHistory();
+  };
+
+  const handleDownloadCertHistoryTemplate = (v: { template: string; fileName: string }) => {
+    const blob = new Blob([v.template], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = v.fileName || 'certificate_template_history.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleAdminSaveCapstoneSelection = async () => {
+    if (!editorUid || !tempCapstoneId) {
+      addToast('Please select both a user and a capstone ID.', 'warning');
+      return;
+    }
+    const db = getFirebaseDb();
+    if (!db) return;
+    const selectedUser = usersList.find(u => u.uid === editorUid);
+    if (!selectedUser) return;
+    const cap = CAPSTONES.find(c => c.id === tempCapstoneId);
+    if (!cap) return;
+
+    try {
+      const payload = {
+        capstoneId: tempCapstoneId,
+        capstoneTitle: cap.title,
+        capstoneDomain: cap.domain,
+        selectedAt: Date.now(),
+        status: 'in_progress',
+        userEmail: selectedUser.email,
+        userName: selectedUser.name
+      };
+      await set(ref(db, `capstoneSelections/${editorUid}`), payload);
+      setEditorSelection(payload);
+      addToast('User capstone selection updated successfully!', 'success');
+      logAuditEvent('CAPSTONE_LOCK_OVERRIDE', `Override capstone locked for user ${selectedUser.email}: ${cap.id}`);
+    } catch (err: any) {
+      addToast(`Update failed: ${err?.message || err}`, 'error');
+    }
+  };
+
+  const handleAdminSaveCapstoneChecklist = async () => {
+    if (!editorUid) {
+      addToast('No candidate selected.', 'warning');
+      return;
+    }
+    const capId = editorSelection?.capstoneId || tempCapstoneId;
+    if (!capId) {
+      addToast('Candidate has no locked capstone selected.', 'warning');
+      return;
+    }
+    const db = getFirebaseDb();
+    if (!db) return;
+    const selectedUser = usersList.find(u => u.uid === editorUid);
+    if (!selectedUser) return;
+
+    try {
+      const payload = {
+        capstoneId: capId,
+        items: editorChecklist,
+        updatedAt: Date.now()
+      };
+      await set(ref(db, `capstoneProgress/${editorUid}`), payload);
+      addToast('Checklist progress saved successfully!', 'success');
+      logAuditEvent('CAPSTONE_PROGRESS_OVERRIDE', `Override checklist progress updated for user ${selectedUser.email}`);
+    } catch (err: any) {
+      addToast(`Update failed: ${err?.message || err}`, 'error');
+    }
+  };
+
+  const handleAdminForceCompleteChecklist = () => {
+    const BUILD_DAYS_REF = [
+      { day: 1, count: 6 },
+      { day: 2, count: 5 },
+      { day: 3, count: 4 },
+      { day: 4, count: 5 },
+      { day: 5, count: 7 }
+    ];
+    const fullChecklist: Record<string, boolean> = {};
+    BUILD_DAYS_REF.forEach(day => {
+      for (let i = 0; i < day.count; i++) {
+        fullChecklist[`day${day.day}_t${i}`] = true;
+      }
+    });
+    setEditorChecklist(fullChecklist);
+    addToast('All 27 tasks set to completed in editor. Click "Save Progress" to write changes to cloud.', 'info');
   };
 
   const handleSaveCredentials = () => {
@@ -370,18 +837,51 @@ export const Admin: React.FC = () => {
     setSelectedTemplateKey(key);
     setSubjectTemplate(systemConfig.templates[key]?.subject || '');
     setBodyTemplate(systemConfig.templates[key]?.body || '');
+    setShowHistory(false);
   };
 
-  const handleSaveTemplate = () => {
+  const handleSaveTemplate = async () => {
+    const db = getFirebaseDb();
+    const now = Date.now();
+    const currentSubject = systemConfig.templates[selectedTemplateKey]?.subject || '';
+    const currentBody = systemConfig.templates[selectedTemplateKey]?.body || '';
+
+    // Archive current version to history before overwriting (skip if blank/unchanged)
+    if (db && (currentSubject || currentBody)) {
+      try {
+        const historyRef = ref(db, `templateHistory/${selectedTemplateKey}`);
+        const snap = await get(historyRef);
+        const existingCount = snap.exists() ? Object.keys(snap.val()).length : 0;
+        const versionRef = push(historyRef);
+        const prevEntry: Record<string, any> = {
+          version: existingCount + 1,
+          subject: currentSubject,
+          body: currentBody,
+          savedAt: now,
+          savedBy: currentUser?.name || 'Admin',
+        };
+        // Mark deactivated timestamp on the most-recent previous entry
+        if (snap.exists()) {
+          const entries = Object.entries(snap.val() as Record<string, any>)
+            .sort((a, b) => b[1].savedAt - a[1].savedAt);
+          if (entries.length > 0) {
+            const [latestId] = entries[0];
+            await set(ref(db, `templateHistory/${selectedTemplateKey}/${latestId}/deactivatedAt`), now);
+          }
+        }
+        await set(versionRef, prevEntry);
+      } catch (e) {
+        console.warn('[handleSaveTemplate] History archive failed:', e);
+      }
+    }
+
     const updatedTemplates = {
       ...systemConfig.templates,
-      [selectedTemplateKey]: {
-        subject: subjectTemplate,
-        body: bodyTemplate
-      }
+      [selectedTemplateKey]: { subject: subjectTemplate, body: bodyTemplate }
     };
     updateSystemConfig({ templates: updatedTemplates });
-    alert("Email template updated!");
+    addToast('Email template saved! Previous version archived to history.', 'success');
+    if (showHistory) loadTemplateHistory(selectedTemplateKey);
   };
 
   const triggerApprovalEmail = async (student: UserProfile) => {
@@ -450,10 +950,27 @@ export const Admin: React.FC = () => {
   const handleApproveUser = async (user: UserProfile) => {
     if (approvingUid) return;
     setApprovingUid(user.uid);
-    updateUserProfile(user.uid, { accountStatus: 'APPROVED' });
-    await triggerApprovalEmail(user);
+    const isPremiumPending = user.premiumStatus === 'PENDING';
+
+    if (isPremiumPending) {
+      updateUserProfile(user.uid, { 
+        isPremiumUpgraded: true, 
+        premiumStatus: 'PREMIUM' 
+      });
+      addNotificationLog({
+        recipient: `${user.name} (${user.email})`,
+        type: 'Premium Access Approved',
+        subject: 'Your OrchestrAI Premium Access has been approved!',
+        channel: 'In-app Notification',
+        status: 'Sent'
+      });
+      alert(`Candidate ${user.name} Premium Upgrade approved!`);
+    } else {
+      updateUserProfile(user.uid, { accountStatus: 'APPROVED' });
+      await triggerApprovalEmail(user);
+      alert(`Candidate ${user.name} approved! Access unlocked.`);
+    }
     setApprovingUid(null);
-    alert(`Candidate ${user.name} approved! Access unlocked.`);
   };
 
 
@@ -822,6 +1339,20 @@ export const Admin: React.FC = () => {
             </button>
           )}
 
+          {!isSme && (
+            <button
+              onClick={() => setActiveTab('feedbackAnalytics')}
+              className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'feedbackAnalytics'
+                  ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+              }`}
+            >
+              <MessageSquare className="h-4 w-4" />
+              <span>Feedback Analytics</span>
+            </button>
+          )}
+
           <button
             onClick={() => setActiveTab('capstoneReviews')}
             className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
@@ -833,6 +1364,20 @@ export const Admin: React.FC = () => {
             <Award className="h-4 w-4" />
             <span>Capstone Reviews</span>
           </button>
+
+          {!isSme && (
+            <button
+              onClick={() => setActiveTab('capstoneEditor')}
+              className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'capstoneEditor'
+                  ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+              }`}
+            >
+              <ListChecks className="h-4 w-4" />
+              <span>Capstone Progress Editor</span>
+            </button>
+          )}
 
           {!isSme && (<>
           <button
@@ -984,7 +1529,7 @@ export const Admin: React.FC = () => {
                   <div className="space-y-1 min-w-0">
                     <p className="text-[11px] font-extrabold text-emerald-400 uppercase tracking-[0.12em]">Certified Grads</p>
                     <h3 className="text-3xl font-extrabold text-[var(--text-primary)] leading-none mt-1">
-                      {submissions.filter(s => s.status === 'CERTIFIED' || s.status === 'HIRE_ELIGIBLE').length}
+                      {submissions.filter(s => s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible').length}
                     </h3>
                     <p className="text-[10px] text-[var(--text-muted)] font-semibold mt-1.5">Passed portfolio review</p>
                   </div>
@@ -1017,11 +1562,11 @@ export const Admin: React.FC = () => {
                     
                     const inProgressVal = usersList.filter(u => {
                       if (u.email === 'vthinkorchestrai@gmail.com') return false;
-                      const hasCertified = submissions.some(s => s.userEmail === u.email && (s.status === 'CERTIFIED' || s.status === 'HIRE_ELIGIBLE'));
+                      const hasCertified = submissions.some(s => (s.userEmail === u.email || s.learnerEmail === u.email) && (s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible'));
                       return !hasCertified;
                     }).length;
 
-                    const certifiedVal = submissions.filter(s => s.status === 'CERTIFIED' || s.status === 'HIRE_ELIGIBLE').length;
+                    const certifiedVal = submissions.filter(s => s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible').length;
 
                     const steps = [
                       { label: 'Landed (Anonymous Traffic)', val: totalVal, pct: 100, color: 'from-indigo-600 to-indigo-500', microConversion: '100% baseline' },
@@ -1310,6 +1855,237 @@ export const Admin: React.FC = () => {
           {activeTab === 'capstoneReviews' && (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-250">
               <CapstoneReviewsAdmin />
+            </div>
+          )}
+
+          {/* TAB: FEEDBACK ANALYTICS */}
+          {activeTab === 'feedbackAnalytics' && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-250">
+              <FeedbackAnalytics usersList={usersList} />
+            </div>
+          )}
+
+          {/* TAB: CAPSTONE PROGRESS OVERRIDE EDITOR */}
+          {activeTab === 'capstoneEditor' && !isSme && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-indigo-500/5 via-[var(--bg-card)]/40 to-purple-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start gap-4">
+                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-500/25">
+                    <ListChecks className="h-6 w-6" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Capstone Override Editor</h3>
+                      <span className="text-[10px] font-extrabold text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Admin Override Panel</span>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                      Select any candidate, override their locked capstone, or toggle checklist tasks on their behalf to resolve submission blocks.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Selector */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
+                <label className="block text-xs font-extrabold uppercase tracking-wider text-[var(--text-secondary)] mb-2">
+                  Select Candidate/User to Edit
+                </label>
+                <select
+                  value={editorUid}
+                  onChange={(e) => setEditorUid(e.target.value)}
+                  className="max-w-md w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+                >
+                  <option value="">-- Choose User --</option>
+                  {usersList.filter(u => u.role !== 'ADMIN').map(u => (
+                    <option key={u.uid} value={u.uid}>{u.name} ({u.email})</option>
+                  ))}
+                </select>
+              </div>
+
+              {editorUid && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  
+                  {/* Left Column: Capstone Selection Override */}
+                  <div className="space-y-6 lg:col-span-1">
+                    <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)] bg-[var(--bg-card)]/50 space-y-4">
+                      <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5 border-b border-[var(--border-color)] pb-3">
+                        <span>🎯</span> Selection Override
+                      </h4>
+
+                      {loadingEditor ? (
+                        <div className="text-xs text-[var(--text-secondary)]">Loading selection info...</div>
+                      ) : (
+                        <div className="space-y-4">
+                          <div>
+                            <p className="text-[10px] text-[var(--text-secondary)] font-bold uppercase">Current Selection</p>
+                            <p className="text-xs font-bold text-[var(--text-primary)] mt-1">
+                              {editorSelection ? `${editorSelection.capstoneId} · ${editorSelection.capstoneTitle}` : 'None locked'}
+                            </p>
+                            <p className="text-[10px] text-[var(--text-secondary)] mt-0.5">
+                              Status: <span className="font-semibold text-indigo-400">{editorSelection?.status || 'N/A'}</span>
+                            </p>
+                          </div>
+
+                          <div className="pt-2 border-t border-[var(--border-color)] space-y-3">
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                              Change Locked Capstone
+                            </label>
+                            <select
+                              value={tempCapstoneId}
+                              onChange={(e) => setTempCapstoneId(e.target.value)}
+                              className="w-full px-2 py-1.5 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            >
+                              <option value="">-- Change Selection --</option>
+                              {CAPSTONES.map(c => (
+                                <option key={c.id} value={c.id}>{c.id} · {c.title}</option>
+                              ))}
+                            </select>
+                            <button
+                              onClick={handleAdminSaveCapstoneSelection}
+                              className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold transition-all cursor-pointer"
+                            >
+                              Lock selected capstone
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right Column: 5-Day Progress Checklist Override */}
+                  <div className="lg:col-span-2">
+                    <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)] space-y-5">
+                      <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+                        <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                          <span>📋</span> 5-Day Progress Checklist Override
+                        </h4>
+                        <div className="flex gap-2.5">
+                          <button
+                            onClick={handleAdminForceCompleteChecklist}
+                            className="px-2.5 py-1 text-[10px] bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 text-emerald-400 font-extrabold rounded"
+                          >
+                            Mark All Done (100%)
+                          </button>
+                          <button
+                            onClick={() => setEditorChecklist({})}
+                            className="px-2.5 py-1 text-[10px] bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 text-red-400 font-extrabold rounded"
+                          >
+                            Reset Checklist
+                          </button>
+                        </div>
+                      </div>
+
+                      {loadingEditor ? (
+                        <div className="text-xs text-[var(--text-secondary)] py-10 text-center">Loading progress checklist...</div>
+                      ) : (
+                        <div className="space-y-6">
+                          
+                          {/* Day-by-day checklist override */}
+                          {(() => {
+                            const BUILD_DAYS_REF = [
+                              { day: 1, label: 'Orientation & Scaffold', tasks: [
+                                'Firebase project created (Auth + RTDB + Storage + Hosting enabled)',
+                                'React 19 + Vite + TypeScript + Tailwind v4 scaffolded',
+                                'GitHub repo created & first commit pushed (initial scaffold)',
+                                'Login + Signup screens with Firebase Auth wired',
+                                'App shell + routing (RR7) with protected routes',
+                                'README.md committed with project intent'
+                              ]},
+                              { day: 2, label: 'Dashboard & Masters', tasks: [
+                                'Dashboard layout with KPI cards (Total Records, This Week, Pending, Closed)',
+                                'Master Data CRUD for each master (List + Create + Edit + Delete)',
+                                'RBAC enforced — only Admin can create/edit masters',
+                                'Indexed RTDB queries for dashboard performance',
+                                'Day-2 git push'
+                              ]},
+                              { day: 3, label: 'Transactions', tasks: [
+                                'Transaction Entity full CRUD (List + Create + Edit + Detail)',
+                                '8-component intent prompt for transaction form (outcome/actor/validation/security/stack/acceptance/edges/data)',
+                                'Server-side validation on create + edit',
+                                'Day-3 git push (each validated component = 1 commit)'
+                              ]},
+                              { day: 4, label: 'Workflow & Attachments', tasks: [
+                                'Status transition matrix implemented — only valid transitions allowed',
+                                'Comments thread on transaction detail (Firebase RTDB)',
+                                'Attachments upload to Firebase Storage with type/size validation',
+                                'Audit log entry written on every status change',
+                                'Day-4 git push'
+                              ]},
+                              { day: 5, label: 'Reporting & Packaging', tasks: [
+                                'Summary Report + Status Report + Activity Report (Excel + PDF export)',
+                                'RBAC matrix complete — Admin, Manager, User permissions enforced everywhere',
+                                'Trainer Extension feature implemented (your differentiator)',
+                                'Deployed to Firebase Hosting — live public URL',
+                                'README polished + DESIGN.md created (names OGE + 5 design docs)',
+                                'Final git push + version tag (e.g. v1.0.0)',
+                                'Submit via Module 7 → Submit Capstone'
+                              ]}
+                            ];
+
+                            const totalTasks = 27;
+                            const doneTasks = Object.values(editorChecklist).filter(Boolean).length;
+                            const progressPct = Math.round((doneTasks / totalTasks) * 100);
+
+                            return (
+                              <div className="space-y-6">
+                                {/* Overall stats */}
+                                <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]/30 flex items-center justify-between">
+                                  <div>
+                                    <span className="text-[10px] uppercase font-bold text-[var(--text-secondary)]">Current Checklist Progress</span>
+                                    <span className="block text-sm font-extrabold text-[var(--text-primary)] mt-0.5">{doneTasks} / {totalTasks} tasks completed</span>
+                                  </div>
+                                  <div className="text-right">
+                                    <span className="text-lg font-extrabold text-indigo-400">{progressPct}%</span>
+                                  </div>
+                                </div>
+
+                                {/* Task loops */}
+                                <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                                  {BUILD_DAYS_REF.map((day) => (
+                                    <div key={day.day} className="space-y-2 border border-[var(--border-color)] rounded-xl p-4 bg-slate-500/5">
+                                      <h5 className="text-xs font-extrabold text-[var(--text-primary)]">Day {day.day}: {day.label}</h5>
+                                      <div className="space-y-1.5 pl-1.5">
+                                        {day.tasks.map((task, idx) => {
+                                          const key = `day${day.day}_t${idx}`;
+                                          return (
+                                            <label key={key} className="flex items-start space-x-2 text-[11px] text-[var(--text-secondary)] cursor-pointer hover:text-[var(--text-primary)]">
+                                              <input
+                                                type="checkbox"
+                                                checked={!!editorChecklist[key]}
+                                                onChange={(e) => {
+                                                  setEditorChecklist({ ...editorChecklist, [key]: e.target.checked });
+                                                }}
+                                                className="mt-0.5 h-3.5 w-3.5 rounded text-purple-500 cursor-pointer"
+                                              />
+                                              <span>{task}</span>
+                                            </label>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                <div className="pt-4 border-t border-[var(--border-color)]">
+                                  <button
+                                    onClick={handleAdminSaveCapstoneChecklist}
+                                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded text-xs font-bold flex items-center space-x-1 shadow cursor-pointer"
+                                  >
+                                    <Save className="h-4 w-4" />
+                                    <span>Save Checklist Progress</span>
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                </div>
+              )}
             </div>
           )}
 
@@ -1660,7 +2436,7 @@ export const Admin: React.FC = () => {
               <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
                 {/* Sub-Tab navigation bar */}
                 <div className="flex flex-wrap gap-2 border-b border-[var(--border-color)] pb-4 mb-6">
-                  {(['connection', 'gating', 'verification', 'emailjs', 'aireview', 'maintenance'] as const).map((subTab) => (
+                  {(['connection', 'gating', 'pricing', 'verification', 'emailjs', 'aireview', 'maintenance'] as const).map((subTab) => (
                     <button
                       key={subTab}
                       type="button"
@@ -1673,6 +2449,7 @@ export const Admin: React.FC = () => {
                     >
                       {subTab === 'connection' && '🔌 Database & Auth'}
                       {subTab === 'gating' && '🚪 Access Gating'}
+                      {subTab === 'pricing' && '💳 Pricing & Support'}
                       {subTab === 'verification' && '🛡️ Sign-Up Verification'}
                       {subTab === 'emailjs' && '📧 Email Config'}
                       {subTab === 'aireview' && '🤖 AI Review (Tier B)'}
@@ -1968,6 +2745,257 @@ export const Admin: React.FC = () => {
                     </div>
                   )}
 
+                  {/* SUB-TAB: PRICING & PORTAL SUPPORT SETTINGS */}
+                  {settingsSubTab === 'pricing' && (
+                    <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-6 animate-in fade-in duration-200">
+                      <div className="border-b border-[var(--border-color)] pb-3">
+                        <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                          <span>💳</span> Portal Pricing & Contact Support Settings
+                        </h4>
+                      </div>
+
+                      <div className="space-y-6">
+                        {/* Academy Portal Name */}
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2">
+                            Academy Portal Name
+                          </label>
+                          <input
+                            type="text"
+                            value={academyNameVal}
+                            onChange={(e) => setAcademyNameVal(e.target.value)}
+                            className="max-w-md w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
+                            placeholder="OrchestrAI Lead Academy"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+                          {/* Certification Fee */}
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2">
+                              Standard Certification Price (₹)
+                            </label>
+                            <input
+                              type="number"
+                              value={certificationPriceVal}
+                              onChange={(e) => setCertificationPriceVal(parseInt(e.target.value) || 0)}
+                              className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                            <p className="text-[9px] text-[var(--text-secondary)] mt-1">
+                              * The standard price students pay to unlock paid modules.
+                            </p>
+                          </div>
+
+                          {/* Premium Upgrade Fee */}
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2">
+                              Premium Case Studies Upgrade Fee (₹)
+                            </label>
+                            <input
+                              type="number"
+                              value={premiumUpgradePriceVal}
+                              onChange={(e) => setPremiumUpgradePriceVal(parseInt(e.target.value) || 0)}
+                              className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                            <p className="text-[9px] text-[var(--text-secondary)] mt-1">
+                              * Fee certified students pay to unlock advanced case studies.
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Contact details card */}
+                        <div className="border border-[var(--border-color)] rounded-xl p-4 bg-[var(--bg-card)]/50 space-y-4 max-w-2xl">
+                          <h5 className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+                            Global Support Contact Info
+                          </h5>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                                Support Email Address
+                              </label>
+                              <input
+                                type="email"
+                                value={contactEmailVal}
+                                onChange={(e) => setContactEmailVal(e.target.value)}
+                                className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
+                                placeholder="support@vthinkglobal.com"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                                Support Phone Number
+                              </label>
+                              <input
+                                type="text"
+                                value={contactPhoneVal}
+                                onChange={(e) => setContactPhoneVal(e.target.value)}
+                                className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
+                                placeholder="+91 98765 43210"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                              Office Address
+                            </label>
+                            <input
+                              type="text"
+                              value={contactAddressVal}
+                              onChange={(e) => setContactAddressVal(e.target.value)}
+                              className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
+                              placeholder="vThink Global Technologies, Chennai, India"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Certificate Template Upload/Download */}
+                        <div className="border border-[var(--border-color)] rounded-xl p-4 bg-[var(--bg-card)]/50 space-y-4 max-w-2xl">
+                          <h5 className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider flex items-center gap-1.5">
+                            🏅 Certificate HTML Template
+                          </h5>
+                          <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
+                            Download the current certificate template, customise it locally (the system will fill <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{learnerName}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{capstoneId}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{decision}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{total}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{certifiedAt}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{certifiedByName}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{capstoneTitle}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{capstoneDomain}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{ribbonLabel}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{certificationName}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{level}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{certificateNumber}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{issuedDate}}'}</code>, <code className="bg-[var(--surface-sunken)] px-1 rounded text-[10px]">{'{{verificationUrl}}'}</code> automatically), then upload it back.
+                          </p>
+                          {systemConfig.certificateTemplate ? (
+                            <div className="flex items-center gap-2 text-[11px] text-emerald-400">
+                              <span>✅ Custom template active ({systemConfig.certificateTemplateFileName || 'unnamed'})</span>
+                              <button
+                                onClick={handleResetCertTemplate}
+                                className="text-rose-400 hover:underline text-[10px] cursor-pointer"
+                              >Reset to default</button>
+                            </div>
+                          ) : (
+                            <p className="text-[11px] text-amber-400">⚠️ Using built-in default template.</p>
+                          )}
+                          <div className="flex flex-wrap gap-3">
+                            <button
+                              onClick={handleDownloadDefaultTemplate}
+                              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300 text-xs font-bold transition-all cursor-pointer"
+                            >
+                              ⬇ Download {systemConfig.certificateTemplate ? 'Current' : 'Default'} Template
+                            </button>
+                            <label className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:brightness-110 text-white text-xs font-bold transition-all cursor-pointer ${certTemplateUploading ? 'opacity-60 pointer-events-none' : ''}`}>
+                              {certTemplateUploading ? '⏳ Uploading…' : '⬆ Upload Custom Template'}
+                              <input
+                                type="file"
+                                accept=".html"
+                                className="sr-only"
+                                onChange={handleCertTemplateUpload}
+                                disabled={certTemplateUploading}
+                              />
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => { setShowCertHistory(h => !h); }}
+                              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300 text-xs font-bold transition-all cursor-pointer"
+                            >
+                              <History className="h-3.5 w-3.5" />
+                              {showCertHistory ? 'Hide Version History' : 'View Version History'}
+                            </button>
+                          </div>
+
+                          {showCertHistory && (
+                            <div className="border border-indigo-500/20 rounded-xl p-4 bg-indigo-500/5 space-y-3 mt-3 animate-in fade-in duration-200">
+                              <div className="flex items-center justify-between">
+                                <h5 className="text-[11px] font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
+                                  <History className="h-3.5 w-3.5" /> Certificate Template History
+                                </h5>
+                                <span className="text-[10px] text-[var(--text-secondary)]">Most recent first</span>
+                              </div>
+
+                              {/* Current live version */}
+                              <div className="border border-emerald-500/30 rounded-lg p-3 bg-emerald-500/5">
+                                <div className="flex items-center justify-between mb-1.5">
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">🟢 Current Live</span>
+                                  <span className="text-[10px] text-[var(--text-secondary)]">Active now</span>
+                                </div>
+                                <p className="text-[11px] font-semibold text-[var(--text-primary)]">
+                                  {systemConfig.certificateTemplateFileName || 'Built-in Default Template'}
+                                </p>
+                                <p className="text-[9px] text-[var(--text-secondary)] mt-0.5">
+                                  {systemConfig.certificateTemplate ? 'Custom uploaded HTML template' : 'System default template'}
+                                </p>
+                              </div>
+
+                              {certHistoryLoading ? (
+                                <div className="text-[11px] text-[var(--text-secondary)] text-center py-4 animate-pulse">Loading history…</div>
+                              ) : certHistory.length === 0 ? (
+                                <div className="text-[11px] text-[var(--text-secondary)] text-center py-4 italic">No previous versions yet. Upload templates to start tracking history.</div>
+                              ) : (
+                                <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+                                  {certHistory.map((v) => {
+                                    const activeDuration = v.deactivatedAt
+                                      ? v.deactivatedAt - v.savedAt
+                                      : Date.now() - v.savedAt;
+                                    const days = Math.floor(activeDuration / 86400000);
+                                    const hrs = Math.floor((activeDuration % 86400000) / 3600000);
+                                    const durationLabel = days > 0 ? `${days}d ${hrs}h` : `${hrs}h`;
+                                    return (
+                                      <div key={v.id} className="border border-[var(--border-color)] rounded-lg p-3 bg-[var(--bg-card)] hover:border-indigo-500/30 transition-all">
+                                        <div className="flex items-start justify-between gap-2 mb-1.5">
+                                          <div className="flex items-center gap-2 flex-wrap">
+                                            <span className="text-[9px] font-extrabold uppercase tracking-wider text-indigo-400">v{v.version}</span>
+                                            <span className="text-[10px] text-[var(--text-secondary)]">
+                                              Saved {new Date(v.savedAt).toLocaleString()} by {v.savedBy}
+                                            </span>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            <button
+                                              type="button"
+                                              onClick={() => handleDownloadCertHistoryTemplate(v)}
+                                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300 text-[9px] font-bold transition-all cursor-pointer animate-none shadow-none"
+                                              title="Download this template HTML file"
+                                            >
+                                              Download
+                                            </button>
+                                            <button
+                                              type="button"
+                                              onClick={() => handleRestoreCertTemplate(v)}
+                                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-amber-500/30 hover:bg-amber-500/10 text-amber-400 text-[9px] font-bold transition-all cursor-pointer animate-none shadow-none"
+                                              title="Restore this version to live"
+                                            >
+                                              <RotateCcw className="h-2.5 w-2.5" /> Restore
+                                            </button>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-[var(--surface-sunken)] text-[var(--text-secondary)] border border-[var(--border-color)]">
+                                            Active: {durationLabel}
+                                          </span>
+                                          {v.deactivatedAt && (
+                                            <span className="text-[9px] text-[var(--text-secondary)]">
+                                              → replaced {new Date(v.deactivatedAt).toLocaleDateString()}
+                                            </span>
+                                          )}
+                                        </div>
+                                        <p className="text-[10px] text-[var(--text-primary)] mt-1 font-mono truncate">
+                                          Filename: {v.fileName}
+                                        </p>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="pt-4 border-t border-[var(--border-color)]">
+                          <button
+                            onClick={handleSavePricingConfig}
+                            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded text-xs font-bold flex items-center space-x-1 shadow cursor-pointer"
+                          >
+                            <Save className="h-4 w-4" />
+                            <span>Save Pricing & Contact Settings</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* SUB-TAB: TWO-LEVEL SIGN-UP VERIFICATION */}
                   {settingsSubTab === 'verification' && (
                     <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-6 animate-in fade-in duration-200">
@@ -2247,7 +3275,7 @@ export const Admin: React.FC = () => {
                             <p className="text-[10px] text-[var(--text-secondary)] font-mono leading-relaxed">{getTemplatePlaceholders()}</p>
                           </div>
 
-                          <div className="pt-2">
+                          <div className="pt-2 flex items-center gap-3 flex-wrap">
                             <button
                               onClick={handleSaveTemplate}
                               className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold flex items-center space-x-1 cursor-pointer"
@@ -2255,7 +3283,89 @@ export const Admin: React.FC = () => {
                               <Save className="h-4 w-4" />
                               <span>Save Template Layout</span>
                             </button>
+                            <button
+                              onClick={() => { setShowHistory(h => !h); if (!showHistory) loadTemplateHistory(selectedTemplateKey); }}
+                              className="px-4 py-2 border border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300 rounded text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all"
+                            >
+                              <History className="h-3.5 w-3.5" />
+                              {showHistory ? 'Hide History' : 'View Version History'}
+                            </button>
                           </div>
+
+                          {/* ─── Template Version History Panel ────────────────── */}
+                          {showHistory && (
+                            <div className="border border-indigo-500/20 rounded-xl p-4 bg-indigo-500/5 space-y-3 animate-in fade-in duration-200">
+                              <div className="flex items-center justify-between">
+                                <h5 className="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
+                                  <History className="h-3.5 w-3.5" /> Version History
+                                </h5>
+                                <span className="text-[10px] text-[var(--text-secondary)]">Most recent first</span>
+                              </div>
+
+                              {/* Current (live) version */}
+                              <div className="border border-emerald-500/30 rounded-lg p-3 bg-emerald-500/5">
+                                <div className="flex items-center justify-between mb-1.5">
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">🟢 Current Live</span>
+                                  <span className="text-[10px] text-[var(--text-secondary)]">Active now</span>
+                                </div>
+                                <p className="text-[11px] font-semibold text-[var(--text-primary)] truncate">{systemConfig.templates[selectedTemplateKey]?.subject || '(no subject)'}</p>
+                                <p className="text-[10px] text-[var(--text-secondary)] mt-0.5 line-clamp-2 font-mono leading-snug">{(systemConfig.templates[selectedTemplateKey]?.body || '').slice(0, 160)}{(systemConfig.templates[selectedTemplateKey]?.body || '').length > 160 ? '…' : ''}</p>
+                              </div>
+
+                              {historyLoading ? (
+                                <div className="text-[11px] text-[var(--text-secondary)] text-center py-4 animate-pulse">Loading history…</div>
+                              ) : templateHistory.length === 0 ? (
+                                <div className="text-[11px] text-[var(--text-secondary)] text-center py-4 italic">No previous versions yet. Save the template again to start tracking.</div>
+                              ) : (
+                                <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+                                  {templateHistory.map((v) => {
+                                    const activeDuration = v.deactivatedAt
+                                      ? v.deactivatedAt - v.savedAt
+                                      : Date.now() - v.savedAt;
+                                    const days = Math.floor(activeDuration / 86400000);
+                                    const hrs = Math.floor((activeDuration % 86400000) / 3600000);
+                                    const durationLabel = days > 0 ? `${days}d ${hrs}h` : `${hrs}h`;
+                                    return (
+                                      <div key={v.id} className="border border-[var(--border-color)] rounded-lg p-3 bg-[var(--bg-card)] hover:border-indigo-500/30 transition-all">
+                                        <div className="flex items-start justify-between gap-2 mb-1.5">
+                                          <div className="flex items-center gap-2 flex-wrap">
+                                            <span className="text-[9px] font-extrabold uppercase tracking-wider text-indigo-400">v{v.version}</span>
+                                            <span className="text-[10px] text-[var(--text-secondary)]">
+                                              Saved {new Date(v.savedAt).toLocaleString()} by {v.savedBy}
+                                            </span>
+                                          </div>
+                                          <button
+                                            onClick={() => {
+                                              setSubjectTemplate(v.subject);
+                                              setBodyTemplate(v.body);
+                                              addToast(`v${v.version} restored to editor. Click Save to apply.`, 'info');
+                                              setShowHistory(false);
+                                            }}
+                                            className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded border border-amber-500/30 hover:bg-amber-500/10 text-amber-400 text-[9px] font-bold transition-all cursor-pointer"
+                                            title="Restore this version to editor"
+                                          >
+                                            <RotateCcw className="h-2.5 w-2.5" /> Restore
+                                          </button>
+                                        </div>
+                                        <div className="flex items-center gap-3 mb-1.5">
+                                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-[var(--surface-sunken)] text-[var(--text-secondary)] border border-[var(--border-color)]">
+                                            Active: {durationLabel}
+                                          </span>
+                                          {v.deactivatedAt && (
+                                            <span className="text-[9px] text-[var(--text-secondary)]">
+                                              → replaced {new Date(v.deactivatedAt).toLocaleDateString()}
+                                            </span>
+                                          )}
+                                        </div>
+                                        <p className="text-[11px] font-semibold text-[var(--text-primary)] truncate">{v.subject || '(no subject)'}</p>
+                                        <p className="text-[10px] text-[var(--text-secondary)] mt-0.5 line-clamp-2 font-mono leading-snug">{v.body.slice(0, 160)}{v.body.length > 160 ? '…' : ''}</p>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -2308,7 +3418,7 @@ export const Admin: React.FC = () => {
                         <span className="text-[10px] font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Payment Gate</span>
                       </div>
                       <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
-                        Verify ₹99 payments and unlock premium access (Modules 3–8). Pending requests show up here when the workflow is set to Manual approval mode.
+                        Verify ₹99 payments and unlock premium access (Modules 3–8), or approve certified users upgrading to Premium. Pending requests show up here when the workflow is set to Manual approval mode.
                       </p>
                     </div>
                   </div>
@@ -2320,47 +3430,151 @@ export const Admin: React.FC = () => {
                 </div>
               </div>
 
-              {/* Content card */}
+              {/* Card 1: Program Access Approvals (₹99) */}
               <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
-              {pendingUsers.length === 0 ? (
-                <div className="py-12 text-center text-[var(--text-secondary)]">
-                  <CheckCircle className="h-10 w-10 text-emerald-500/30 mx-auto mb-2" />
-                  <p className="text-xs font-bold text-[var(--text-primary)]">All clear! No pending approvals</p>
-                  <p className="text-[11px] mt-1">Pending payments will appear here in manual mode.</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto border border-[var(--border-color)] rounded-lg">
-                  <table className="w-full text-left border-collapse text-xs">
-                    <thead>
-                      <tr className="bg-slate-500/5 font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)]">
-                        <th className="p-4">Name / Email</th>
-                        <th className="p-4">Razorpay Payment ID</th>
-                        <th className="p-4 text-right">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
-                      {pendingUsers.map(user => (
-                        <tr key={user.uid} className="hover:bg-slate-500/5">
-                          <td className="p-4">
-                            <div className="font-bold text-[var(--text-primary)]">{user.name}</div>
-                            <div>{user.email}</div>
-                          </td>
-                          <td className="p-4 font-mono font-bold text-[var(--text-primary)]">{user.paymentId || 'N/A'}</td>
-                          <td className="p-4 text-right">
-                            <button
-                              onClick={() => handleApproveUser(user)}
-                              disabled={approvingUid === user.uid}
-                              className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded text-[11px] font-bold shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {approvingUid === user.uid ? 'Approving…' : 'Approve Candidate'}
-                            </button>
-                          </td>
+                <h4 className="text-sm font-bold text-[var(--text-primary)] mb-4 flex items-center gap-1.5">
+                  <span className="inline-block w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                  Program Access Approvals (₹99)
+                </h4>
+                {usersList.filter(u => u.accountStatus === 'PENDING_APPROVAL').length === 0 ? (
+                  <div className="py-8 text-center text-[var(--text-secondary)] text-xs">
+                    No pending program access approvals.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto border border-[var(--border-color)] rounded-lg">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="bg-slate-500/5 font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)]">
+                          <th className="p-4">Name / Email</th>
+                          <th className="p-4">Razorpay Payment ID</th>
+                          <th className="p-4 text-right">Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
+                        {usersList
+                          .filter(u => u.accountStatus === 'PENDING_APPROVAL')
+                          .map(user => (
+                            <tr key={user.uid} className="hover:bg-slate-500/5">
+                              <td className="p-4">
+                                <div className="font-bold text-[var(--text-primary)]">{user.name}</div>
+                                <div>{user.email}</div>
+                              </td>
+                              <td className="p-4 font-mono font-bold text-[var(--text-primary)]">{user.paymentId || 'N/A'}</td>
+                              <td className="p-4 text-right">
+                                <button
+                                  onClick={() => handleApproveUser(user)}
+                                  disabled={approvingUid === user.uid}
+                                  className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded text-[11px] font-bold shadow transition-all"
+                                >
+                                  {approvingUid === user.uid ? 'Approving…' : 'Approve'}
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              {/* Card 2: Premium Upgrade Approvals (₹499) */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
+                <h4 className="text-sm font-bold text-[var(--text-primary)] mb-4 flex items-center gap-1.5">
+                  <span className="inline-block w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse" />
+                  Premium Upgrade Approvals (₹499)
+                </h4>
+                {usersList.filter(u => u.premiumStatus === 'PENDING').length === 0 ? (
+                  <div className="py-8 text-center text-[var(--text-secondary)] text-xs">
+                    No pending premium upgrade approvals.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto border border-[var(--border-color)] rounded-lg">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="bg-slate-500/5 font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] font-bold">
+                          <th className="p-4">Name / Email</th>
+                          <th className="p-4">Razorpay Payment ID</th>
+                          <th className="p-4 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
+                        {usersList
+                          .filter(u => u.premiumStatus === 'PENDING')
+                          .map(user => (
+                            <tr key={user.uid} className="hover:bg-slate-500/5">
+                              <td className="p-4">
+                                <div className="font-bold text-[var(--text-primary)]">{user.name}</div>
+                                <div>{user.email}</div>
+                              </td>
+                              <td className="p-4 font-mono font-bold text-[var(--text-primary)]">{user.paymentId || 'N/A'}</td>
+                              <td className="p-4 text-right">
+                                <button
+                                  onClick={() => handleApproveUser(user)}
+                                  disabled={approvingUid === user.uid}
+                                  className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded text-[11px] font-bold shadow transition-all"
+                                >
+                                  {approvingUid === user.uid ? 'Approving…' : 'Approve'}
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              {/* Meeting Requests Section */}
+              <div className="mt-8 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                      <Calendar className="h-4 w-4 text-indigo-400" />
+                      SME Meeting Requests (Premium Users)
+                    </h4>
+                    <p className="text-[11px] text-[var(--text-secondary)] mt-1">
+                      Schedule 1-on-1 virtual design review meetings with premium candidates. Paste the Google Meet or Teams link and set the date.
+                    </p>
+                  </div>
+                  <button 
+                    onClick={loadMeetingRequests}
+                    className="px-2.5 py-1.5 text-[10px] font-bold border border-[var(--border-color)] rounded-lg bg-[var(--surface-sunken)] hover:bg-[var(--border-color)] transition-all cursor-pointer flex items-center gap-1"
+                  >
+                    Refresh List
+                  </button>
                 </div>
-              )}
+
+                <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
+                  {loadingMeetings ? (
+                    <div className="text-center text-xs py-6">Loading meeting requests...</div>
+                  ) : meetingRequests.length === 0 ? (
+                    <div className="py-6 text-center text-[var(--text-secondary)] text-xs">
+                      No meeting requests submitted yet.
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto border border-[var(--border-color)] rounded-lg">
+                      <table className="w-full text-left border-collapse text-xs">
+                        <thead>
+                          <tr className="bg-slate-500/5 font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)]">
+                            <th className="p-4">Learner / Capstone</th>
+                            <th className="p-4">Focus Notes</th>
+                            <th className="p-4">Scheduled Info / Status</th>
+                            <th className="p-4 text-right">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
+                          {meetingRequests.map(req => (
+                            <MeetingRow 
+                              key={req.userId} 
+                              req={req} 
+                              onUpdated={loadMeetingRequests} 
+                            />
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -2687,7 +3901,7 @@ export const Admin: React.FC = () => {
                           const hasM1Lab = (candidate.progress?.labsPassed || []).includes(1);
 
                           // Correlate with submission
-                          const candidateSubmission = submissions.find(s => s.userEmail === candidate.email);
+                          const candidateSubmission = submissions.find(s => s.userEmail === candidate.email || s.learnerEmail === candidate.email);
 
                           // Talent Radar: per-candidate readiness + outreach tag
                           const readiness = computeLeadReadiness(candidate, !!candidateSubmission);
@@ -2852,14 +4066,14 @@ export const Admin: React.FC = () => {
                   <h3 className="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
                     Trainer Profile · Lead Readiness
                     {(() => {
-                      const r = computeLeadReadiness(selectedCandidateDetail, submissions.some(s => s.userEmail === selectedCandidateDetail.email));
+                      const r = computeLeadReadiness(selectedCandidateDetail, submissions.some(s => s.userEmail === selectedCandidateDetail.email || s.learnerEmail === selectedCandidateDetail.email));
                       return r.isStandout ? <Star className="h-4 w-4 fill-amber-400 text-amber-400" /> : null;
                     })()}
                   </h3>
                   <p className="text-xs text-[var(--text-secondary)] mt-1">Engagement, audit trail, and recruiting signal in one place.</p>
                 </div>
                 {(() => {
-                  const r = computeLeadReadiness(selectedCandidateDetail, submissions.some(s => s.userEmail === selectedCandidateDetail.email));
+                  const r = computeLeadReadiness(selectedCandidateDetail, submissions.some(s => s.userEmail === selectedCandidateDetail.email || s.learnerEmail === selectedCandidateDetail.email));
                   return (
                     <span className={`inline-block px-3 py-1.5 rounded-xl border text-base font-extrabold ${scoreColor(r.score)}`} title="Lead Readiness Score">
                       {r.score}<span className="text-xs font-bold opacity-70">/100</span>
@@ -2952,7 +4166,7 @@ export const Admin: React.FC = () => {
 
               {/* ── Lead Readiness Profile + Outreach panel (Talent Radar) ── */}
               {(() => {
-                const hasSubmission = submissions.some(s => s.userEmail === selectedCandidateDetail.email);
+                const hasSubmission = submissions.some(s => s.userEmail === selectedCandidateDetail.email || s.learnerEmail === selectedCandidateDetail.email);
                 const r = computeLeadReadiness(selectedCandidateDetail, hasSubmission);
                 const outreach = outreachData[selectedCandidateDetail.uid];
                 const rows = [
@@ -3380,5 +4594,88 @@ const AIReviewPanel: React.FC = () => {
         </ol>
       </div>
     </div>
+  );
+};
+
+const MeetingRow: React.FC<{ req: any; onUpdated: () => void }> = ({ req, onUpdated }) => {
+  const [link, setLink] = useState(req.meetingLink || '');
+  const [time, setTime] = useState(req.scheduledAt || '');
+  const [saving, setSaving] = useState(false);
+  const { addToast } = useApp();
+
+  const handleSchedule = async () => {
+    if (!link.trim() || !time.trim()) {
+      addToast('Please provide both a meeting link and time.', 'warning');
+      return;
+    }
+    setSaving(true);
+    try {
+      const db = getFirebaseDb();
+      if (!db) return;
+      await set(ref(db, `meetingRequests/${req.userId}`), {
+        ...req,
+        meetingLink: link,
+        scheduledAt: time,
+        status: 'SCHEDULED'
+      });
+      addToast(`Meeting scheduled for ${req.userName}!`, 'success');
+      onUpdated();
+    } catch (err) {
+      console.error(err);
+      addToast('Failed to schedule meeting.', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <tr className="hover:bg-slate-500/5">
+      <td className="p-4 max-w-xs">
+        <div className="font-bold text-[var(--text-primary)]">{req.userName}</div>
+        <div>{req.userEmail}</div>
+        <div className="mt-1 text-[10px] text-indigo-400 font-bold">{req.capstoneId} · {req.capstoneTitle}</div>
+      </td>
+      <td className="p-4 max-w-sm">
+        <p className="whitespace-pre-wrap break-words italic leading-relaxed text-[11px] bg-[var(--surface-sunken)] p-2 rounded border border-[var(--border-color)]">
+          {req.notes || '(no notes)'}
+        </p>
+      </td>
+      <td className="p-4 space-y-2">
+        <div className="flex items-center gap-2">
+          <span className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider border ${
+            req.status === 'SCHEDULED' 
+              ? 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400' 
+              : 'border-yellow-500/30 bg-yellow-500/5 text-yellow-500'
+          }`}>
+            {req.status}
+          </span>
+        </div>
+        <div className="space-y-1">
+          <input
+            type="text"
+            placeholder="Meet / Teams Link URL"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            className="w-full px-2 py-1 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-[11px] text-[var(--text-primary)] focus:outline-none"
+          />
+          <input
+            type="text"
+            placeholder="e.g. July 5, 2026 at 4:00 PM IST"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="w-full px-2 py-1 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-[11px] text-[var(--text-primary)] focus:outline-none"
+          />
+        </div>
+      </td>
+      <td className="p-4 text-right">
+        <button
+          onClick={handleSchedule}
+          disabled={saving}
+          className="px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:brightness-110 text-white rounded text-[11px] font-bold shadow transition-all disabled:opacity-50 cursor-pointer"
+        >
+          {saving ? 'Saving…' : (req.status === 'SCHEDULED' ? 'Update Schedule' : 'Schedule Meeting')}
+        </button>
+      </td>
+    </tr>
   );
 };

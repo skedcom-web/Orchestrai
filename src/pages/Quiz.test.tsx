@@ -49,7 +49,7 @@ describe('Quiz', () => {
 
   it('passes at >= 80% (4/5 correct), calls recordQuizScore and marks quizPassed', () => {
     const { updateUserProfile, recordQuizScore } = renderQuiz();
-    const correctIndexes = [2, 1, 1, 2, 3];
+    const correctIndexes = [1, 0, 2, 0, 1, 3];
     correctIndexes.forEach((correctIdx, qIdx) => {
       const questionBlocks = screen.getAllByRole('button').filter((b) => b.textContent && !['Submit Answers', 'Try Again', 'Proceed to Payment'].includes(b.textContent));
       // Each question has 4 option buttons; pick the qIdx-th group's correct option.
@@ -66,8 +66,8 @@ describe('Quiz', () => {
 
   it('fails below 80%, shows retry + study guide, and does not mark quizPassed', () => {
     const { updateUserProfile, recordQuizScore } = renderQuiz();
-    // Answer everything wrong (option 0 for every question whose correct index isn't 0)
-    const wrongIndexes = [0, 0, 0, 0, 0];
+    // Answer everything wrong
+    const wrongIndexes = [0, 1, 0, 1, 0, 0];
     wrongIndexes.forEach((wrongIdx, qIdx) => {
       const questionBlocks = screen.getAllByRole('button').filter((b) => b.textContent && !['Submit Answers', 'Try Again', 'Proceed to Payment'].includes(b.textContent));
       const optionsForQuestion = questionBlocks.slice(qIdx * 4, qIdx * 4 + 4);
@@ -84,7 +84,7 @@ describe('Quiz', () => {
 
   it('Try Again resets answers and returns to the question view', () => {
     renderQuiz();
-    const wrongIndexes = [0, 0, 0, 0, 0];
+    const wrongIndexes = [0, 1, 0, 1, 0, 0];
     wrongIndexes.forEach((wrongIdx, qIdx) => {
       const questionBlocks = screen.getAllByRole('button').filter((b) => b.textContent && !['Submit Answers', 'Try Again', 'Proceed to Payment'].includes(b.textContent));
       const optionsForQuestion = questionBlocks.slice(qIdx * 4, qIdx * 4 + 4);
@@ -98,7 +98,7 @@ describe('Quiz', () => {
 
   it('locks answer selection after submission', () => {
     renderQuiz();
-    const correctIndexes = [2, 1, 1, 2, 3];
+    const correctIndexes = [1, 0, 2, 0, 1, 3];
     correctIndexes.forEach((correctIdx, qIdx) => {
       const questionBlocks = screen.getAllByRole('button').filter((b) => b.textContent && !['Submit Answers', 'Try Again', 'Proceed to Payment'].includes(b.textContent));
       const optionsForQuestion = questionBlocks.slice(qIdx * 4, qIdx * 4 + 4);

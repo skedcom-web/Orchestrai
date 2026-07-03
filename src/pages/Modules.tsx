@@ -1,18 +1,77 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Lock, Unlock, ChevronDown, ChevronUp, CheckCircle2, Award, Zap, HelpCircle, Play, ExternalLink } from 'lucide-react';
+import { Lock, Unlock, ChevronDown, ChevronUp, CheckCircle2, Award, Zap, HelpCircle, Play, ExternalLink, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { TrainingPresenter } from '../components/TrainingPresenter';
+import { ModuleFeedbackModal } from './FeedbackForm';
+
+export const GuestGateModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-sm border border-[var(--border-color)] rounded-2xl bg-[var(--bg-card)] p-6 text-center shadow-2xl animate-in zoom-in-95 duration-200">
+        <div className="absolute top-4 right-4">
+          <button 
+            onClick={onClose}
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-450 mb-4 animate-bounce">
+          <Award className="h-6 w-6" />
+        </div>
+        
+        <h3 className="text-base font-bold text-[var(--text-primary)] mb-2">
+          Modules 1 &amp; 2 are Free! 🎓
+        </h3>
+        
+        <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 px-2 text-left">
+          Study resources and training for Modules 1 &amp; 2 are completely free. However, to track your progress, record quiz scores, and receive feedback, please register and login.
+          <br /><br />
+          Click the <strong className="text-indigo-550 dark:text-indigo-400">Register / Login</strong> button at the top right of the page to get started.
+        </p>
+        
+        <button
+          onClick={onClose}
+          className="w-full py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-lg transition-all cursor-pointer"
+        >
+          Got it, Close
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export const Modules: React.FC = () => {
   const { currentUser, systemConfig, addToast, alertUser } = useApp();
   const [expandedModule, setExpandedModule] = useState<number | null>(1);
   const [activeTrainingModuleId, setActiveTrainingModuleId] = useState<number | null>(null);
+  const [feedbackModuleId, setFeedbackModuleId] = useState<number | null>(null);
+  const [showGuestGateModal, setShowGuestGateModal] = useState(false);
   const navigate = useNavigate();
 
   // Helper values to check progress
-  const freeLimit = systemConfig.freeModulesLimit;
+  const freeLimit = Math.max(systemConfig.freeModulesLimit ?? 2, 2);
   const isUserApproved = currentUser?.accountStatus === 'APPROVED';
+
+  const handleLaunchModule = (moduleId: number) => {
+    if (!currentUser) {
+      setShowGuestGateModal(true);
+      return;
+    }
+    
+    if (moduleId === 2) {
+      const hasCompletedMod1 = !!currentUser.progress?.modulesCompleted?.includes(1);
+      if (!hasCompletedMod1) {
+        addToast("Please complete Module 1 first before starting Module 2!", "warning");
+        return;
+      }
+    }
+    
+    setActiveTrainingModuleId(moduleId);
+  };
 
   const modulesData = [
     {
@@ -28,8 +87,8 @@ export const Modules: React.FC = () => {
             Understand traditional engineering gaps, the orchestration paradigm shift, and the core competencies of an OrchestrAI Lead. This module includes an interactive web-deck with AI avatar voiceover and concludes with a Prompt Simulator lab.
           </p>
           <button
-            onClick={() => setActiveTrainingModuleId(1)}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-lg hover:scale-103 hover:brightness-110 transition-all"
+            onClick={() => handleLaunchModule(1)}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-lg hover:scale-103 hover:brightness-110 transition-all cursor-pointer"
           >
             <Play className="h-4 w-4" /> Launch Interactive Training (Web-Deck &amp; Lab)
           </button>
@@ -90,8 +149,8 @@ export const Modules: React.FC = () => {
                 </p>
               </div>
               <button
-                onClick={() => setActiveTrainingModuleId(2)}
-                className="w-full sm:w-auto self-start px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-bold shadow transition-all flex items-center justify-center space-x-1"
+                onClick={() => handleLaunchModule(2)}
+                className="w-full sm:w-auto self-start px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-bold shadow transition-all flex items-center justify-center space-x-1 cursor-pointer"
               >
                 <Play className="h-3.5 w-3.5" />
                 <span>Launch Slide Deck</span>
@@ -102,10 +161,10 @@ export const Modules: React.FC = () => {
               <div>
                 <h4 className="text-sm font-bold text-indigo-400 mb-1 flex items-center space-x-1.5">
                   <Zap className="h-4 w-4" />
-                  <span>Module 2 Knowledge Gate Challenge</span>
+                  <span>Module 3 Gate Challenge</span>
                 </h4>
                 <p className="text-xs text-[var(--text-secondary)] mb-3 leading-relaxed">
-                  Before moving to Modules 3-8, you must pass the Module 2 quiz with a score of 80% or higher.
+                  Before moving to Modules 3-8, you must pass the Module 1&amp;2 quiz with a score of 80% or higher.
                 </p>
               </div>
               <button
@@ -182,7 +241,13 @@ export const Modules: React.FC = () => {
       <div className="space-y-4">
         {modulesData.map((mod) => {
           // Check if this module is locked for this user
-          const isModuleLocked = mod.id > freeLimit && !isUserApproved;
+          // Module 1 is never locked (but guest is prompted to login)
+          // Module 2 is locked if they haven't completed Module 1
+          // Module 3+ is locked if they haven't been approved
+          const hasCompletedMod1 = !!currentUser?.progress?.modulesCompleted?.includes(1);
+          const isModuleLocked =
+            mod.id === 2 ? !hasCompletedMod1 :
+            mod.id > freeLimit ? !isUserApproved : false;
           const isExpanded = expandedModule === mod.id;
 
           return (
@@ -245,39 +310,73 @@ export const Modules: React.FC = () => {
                       <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 mb-4 animate-bounce">
                         <Lock className="h-5 w-5" />
                       </div>
-                      <h4 className="text-base font-bold mb-2">Module is Locked</h4>
-                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6">
-                        Modules 3 to 8 are gated for certified track candidates. To unlock access, you must score at least 80% on the Module 2 knowledge check, pay the ₹99 accountability gate fee, and receive admin approval.
-                      </p>
-
-                      <div className="flex flex-col space-y-2.5">
-                        {!currentUser ? (
-                          <button
-                            onClick={() => addToast("Please log in to start your candidate certification workflow!", "warning")}
-                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all"
-                          >
-                            Sign In / Login
-                          </button>
-                        ) : !currentUser.quizPassed ? (
-                          <button
-                            onClick={() => navigate('/quiz')}
-                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all"
-                          >
-                            Launch Knowledge Check Quiz
-                          </button>
-                        ) : currentUser.accountStatus === 'FREE_TIER' ? (
-                          <button
-                            onClick={() => navigate('/payment')}
-                            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all"
-                          >
-                            Proceed to Verify Intent (₹99)
-                          </button>
-                        ) : (
-                          <div className="border border-indigo-500/20 bg-indigo-500/5 p-3 rounded-lg text-xs font-semibold text-indigo-400">
-                            Status: PENDING_APPROVAL. Waiting for manual approval from Sithanandham R.
+                      
+                      {mod.id === 2 ? (
+                        <>
+                          <h4 className="text-base font-bold mb-2">Module 2 is Locked</h4>
+                          <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6">
+                            {!currentUser 
+                              ? "Module 2 is free, but to track your progress and feedback please register and login, and complete Module 1 so that Module 2 opens for you!"
+                              : "Please complete Module 1 first to unlock and start Module 2!"}
+                          </p>
+                          <div className="flex flex-col space-y-2.5">
+                            {!currentUser ? (
+                              <button
+                                onClick={() => setShowGuestGateModal(true)}
+                                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all cursor-pointer"
+                              >
+                                Register &amp; Login
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => setExpandedModule(1)}
+                                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all cursor-pointer"
+                              >
+                                Go to Module 1
+                              </button>
+                            )}
                           </div>
-                        )}
-                      </div>
+                        </>
+                      ) : (
+                        <>
+                          <h4 className="text-base font-bold mb-2">Module is Locked</h4>
+                          <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6">
+                            Modules 3 to 8 are gated for certified track candidates. To unlock access, you must score at least 80% on the Module 2 knowledge check, pay the ₹99 accountability gate fee, and receive admin approval.
+                          </p>
+
+                          <div className="flex flex-col space-y-2.5">
+                            {!currentUser ? (
+                              <button
+                                onClick={() => {
+                                  addToast("Please log in to start your candidate certification workflow!", "warning");
+                                  window.dispatchEvent(new CustomEvent('orchestrai_trigger_login'));
+                                }}
+                                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all cursor-pointer"
+                              >
+                                Sign In / Login
+                              </button>
+                            ) : !currentUser.quizPassed ? (
+                              <button
+                                onClick={() => navigate('/quiz')}
+                                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all cursor-pointer"
+                              >
+                                Launch Knowledge Check Quiz
+                              </button>
+                            ) : currentUser.accountStatus === 'FREE_TIER' ? (
+                              <button
+                                onClick={() => navigate('/payment')}
+                                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all cursor-pointer"
+                              >
+                                Proceed to Verify Intent (₹99)
+                              </button>
+                            ) : (
+                              <div className="border border-indigo-500/20 bg-indigo-500/5 p-3 rounded-lg text-xs font-semibold text-indigo-400">
+                                Status: PENDING_APPROVAL. Waiting for manual approval from Sithanandham R.
+                              </div>
+                            )}
+                          </div>
+                        </>
+                      )}
                     </div>
                   ) : (
                     /* Unlocked Module Content */
@@ -300,8 +399,8 @@ export const Modules: React.FC = () => {
                             </button>
                           ) : (
                             <button
-                              onClick={() => setActiveTrainingModuleId(mod.id)}
-                              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-md hover:scale-102 hover:brightness-110 transition-all"
+                              onClick={() => handleLaunchModule(mod.id)}
+                              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs font-extrabold shadow-md hover:scale-102 hover:brightness-110 transition-all cursor-pointer"
                             >
                               <Play className="h-3.5 w-3.5" /> Launch Interactive Training (Web-Deck &amp; Video)
                             </button>
@@ -335,18 +434,44 @@ export const Modules: React.FC = () => {
           onComplete={() => {
             const completedId = activeTrainingModuleId;
             setActiveTrainingModuleId(null);
-            // Alert user of success using premium alert dialog
+            // Show module feedback modal first, then alert on close
+            setFeedbackModuleId(completedId);
+          }}
+        />
+      )}
+
+      {/* Module Feedback Modal — appears after completing a module */}
+      {feedbackModuleId !== null && (
+        <ModuleFeedbackModal
+          moduleId={feedbackModuleId}
+          onClose={() => {
+            const completedId = feedbackModuleId;
+            setFeedbackModuleId(null);
             const isFinal = completedId === 6;
             alertUser(
-              "Module Completed!",
+              'Module Completed!',
               isFinal
-                ? "Congratulations! You have completed all six modules of the OrchestrAI Lead training course! Head over to the Certification page to submit your capstone portfolio."
+                ? 'Congratulations! You have completed all six theory modules of the OrchestrAI Lead training course! Head over to Module 7 to start your practical Capstone build.'
                 : `Congratulations! You have successfully completed Module ${completedId}! Keep pushing to unlock the rest of the syllabus.`,
-              "success"
+              'success'
+            );
+          }}
+          onSubmitted={() => {
+            const completedId = feedbackModuleId;
+            setFeedbackModuleId(null);
+            const isFinal = completedId === 6;
+            alertUser(
+              'Feedback Submitted & Module Completed! 🎉',
+              isFinal
+                ? 'Thank you for your feedback! You have completed all six theory modules. Head over to Module 7 to start your practical Capstone build.'
+                : `Thank you! Your feedback for Module ${completedId} has been recorded. Keep going!`,
+              'success'
             );
           }}
         />
       )}
+
+      <GuestGateModal isOpen={showGuestGateModal} onClose={() => setShowGuestGateModal(false)} />
     </div>
   );
 };
