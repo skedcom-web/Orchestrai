@@ -374,7 +374,7 @@ const SubmissionQueue: React.FC<{
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as any)}
-          className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs focus:outline-none cursor-pointer"
+          className="relative z-10 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs font-semibold focus:outline-none cursor-pointer hover:border-indigo-500/40 transition-all"
         >
           <option value="all">All Statuses</option>
           {(Object.keys(STATUS_COLORS) as SubmissionStatus[]).map(s => (
@@ -384,7 +384,7 @@ const SubmissionQueue: React.FC<{
         <select
           value={domainFilter}
           onChange={(e) => setDomainFilter(e.target.value as any)}
-          className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs focus:outline-none cursor-pointer"
+          className="relative z-10 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs font-semibold focus:outline-none cursor-pointer hover:border-indigo-500/40 transition-all"
         >
           <option value="all">All Domains</option>
           {DOMAINS.map(d => <option key={d} value={d}>{d}</option>)}

@@ -31,7 +31,21 @@ export const Header: React.FC = () => {
   } = useApp();
 
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const handleLogoutActionDirect = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    try {
+      sessionStorage.removeItem('orchestrai_session_user');
+      localStorage.removeItem('orchestrai_db_currentUser');
+      logout();
+      navigate('/');
+    } catch (err) {
+      console.error("Logout execution error:", err);
+    }
+  };
   
   // Registration and verification form states
   const [loginEmail, setLoginEmail] = useState('');
@@ -1134,57 +1148,35 @@ export const Header: React.FC = () => {
               ))}
             </div>
 
-            {/* User menu (avatar dropdown) or Login */}
+               {/* User menu or Login */}
             {currentUser ? (
-              <div className="relative" style={{ position: 'relative' }}>
-                <button
-                  onClick={() => setShowUserMenu((o) => !o)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs font-extrabold shadow-md shadow-indigo-500/25 ring-1 ring-white/15 hover:brightness-110 transition-all"
-                  title={currentUser.name}
-                  aria-label="Account menu"
+              <div className="flex items-center gap-2 border border-[var(--border-color)] bg-slate-500/5 rounded-full pl-2 pr-1.5 py-1">
+                {/* Initials avatar circle */}
+                <span 
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-[10px] font-extrabold shadow ring-1 ring-white/15 cursor-default" 
+                  title={`${currentUser.name} (${currentUser.email}) - Role: ${currentUser.role}`}
                 >
                   {initials}
+                </span>
+                
+                {/* User Name */}
+                <span 
+                  className="hidden lg:inline text-xs font-bold text-[var(--text-primary)] max-w-[80px] truncate" 
+                  title={currentUser.name}
+                >
+                  {currentUser.name.split(' ')[0]}
+                </span>
+                
+                {/* Direct Logout Button */}
+                <button
+                  id="logout-btn"
+                  onClick={handleLogoutActionDirect}
+                  className="flex items-center justify-center gap-1 px-2.5 py-1 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-500 hover:text-red-400 rounded-full text-[10px] font-extrabold transition-all cursor-pointer"
+                  title="Logout"
+                >
+                  <LogOut className="h-3 w-3" />
+                  <span>Logout</span>
                 </button>
-
-                {showUserMenu && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
-                    <div 
-                      className="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-32px)] z-50 glass-card rounded-2xl p-4 animate-in fade-in slide-in-from-top-1 zoom-in-95 duration-200"
-                      style={{ position: 'absolute', top: '100%', right: 0, marginTop: '8px' }}
-                    >
-                      {/* Identity */}
-                      <div className="flex items-center gap-3 pb-3 mb-3 border-b border-[var(--border-color)]">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-sm font-extrabold shadow ring-1 ring-white/15">
-                          {initials}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="text-sm font-bold text-[var(--text-primary)] leading-snug break-words">{currentUser.name}</p>
-                          <p className="text-[11px] text-[var(--text-secondary)] truncate">{currentUser.email}</p>
-                        </div>
-                      </div>
-
-                      {/* Role badge */}
-                      <div className="flex items-center justify-between px-1 mb-3">
-                        <span className="text-[11px] font-semibold text-[var(--text-secondary)]">Role</span>
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                          currentUser.role === 'ADMIN'
-                            ? 'bg-purple-500/10 border-purple-500/25 text-purple-400'
-                            : 'bg-indigo-500/10 border-indigo-500/25 text-indigo-400'
-                        }`}>
-                          {currentUser.role}
-                        </span>
-                      </div>
-
-                      <button
-                        onClick={() => { logout(); setShowUserMenu(false); navigate('/'); }}
-                        className="w-full flex items-center justify-center gap-2 py-2 border border-red-500/20 hover:border-red-500/40 text-red-400 hover:bg-red-500/10 rounded-lg text-xs font-bold transition-all"
-                      >
-                        <LogOut className="h-3.5 w-3.5" /> Logout
-                      </button>
-                    </div>
-                  </>
-                )}
               </div>
             ) : (
               <button
@@ -1219,8 +1211,9 @@ export const Header: React.FC = () => {
           )}
           {currentUser && (
             <button
-              onClick={() => { logout(); setShowUserMenu(false); navigate('/'); }}
-              className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors flex items-center gap-1"
+              id="mobile-logout-btn"
+              onClick={handleLogoutActionDirect}
+              className="text-xs font-semibold text-red-500 hover:text-red-400 transition-colors flex items-center gap-1 cursor-pointer bg-transparent border-none outline-none"
             >
               <LogOut className="h-3.5 w-3.5" />
               <span>Logout</span>

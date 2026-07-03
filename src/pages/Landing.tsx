@@ -319,7 +319,7 @@ export const Landing: React.FC = () => {
       {/* ═══ STATS ROW ═══════════════════════════════════ */}
       <section className="w-full border-t border-b border-[var(--border-color)] bg-[var(--bg-card)]/40 backdrop-blur-sm py-10 px-4">
         <div className="mx-auto max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-[var(--border-color)]">
-          <StatCard value={8} suffix="+" label="Training Modules" colorClass="gradient-text" />
+          <StatCard value={6} suffix="+" label="Training Modules" colorClass="gradient-text" />
           <StatCard value={systemConfig.certificationPrice ?? 99} suffix="₹" label="Full Certification Fee" colorClass="text-amber-400" />
           <StatCard value={7} suffix=" Days" label="Average POC Build" colorClass="text-emerald-400" />
           <StatCard value={90} suffix="%" label="Score → Hiring Referral" colorClass="text-indigo-400" />

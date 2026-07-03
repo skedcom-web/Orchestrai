@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp, ensureProgress, getLevelInfo, BADGES } from '../context/AppContext';
 import { resolveBadgeIcon } from './badgeIcons';
 import { Flame, Lock, Sparkles } from 'lucide-react';
@@ -10,6 +10,25 @@ import { Flame, Lock, Sparkles } from 'lucide-react';
 export const XPWidget: React.FC = () => {
   const { currentUser } = useApp();
   const [open, setOpen] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        const btn = document.getElementById('xp-widget-btn');
+        if (btn && btn.contains(event.target as Node)) {
+          return;
+        }
+        setOpen(false);
+      }
+    }
+    if (open) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [open]);
 
   if (!currentUser) return null;
 
@@ -22,6 +41,7 @@ export const XPWidget: React.FC = () => {
     <div className="relative">
       {/* Chip */}
       <button
+        id="xp-widget-btn"
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-2.5 pl-1.5 pr-3 py-1.5 rounded-full border border-[var(--border-color)] bg-slate-500/5 hover:bg-slate-500/10 transition-colors"
         title="Your progress"
@@ -60,8 +80,10 @@ export const XPWidget: React.FC = () => {
       {/* Popover */}
       {open && (
         <>
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 mt-2 w-72 z-50 glass-card rounded-2xl p-5 animate-in fade-in slide-in-from-top-1 zoom-in-95 duration-200">
+          <div 
+            ref={popoverRef}
+            className="absolute right-0 mt-2 w-72 z-50 glass-card rounded-2xl p-5 animate-in fade-in slide-in-from-top-1 zoom-in-95 duration-200"
+          >
             {/* Level summary */}
             <div className="flex items-center gap-3 mb-4">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-lg font-black shadow-lg shadow-indigo-500/30 shrink-0">

@@ -1116,11 +1116,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const logout = () => {
-    if (currentUser) {
-      logAuditEvent(currentUser.role === 'ADMIN' ? 'ADMIN_LOGOUT' : 'USER_LOGOUT', `${currentUser.name} logged out`);
-    }
-    setCurrentUser(null);
+    // 1. Clear ALL session persistence FIRST, before anything else
     sessionStorage.removeItem('orchestrai_session_user');
+    localStorage.removeItem('orchestrai_db_currentUser');
+
+    // 2. Clear React state
+    setCurrentUser(null);
+
+    // 3. Audit log AFTER clearing (fire-and-forget, non-blocking)
+    try {
+      if (currentUser) {
+        logAuditEvent(currentUser.role === 'ADMIN' ? 'ADMIN_LOGOUT' : 'USER_LOGOUT', `${currentUser.name} logged out`);
+      }
+    } catch (e) {
+      // Never block logout for audit logging
+    }
   };
 
   // Explicitly seed the admin profile for direct testing convenience
