@@ -7,7 +7,17 @@ import {
   RefreshCw, 
   Bot, 
   User, 
-  Sparkles
+  Sparkles,
+  Home,
+  BookOpen,
+  Lock,
+  CreditCard,
+  Award,
+  FlaskConical,
+  UserCheck,
+  Settings,
+  Trophy,
+  LifeBuoy
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -654,17 +664,17 @@ export const QuickHelp: React.FC = () => {
   const allFaqs: FaqEntry[] = Object.values(faqCategories).flat();
 
   // ── Category metadata for UI tabs ──
-  const categoryMeta: { id: FaqCategoryKey; label: string }[] = [
-    { id: 'getting_started', label: '🏠 Start' },
-    { id: 'modules', label: '📚 Modules' },
-    { id: 'access_gating', label: '🔓 Access' },
-    { id: 'payment', label: '💳 Payment' },
-    { id: 'certification', label: '🎓 Certify' },
-    { id: 'capstone', label: '🧪 Capstone' },
-    { id: 'sme_review', label: '👨‍🏫 SME' },
-    { id: 'admin', label: '⚙️ Admin' },
-    { id: 'gamification', label: '🏆 XP' },
-    { id: 'resources', label: '📦 Support' },
+  const categoryMeta: { id: FaqCategoryKey; icon: React.ElementType; label: string }[] = [
+    { id: 'getting_started', icon: Home,        label: 'Start'    },
+    { id: 'modules',         icon: BookOpen,     label: 'Modules'  },
+    { id: 'access_gating',   icon: Lock,         label: 'Access'   },
+    { id: 'payment',         icon: CreditCard,   label: 'Payment'  },
+    { id: 'certification',   icon: Award,        label: 'Certify'  },
+    { id: 'capstone',        icon: FlaskConical, label: 'Capstone' },
+    { id: 'sme_review',      icon: UserCheck,    label: 'SME'      },
+    { id: 'admin',           icon: Settings,     label: 'Admin'    },
+    { id: 'gamification',    icon: Trophy,       label: 'XP'       },
+    { id: 'resources',       icon: LifeBuoy,     label: 'Support'  },
   ];
 
   // Load chat history from sessionStorage
@@ -988,21 +998,26 @@ export const QuickHelp: React.FC = () => {
           {/* FAQ Navigation & Pills */}
           {!isTyping && (
             <div className="pt-3 mt-auto border-t border-[var(--border-color)] shrink-0">
-              {/* Category tabs */}
-              <div className="flex border-b border-[var(--border-color)] pb-2 mb-2 gap-0.5 overflow-x-auto scrollbar-none">
-                {categoryMeta.map(cat => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveCategory(cat.id)}
-                    className={`text-[8.5px] uppercase tracking-wider font-extrabold px-2 py-1 rounded-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                      activeCategory === cat.id 
-                        ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 shadow-sm' 
-                        : 'text-[var(--text-secondary)] hover:bg-slate-500/5'
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
+              {/* Category tabs — 2-row grid so all 10 are always visible */}
+              <div className="grid grid-cols-5 gap-0.5 border-b border-[var(--border-color)] pb-2 mb-2">
+                {categoryMeta.map(cat => {
+                  const Icon = cat.icon;
+                  const isActive = activeCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 rounded-md transition-all duration-150 cursor-pointer ${
+                        isActive
+                          ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 shadow-sm'
+                          : 'text-[var(--text-secondary)] hover:bg-slate-500/8 hover:text-[var(--text-primary)]'
+                      }`}
+                    >
+                      <Icon className="h-3 w-3 shrink-0" strokeWidth={isActive ? 2.5 : 1.8} />
+                      <span className="text-[7.5px] font-bold uppercase tracking-wide leading-none">{cat.label}</span>
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Categorized Pills */}
