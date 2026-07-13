@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import { Header } from './components/Header';
@@ -73,9 +74,10 @@ const AppContent: React.FC = () => {
   const showRoadmap = !isAdminRoute && !(currentUser?.isReviewer || currentUser?.role === 'SME' || currentUser?.role === 'ADMIN');
 
   return (
-    <div className="min-h-screen flex flex-col relative">
+    <>
+    <div className="min-h-screen flex flex-col">
       {/* Centralized Toasts Container */}
-      <div className="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none">
+      <div className="fixed top-5 right-5 z-[9990] flex flex-col gap-3 max-w-sm pointer-events-none">
         {toasts.map((toast) => {
           let ToastIcon = Info;
           let colorClass = "border-blue-500/30 bg-blue-500/10 text-blue-400";
@@ -113,8 +115,8 @@ const AppContent: React.FC = () => {
       </div>
 
       {/* Centralized Custom Dialog Modal */}
-      {activeDialog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--surface-overlay)] backdrop-blur-md p-4 animate-in fade-in duration-200">
+      {activeDialog && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[var(--surface-overlay)] backdrop-blur-md p-4 animate-in fade-in duration-200">
           <div className="glass-card w-full max-w-md rounded-2xl overflow-hidden p-6 shadow-2xl relative animate-in zoom-in-95 duration-250">
             {/* Header Icon & Title */}
             <div className="flex items-center gap-3.5 border-b border-[var(--border-color)] pb-4 mb-4">
@@ -190,14 +192,8 @@ const AppContent: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
-      {/* Gamification celebration modal (level-up / badge unlock) */}
-      <CelebrationOverlay />
-
-      {/* Floating Quick Help / Ask Assistant Chatbot */}
-      <QuickHelp />
-
-      {/* Premium Glow Background Blobs */}
+      , document.body)}
+      {/* Premium Glow Background Blobs — rendered first, sits behind everything */}
       <GlowBackground />
 
       {/* Navigation Top Header */}
@@ -206,8 +202,8 @@ const AppContent: React.FC = () => {
       {/* Candidate Progress Roadmap */}
       {showRoadmap && <TimelineRoadmap />}
 
-      {/* Pages Viewport */}
-      <main className="flex-grow z-10">
+      {/* Pages Viewport — NO z-index to avoid creating a broken stacking context */}
+      <main className="flex-grow relative">
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/modules" element={<Modules />} />
@@ -225,7 +221,7 @@ const AppContent: React.FC = () => {
       </main>
 
       {/* Website-Style Footer */}
-      <footer className="w-full border-t border-[var(--border-color)] bg-[var(--bg-card)]/40 backdrop-blur-sm py-10 z-10">
+      <footer className="w-full border-t border-[var(--border-color)] bg-[var(--bg-card)]/40 backdrop-blur-sm py-10 relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             
@@ -287,6 +283,14 @@ const AppContent: React.FC = () => {
         </div>
       </footer>
     </div>
+
+    {/* These render outside the main flex container to avoid stacking context issues on mobile */}
+    {/* Gamification celebration modal (level-up / badge unlock) */}
+    <CelebrationOverlay />
+
+    {/* Floating Quick Help / Ask Assistant Chatbot */}
+    <QuickHelp />
+  </>
   );
 };
 

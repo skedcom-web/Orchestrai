@@ -20,7 +20,7 @@ export const GlowBackground: React.FC = () => {
   const isGlass = theme === 'glass';
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -1 }} aria-hidden="true">
 
       {/* ── GLASS ORBS ── Vivid orange / magenta / violet (reference style) */}
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ArrowRight, Zap, Shield, Check, Code, Award,
   TrendingUp, Users, Star, ChevronRight, Play, Briefcase,
@@ -48,8 +49,8 @@ const StatCard: React.FC<{ value: number; suffix: string; label: string; colorCl
 
 export const GuestGateModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-sm border border-[var(--border-color)] rounded-2xl bg-[var(--bg-card)] p-6 text-center shadow-2xl animate-in zoom-in-95 duration-200">
         <div className="absolute top-4 right-4">
           <button 
@@ -81,7 +82,8 @@ export const GuestGateModal: React.FC<{ isOpen: boolean; onClose: () => void }> 
           Got it, Close
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

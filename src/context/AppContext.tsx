@@ -725,6 +725,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
         setSubmissions(flat);
         localStorage.setItem('orchestrai_db_submissions', JSON.stringify(flat));
+      }, (err) => {
+        console.error("RTDB submissions listen failed:", err);
       });
 
       // 3. Listen to /logs
@@ -739,6 +741,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
         setNotificationLogs(sortedLogs);
         localStorage.setItem('orchestrai_db_logs', JSON.stringify(sortedLogs));
+      }, (err) => {
+        console.error("RTDB logs listen failed:", err);
       });
 
       // Listen to /audit_logs
@@ -748,6 +752,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const sortedLogs = logs.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
         setAuditLogs(sortedLogs);
         localStorage.setItem('orchestrai_db_audit_logs', JSON.stringify(sortedLogs));
+      }, (err) => {
+        console.error("RTDB audit_logs listen failed:", err);
       });
 
       // Listen to /visitors
@@ -756,6 +762,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const list = Object.values(val) as VisitorRecord[];
         setVisitorsList(list);
         localStorage.setItem('orchestrai_db_visitors', JSON.stringify(list));
+      }, (err) => {
+        console.error("RTDB visitors listen failed:", err);
       });
 
       // 4. Listen to /config
@@ -798,6 +806,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             console.error("[AppContext] Failed to seed database configuration node:", err);
           });
         }
+      }, (err) => {
+        console.error("RTDB config listen failed:", err);
       });
 
       // 5. Cloud Database cleanup and test reset on startup

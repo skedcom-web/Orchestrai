@@ -912,7 +912,7 @@ export const QuickHelp: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans pointer-events-none">
       
       {/* ─── CHATBOX PANEL ─── */}
       <div 
@@ -1065,11 +1065,10 @@ export const QuickHelp: React.FC = () => {
         </div>
       </div>
 
-      {/* ─── FLOATING ACTION BUTTON (FAB) ─── */}
       <button 
         id="quick-help-fab"
         onClick={() => setIsOpen(!isOpen)}
-        className={`h-14 w-14 rounded-full bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer relative group ${
+        className={`pointer-events-auto h-14 w-14 rounded-full bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer relative group ${
           isOpen ? 'rotate-90' : ''
         }`}
         style={{ boxShadow: 'var(--btn-shadow)' }}

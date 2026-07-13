@@ -12,7 +12,7 @@ import {
   BarChart2, TrendingUp, Users, Activity, Search, Filter, Clock,
   BookOpen, Upload, HelpCircle, Eye, EyeOff, Ban, UserCheck, Radar,
   Star, Sparkles, Download, MessageSquare, History, RotateCcw, Calendar,
-  FileSpreadsheet, UserPlus, Coins, CheckSquare
+  FileSpreadsheet, UserPlus, Coins, CheckSquare, ChevronDown
 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { computeLeadReadiness, scoreColor, tagColor, OUTREACH_TAGS, triggerCsvDownload } from '../utils/leadReadiness';
@@ -1329,11 +1329,58 @@ export const Admin: React.FC = () => {
           </span>
         </div>
       </div>
+      {/* Mobile Tab Dropdown Selector (Visible on mobile/tablet, hidden on desktop) */}
+      <div className="block lg:hidden mb-6">
+        <label htmlFor="admin-mobile-tab-select" className="block text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-secondary)] mb-2">
+          Select Workspace / Workflow
+        </label>
+        <div className="relative">
+          <select
+            id="admin-mobile-tab-select"
+            value={activeTab}
+            onChange={(e) => setActiveTab(e.target.value as any)}
+            className="form-input py-3 pr-10 text-xs font-bold appearance-none w-full border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] rounded-xl cursor-pointer focus:border-purple-500/60 focus:ring-2 focus:ring-purple-500/20 transition-all"
+          >
+            {!isSme && (
+              <>
+                <optgroup label="Overview">
+                  <option value="reports">📊 Dashboard & Insights</option>
+                  <option value="downloads">📄 Reports & Downloads</option>
+                </optgroup>
+                <optgroup label="Training Ops">
+                  <option value="modules">📖 Manage Modules</option>
+                  <option value="feedbackAnalytics">💬 Feedback Analytics</option>
+                  <option value="capstoneReviews">🏆 Capstone Reviews</option>
+                  <option value="capstoneEditor">📋 Capstone Progress Editor</option>
+                  <option value="approvals">✅ Manual Approvals ({pendingUsers.length})</option>
+                  <option value="meetings">📅 SME Meetings ({meetingRequests.filter(r => r.status === 'PENDING').length})</option>
+                </optgroup>
+                <optgroup label="Talent">
+                  <option value="candidates">📡 Talent Radar ({usersList.filter(u => u.role !== 'ADMIN').length})</option>
+                </optgroup>
+                <optgroup label="System">
+                  <option value="logs">✉️ Notification Delivery Log</option>
+                  <option value="audit">⚙️ System Audit Log</option>
+                  <option value="settings">🛠️ System Settings</option>
+                </optgroup>
+              </>
+            )}
+            {isSme && (
+              <optgroup label="My Work">
+                <option value="capstoneReviews">🏆 Capstone Reviews</option>
+              </optgroup>
+            )}
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[var(--text-secondary)]">
+            <ChevronDown className="h-4 w-4" />
+          </div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)] gap-6">
 
-        {/* Left Side Tab Navigation */}
-        <div className="space-y-1">
+        {/* Left Side Tab Navigation (Desktop Only) */}
+        <div className="hidden lg:block space-y-1">
           {!isSme && (
             <>
               <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--text-muted)] px-3 pt-1 pb-1.5">Overview</p>

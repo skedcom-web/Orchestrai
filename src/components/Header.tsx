@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useApp } from '../context/AppContext';
 import { Sun, Moon, Sparkles, LogOut, Shield, Award, BookOpen, LogIn, Mail, ArrowRight, X, Phone, CheckCircle2, AlertCircle, RefreshCw, Eye, EyeOff, Folder } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -1294,8 +1295,8 @@ export const Header: React.FC = () => {
       </header>
 
       {/* Sign In Dialog (Rendered OUTSIDE <header> to prevent backdrop-blur containing block truncation) */}
-      {showLoginModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--surface-overlay)] backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      {showLoginModal && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[var(--surface-overlay)] backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="glass-card w-full max-w-sm rounded-2xl p-7 sm:p-8 animate-in fade-in zoom-in-95 duration-200 relative">
 
             {/* Invisible Recaptcha Anchor for Firebase Phone Auth */}
@@ -2091,7 +2092,7 @@ export const Header: React.FC = () => {
 
           </div>
         </div>
-      )}
+      , document.body)}
     </>
   );
 };
