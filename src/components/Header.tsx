@@ -264,7 +264,8 @@ export const Header: React.FC = () => {
             existingUser.name,
             existingUser.mobile || '',
             true, // emailVerified = true
-            existingUser.mobileVerified || false
+            existingUser.mobileVerified || false,
+            existingUser
           );
           addToast("Welcome back! Logged in successfully.", "success");
           setShowLoginModal(false);
@@ -469,7 +470,8 @@ export const Header: React.FC = () => {
       setLoginStep('success');
       setTimeout(() => {
         seedAdminAccount();
-        login('vthinkorchestrai@gmail.com', 'vThink OrchestrAI Admin', '+919876543210', true, true);
+        const adminProfile = usersList.find(u => u.email === 'vthinkorchestrai@gmail.com');
+        login('vthinkorchestrai@gmail.com', 'vThink OrchestrAI Admin', '+919876543210', true, true, adminProfile);
         setShowLoginModal(false);
         setAdminPasswordInput('');
         navigate('/admin');
@@ -737,7 +739,7 @@ export const Header: React.FC = () => {
         await set(ref(db, `users/${profile!.uid}`), profile);
       }
 
-      login(formattedEmail, profile!.name, profile!.mobile || '', true, profile!.mobileVerified || false);
+      login(formattedEmail, profile!.name, profile!.mobile || '', true, profile!.mobileVerified || false, profile);
       addToast(isNewUser ? "Account registered successfully!" : "Password created successfully!", "success");
       setLoginStep('success');
 
@@ -780,7 +782,7 @@ export const Header: React.FC = () => {
         return;
       }
 
-      login(formattedEmail, existingUser.name, existingUser.mobile, true, existingUser.mobileVerified);
+      login(formattedEmail, existingUser.name, existingUser.mobile, true, existingUser.mobileVerified, existingUser);
       addToast(`Welcome back, ${existingUser.name}!`, "success");
       setLoginStep('success');
 
@@ -1033,7 +1035,7 @@ export const Header: React.FC = () => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b border-[var(--border-color)] bg-[var(--header-bg)] backdrop-blur-[20px] saturate-150 transition-all duration-300">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-4 sm:px-6 lg:px-8">
           
           {/* Logo Section */}
           <Link to="/" className="flex items-center space-x-3 group">
@@ -1161,12 +1163,81 @@ export const Header: React.FC = () => {
                 
                 {/* User Name */}
                 <span 
-                  className="hidden lg:inline text-xs font-bold text-[var(--text-primary)] max-w-[80px] truncate" 
+                  className="hidden lg:inline text-xs font-bold text-[var(--text-primary)] max-w-[160px] truncate" 
                   title={currentUser.name}
                 >
                   {currentUser.name.split(' ')[0]}
                 </span>
-                
+
+                {/* Tier indicator badge */}
+                {(() => {
+                  if (currentUser.role === 'ADMIN') {
+                    return (
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-purple-500/15 border border-purple-500/25 text-purple-400">
+                        Admin
+                      </span>
+                    );
+                  }
+                  if (currentUser.role === 'SME') {
+                    return (
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-purple-500/15 border border-purple-500/25 text-purple-400">
+                        SME
+                      </span>
+                    );
+                  }
+                  if (currentUser.isPremiumUpgraded) {
+                    return (
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-500/10 border border-amber-500/25 text-amber-400" title="Premium user (₹499): Full access to Capstone Projects & SME Review Meetings">
+                        Premium (₹{systemConfig?.premiumUpgradePrice ?? 499})
+                      </span>
+                    );
+                  }
+                  if (currentUser.accountStatus === 'APPROVED') {
+                    return (
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-indigo-500/10 border border-indigo-500/25 text-indigo-400" title="Paid user (₹199): Gets access to Modules 3 to 7">
+                        Paid (₹{systemConfig?.certificationPrice ?? 199})
+                      </span>
+                    );
+                  }
+                  if (currentUser.accountStatus === 'PENDING_APPROVAL') {
+                    return (
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-yellow-500/10 border border-yellow-500/25 text-yellow-500" title="Paid tier pending manual verification">
+                        Pending Paid
+                      </span>
+                    );
+                  }
+                  return (
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-slate-500/10 border border-slate-500/25 text-[var(--text-secondary)]" title="Normal Registered user: Access to Modules 1 & 2 (Free)">
+                      Free Tier
+                    </span>
+                  );
+                })()}
+
+                {/* Tier Info Icon with Dropdown Legend */}
+                <div className="relative group cursor-help flex h-5.5 w-5.5 items-center justify-center rounded-full border border-slate-500/35 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-slate-500/60 text-[10px] font-bold select-none transition-all">
+                  ?
+                  <div className="absolute right-0 top-7 hidden group-hover:block z-50 w-72 p-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl text-left text-[11px] leading-relaxed text-[var(--text-secondary)] font-normal space-y-1.5 backdrop-blur-md">
+                    <div className="font-bold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-1.5 flex items-center gap-1">
+                      <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
+                      <span>Account Tiers & Access Guide</span>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="flex justify-between items-center gap-2">
+                        <strong className="text-[var(--text-primary)]">Normal Registered user:</strong>
+                        <span className="shrink-0 bg-slate-500/10 px-1.5 py-0.5 rounded text-[10px] text-slate-400">Modules 1–2 (Free)</span>
+                      </p>
+                      <p className="flex justify-between items-center gap-2">
+                        <strong className="text-[var(--text-primary)]">Paid user (₹199):</strong>
+                        <span className="shrink-0 bg-indigo-500/10 px-1.5 py-0.5 rounded text-[10px] text-indigo-400">Modules 3–7</span>
+                      </p>
+                      <p className="flex justify-between items-center gap-2">
+                        <strong className="text-[var(--text-primary)]">Premium user (₹499):</strong>
+                        <span className="shrink-0 bg-amber-500/10 px-1.5 py-0.5 rounded text-[10px] text-amber-400">Capstones &amp; SME</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Direct Logout Button */}
                 <button
                   id="logout-btn"

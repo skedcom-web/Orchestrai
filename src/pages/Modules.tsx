@@ -341,7 +341,7 @@ export const Modules: React.FC = () => {
                         <>
                           <h4 className="text-base font-bold mb-2">Module is Locked</h4>
                           <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6">
-                            Modules 3 to 8 are gated for certified track candidates. To unlock access, you must score at least 80% on the Module 2 knowledge check, pay the ₹99 accountability gate fee, and receive admin approval.
+                            Modules 3 to 7 are gated for certified track candidates. To unlock access, you must score at least 80% on the Module 2 knowledge check, pay the ₹199 accountability gate fee, and receive admin approval.
                           </p>
 
                           <div className="flex flex-col space-y-2.5">
@@ -367,7 +367,7 @@ export const Modules: React.FC = () => {
                                 onClick={() => navigate('/payment')}
                                 className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow transition-all cursor-pointer"
                               >
-                                Proceed to Verify Intent (₹99)
+                                Proceed to Verify Intent (₹199)
                               </button>
                             ) : (
                               <div className="border border-indigo-500/20 bg-indigo-500/5 p-3 rounded-lg text-xs font-semibold text-indigo-400">

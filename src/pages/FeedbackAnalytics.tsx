@@ -20,7 +20,7 @@ import { exportToCSV, exportToExcel, exportToPDF } from '../utils/feedbackExport
 import {
   BarChart2, Star, TrendingUp, Users, MessageSquare,
   Filter, RefreshCw, FileSpreadsheet, FileText,
-  File, ChevronUp, ChevronDown, Award, ThumbsUp
+  File, ChevronUp, ChevronDown, Award, ThumbsUp, Eye, X
 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -101,6 +101,10 @@ export const FeedbackAnalytics: React.FC<FeedbackAnalyticsProps> = ({ usersList 
   const [moduleFeedbacks, setModuleFeedbacks] = useState<ModuleFeedback[]>([]);
   const [certFeedbacks, setCertFeedbacks] = useState<CertFeedback[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Modal display states for full detail view
+  const [selectedModuleFeedback, setSelectedModuleFeedback] = useState<ModuleFeedback | null>(null);
+  const [selectedCertFeedback, setSelectedCertFeedback] = useState<CertFeedback | null>(null);
 
   // Filter states
   const [filterModule, setFilterModule] = useState<string>('all');
@@ -676,11 +680,17 @@ export const FeedbackAnalytics: React.FC<FeedbackAnalyticsProps> = ({ usersList 
                     </th>
                   ))}
                   <th className="px-3 py-2.5 text-left font-bold text-[var(--text-secondary)] uppercase tracking-wider">Dept</th>
+                  <th className="px-3 py-2.5 text-left font-bold text-[var(--text-secondary)] uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border-color)]/50">
                 {sorted(filteredModule).slice(0, 100).map((fb, i) => (
-                  <tr key={i} className="hover:bg-[var(--surface-sunken)]/40 transition-colors">
+                  <tr 
+                    key={i} 
+                    onClick={() => setSelectedModuleFeedback(fb)}
+                    className="hover:bg-[var(--surface-sunken)]/40 transition-colors cursor-pointer"
+                    title="Click to view full feedback detail"
+                  >
                     <td className="px-3 py-2 font-bold text-indigo-400 whitespace-nowrap">M{fb.moduleId}</td>
                     <td className="px-3 py-2">
                       <div className="font-bold text-[var(--text-primary)]">{fb.userName}</div>
@@ -694,10 +704,20 @@ export const FeedbackAnalytics: React.FC<FeedbackAnalyticsProps> = ({ usersList 
                     <td className="px-3 py-2 text-[var(--text-secondary)] max-w-[150px] truncate">{fb.learningOutcome}</td>
                     <td className="px-3 py-2 text-[var(--text-muted)] whitespace-nowrap">{new Date(fb.completedAt).toLocaleDateString()}</td>
                     <td className="px-3 py-2 text-[var(--text-muted)]">{fb.department || '—'}</td>
+                    <td className="px-3 py-2 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={() => setSelectedModuleFeedback(fb)}
+                        className="inline-flex items-center gap-1 text-[11px] text-indigo-450 hover:text-indigo-400 font-bold hover:underline cursor-pointer"
+                        title="View Full Feedback"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        <span>View</span>
+                      </button>
+                    </td>
                   </tr>
                 ))}
                 {filteredModule.length === 0 && (
-                  <tr><td colSpan={8} className="px-3 py-8 text-center text-[var(--text-secondary)]">No module feedback found.</td></tr>
+                  <tr><td colSpan={9} className="px-3 py-8 text-center text-[var(--text-secondary)]">No module feedback found.</td></tr>
                 )}
               </tbody>
             </table>
@@ -720,11 +740,17 @@ export const FeedbackAnalytics: React.FC<FeedbackAnalyticsProps> = ({ usersList 
                     </th>
                   ))}
                   <th className="px-3 py-2.5 text-left font-bold text-[var(--text-secondary)] uppercase tracking-wider">Takeaway</th>
+                  <th className="px-3 py-2.5 text-left font-bold text-[var(--text-secondary)] uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border-color)]/50">
                 {sorted(filteredCert).slice(0, 100).map((fb, i) => (
-                  <tr key={i} className="hover:bg-[var(--surface-sunken)]/40 transition-colors">
+                  <tr 
+                    key={i} 
+                    onClick={() => setSelectedCertFeedback(fb)}
+                    className="hover:bg-[var(--surface-sunken)]/40 transition-colors cursor-pointer"
+                    title="Click to view full feedback detail"
+                  >
                     <td className="px-3 py-2">
                       <div className="font-bold text-[var(--text-primary)]">{fb.userName}</div>
                       <div className="text-[var(--text-muted)]">{fb.userEmail}</div>
@@ -739,10 +765,20 @@ export const FeedbackAnalytics: React.FC<FeedbackAnalyticsProps> = ({ usersList 
                     <td className="px-3 py-2 text-[var(--text-secondary)]">{fb.advancedCertInterest}</td>
                     <td className="px-3 py-2 text-[var(--text-muted)] whitespace-nowrap">{new Date(fb.completedAt).toLocaleDateString()}</td>
                     <td className="px-3 py-2 text-[var(--text-secondary)] max-w-[200px] truncate" title={fb.biggestTakeaway}>{fb.biggestTakeaway || '—'}</td>
+                    <td className="px-3 py-2 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={() => setSelectedCertFeedback(fb)}
+                        className="inline-flex items-center gap-1 text-[11px] text-indigo-450 hover:text-indigo-400 font-bold hover:underline cursor-pointer"
+                        title="View Full Feedback"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        <span>View</span>
+                      </button>
+                    </td>
                   </tr>
                 ))}
                 {filteredCert.length === 0 && (
-                  <tr><td colSpan={7} className="px-3 py-8 text-center text-[var(--text-secondary)]">No certification feedback found.</td></tr>
+                  <tr><td colSpan={8} className="px-3 py-8 text-center text-[var(--text-secondary)]">No certification feedback found.</td></tr>
                 )}
               </tbody>
             </table>
@@ -754,6 +790,217 @@ export const FeedbackAnalytics: React.FC<FeedbackAnalyticsProps> = ({ usersList 
           </div>
         )}
       </div>
+
+      {/* Module Feedback Detail Modal */}
+      {selectedModuleFeedback && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="glass-card w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-color)] bg-[var(--bg-card)] max-h-[85vh] flex flex-col animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="px-5 py-4 border-b border-[var(--border-color)] flex items-center justify-between bg-slate-500/5">
+              <div>
+                <h3 className="text-sm font-extrabold text-[var(--text-primary)]">Module Feedback Detail</h3>
+                <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">
+                  Module {selectedModuleFeedback.moduleId}: {MODULE_NAMES[selectedModuleFeedback.moduleId]?.split(':')[1]?.trim() || `Module ${selectedModuleFeedback.moduleId}`}
+                </span>
+              </div>
+              <button 
+                onClick={() => setSelectedModuleFeedback(null)}
+                className="p-1.5 hover:bg-slate-500/10 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto space-y-4 text-xs">
+              {/* Learner Info Card */}
+              <div className="p-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)] space-y-2">
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <div>
+                    <span className="text-[var(--text-muted)] font-medium">Learner Name:</span>
+                    <p className="font-bold text-[var(--text-primary)]">{selectedModuleFeedback.isAnonymous ? 'Anonymous' : selectedModuleFeedback.userName || '—'}</p>
+                  </div>
+                  <div>
+                    <span className="text-[var(--text-muted)] font-medium">Learner Email:</span>
+                    <p className="font-bold text-[var(--text-primary)]">{selectedModuleFeedback.isAnonymous ? 'Anonymous (Hidden)' : selectedModuleFeedback.userEmail || '—'}</p>
+                  </div>
+                  <div>
+                    <span className="text-[var(--text-muted)] font-medium">Department:</span>
+                    <p className="font-bold text-[var(--text-primary)]">{selectedModuleFeedback.department || '—'}</p>
+                  </div>
+                  <div>
+                    <span className="text-[var(--text-muted)] font-medium">Organisation:</span>
+                    <p className="font-bold text-[var(--text-primary)]">{selectedModuleFeedback.organization || '—'}</p>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-[var(--border-color)] text-[10px] text-[var(--text-muted)] flex justify-between">
+                  <span>Submitted on: {new Date(selectedModuleFeedback.completedAt).toLocaleString()}</span>
+                  <span>Type: {selectedModuleFeedback.isAnonymous ? '👤 Anonymous' : '📝 Public'}</span>
+                </div>
+              </div>
+
+              {/* Questions & Answers */}
+              <div className="space-y-3.5">
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">Overall Rating:</h4>
+                  <div className="flex items-center gap-2">
+                    <StarRating value={selectedModuleFeedback.rating} readonly size="sm" />
+                    <span className="text-[11px] font-bold text-[var(--text-primary)]">{selectedModuleFeedback.rating} / 5</span>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">How useful was this training module?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30">{selectedModuleFeedback.usefulness || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">How clear was the explanation of concepts?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30">{selectedModuleFeedback.contentClarity || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">Did you achieve the expected learning outcome?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30 whitespace-pre-line">{selectedModuleFeedback.learningOutcome || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">What did you like most about this module?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30 whitespace-pre-line">{selectedModuleFeedback.likedMost || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">Are there any specific areas for improvement?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30 whitespace-pre-line">{selectedModuleFeedback.improvements || '—'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-[var(--border-color)] bg-slate-500/5 flex justify-end">
+              <button 
+                onClick={() => setSelectedModuleFeedback(null)}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer"
+              >
+                Close View
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cert Feedback Detail Modal */}
+      {selectedCertFeedback && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="glass-card w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-color)] bg-[var(--bg-card)] max-h-[85vh] flex flex-col animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="px-5 py-4 border-b border-[var(--border-color)] flex items-center justify-between bg-slate-500/5">
+              <div>
+                <h3 className="text-sm font-extrabold text-[var(--text-primary)]">Certification Feedback Detail</h3>
+                <span className="text-[10px] text-purple-400 font-bold uppercase tracking-wider">
+                  Full Program Assessment
+                </span>
+              </div>
+              <button 
+                onClick={() => setSelectedCertFeedback(null)}
+                className="p-1.5 hover:bg-slate-500/10 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto space-y-4 text-xs">
+              {/* Learner Info Card */}
+              <div className="p-3.5 rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)] space-y-2">
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <div>
+                    <span className="text-[var(--text-muted)] font-medium">Learner Name:</span>
+                    <p className="font-bold text-[var(--text-primary)]">{selectedCertFeedback.isAnonymous ? 'Anonymous' : selectedCertFeedback.userName || '—'}</p>
+                  </div>
+                  <div>
+                    <span className="text-[var(--text-muted)] font-medium">Learner Email:</span>
+                    <p className="font-bold text-[var(--text-primary)]">{selectedCertFeedback.isAnonymous ? 'Anonymous (Hidden)' : selectedCertFeedback.userEmail || '—'}</p>
+                  </div>
+                  <div>
+                    <span className="text-[var(--text-muted)] font-medium">Department:</span>
+                    <p className="font-bold text-[var(--text-primary)]">{selectedCertFeedback.department || '—'}</p>
+                  </div>
+                  <div>
+                    <span className="text-[var(--text-muted)] font-medium">Organisation:</span>
+                    <p className="font-bold text-[var(--text-primary)]">{selectedCertFeedback.organization || '—'}</p>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-[var(--border-color)] text-[10px] text-[var(--text-muted)] flex justify-between">
+                  <span>Submitted on: {new Date(selectedCertFeedback.completedAt).toLocaleString()}</span>
+                  <span>Type: {selectedCertFeedback.isAnonymous ? '👤 Anonymous' : '📝 Public'}</span>
+                </div>
+              </div>
+
+              {/* Questions & Answers */}
+              <div className="space-y-3.5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-bold text-[var(--text-primary)] mb-1">Overall Rating:</h4>
+                    <div className="flex items-center gap-2">
+                      <StarRating value={selectedCertFeedback.overallRating} readonly size="sm" />
+                      <span className="text-[11px] font-bold text-[var(--text-primary)]">{selectedCertFeedback.overallRating} / 5</span>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[var(--text-primary)] mb-1">Net Promoter Score (NPS):</h4>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold ${selectedCertFeedback.npsScore >= 9 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : selectedCertFeedback.npsScore >= 7 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`}>
+                        {selectedCertFeedback.npsScore} / 10
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">Which module did you find most valuable?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30">{selectedCertFeedback.mostValuableModule || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">Which module needs the most improvement?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30">{selectedCertFeedback.moduleNeedsImprovement || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">Did the course improve your confidence in applying skills?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30">{selectedCertFeedback.confidenceImprovement || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">Are you interested in an advanced certification?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30">{selectedCertFeedback.advancedCertInterest || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">What is your biggest takeaway from the program?</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30 whitespace-pre-line">{selectedCertFeedback.biggestTakeaway || '—'}</p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)] mb-1">Share a brief testimonial/review of the course:</h4>
+                  <p className="p-2.5 rounded-lg bg-slate-500/5 text-[var(--text-secondary)] border border-[var(--border-color)]/30 whitespace-pre-line">{selectedCertFeedback.testimonial || '—'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 border-t border-[var(--border-color)] bg-slate-500/5 flex justify-end">
+              <button 
+                onClick={() => setSelectedCertFeedback(null)}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer"
+              >
+                Close View
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

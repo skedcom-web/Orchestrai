@@ -11,11 +11,13 @@ import {
   Trash2, Award, Save, ListChecks,
   BarChart2, TrendingUp, Users, Activity, Search, Filter, Clock,
   BookOpen, Upload, HelpCircle, Eye, EyeOff, Ban, UserCheck, Radar,
-  Star, Sparkles, Download, MessageSquare, History, RotateCcw, Calendar
+  Star, Sparkles, Download, MessageSquare, History, RotateCcw, Calendar,
+  FileSpreadsheet, UserPlus, Coins, CheckSquare
 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { computeLeadReadiness, scoreColor, tagColor, OUTREACH_TAGS, triggerCsvDownload } from '../utils/leadReadiness';
 import type { OutreachTag } from '../context/AppContext';
+import { exportToCSV, exportToExcel, exportToPDF } from '../utils/feedbackExport';
 
 export const Admin: React.FC = () => {
   const { 
@@ -45,7 +47,16 @@ export const Admin: React.FC = () => {
     seedSampleCohort
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'logs' | 'reports' | 'audit' | 'modules' | 'candidates' | 'capstoneReviews' | 'feedbackAnalytics' | 'capstoneEditor'>('reports');
+  const [activeTab, setActiveTab] = useState<'settings' | 'approvals' | 'meetings' | 'logs' | 'reports' | 'downloads' | 'audit' | 'modules' | 'candidates' | 'capstoneReviews' | 'feedbackAnalytics' | 'capstoneEditor'>('reports');
+
+  // Custom states for Reports & Downloads filters
+  const [filterRegLearnersStatus, setFilterRegLearnersStatus] = useState<'all' | 'FREE_TIER' | 'PENDING_APPROVAL' | 'APPROVED' | 'PREMIUM' | 'CERTIFIED'>('all');
+  const [filterPaymentsTier, setFilterPaymentsTier] = useState<'all' | 'program' | 'premium' | 'both'>('all');
+  const [filterCapstonesDomain, setFilterCapstonesDomain] = useState<'all' | 'Education' | 'HR' | 'IT Operations' | 'Agriculture' | 'Healthcare' | 'Operations'>('all');
+  const [filterCapstonesStatus, setFilterCapstonesStatus] = useState<'all' | 'submitted' | 'assigned' | 'in_review' | 'certified' | 'rework' | 'rebuild'>('all');
+  const [filterProgressMilestone, setFilterProgressMilestone] = useState<'all' | 'completed_m1' | 'completed_m2' | 'passed_lab' | 'completed_all'>('all');
+  const [filterMeetingsStatus, setFilterMeetingsStatus] = useState<'all' | 'PENDING' | 'SCHEDULED'>('all');
+  const [filterAuditCategoryReport, setFilterAuditCategoryReport] = useState<'ALL' | 'LOGINS' | 'CONFIG' | 'PROGRESSION' | 'DATABASE'>('ALL');
   const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'gating' | 'pricing' | 'verification' | 'emailjs' | 'aireview' | 'maintenance'>('connection');
   const [requireEmailVerifVal, setRequireEmailVerifVal] = useState(systemConfig.requireEmailVerification !== false);
   const [requirePhoneVerifVal, setRequirePhoneVerifVal] = useState(!!systemConfig.requirePhoneVerification);
@@ -86,7 +97,11 @@ export const Admin: React.FC = () => {
   const [candidateSearchTerm, setCandidateSearchTerm] = useState('');
   const [filterScoreRange, setFilterScoreRange] = useState<'all' | 'passed' | 'top_scored'>('all');
   const [filterModuleProgress, setFilterModuleProgress] = useState<'all' | 'completed_m1' | 'completed_m2' | 'passed_lab'>('all');
-  const [filterAccountStatus, setFilterAccountStatus] = useState<'all' | 'FREE_TIER' | 'PENDING_APPROVAL' | 'APPROVED' | 'CERTIFIED'>('all');
+  const [filterAccountStatus, setFilterAccountStatus] = useState<'all' | 'FREE_TIER' | 'PENDING_APPROVAL' | 'APPROVED' | 'PREMIUM' | 'CERTIFIED'>('all');
+  
+  // Approval History Filters
+  const [approvalSearchTerm, setApprovalSearchTerm] = useState('');
+  const [filterApprovalTier, setFilterApprovalTier] = useState<'all' | 'program' | 'premium' | 'both'>('all');
   // Talent Radar filters
   const [showStandoutsOnly, setShowStandoutsOnly] = useState(false);
   const [filterOutreachTag, setFilterOutreachTag] = useState<'all' | OutreachTag | 'Untagged'>('all');
@@ -123,7 +138,11 @@ export const Admin: React.FC = () => {
   };
 
   useEffect(() => {
-    if (activeTab === 'approvals') {
+    loadMeetingRequests();
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'approvals' || activeTab === 'meetings') {
       loadMeetingRequests();
     }
   }, [activeTab]);
@@ -164,6 +183,11 @@ export const Admin: React.FC = () => {
       if (filterAccountStatus === 'CERTIFIED') {
         const isCertified = submissions.some(s => (s.userEmail === c.email || s.learnerEmail === c.email) && (s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible'));
         if (!isCertified) return false;
+      } else if (filterAccountStatus === 'PREMIUM') {
+        if (!c.isPremiumUpgraded) return false;
+      } else if (filterAccountStatus === 'APPROVED') {
+        // Paid user only: APPROVED status but NOT upgraded to premium
+        if (c.accountStatus !== 'APPROVED' || c.isPremiumUpgraded) return false;
       } else {
         if (c.accountStatus !== filterAccountStatus) return false;
       }
@@ -314,6 +338,7 @@ export const Admin: React.FC = () => {
   const [templateIdCertification, setTemplateIdCertification] = useState(systemConfig.emailjsTemplateIdCertification || '');
   const [templateIdAdminNotification, setTemplateIdAdminNotification] = useState(systemConfig.emailjsTemplateIdAdminNotification || '');
   const [templateIdSmeReassigned, setTemplateIdSmeReassigned] = useState(systemConfig.emailjsTemplateIdSmeReassigned || '');
+  const [templateIdMeeting, setTemplateIdMeeting] = useState(systemConfig.emailjsTemplateIdMeeting || '');
 
   // Synchronize local states with global systemConfig (needed when RTDB config listener loads values asynchronously)
   useEffect(() => {
@@ -326,6 +351,7 @@ export const Admin: React.FC = () => {
     setTemplateIdCertification(systemConfig.emailjsTemplateIdCertification || '');
     setTemplateIdAdminNotification(systemConfig.emailjsTemplateIdAdminNotification || '');
     setTemplateIdSmeReassigned(systemConfig.emailjsTemplateIdSmeReassigned || '');
+    setTemplateIdMeeting(systemConfig.emailjsTemplateIdMeeting || '');
     setRequireEmailVerifVal(systemConfig.requireEmailVerification !== false);
     setRequirePhoneVerifVal(!!systemConfig.requirePhoneVerification);
     setFreeModulesLimitVal(systemConfig.freeModulesLimit || 2);
@@ -346,6 +372,7 @@ export const Admin: React.FC = () => {
     systemConfig.emailjsTemplateIdCertification,
     systemConfig.emailjsTemplateIdAdminNotification,
     systemConfig.emailjsTemplateIdSmeReassigned,
+    systemConfig.emailjsTemplateIdMeeting,
     systemConfig.requireEmailVerification,
     systemConfig.requirePhoneVerification,
     systemConfig.freeModulesLimit,
@@ -828,7 +855,8 @@ export const Admin: React.FC = () => {
       emailjsTemplateIdFeedback: templateIdFeedback,
       emailjsTemplateIdCertification: templateIdCertification,
       emailjsTemplateIdAdminNotification: templateIdAdminNotification,
-      emailjsTemplateIdSmeReassigned: templateIdSmeReassigned
+      emailjsTemplateIdSmeReassigned: templateIdSmeReassigned,
+      emailjsTemplateIdMeeting: templateIdMeeting
     });
     alert("EmailJS API settings saved!");
   };
@@ -1318,7 +1346,18 @@ export const Admin: React.FC = () => {
                 }`}
               >
                 <BarChart2 className="h-4 w-4" />
-                <span>Reports & Insights</span>
+                <span>Dashboard & Insights</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('downloads')}
+                className={`w-full flex items-center space-x-2 px-4 py-3 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === 'downloads'
+                    ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+                }`}
+              >
+                <FileSpreadsheet className="h-4 w-4" />
+                <span>Reports & Downloads</span>
               </button>
             </>
           )}
@@ -1395,6 +1434,25 @@ export const Admin: React.FC = () => {
             {pendingUsers.length > 0 && (
               <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                 {pendingUsers.length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('meetings')}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-xs font-bold transition-all ${
+              activeTab === 'meetings'
+                ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <Calendar className="h-4 w-4" />
+              <span>SME Meetings</span>
+            </div>
+            {meetingRequests.filter(r => r.status === 'PENDING').length > 0 && (
+              <span className="bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                {meetingRequests.filter(r => r.status === 'PENDING').length}
               </span>
             )}
           </button>
@@ -1650,6 +1708,939 @@ export const Admin: React.FC = () => {
                   <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" /> 15–39%</span>
                   <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-slate-500" /> &lt;15%</span>
                 </div>
+              </div>
+
+              {/* Cohort Distribution & Standouts Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Cohort Status Distribution */}
+                <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)] space-y-4 lg:col-span-2">
+                  <div className="flex items-start gap-3 border-b border-[var(--border-color)] pb-3">
+                    <div className="h-9 w-9 shrink-0 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                      <Users className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-extrabold text-[var(--text-primary)] tracking-tight">Cohort Status Distribution</h3>
+                      <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                        Breakdown of the candidate roster by access level and account tier.
+                      </p>
+                    </div>
+                  </div>
+
+                  {(() => {
+                    const totalUsers = Math.max(1, usersList.length);
+                    const freeCount = usersList.filter(u => u.role === 'USER' && u.accountStatus !== 'APPROVED' && u.accountStatus !== 'PENDING_APPROVAL' && !u.isPremiumUpgraded).length;
+                    const pendingCount = usersList.filter(u => u.role === 'USER' && u.accountStatus === 'PENDING_APPROVAL').length;
+                    const approvedCount = usersList.filter(u => u.role === 'USER' && u.accountStatus === 'APPROVED' && !u.isPremiumUpgraded).length;
+                    const premiumCount = usersList.filter(u => u.role === 'USER' && u.isPremiumUpgraded).length;
+                    const adminSmeCount = usersList.filter(u => u.role === 'ADMIN' || u.role === 'SME').length;
+
+                    const distribution = [
+                      { label: 'Free Tier Guest', count: freeCount, color: 'from-slate-500 to-slate-400', badgeColor: 'bg-slate-500/10 text-slate-400 border-slate-500/20' },
+                      { label: 'Pending Paid Approval', count: pendingCount, color: 'from-yellow-500 to-amber-500', badgeColor: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' },
+                      { label: 'Approved Paid User', count: approvedCount, color: 'from-indigo-500 to-indigo-400', badgeColor: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' },
+                      { label: 'Premium Upgraded', count: premiumCount, color: 'from-amber-500 to-orange-400', badgeColor: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
+                      { label: 'Admin / SME Role', count: adminSmeCount, color: 'from-purple-500 to-fuchsia-400', badgeColor: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
+                    ];
+
+                    return (
+                      <div className="space-y-3">
+                        {distribution.map((tier) => {
+                          const pct = Math.round((tier.count / totalUsers) * 100);
+                          return (
+                            <div key={tier.label} className="space-y-1">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="font-semibold text-[var(--text-primary)]">{tier.label}</span>
+                                <div className="flex items-center gap-2">
+                                  <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold border ${tier.badgeColor}`}>{tier.count} users</span>
+                                  <span className="font-extrabold text-[var(--text-primary)]">{pct}%</span>
+                                </div>
+                              </div>
+                              <div className="w-full h-2.5 bg-[var(--surface-sunken)] rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full bg-gradient-to-r ${tier.color} rounded-full transition-all duration-700`}
+                                  style={{ width: `${Math.min(100, Math.max(0, pct))}%` }}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Top Standouts Candidate Card */}
+                <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)] space-y-4 lg:col-span-1 flex flex-col justify-between">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3 border-b border-[var(--border-color)] pb-3">
+                      <div className="h-9 w-9 shrink-0 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                        <Star className="h-4 w-4 fill-amber-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-extrabold text-[var(--text-primary)] tracking-tight">Top Standout Candidates</h3>
+                        <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                          Highest readiness scores in the cohort.
+                        </p>
+                      </div>
+                    </div>
+
+                    {(() => {
+                      const standouts = usersList
+                        .filter(u => u.role !== 'ADMIN' && u.role !== 'SME')
+                        .map(u => {
+                          const hasSub = submissions.some(s => s.userEmail === u.email || s.learnerEmail === u.email);
+                          return { user: u, readiness: computeLeadReadiness(u, hasSub) };
+                        })
+                        .filter(x => x.readiness.isStandout)
+                        .sort((a, b) => b.readiness.score - a.readiness.score)
+                        .slice(0, 4);
+
+                      if (standouts.length === 0) {
+                        return (
+                          <div className="py-8 text-center text-xs text-[var(--text-secondary)] italic">
+                            No standout candidates detected yet. Run seed cohort or complete quizzes/labs to generate data.
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <div className="space-y-3">
+                          {standouts.map(({ user, readiness }) => (
+                            <div key={user.uid} className="flex items-center justify-between p-2.5 rounded-xl border border-[var(--border-color)] bg-slate-500/5">
+                              <div className="min-w-0 flex-1 mr-2">
+                                <div className="text-xs font-bold text-[var(--text-primary)] truncate flex items-center gap-1">
+                                  <span>{user.name || 'Anonymous'}</span>
+                                  {user.isPremiumUpgraded && <span className="text-[9px] bg-amber-500/15 text-amber-400 border border-amber-500/20 px-1 rounded font-extrabold">⭐</span>}
+                                </div>
+                                <div className="text-[9px] text-[var(--text-secondary)] truncate mt-0.5">{user.email}</div>
+                              </div>
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold border shrink-0 ${scoreColor(readiness.score)}`}>
+                                {readiness.score}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  <button
+                    onClick={() => setActiveTab('candidates')}
+                    className="w-full mt-3 py-2 text-center text-xs font-bold text-indigo-400 hover:text-indigo-300 border border-indigo-500/25 hover:border-indigo-500/40 hover:bg-indigo-500/10 rounded-xl transition-all cursor-pointer"
+                  >
+                    Open Talent Radar Pipeline
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: REPORTS & DOWNLOADS */}
+          {activeTab === 'downloads' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-indigo-500/5 via-[var(--bg-card)]/40 to-purple-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start gap-4">
+                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-500/25">
+                    <FileSpreadsheet className="h-6 w-6" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">Reports & Downloads</h3>
+                      <span className="text-[10px] font-extrabold text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Data Center</span>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                      Generate, query, and download cohort activity datasets in Excel (XLSX), CSV, and PDF formats. Refine criteria dynamically before export.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid of Report Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                
+                {/* 1. REGISTERED LEARNERS */}
+                <div className="glass-card rounded-2xl p-5 border border-[var(--border-color)] bg-[var(--surface-sunken)]/20 flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="h-9 w-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                        <UserPlus className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-[var(--text-primary)]">Registered Learners Directory</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] mt-0.5"> Roster of student profiles, levels, XP, and streaks. </p>
+                      </div>
+                    </div>
+                    
+                    {/* Filters */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Filter Status</label>
+                      <select
+                        value={filterRegLearnersStatus}
+                        onChange={(e: any) => setFilterRegLearnersStatus(e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-xs text-[var(--text-primary)] focus:outline-none"
+                      >
+                        <option value="all">All Status Tiers</option>
+                        <option value="FREE_TIER">Free Tier (Guest)</option>
+                        <option value="PENDING_APPROVAL">Pending Paid</option>
+                        <option value="APPROVED">Approved Paid</option>
+                        <option value="PREMIUM">Premium Upgrade</option>
+                        <option value="CERTIFIED">Certified Graduate</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-1.5 pt-2">
+                    <button
+                      onClick={async () => {
+                        const list = candidatesList.filter(c => {
+                          if (filterRegLearnersStatus === 'all') return true;
+                          if (filterRegLearnersStatus === 'PREMIUM') return c.isPremiumUpgraded;
+                          if (filterRegLearnersStatus === 'CERTIFIED') {
+                            return submissions.some(s => (s.userEmail === c.email || s.learnerEmail === c.email) && (s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible'));
+                          }
+                          return c.accountStatus === filterRegLearnersStatus;
+                        });
+                        const rows = list.map(c => {
+                          const hasSub = submissions.some(s => s.userEmail === c.email || s.learnerEmail === c.email);
+                          const readiness = computeLeadReadiness(c, hasSub);
+                          return {
+                            "Full Name": c.name || 'Anonymous',
+                            "Email Address": c.email,
+                            "Mobile Number": c.mobile || 'N/A',
+                            "Role": c.role,
+                            "Account Tier": c.isPremiumUpgraded ? 'Premium' : (c.accountStatus === 'APPROVED' ? 'Paid User' : (c.accountStatus === 'PENDING_APPROVAL' ? 'Pending Paid' : 'Free Tier')),
+                            "XP Score": c.progress?.xp || 0,
+                            "Level": c.progress?.level || 1,
+                            "Active Streak (Days)": c.progress?.streakDays || 0,
+                            "Lead Readiness": readiness.score,
+                            "Standout status": readiness.isStandout ? 'YES' : 'NO'
+                          };
+                        });
+                        if (!rows.length) { addToast('No records found for the selected status.', 'warning'); return; }
+                        await exportToExcel([{ name: 'Registered Learners', rows }], 'Registered_Learners_Report');
+                        addToast('Excel report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      Excel (.xlsx)
+                    </button>
+                    <button
+                      onClick={() => {
+                        const list = candidatesList.filter(c => {
+                          if (filterRegLearnersStatus === 'all') return true;
+                          if (filterRegLearnersStatus === 'PREMIUM') return c.isPremiumUpgraded;
+                          if (filterRegLearnersStatus === 'CERTIFIED') {
+                            return submissions.some(s => (s.userEmail === c.email || s.learnerEmail === c.email) && (s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible'));
+                          }
+                          return c.accountStatus === filterRegLearnersStatus;
+                        });
+                        const rows = list.map(c => {
+                          const hasSub = submissions.some(s => s.userEmail === c.email || s.learnerEmail === c.email);
+                          const readiness = computeLeadReadiness(c, hasSub);
+                          return {
+                            "Full Name": c.name || 'Anonymous',
+                            "Email Address": c.email,
+                            "Mobile Number": c.mobile || 'N/A',
+                            "Role": c.role,
+                            "Account Tier": c.isPremiumUpgraded ? 'Premium' : (c.accountStatus === 'APPROVED' ? 'Paid User' : (c.accountStatus === 'PENDING_APPROVAL' ? 'Pending Paid' : 'Free Tier')),
+                            "XP Score": c.progress?.xp || 0,
+                            "Level": c.progress?.level || 1,
+                            "Active Streak (Days)": c.progress?.streakDays || 0,
+                            "Lead Readiness": readiness.score,
+                            "Standout status": readiness.isStandout ? 'YES' : 'NO'
+                          };
+                        });
+                        if (!rows.length) { addToast('No records found for the selected status.', 'warning'); return; }
+                        exportToCSV(rows, 'Registered_Learners_Report');
+                        addToast('CSV report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 hover:border-purple-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      CSV
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const list = candidatesList.filter(c => {
+                          if (filterRegLearnersStatus === 'all') return true;
+                          if (filterRegLearnersStatus === 'PREMIUM') return c.isPremiumUpgraded;
+                          if (filterRegLearnersStatus === 'CERTIFIED') {
+                            return submissions.some(s => (s.userEmail === c.email || s.learnerEmail === c.email) && (s.status?.toLowerCase() === 'certified' || s.status?.toLowerCase() === 'hire_eligible'));
+                          }
+                          return c.accountStatus === filterRegLearnersStatus;
+                        });
+                        const rows = list.map(c => {
+                          const hasSub = submissions.some(s => s.userEmail === c.email || s.learnerEmail === c.email);
+                          const readiness = computeLeadReadiness(c, hasSub);
+                          return [
+                            c.name || 'Anonymous',
+                            c.email,
+                            c.isPremiumUpgraded ? 'Premium' : (c.accountStatus === 'APPROVED' ? 'Paid' : 'Free'),
+                            c.progress?.level || 1,
+                            c.progress?.xp || 0,
+                            readiness.score,
+                            readiness.isStandout ? 'Yes' : 'No'
+                          ];
+                        });
+                        if (!rows.length) { addToast('No records found for the selected status.', 'warning'); return; }
+                        await exportToPDF(
+                          'Registered Learners Directory',
+                          `Status Filter: ${filterRegLearnersStatus.toUpperCase()}`,
+                          [{ heading: 'Roster of Candidates', columns: ['Name', 'Email Address', 'Account Tier', 'Level', 'XP', 'Readiness', 'Standout'], rows }],
+                          'Registered_Learners_Report'
+                        );
+                        addToast('PDF report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 hover:border-rose-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      PDF
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. PAYMENTS & APPROVALS */}
+                <div className="glass-card rounded-2xl p-5 border border-[var(--border-color)] bg-[var(--surface-sunken)]/20 flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="h-9 w-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <Coins className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-[var(--text-primary)]">Payment & Approvals Log</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] mt-0.5"> Transaction details, approved tiers, and logging dates. </p>
+                      </div>
+                    </div>
+                    
+                    {/* Filters */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Filter Approved Tier</label>
+                      <select
+                        value={filterPaymentsTier}
+                        onChange={(e: any) => setFilterPaymentsTier(e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-xs text-[var(--text-primary)] focus:outline-none"
+                      >
+                        <option value="all">All Tiers (Standard & Premium)</option>
+                        <option value="program">Program Access Only (₹{systemConfig.certificationPrice || 199})</option>
+                        <option value="premium">Premium Upgrade Only (₹{systemConfig.premiumUpgradePrice || 499})</option>
+                        <option value="both">Both Tiers Approved</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-1.5 pt-2">
+                    <button
+                      onClick={async () => {
+                        const list = usersList
+                          .filter(u => u.role === 'USER' && (u.accountStatus === 'APPROVED' || u.isPremiumUpgraded))
+                          .filter(u => {
+                            if (filterPaymentsTier === 'all') return true;
+                            if (filterPaymentsTier === 'program') return u.accountStatus === 'APPROVED' && !u.isPremiumUpgraded;
+                            if (filterPaymentsTier === 'premium') return u.isPremiumUpgraded;
+                            if (filterPaymentsTier === 'both') return u.accountStatus === 'APPROVED' && u.isPremiumUpgraded;
+                            return true;
+                          });
+                        const rows = list.map(u => ({
+                          "Candidate Name": u.name || 'Anonymous',
+                          "Email Address": u.email,
+                          "Payment ID": u.paymentId || 'N/A',
+                          "Program Access Approved": u.accountStatus === 'APPROVED' || u.isPremiumUpgraded ? 'Approved' : 'No',
+                          "Premium Upgrade Approved": u.isPremiumUpgraded ? 'Approved' : 'No',
+                          "Approval Date": u.approvedAt ? new Date(u.approvedAt).toLocaleDateString() : 'N/A',
+                          "Premium Approval Date": u.premiumApprovedAt ? new Date(u.premiumApprovedAt).toLocaleDateString() : 'N/A'
+                        }));
+                        if (!rows.length) { addToast('No records found for the selected tier.', 'warning'); return; }
+                        await exportToExcel([{ name: 'Payment Log', rows }], 'Payment_Approvals_Log');
+                        addToast('Excel report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      Excel (.xlsx)
+                    </button>
+                    <button
+                      onClick={() => {
+                        const list = usersList
+                          .filter(u => u.role === 'USER' && (u.accountStatus === 'APPROVED' || u.isPremiumUpgraded))
+                          .filter(u => {
+                            if (filterPaymentsTier === 'all') return true;
+                            if (filterPaymentsTier === 'program') return u.accountStatus === 'APPROVED' && !u.isPremiumUpgraded;
+                            if (filterPaymentsTier === 'premium') return u.isPremiumUpgraded;
+                            if (filterPaymentsTier === 'both') return u.accountStatus === 'APPROVED' && u.isPremiumUpgraded;
+                            return true;
+                          });
+                        const rows = list.map(u => ({
+                          "Candidate Name": u.name || 'Anonymous',
+                          "Email Address": u.email,
+                          "Payment ID": u.paymentId || 'N/A',
+                          "Program Access Approved": u.accountStatus === 'APPROVED' || u.isPremiumUpgraded ? 'Approved' : 'No',
+                          "Premium Upgrade Approved": u.isPremiumUpgraded ? 'Approved' : 'No',
+                          "Approval Date": u.approvedAt ? new Date(u.approvedAt).toLocaleDateString() : 'N/A',
+                          "Premium Approval Date": u.premiumApprovedAt ? new Date(u.premiumApprovedAt).toLocaleDateString() : 'N/A'
+                        }));
+                        if (!rows.length) { addToast('No records found for the selected tier.', 'warning'); return; }
+                        exportToCSV(rows, 'Payment_Approvals_Log');
+                        addToast('CSV report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 hover:border-purple-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      CSV
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const list = usersList
+                          .filter(u => u.role === 'USER' && (u.accountStatus === 'APPROVED' || u.isPremiumUpgraded))
+                          .filter(u => {
+                            if (filterPaymentsTier === 'all') return true;
+                            if (filterPaymentsTier === 'program') return u.accountStatus === 'APPROVED' && !u.isPremiumUpgraded;
+                            if (filterPaymentsTier === 'premium') return u.isPremiumUpgraded;
+                            if (filterPaymentsTier === 'both') return u.accountStatus === 'APPROVED' && u.isPremiumUpgraded;
+                            return true;
+                          });
+                        const rows = list.map(u => [
+                          u.name || 'Anonymous',
+                          u.email,
+                          u.paymentId || 'N/A',
+                          u.accountStatus === 'APPROVED' || u.isPremiumUpgraded ? 'Yes' : 'No',
+                          u.isPremiumUpgraded ? 'Yes' : 'No',
+                          u.approvedAt ? new Date(u.approvedAt).toLocaleDateString() : 'N/A',
+                        ]);
+                        if (!rows.length) { addToast('No records found for the selected tier.', 'warning'); return; }
+                        await exportToPDF(
+                          'Payment & Approvals Log',
+                          `Tier Filter: ${filterPaymentsTier.toUpperCase()}`,
+                          [{ heading: 'Roster of Approved Payments', columns: ['Name', 'Email Address', 'Payment ID', 'Program Access', 'Premium Upgrade', 'Approval Date'], rows }],
+                          'Payment_Approvals_Log'
+                        );
+                        addToast('PDF report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 hover:border-rose-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      PDF
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. CAPSTONE SUBMISSIONS */}
+                <div className="glass-card rounded-2xl p-5 border border-[var(--border-color)] bg-[var(--surface-sunken)]/20 flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="h-9 w-9 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                        <Award className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-[var(--text-primary)]">Capstone Submissions Report</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] mt-0.5"> Track project domains, repository links, and final scores. </p>
+                      </div>
+                    </div>
+                    
+                    {/* Filters */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Domain</label>
+                        <select
+                          value={filterCapstonesDomain}
+                          onChange={(e: any) => setFilterCapstonesDomain(e.target.value)}
+                          className="w-full px-2 py-1.5 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-xs text-[var(--text-primary)] focus:outline-none"
+                        >
+                          <option value="all">All Domains</option>
+                          <option value="Education">Education</option>
+                          <option value="HR">HR</option>
+                          <option value="IT Operations">IT Ops</option>
+                          <option value="Agriculture">Agriculture</option>
+                          <option value="Healthcare">Healthcare</option>
+                          <option value="Operations">Operations</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Status</label>
+                        <select
+                          value={filterCapstonesStatus}
+                          onChange={(e: any) => setFilterCapstonesStatus(e.target.value)}
+                          className="w-full px-2 py-1.5 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-xs text-[var(--text-primary)] focus:outline-none"
+                        >
+                          <option value="all">All Statuses</option>
+                          <option value="submitted">Submitted</option>
+                          <option value="assigned">Assigned</option>
+                          <option value="in_review">In Review</option>
+                          <option value="certified">Certified</option>
+                          <option value="rework">Rework</option>
+                          <option value="rebuild">Rebuild</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-1.5 pt-2">
+                    <button
+                      onClick={async () => {
+                        const list = submissions.filter(s => {
+                          if (filterCapstonesDomain !== 'all') {
+                            const id = s.capstoneId || '';
+                            const num = parseInt(id.replace(/[^\d]/g, ''), 10);
+                            let domain = '';
+                            if (num >= 1 && num <= 5) domain = 'Education';
+                            else if (num >= 6 && num <= 10) domain = 'HR';
+                            else if (num >= 11 && num <= 15) domain = 'IT Operations';
+                            else if (num >= 16 && num <= 20) domain = 'Agriculture';
+                            else if (num >= 21 && num <= 25) domain = 'Healthcare';
+                            else if (num >= 26 && num <= 30) domain = 'Operations';
+                            if (domain !== filterCapstonesDomain) return false;
+                          }
+                          if (filterCapstonesStatus !== 'all') {
+                            if (s.status?.toLowerCase() !== filterCapstonesStatus.toLowerCase()) return false;
+                          }
+                          return true;
+                        });
+                        const rows = list.map((s: any) => ({
+                          "Learner Name": s.userName || s.learnerName || 'Anonymous',
+                          "Email Address": s.userEmail || s.learnerEmail,
+                          "Capstone ID": s.capstoneId,
+                          "Capstone Title": s.capstoneTitle || 'N/A',
+                          "Submission Date": s.submittedAt ? new Date(s.submittedAt).toLocaleDateString() : 'N/A',
+                          "GitHub Repo URL": s.githubUrl || 'N/A',
+                          "Firebase Deployed URL": s.firebaseUrl || 'N/A',
+                          "SME Reviewer": s.reviewerName || 'N/A',
+                          "Submission Status": s.status,
+                          "Final Score": s.automatedTotal !== undefined ? s.automatedTotal : 'N/A'
+                        }));
+                        if (!rows.length) { addToast('No records match your filters.', 'warning'); return; }
+                        await exportToExcel([{ name: 'Capstones', rows }], 'Capstone_Submissions_Report');
+                        addToast('Excel report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      Excel (.xlsx)
+                    </button>
+                    <button
+                      onClick={() => {
+                        const list = submissions.filter(s => {
+                          if (filterCapstonesDomain !== 'all') {
+                            const id = s.capstoneId || '';
+                            const num = parseInt(id.replace(/[^\d]/g, ''), 10);
+                            let domain = '';
+                            if (num >= 1 && num <= 5) domain = 'Education';
+                            else if (num >= 6 && num <= 10) domain = 'HR';
+                            else if (num >= 11 && num <= 15) domain = 'IT Operations';
+                            else if (num >= 16 && num <= 20) domain = 'Agriculture';
+                            else if (num >= 21 && num <= 25) domain = 'Healthcare';
+                            else if (num >= 26 && num <= 30) domain = 'Operations';
+                            if (domain !== filterCapstonesDomain) return false;
+                          }
+                          if (filterCapstonesStatus !== 'all') {
+                            if (s.status?.toLowerCase() !== filterCapstonesStatus.toLowerCase()) return false;
+                          }
+                          return true;
+                        });
+                        const rows = list.map((s: any) => ({
+                          "Learner Name": s.userName || s.learnerName || 'Anonymous',
+                          "Email Address": s.userEmail || s.learnerEmail,
+                          "Capstone ID": s.capstoneId,
+                          "Capstone Title": s.capstoneTitle || 'N/A',
+                          "Submission Date": s.submittedAt ? new Date(s.submittedAt).toLocaleDateString() : 'N/A',
+                          "GitHub Repo URL": s.githubUrl || 'N/A',
+                          "Firebase Deployed URL": s.firebaseUrl || 'N/A',
+                          "SME Reviewer": s.reviewerName || 'N/A',
+                          "Submission Status": s.status,
+                          "Final Score": s.automatedTotal !== undefined ? s.automatedTotal : 'N/A'
+                        }));
+                        if (!rows.length) { addToast('No records match your filters.', 'warning'); return; }
+                        exportToCSV(rows, 'Capstone_Submissions_Report');
+                        addToast('CSV report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 hover:border-purple-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      CSV
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const list = submissions.filter(s => {
+                          if (filterCapstonesDomain !== 'all') {
+                            const id = s.capstoneId || '';
+                            const num = parseInt(id.replace(/[^\d]/g, ''), 10);
+                            let domain = '';
+                            if (num >= 1 && num <= 5) domain = 'Education';
+                            else if (num >= 6 && num <= 10) domain = 'HR';
+                            else if (num >= 11 && num <= 15) domain = 'IT Operations';
+                            else if (num >= 16 && num <= 20) domain = 'Agriculture';
+                            else if (num >= 21 && num <= 25) domain = 'Healthcare';
+                            else if (num >= 26 && num <= 30) domain = 'Operations';
+                            if (domain !== filterCapstonesDomain) return false;
+                          }
+                          if (filterCapstonesStatus !== 'all') {
+                            if (s.status?.toLowerCase() !== filterCapstonesStatus.toLowerCase()) return false;
+                          }
+                          return true;
+                        });
+                        const rows = list.map((s: any) => [
+                          s.userName || s.learnerName || 'Anonymous',
+                          s.userEmail || s.learnerEmail,
+                          s.capstoneId,
+                          s.status,
+                          s.reviewerName || 'N/A',
+                          s.automatedTotal !== undefined ? s.automatedTotal : 'N/A',
+                          s.submittedAt ? new Date(s.submittedAt).toLocaleDateString() : 'N/A'
+                        ]);
+                        if (!rows.length) { addToast('No records match your filters.', 'warning'); return; }
+                        await exportToPDF(
+                          'Capstone Submissions Directory',
+                          `Domain: ${filterCapstonesDomain.toUpperCase()} | Status: ${filterCapstonesStatus.toUpperCase()}`,
+                          [{ heading: 'Roster of Capstone Projects', columns: ['Learner', 'Email', 'Capstone ID', 'Status', 'SME Reviewer', 'Score', 'Date'], rows }],
+                          'Capstone_Submissions_Report'
+                        );
+                        addToast('PDF report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 hover:border-rose-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      PDF
+                    </button>
+                  </div>
+                </div>
+
+                {/* 4. CURRICULUM PROGRESS */}
+                <div className="glass-card rounded-2xl p-5 border border-[var(--border-color)] bg-[var(--surface-sunken)]/20 flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="h-9 w-9 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                        <CheckSquare className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-[var(--text-primary)]">Curriculum Progress Report</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] mt-0.5"> Detailed stats of modules, quizzes, and simulator labs. </p>
+                      </div>
+                    </div>
+                    
+                    {/* Filters */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Progress Milestone</label>
+                      <select
+                        value={filterProgressMilestone}
+                        onChange={(e: any) => setFilterProgressMilestone(e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-xs text-[var(--text-primary)] focus:outline-none"
+                      >
+                        <option value="all">All Learners</option>
+                        <option value="completed_m1">Completed Module 1</option>
+                        <option value="completed_m2">Completed Module 2</option>
+                        <option value="passed_lab">Passed Simulator Lab</option>
+                        <option value="completed_all">Completed All Modules (1-6)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-1.5 pt-2">
+                    <button
+                      onClick={async () => {
+                        const list = candidatesList.filter(c => {
+                          if (filterProgressMilestone === 'all') return true;
+                          if (filterProgressMilestone === 'completed_m1') return c.progress?.modulesCompleted?.includes(1);
+                          if (filterProgressMilestone === 'completed_m2') return c.progress?.modulesCompleted?.includes(2);
+                          if (filterProgressMilestone === 'passed_lab') return (c.progress?.labsPassed || []).includes(1);
+                          if (filterProgressMilestone === 'completed_all') return (c.progress?.modulesCompleted || []).length >= 6;
+                          return true;
+                        });
+                        const rows = list.map(c => ({
+                          "Learner Name": c.name || 'Anonymous',
+                          "Email Address": c.email,
+                          "Module 1 Progress": c.progress?.slidesViewed?.[1] ? `${Math.round((c.progress.slidesViewed[1].length / 23) * 100)}%` : '0%',
+                          "Module 2 Progress": c.progress?.slidesViewed?.[2] ? `${Math.round((c.progress.slidesViewed[2].length / 23) * 100)}%` : '0%',
+                          "M1 Quiz Score": c.progress?.quizScores?.[1] !== undefined ? `${c.progress.quizScores[1]}%` : 'Not Taken',
+                          "M1 Simulator Lab": (c.progress?.labsPassed || []).includes(1) ? 'Cleared' : 'Incomplete',
+                          "XP Accumulated": c.progress?.xp || 0,
+                          "Current Level": c.progress?.level || 1
+                        }));
+                        if (!rows.length) { addToast('No records match the milestone.', 'warning'); return; }
+                        await exportToExcel([{ name: 'Curriculum Progress', rows }], 'Curriculum_Progress_Report');
+                        addToast('Excel report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      Excel (.xlsx)
+                    </button>
+                    <button
+                      onClick={() => {
+                        const list = candidatesList.filter(c => {
+                          if (filterProgressMilestone === 'all') return true;
+                          if (filterProgressMilestone === 'completed_m1') return c.progress?.modulesCompleted?.includes(1);
+                          if (filterProgressMilestone === 'completed_m2') return c.progress?.modulesCompleted?.includes(2);
+                          if (filterProgressMilestone === 'passed_lab') return (c.progress?.labsPassed || []).includes(1);
+                          if (filterProgressMilestone === 'completed_all') return (c.progress?.modulesCompleted || []).length >= 6;
+                          return true;
+                        });
+                        const rows = list.map(c => ({
+                          "Learner Name": c.name || 'Anonymous',
+                          "Email Address": c.email,
+                          "Module 1 Progress": c.progress?.slidesViewed?.[1] ? `${Math.round((c.progress.slidesViewed[1].length / 23) * 100)}%` : '0%',
+                          "Module 2 Progress": c.progress?.slidesViewed?.[2] ? `${Math.round((c.progress.slidesViewed[2].length / 23) * 100)}%` : '0%',
+                          "M1 Quiz Score": c.progress?.quizScores?.[1] !== undefined ? `${c.progress.quizScores[1]}%` : 'Not Taken',
+                          "M1 Simulator Lab": (c.progress?.labsPassed || []).includes(1) ? 'Cleared' : 'Incomplete',
+                          "XP Accumulated": c.progress?.xp || 0,
+                          "Current Level": c.progress?.level || 1
+                        }));
+                        if (!rows.length) { addToast('No records match the milestone.', 'warning'); return; }
+                        exportToCSV(rows, 'Curriculum_Progress_Report');
+                        addToast('CSV report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 hover:border-purple-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      CSV
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const list = candidatesList.filter(c => {
+                          if (filterProgressMilestone === 'all') return true;
+                          if (filterProgressMilestone === 'completed_m1') return c.progress?.modulesCompleted?.includes(1);
+                          if (filterProgressMilestone === 'completed_m2') return c.progress?.modulesCompleted?.includes(2);
+                          if (filterProgressMilestone === 'passed_lab') return (c.progress?.labsPassed || []).includes(1);
+                          if (filterProgressMilestone === 'completed_all') return (c.progress?.modulesCompleted || []).length >= 6;
+                          return true;
+                        });
+                        const rows = list.map(c => [
+                          c.name || 'Anonymous',
+                          c.email,
+                          c.progress?.slidesViewed?.[1] ? `${Math.round((c.progress.slidesViewed[1].length / 23) * 100)}%` : '0%',
+                          c.progress?.quizScores?.[1] !== undefined ? `${c.progress.quizScores[1]}%` : 'Not Taken',
+                          (c.progress?.labsPassed || []).includes(1) ? 'Cleared' : 'No',
+                          c.progress?.xp || 0
+                        ]);
+                        if (!rows.length) { addToast('No records match the milestone.', 'warning'); return; }
+                        await exportToPDF(
+                          'Curriculum Completion Report',
+                          `Milestone Filter: ${filterProgressMilestone.toUpperCase()}`,
+                          [{ heading: 'Candidate Progress Roster', columns: ['Name', 'Email Address', 'Mod 1 Views', 'M1 Quiz Score', 'Simulator Lab', 'XP'], rows }],
+                          'Curriculum_Progress_Report'
+                        );
+                        addToast('PDF report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 hover:border-rose-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      PDF
+                    </button>
+                  </div>
+                </div>
+
+                {/* 5. SME MEETINGS SCHEDULE */}
+                <div className="glass-card rounded-2xl p-5 border border-[var(--border-color)] bg-[var(--surface-sunken)]/20 flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="h-9 w-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                        <Calendar className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-[var(--text-primary)]">SME Meetings Log</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] mt-0.5"> Virtual mentoring sessions, Google Meet/Teams URLs, and status codes. </p>
+                      </div>
+                    </div>
+                    
+                    {/* Filters */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Meeting Status</label>
+                      <select
+                        value={filterMeetingsStatus}
+                        onChange={(e: any) => setFilterMeetingsStatus(e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-xs text-[var(--text-primary)] focus:outline-none"
+                      >
+                        <option value="all">All Statuses</option>
+                        <option value="PENDING">Pending Scheduling</option>
+                        <option value="SCHEDULED">Scheduled / Active</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-1.5 pt-2">
+                    <button
+                      onClick={async () => {
+                        const list = meetingRequests.filter(r => {
+                          if (filterMeetingsStatus !== 'all' && r.status !== filterMeetingsStatus) return false;
+                          return true;
+                        });
+                        const rows = list.map(r => ({
+                          "Learner Name": r.userName || 'Anonymous',
+                          "Email Address": r.userEmail,
+                          "Capstone ID": r.capstoneId,
+                          "Capstone Title": r.capstoneTitle || 'N/A',
+                          "Meeting Link": r.meetingLink || 'N/A',
+                          "Scheduled Date/Time": r.scheduledAt || 'N/A',
+                          "Notes": r.notes || '',
+                          "Meeting Status": r.status
+                        }));
+                        if (!rows.length) { addToast('No meeting logs found.', 'warning'); return; }
+                        await exportToExcel([{ name: 'SME Meetings', rows }], 'SME_Meetings_Report');
+                        addToast('Excel report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      Excel (.xlsx)
+                    </button>
+                    <button
+                      onClick={() => {
+                        const list = meetingRequests.filter(r => {
+                          if (filterMeetingsStatus !== 'all' && r.status !== filterMeetingsStatus) return false;
+                          return true;
+                        });
+                        const rows = list.map(r => ({
+                          "Learner Name": r.userName || 'Anonymous',
+                          "Email Address": r.userEmail,
+                          "Capstone ID": r.capstoneId,
+                          "Capstone Title": r.capstoneTitle || 'N/A',
+                          "Meeting Link": r.meetingLink || 'N/A',
+                          "Scheduled Date/Time": r.scheduledAt || 'N/A',
+                          "Notes": r.notes || '',
+                          "Meeting Status": r.status
+                        }));
+                        if (!rows.length) { addToast('No meeting logs found.', 'warning'); return; }
+                        exportToCSV(rows, 'SME_Meetings_Report');
+                        addToast('CSV report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 hover:border-purple-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      CSV
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const list = meetingRequests.filter(r => {
+                          if (filterMeetingsStatus !== 'all' && r.status !== filterMeetingsStatus) return false;
+                          return true;
+                        });
+                        const rows = list.map(r => [
+                          r.userName || 'Anonymous',
+                          r.userEmail,
+                          r.capstoneId || 'N/A',
+                          r.scheduledAt || 'N/A',
+                          r.meetingLink || 'N/A',
+                          r.status
+                        ]);
+                        if (!rows.length) { addToast('No meeting logs found.', 'warning'); return; }
+                        await exportToPDF(
+                          'SME Capstone Mentoring Schedule',
+                          `Meeting Status: ${filterMeetingsStatus}`,
+                          [{ heading: 'Mentoring Requests & Meetings', columns: ['Learner', 'Email Address', 'Capstone ID', 'Time', 'Link', 'Status'], rows }],
+                          'SME_Meetings_Report'
+                        );
+                        addToast('PDF report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 hover:border-rose-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      PDF
+                    </button>
+                  </div>
+                </div>
+
+                {/* 6. SYSTEM AUDIT TRAIL */}
+                <div className="glass-card rounded-2xl p-5 border border-[var(--border-color)] bg-[var(--surface-sunken)]/20 flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all">
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="h-9 w-9 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+                        <Activity className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-[var(--text-primary)]">System Audit Trail Log</h4>
+                        <p className="text-[11px] text-[var(--text-secondary)] mt-0.5"> Full sequence record of actions, logins, resets, and configurations. </p>
+                      </div>
+                    </div>
+                    
+                    {/* Filters */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">Log Category</label>
+                      <select
+                        value={filterAuditCategoryReport}
+                        onChange={(e: any) => setFilterAuditCategoryReport(e.target.value)}
+                        className="w-full px-2 py-1.5 rounded border border-[var(--border-color)] bg-[var(--bg-card)] text-xs text-[var(--text-primary)] focus:outline-none"
+                      >
+                        <option value="ALL">All Categories</option>
+                        <option value="LOGINS">Logins & Sign-ups</option>
+                        <option value="CONFIG">Settings & Config Updates</option>
+                        <option value="PROGRESSION">Course Progress Milestones</option>
+                        <option value="DATABASE">Database Operations</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-1.5 pt-2">
+                    <button
+                      onClick={async () => {
+                        const list = auditLogs.filter(log => {
+                          if (filterAuditCategoryReport !== 'ALL') {
+                            const type = log.type;
+                            if (filterAuditCategoryReport === 'LOGINS' && !['USER_LOGIN', 'ADMIN_LOGIN', 'USER_REGISTER', 'USER_LOGOUT', 'ADMIN_LOGOUT'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'CONFIG' && !['CONFIG_UPDATE', 'APPROVE_STUDENT', 'CLEAR_AUDIT_LOGS'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'PROGRESSION' && !['MODULE_COMPLETE', 'QUIZ_SUBMIT', 'LAB_COMPLETE', 'PROJECT_SUBMIT', 'CERTIFY_STUDENT'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'DATABASE' && !['WIPE_DATABASE', 'CONNECT_DATABASE', 'DISCONNECT_DATABASE'].includes(type)) return false;
+                          }
+                          return true;
+                        });
+                        const rows = list.map(log => ({
+                          "Timestamp": new Date(log.timestamp).toLocaleString(),
+                          "Event Type": log.type,
+                          "Actor Email": log.userEmail,
+                          "Description": log.description
+                        }));
+                        if (!rows.length) { addToast('No audit logs fit this category.', 'warning'); return; }
+                        await exportToExcel([{ name: 'Audit Trail', rows }], 'System_Audit_Logs_Report');
+                        addToast('Excel report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      Excel (.xlsx)
+                    </button>
+                    <button
+                      onClick={() => {
+                        const list = auditLogs.filter(log => {
+                          if (filterAuditCategoryReport !== 'ALL') {
+                            const type = log.type;
+                            if (filterAuditCategoryReport === 'LOGINS' && !['USER_LOGIN', 'ADMIN_LOGIN', 'USER_REGISTER', 'USER_LOGOUT', 'ADMIN_LOGOUT'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'CONFIG' && !['CONFIG_UPDATE', 'APPROVE_STUDENT', 'CLEAR_AUDIT_LOGS'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'PROGRESSION' && !['MODULE_COMPLETE', 'QUIZ_SUBMIT', 'LAB_COMPLETE', 'PROJECT_SUBMIT', 'CERTIFY_STUDENT'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'DATABASE' && !['WIPE_DATABASE', 'CONNECT_DATABASE', 'DISCONNECT_DATABASE'].includes(type)) return false;
+                          }
+                          return true;
+                        });
+                        const rows = list.map(log => ({
+                          "Timestamp": new Date(log.timestamp).toLocaleString(),
+                          "Event Type": log.type,
+                          "Actor Email": log.userEmail,
+                          "Description": log.description
+                        }));
+                        if (!rows.length) { addToast('No audit logs fit this category.', 'warning'); return; }
+                        exportToCSV(rows, 'System_Audit_Logs_Report');
+                        addToast('CSV report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 hover:border-purple-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      CSV
+                    </button>
+                    <button
+                      onClick={async () => {
+                        const list = auditLogs.filter(log => {
+                          if (filterAuditCategoryReport !== 'ALL') {
+                            const type = log.type;
+                            if (filterAuditCategoryReport === 'LOGINS' && !['USER_LOGIN', 'ADMIN_LOGIN', 'USER_REGISTER', 'USER_LOGOUT', 'ADMIN_LOGOUT'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'CONFIG' && !['CONFIG_UPDATE', 'APPROVE_STUDENT', 'CLEAR_AUDIT_LOGS'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'PROGRESSION' && !['MODULE_COMPLETE', 'QUIZ_SUBMIT', 'LAB_COMPLETE', 'PROJECT_SUBMIT', 'CERTIFY_STUDENT'].includes(type)) return false;
+                            if (filterAuditCategoryReport === 'DATABASE' && !['WIPE_DATABASE', 'CONNECT_DATABASE', 'DISCONNECT_DATABASE'].includes(type)) return false;
+                          }
+                          return true;
+                        });
+                        const rows = list.map(log => [
+                          new Date(log.timestamp).toLocaleString(),
+                          log.type.replace('_', ' '),
+                          log.userEmail,
+                          log.description
+                        ]);
+                        if (!rows.length) { addToast('No audit logs fit this category.', 'warning'); return; }
+                        await exportToPDF(
+                          'System Audit Trail Logs',
+                          `Category Filter: ${filterAuditCategoryReport}`,
+                          [{ heading: 'Forensic System Events Log', columns: ['Timestamp', 'Type', 'Actor Email', 'Description'], rows }],
+                          'System_Audit_Logs_Report'
+                        );
+                        addToast('PDF report generated successfully!', 'success');
+                      }}
+                      className="flex-1 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 hover:border-rose-500/30 rounded-lg text-[10px] font-bold tracking-wide transition-all cursor-pointer text-center"
+                    >
+                      PDF
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
           )}
@@ -3201,6 +4192,18 @@ export const Admin: React.FC = () => {
                               className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
                             />
                           </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                              SME Meeting Scheduled Template ID (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="template_meeting_scheduled"
+                              value={templateIdMeeting}
+                              onChange={(e) => setTemplateIdMeeting(e.target.value)}
+                              className="w-full px-3 py-2 rounded border border-[var(--border-color)] bg-transparent text-[var(--text-primary)] text-xs focus:outline-none"
+                            />
+                          </div>
                         </div>
 
                         <div className="pt-2">
@@ -3418,7 +4421,7 @@ export const Admin: React.FC = () => {
                         <span className="text-[10px] font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Payment Gate</span>
                       </div>
                       <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
-                        Verify ₹99 payments and unlock premium access (Modules 3–8), or approve certified users upgrading to Premium. Pending requests show up here when the workflow is set to Manual approval mode.
+                        Verify ₹{systemConfig.certificationPrice || 99} payments and unlock premium access (Modules 3–8), or approve certified users upgrading to Premium. Pending requests show up here when the workflow is set to Manual approval mode.
                       </p>
                     </div>
                   </div>
@@ -3430,11 +4433,11 @@ export const Admin: React.FC = () => {
                 </div>
               </div>
 
-              {/* Card 1: Program Access Approvals (₹99) */}
+              {/* Card 1: Program Access Approvals (₹Dynamic) */}
               <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
                 <h4 className="text-sm font-bold text-[var(--text-primary)] mb-4 flex items-center gap-1.5">
                   <span className="inline-block w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                  Program Access Approvals (₹99)
+                  Program Access Approvals (₹{systemConfig.certificationPrice || 99})
                 </h4>
                 {usersList.filter(u => u.accountStatus === 'PENDING_APPROVAL').length === 0 ? (
                   <div className="py-8 text-center text-[var(--text-secondary)] text-xs">
@@ -3477,11 +4480,11 @@ export const Admin: React.FC = () => {
                 )}
               </div>
 
-              {/* Card 2: Premium Upgrade Approvals (₹499) */}
+              {/* Card 2: Premium Upgrade Approvals (₹Dynamic) */}
               <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
                 <h4 className="text-sm font-bold text-[var(--text-primary)] mb-4 flex items-center gap-1.5">
                   <span className="inline-block w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse" />
-                  Premium Upgrade Approvals (₹499)
+                  Premium Upgrade Approvals (₹{systemConfig.premiumUpgradePrice || 499})
                 </h4>
                 {usersList.filter(u => u.premiumStatus === 'PENDING').length === 0 ? (
                   <div className="py-8 text-center text-[var(--text-secondary)] text-xs">
@@ -3524,17 +4527,173 @@ export const Admin: React.FC = () => {
                 )}
               </div>
 
-              {/* Meeting Requests Section */}
-              <div className="mt-8 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
-                      <Calendar className="h-4 w-4 text-indigo-400" />
-                      SME Meeting Requests (Premium Users)
-                    </h4>
-                    <p className="text-[11px] text-[var(--text-secondary)] mt-1">
-                      Schedule 1-on-1 virtual design review meetings with premium candidates. Paste the Google Meet or Teams link and set the date.
-                    </p>
+              {/* Card 3: Approval History (Already Approved) */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
+                {(() => {
+                  const approvedUsers = usersList
+                    .filter(u => u.role === 'USER' && (u.accountStatus === 'APPROVED' || u.isPremiumUpgraded))
+                    .filter(u => {
+                      if (approvalSearchTerm.trim() !== '') {
+                        const term = approvalSearchTerm.toLowerCase();
+                        const nameMatch = (u.name || '').toLowerCase().includes(term);
+                        const emailMatch = (u.email || '').toLowerCase().includes(term);
+                        if (!nameMatch && !emailMatch) return false;
+                      }
+                      if (filterApprovalTier !== 'all') {
+                        if (filterApprovalTier === 'program') {
+                          if (u.accountStatus !== 'APPROVED') return false;
+                        } else if (filterApprovalTier === 'premium') {
+                          if (!u.isPremiumUpgraded) return false;
+                        } else if (filterApprovalTier === 'both') {
+                          if (u.accountStatus !== 'APPROVED' || !u.isPremiumUpgraded) return false;
+                        }
+                      }
+                      return true;
+                    })
+                    .sort((a, b) => {
+                      const timeA = Math.max(
+                        a.approvedAt ? new Date(a.approvedAt).getTime() : 0,
+                        a.premiumApprovedAt ? new Date(a.premiumApprovedAt).getTime() : 0
+                      );
+                      const timeB = Math.max(
+                        b.approvedAt ? new Date(b.approvedAt).getTime() : 0,
+                        b.premiumApprovedAt ? new Date(b.premiumApprovedAt).getTime() : 0
+                      );
+                      if (timeA && timeB) return timeB - timeA;
+                      if (timeA) return -1;
+                      if (timeB) return 1;
+                      return a.name.localeCompare(b.name);
+                    });
+
+                  return (
+                    <>
+                      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                        <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                          <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                          Approval History (Already Approved)
+                        </h4>
+                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          Total: {approvedUsers.length} users
+                        </span>
+                      </div>
+
+                      {/* Filters toolbar */}
+                      <div className="flex flex-wrap items-center gap-3 mb-4 bg-slate-500/5 p-3.5 rounded-xl border border-[var(--border-color)]/60">
+                        {/* Search Input */}
+                        <div className="relative flex-1 min-w-[200px]">
+                          <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[var(--text-secondary)]/60" />
+                          <input
+                            type="text"
+                            placeholder="Search approved candidates..."
+                            value={approvalSearchTerm}
+                            onChange={(e) => setApprovalSearchTerm(e.target.value)}
+                            className="w-full pl-9 pr-4 py-2 border border-[var(--border-color)] rounded-lg bg-[var(--bg-card)]/50 text-xs text-[var(--text-primary)] focus:outline-none focus:border-purple-500/55 transition-all placeholder:text-[var(--text-secondary)]/50"
+                          />
+                          {approvalSearchTerm && (
+                            <button
+                              onClick={() => setApprovalSearchTerm('')}
+                              className="absolute right-3 top-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs font-bold cursor-pointer"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Tier Dropdown */}
+                        <div className="w-[180px] shrink-0">
+                          <select
+                            value={filterApprovalTier}
+                            onChange={(e: any) => setFilterApprovalTier(e.target.value)}
+                            className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg bg-[var(--bg-card)]/50 text-xs text-[var(--text-primary)] focus:outline-none focus:border-purple-500/55 transition-all font-semibold"
+                          >
+                            <option value="all">All Approved Tiers</option>
+                            <option value="program">Program Access (₹{systemConfig.certificationPrice || 99})</option>
+                            <option value="premium">Premium Upgrade (₹{systemConfig.premiumUpgradePrice || 499})</option>
+                            <option value="both">Both Tiers</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      {approvedUsers.length === 0 ? (
+                        <div className="py-8 text-center text-[var(--text-secondary)] text-xs">
+                          No approved users found.
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto border border-[var(--border-color)] rounded-lg">
+                          <table className="w-full text-left border-collapse text-xs">
+                            <thead>
+                              <tr className="bg-slate-500/5 font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)]">
+                                <th className="p-4">Name / Email</th>
+                                <th className="p-4">Approved Access Tiers</th>
+                                <th className="p-4">Payment ID</th>
+                                <th className="p-4">Approval Date</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
+                              {approvedUsers.map(user => {
+                                const dateStr = (() => {
+                                  const dateObj = user.premiumApprovedAt ? new Date(user.premiumApprovedAt) : (user.approvedAt ? new Date(user.approvedAt) : null);
+                                  if (!dateObj || isNaN(dateObj.getTime())) return 'Historical (Prior to log)';
+                                  return dateObj.toLocaleString('en-IN', {
+                                    dateStyle: 'medium',
+                                    timeStyle: 'short'
+                                  });
+                                })();
+                                return (
+                                  <tr key={user.uid} className="hover:bg-slate-500/5 transition-all">
+                                    <td className="p-4">
+                                      <div className="font-bold text-[var(--text-primary)]">{user.name}</div>
+                                      <div className="text-[10px] text-[var(--text-secondary)]">{user.email}</div>
+                                    </td>
+                                    <td className="p-4">
+                                      <div className="flex flex-wrap gap-1.5">
+                                        {user.accountStatus === 'APPROVED' && (
+                                          <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-indigo-500/10 border-indigo-500/25 text-indigo-400">
+                                            Program Access (₹{systemConfig.certificationPrice || 99})
+                                          </span>
+                                        )}
+                                        {user.isPremiumUpgraded && (
+                                          <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-amber-500/10 border-amber-500/25 text-amber-400">
+                                            Premium Upgrade (₹{systemConfig.premiumUpgradePrice || 499})
+                                          </span>
+                                        )}
+                                      </div>
+                                    </td>
+                                    <td className="p-4 font-mono text-[var(--text-primary)]">{user.paymentId || 'N/A'}</td>
+                                    <td className="p-4 text-[var(--text-secondary)]">{dateStr}</td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+          )}
+
+          {/* TAB: SME MEETING REQUESTS */}
+          {activeTab === 'meetings' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-250">
+              {/* Hero header */}
+              <div className="glass-card rounded-2xl p-6 bg-gradient-to-br from-indigo-500/5 via-[var(--bg-card)]/40 to-purple-500/5 border border-[var(--border-color)]">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-500/25">
+                      <Calendar className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-lg font-extrabold text-[var(--text-primary)] tracking-tight">SME Meeting Requests</h3>
+                        <span className="text-[10px] font-extrabold text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-2 py-0.5 rounded-full uppercase tracking-[0.15em]">Premium Candidates</span>
+                      </div>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+                        Schedule 1-on-1 virtual design review meetings with premium candidates. Paste the Google Meet or Teams link and set the date/time. A confirmation email will automatically be sent to the premium user.
+                      </p>
+                    </div>
                   </div>
                   <button 
                     onClick={loadMeetingRequests}
@@ -3543,38 +4702,39 @@ export const Admin: React.FC = () => {
                     Refresh List
                   </button>
                 </div>
+              </div>
 
-                <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
-                  {loadingMeetings ? (
-                    <div className="text-center text-xs py-6">Loading meeting requests...</div>
-                  ) : meetingRequests.length === 0 ? (
-                    <div className="py-6 text-center text-[var(--text-secondary)] text-xs">
-                      No meeting requests submitted yet.
-                    </div>
-                  ) : (
-                    <div className="overflow-x-auto border border-[var(--border-color)] rounded-lg">
-                      <table className="w-full text-left border-collapse text-xs">
-                        <thead>
-                          <tr className="bg-slate-500/5 font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)]">
-                            <th className="p-4">Learner / Capstone</th>
-                            <th className="p-4">Focus Notes</th>
-                            <th className="p-4">Scheduled Info / Status</th>
-                            <th className="p-4 text-right">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
-                          {meetingRequests.map(req => (
-                            <MeetingRow 
-                              key={req.userId} 
-                              req={req} 
-                              onUpdated={loadMeetingRequests} 
-                            />
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
+              {/* Table Card */}
+              <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
+                {loadingMeetings ? (
+                  <div className="text-center text-xs py-6">Loading meeting requests...</div>
+                ) : meetingRequests.length === 0 ? (
+                  <div className="py-6 text-center text-[var(--text-secondary)] text-xs">
+                    No meeting requests submitted yet.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto border border-[var(--border-color)] rounded-lg">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="bg-slate-500/5 font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)]">
+                          <th className="p-4">Learner / Capstone</th>
+                          <th className="p-4">Focus Notes</th>
+                          <th className="p-4">Scheduled Info / Status</th>
+                          <th className="p-4 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[var(--border-color)] text-[var(--text-secondary)]">
+                        {meetingRequests.map(req => (
+                          <MeetingRow 
+                            key={req.userId} 
+                            req={req} 
+                            onUpdated={loadMeetingRequests} 
+                          />
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -3836,10 +4996,11 @@ export const Admin: React.FC = () => {
                       onChange={(e: any) => setFilterAccountStatus(e.target.value)}
                       className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg bg-[var(--bg-card)]/50 text-xs text-[var(--text-primary)] focus:outline-none focus:border-purple-500/55 transition-all"
                     >
-                      <option value="all">All Account Statuses</option>
-                      <option value="FREE_TIER">Free Tier Access</option>
-                      <option value="PENDING_APPROVAL">Pending Premium Approval</option>
-                      <option value="APPROVED">Approved Premium Access</option>
+                      <option value="all">All User Types</option>
+                      <option value="FREE_TIER">Free Tier (Guest)</option>
+                      <option value="PENDING_APPROVAL">Pending Paid (₹199)</option>
+                      <option value="APPROVED">Paid User (₹199)</option>
+                      <option value="PREMIUM">Premium User (₹499)</option>
                       <option value="CERTIFIED">Certified / Hire Eligible</option>
                     </select>
                   </div>
@@ -3934,17 +5095,48 @@ export const Admin: React.FC = () => {
                                   <span className="px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-red-500/10 border-red-500/20 text-red-400">
                                     Blacklisted
                                   </span>
-                                ) : (
-                                  <span className={`px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide ${
-                                    candidate.accountStatus === 'APPROVED'
-                                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                                      : candidate.accountStatus === 'PENDING_APPROVAL'
-                                        ? 'bg-amber-500/10 border-amber-500/20 text-amber-400 animate-pulse'
-                                        : 'bg-slate-500/10 border-slate-500/20 text-[var(--text-secondary)]'
-                                  }`}>
-                                    {candidate.accountStatus.replace('_', ' ')}
-                                  </span>
-                                )}
+                                ) : (() => {
+                                  if (candidate.role === 'ADMIN') {
+                                    return (
+                                      <span className="px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-purple-500/15 border-purple-500/25 text-purple-400">
+                                        Admin
+                                      </span>
+                                    );
+                                  }
+                                  if (candidate.role === 'SME') {
+                                    return (
+                                      <span className="px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-purple-500/15 border-purple-500/25 text-purple-400">
+                                        SME
+                                      </span>
+                                    );
+                                  }
+                                  if (candidate.isPremiumUpgraded) {
+                                    return (
+                                      <span className="px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-amber-500/10 border-amber-500/25 text-amber-400" title="Premium user (₹499): Full access to Capstone Projects & SME Review Meetings">
+                                        Premium
+                                      </span>
+                                    );
+                                  }
+                                  if (candidate.accountStatus === 'APPROVED') {
+                                    return (
+                                      <span className="px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-indigo-500/10 border-indigo-500/25 text-indigo-400" title="Paid user (₹199): Gets access to Modules 3 to 7">
+                                        Paid (₹199)
+                                      </span>
+                                    );
+                                  }
+                                  if (candidate.accountStatus === 'PENDING_APPROVAL') {
+                                    return (
+                                      <span className="px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-yellow-500/10 border-yellow-500/25 text-yellow-500 animate-pulse" title="Paid tier pending manual verification">
+                                        Pending Paid
+                                      </span>
+                                    );
+                                  }
+                                  return (
+                                    <span className="px-2 py-1 rounded text-[10px] font-extrabold uppercase border tracking-wide bg-slate-500/10 border-slate-500/25 text-[var(--text-secondary)]" title="Normal Registered user: Access to Modules 1 & 2 (Free)">
+                                      Free Tier
+                                    </span>
+                                  );
+                                })()}
                               </td>
                               <td className="p-3.5">
                                 <div className="flex flex-wrap gap-1.5 items-center">
@@ -4601,7 +5793,7 @@ const MeetingRow: React.FC<{ req: any; onUpdated: () => void }> = ({ req, onUpda
   const [link, setLink] = useState(req.meetingLink || '');
   const [time, setTime] = useState(req.scheduledAt || '');
   const [saving, setSaving] = useState(false);
-  const { addToast } = useApp();
+  const { addToast, systemConfig, addNotificationLog } = useApp();
 
   const handleSchedule = async () => {
     if (!link.trim() || !time.trim()) {
@@ -4612,13 +5804,63 @@ const MeetingRow: React.FC<{ req: any; onUpdated: () => void }> = ({ req, onUpda
     try {
       const db = getFirebaseDb();
       if (!db) return;
-      await set(ref(db, `meetingRequests/${req.userId}`), {
+      
+      const updatedRequest = {
         ...req,
         meetingLink: link,
         scheduledAt: time,
         status: 'SCHEDULED'
-      });
-      addToast(`Meeting scheduled for ${req.userName}!`, 'success');
+      };
+
+      await set(ref(db, `meetingRequests/${req.userId}`), updatedRequest);
+
+      // EmailJS sending setup
+      const serviceId = systemConfig.emailjsServiceId;
+      const templateId = systemConfig.emailjsTemplateIdMeeting || systemConfig.emailjsTemplateId;
+      const publicKey = systemConfig.emailjsPublicKey;
+      
+      let emailStatus = 'pending';
+      let emailErr = '';
+
+      if (serviceId && templateId && publicKey) {
+        try {
+          await emailjs.send(serviceId, templateId, {
+            to_name: req.userName,
+            to_email: req.userEmail,
+            meeting_link: link,
+            meeting_time: time,
+            capstone_title: req.capstoneTitle || req.capstoneId || 'Capstone Project',
+            capstone_id: req.capstoneId || ''
+          }, publicKey);
+          emailStatus = 'sent';
+        } catch (err: any) {
+          emailStatus = 'failed';
+          emailErr = err?.text || err?.message || 'EmailJS send error';
+        }
+      } else {
+        emailStatus = 'simulated';
+        emailErr = 'EmailJS credentials not configured.';
+      }
+
+      // Log notification
+      if (addNotificationLog) {
+        addNotificationLog({
+          type: 'Meeting Scheduled',
+          recipient: req.userEmail,
+          subject: `Your OrchestrAI Capstone Review Meeting is Scheduled`,
+          status: emailStatus === 'sent' ? 'Sent' : 'Failed',
+          channel: emailStatus === 'sent' ? 'EmailJS API' : `EmailJS API (${emailStatus}${emailErr ? ': ' + emailErr.slice(0, 80) : ''})`
+        });
+      }
+
+      if (emailStatus === 'sent') {
+        addToast(`Meeting scheduled and notification email sent to ${req.userEmail}!`, 'success');
+      } else if (emailStatus === 'simulated') {
+        addToast(`Meeting scheduled. Note: EmailJS is not configured (simulated mode).`, 'info');
+      } else {
+        addToast(`Meeting scheduled, but email alert failed to send: ${emailErr}`, 'warning');
+      }
+      
       onUpdated();
     } catch (err) {
       console.error(err);

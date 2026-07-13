@@ -161,7 +161,7 @@ export const Landing: React.FC = () => {
     { num: '03', label: 'Generate', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20', desc: 'Direct AI to build components sequentially — migrations first, controllers second, UI forms last.' },
     { num: '04', label: 'Validate', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', desc: 'Verify functional logic, server-side data isolation, security boundaries and OWASP compliance.' },
     { num: '05', label: 'Evolve', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', desc: 'Take real feedback and execute targeted enhancements. Re-prompt changes immediately in the same session.' },
-    { num: '06', label: 'Deploy', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20', desc: 'Promote validated features to production with CI/CD pipelines, living documentation and audit logs.' },
+    { num: '06', label: 'Deploy', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20', desc: 'Promote validated and production grade codes to QA' },
   ];
 
   const pipDemos = [
@@ -503,8 +503,8 @@ export const Landing: React.FC = () => {
                 <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight mb-0.5">
                   Sithanandham Radhakrishnan
                 </h2>
-                <p className="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-0.5">
-                  Strategic Advisor &amp; Product Owner — vThink Global Technologies
+                <p className="text-sm font-bold text-indigo-400 tracking-widest mb-0.5">
+                  STRATEGIC ADVISOR &amp; PRODUCT OWNER — vTHINK GLOBAL TECHNOLOGIES
                 </p>
                 <p className="text-sm text-[var(--text-secondary)] font-semibold mb-4">
                   Chief OrchestrAI Architect

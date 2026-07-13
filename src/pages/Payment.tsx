@@ -171,7 +171,7 @@ export const Payment: React.FC = () => {
 
   const price = isPremiumUpgrade 
     ? (systemConfig.premiumUpgradePrice ?? 499) 
-    : (systemConfig.certificationPrice ?? 99);
+    : (systemConfig.certificationPrice ?? 199);
 
   const title = isPremiumUpgrade 
     ? "Premium Case Studies Upgrade" 
@@ -187,7 +187,7 @@ export const Payment: React.FC = () => {
 
   const itemDesc = isPremiumUpgrade 
     ? "Unlocks post-certification Module 7 advanced labs and case studies"
-    : "Full access to Modules 3–8, labs, and certification demo";
+    : "Full access to Modules 3–7, labs, and certification demo";
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">

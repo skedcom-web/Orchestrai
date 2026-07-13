@@ -45,6 +45,8 @@ export interface UserProfile {
   reviewerRole?: string;
   isPremiumUpgraded?: boolean;
   premiumStatus?: 'NONE' | 'PENDING' | 'PREMIUM';
+  approvedAt?: string;
+  premiumApprovedAt?: string;
   // Feedback auto-fill fields
   department?: string;
   organization?: string;
@@ -180,6 +182,7 @@ export interface SystemConfig {
   emailjsTemplateIdCertification?: string;
   emailjsTemplateIdAdminNotification?: string;
   emailjsTemplateIdSmeReassigned?: string;
+  emailjsTemplateIdMeeting?: string;
   firebaseApiKey?: string;
   firebaseAuthDomain?: string;
   firebaseProjectId?: string;
@@ -322,7 +325,7 @@ interface AppContextType {
   submissions: Submission[];
   addSubmission: (githubRepoUrl: string, promptLogUrl: string) => void;
   updateSubmissionStatus: (id: string, status: Submission['status'], score: number) => void;
-  login: (email: string, name: string, mobile?: string, emailVerified?: boolean, mobileVerified?: boolean) => void;
+  login: (email: string, name: string, mobile?: string, emailVerified?: boolean, mobileVerified?: boolean, existingProfile?: UserProfile) => void;
   logout: () => void;
   seedAdminAccount: () => void;
 
@@ -367,7 +370,7 @@ const DEFAULT_CONFIG: SystemConfig = {
   emailjsTemplateId: '',
   emailjsPublicKey: '',
   adminEmail: 'vthinkorchestrai@gmail.com',
-  certificationPrice: 99,
+  certificationPrice: 199,
   premiumUpgradePrice: 499,
   contactEmail: 'support@vthinkglobal.com',
   contactPhone: '+91 98765 43210',
@@ -382,6 +385,7 @@ const DEFAULT_CONFIG: SystemConfig = {
   emailjsTemplateIdCertification: '',
   emailjsTemplateIdAdminNotification: '',
   emailjsTemplateIdSmeReassigned: '',
+  emailjsTemplateIdMeeting: '',
   firebaseApiKey: 'AIzaSyDb2WxO-sGsKEHWGYwBaSSCI058F8gcwB0',
   firebaseAuthDomain: 'vthinkorchestrai-auth.firebaseapp.com',
   firebaseProjectId: 'vthinkorchestrai-auth',
@@ -397,11 +401,11 @@ const DEFAULT_CONFIG: SystemConfig = {
   templates: {
     payment_pending: {
       subject: "[OrchestrAI Alert] Payment Pending Manual Approval",
-      body: "Hi Sithanandham,\n\nA student ({{name}}, email: {{email}}) has paid ₹99 INR for the OrchestrAI Lead Certification course.\nRazorpay Payment ID: {{paymentId}}.\n\nPlease review this payment in your Razorpay dashboard and approve their access in the /admin portal."
+      body: "Hi Sithanandham,\n\nA student ({{name}}, email: {{email}}) has paid ₹199 INR for the OrchestrAI Lead Certification course.\nRazorpay Payment ID: {{paymentId}}.\n\nPlease review this payment in your Razorpay dashboard and approve their access in the /admin portal."
     },
     account_approved: {
       subject: "[OrchestrAI] Congratulations! Your Access has been Approved",
-      body: "Hi {{name}},\n\nWe have verified your payment of ₹99 INR. Your account has been approved and you now have full access to Modules 3 to 8.\n\nStart learning here: {{loginUrl}}\n\nGood luck,\nOrchestrAI Lead Team"
+      body: "Hi {{name}},\n\nWe have verified your payment of ₹199 INR. Your account has been approved and you now have full access to Modules 3 to 7.\n\nStart learning here: {{loginUrl}}\n\nGood luck,\nOrchestrAI Lead Team"
     },
     project_submitted: {
       subject: "[OrchestrAI Alert] New Portfolio Submission Received",
@@ -992,13 +996,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     name: string,
     mobile?: string,
     emailVerified?: boolean,
-    mobileVerified?: boolean
+    mobileVerified?: boolean,
+    existingProfile?: UserProfile
   ) => {
     const formattedEmail = email.trim().toLowerCase();
     const db = getFirebaseDb();
     
     // Find profile in current states (synced with Firestore/LocalStorage)
-    let profile = usersList.find(u => u.email === formattedEmail);
+    let profile = existingProfile || usersList.find(u => u.email === formattedEmail);
 
     if (profile && profile.disabled) {
       addToast("Your account has been disabled/blacklisted. Please contact the administrator.", "error");
@@ -1175,7 +1180,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     if (updates.accountStatus === 'APPROVED' && userToUpdate.accountStatus !== 'APPROVED') {
+      updates.approvedAt = new Date().toISOString();
       logAuditEvent('APPROVE_STUDENT', `Approved student account access: ${userToUpdate.name} (${userToUpdate.email})`);
+    }
+
+    if (updates.premiumStatus === 'PREMIUM' && userToUpdate.premiumStatus !== 'PREMIUM') {
+      updates.premiumApprovedAt = new Date().toISOString();
+      logAuditEvent('APPROVE_PREMIUM', `Approved premium upgrade: ${userToUpdate.name} (${userToUpdate.email})`);
     }
 
     // If updating the active user session

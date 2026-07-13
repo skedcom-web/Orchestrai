@@ -39,14 +39,14 @@ export const TimelineRoadmap: React.FC = () => {
     {
       id: 3,
       name: 'Career Commit',
-      desc: '₹99 — Accountability',
+      desc: '₹199 — Accountability',
       icon: CreditCard,
       path: '/payment'
     },
     {
       id: 4,
       name: 'Build & Demo',
-      desc: 'Modules 3–8 · Portfolio',
+      desc: 'Modules 3–7 · Portfolio',
       icon: Clock,
       path: '/modules'
     },

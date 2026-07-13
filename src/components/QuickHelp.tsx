@@ -502,7 +502,7 @@ export const QuickHelp: React.FC = () => {
       {
         id: 'adm-1',
         question: 'What can the admin do?',
-        answer: 'The admin has access to multiple management tabs:\n\n📊 **Reports & Insights**: Traffic analytics, conversion funnels\n📚 **Manage Modules**: Upload/edit slide decks, audio, videos\n📝 **Feedback Analytics**: Analyze learner feedback\n🎓 **Capstone Reviews**: Full SME review management\n📋 **Capstone Progress Editor**: Override capstone selections\n✅ **Manual Approvals**: Approve pending payments & premium upgrades\n🎯 **Talent Radar**: Candidate scoring, outreach management\n📅 **SME Meetings**: Manage meeting requests from candidates\n📧 **Notification Log**: Email delivery history\n🔍 **System Audit Log**: Searchable audit trail\n⚙️ **System Settings**: Full platform configuration',
+        answer: 'The admin has access to multiple management tabs:\n\n📊 **Dashboard & Insights**: Live traffic analytics, cohort stats, and funnel\n📂 **Reports & Downloads**: Filtered data export wizard (XLSX, CSV, PDF)\n📚 **Manage Modules**: Upload/edit slide decks, audio, videos\n📝 **Feedback Analytics**: Analyze learner feedback\n🎓 **Capstone Reviews**: Full SME review management\n📋 **Capstone Progress Editor**: Override capstone selections\n✅ **Manual Approvals**: Approve pending payments & premium upgrades\n🎯 **Talent Radar**: Candidate scoring, outreach management\n📅 **SME Meetings**: Manage meeting requests from candidates\n📧 **Notification Log**: Email delivery history\n🔍 **System Audit Log**: Searchable audit trail\n⚙️ **System Settings**: Full platform configuration',
         keywords: ['admin', 'administrator', 'admin capabilities', 'what admin does', 'admin features', 'management']
       },
       {
@@ -532,8 +532,8 @@ export const QuickHelp: React.FC = () => {
       {
         id: 'adm-6',
         question: 'Can the admin export data?',
-        answer: 'Yes, the admin can export various data:\n\n• **Talent Radar**: CSV export of candidate data with Lead Readiness Scores\n• **Feedback Analytics**: Export feedback data as multi-sheet Excel (XLSX)\n• **Audit Logs**: Searchable and filterable audit trail\n• **Notification Logs**: History of all email notifications\n\nData exports use SheetJS (XLSX) for Excel files and built-in CSV generation.',
-        keywords: ['export', 'csv', 'excel', 'xlsx', 'download data', 'data export', 'audit log export']
+        answer: 'Yes! The admin has two main ways to download data:\n\n1. **Reports & Downloads tab**: A dedicated data center where you can filter and download 6 different reports (Learners Directory, Payment Logs, Capstone Submissions, Curriculum Progress, SME Meetings, and Audit Logs) as Excel (.xlsx), CSV, or PDF.\n2. **Feedback Analytics & Talent Radar**: Direct export options exist inside those specific tabs.\n\nExcel exports utilize SheetJS (XLSX) for clean multi-sheet workbooks.',
+        keywords: ['export', 'csv', 'excel', 'xlsx', 'download data', 'data export', 'audit log export', 'pdf export']
       },
       {
         id: 'adm-7',
@@ -576,6 +576,12 @@ export const QuickHelp: React.FC = () => {
         question: 'Can the admin see approvals done before timestamp logging was added?',
         answer: 'Yes — the **Approval History** card shows ALL currently approved users regardless of when they were approved.\n\nFor users approved **after** the timestamp logging was introduced, the exact approval date/time is shown in IST format.\n\nFor users approved **before** the logging system was in place (historical approvals), the date column shows:\n"**Historical (Prior to log)**"\n\nThis ensures no approved user is ever invisible to the admin — you will always see the complete picture of who has access, with whatever date information is available.\n\nIf you need to manually fix an approval date, contact your developer to update the `approvedAt` or `premiumApprovedAt` field directly in Firebase.',
         keywords: ['historical approvals', 'old approvals', 'before logging', 'no date', 'missing date', 'prior to log', 'approval timestamp', 'historical data']
+      },
+      {
+        id: 'adm-14',
+        question: 'What reports can I download from the Reports & Downloads tab?',
+        answer: 'The **Reports & Downloads** tab provides 6 custom report modules:\n\n1. **Registered Learners Directory** — details, levels, XP, streaks, and standout status\n2. **Payment & Approvals Log** — details of certified fees, premium upgrades, payment IDs, and dates\n3. **Capstone Submissions Report** — project lock details, repository/live links, reviewing SMEs, and scores\n4. **Curriculum Progress Report** — slide progress per module, quiz scores, and lab clearances\n5. **SME Meetings Log** — scheduled virtual review sessions, links, notes, and statuses\n6. **System Audit Trail Log** — timeline log of logins, settings changes, and events\n\nEach report has inline filter dropdowns so you can refine your dataset before downloading it as Excel (.xlsx), CSV, or PDF.',
+        keywords: ['download reports', 'what reports', 'report types', 'excel download', 'pdf report', 'export reports', 'learner directory', 'payments log']
       },
     ],
 
