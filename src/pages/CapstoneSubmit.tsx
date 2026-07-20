@@ -5,7 +5,8 @@ import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } f
 import emailjs from '@emailjs/browser';
 import {
   ArrowLeft, Upload, Code2,ExternalLink, FileText, X, CheckCircle2,
-  Send, AlertCircle, Loader, Award, Workflow as WorkflowIcon, Trash2
+  Send, AlertCircle, Loader, Award, Workflow as WorkflowIcon, Trash2,
+  User, Lock
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { getFirebaseApp, getFirebaseDb } from '../firebase';
@@ -43,6 +44,8 @@ export const CapstoneSubmit: React.FC = () => {
   // Form state
   const [githubUrl, setGithubUrl] = useState('');
   const [firebaseUrl, setFirebaseUrl] = useState('');
+  const [appAdminUserId, setAppAdminUserId] = useState('');
+  const [appAdminPassword, setAppAdminPassword] = useState('');
   const [readmeUrl, setReadmeUrl] = useState('');
   const [workflowDiagramUrl, setWorkflowDiagramUrl] = useState('');
   const [supportingDocs, setSupportingDocs] = useState<SupportingDoc[]>([]);
@@ -221,6 +224,7 @@ export const CapstoneSubmit: React.FC = () => {
     reviewerName: string; reviewerEmail: string;
     capstoneId: string; capstoneTitle: string; capstoneDomain: string;
     submittedAt: string; githubUrl: string; firebaseUrl: string;
+    appAdminUserId: string; appAdminPassword: string;
     readmeUrl: string; workflowDiagramUrl: string; supportingDocsCount: number;
   }) => {
     const serviceId = systemConfig.emailjsServiceId;
@@ -249,6 +253,8 @@ export const CapstoneSubmit: React.FC = () => {
       .replace(/{{submittedAt}}/g, params.submittedAt)
       .replace(/{{githubUrl}}/g, params.githubUrl)
       .replace(/{{firebaseUrl}}/g, params.firebaseUrl)
+      .replace(/{{appAdminUserId}}/g, params.appAdminUserId)
+      .replace(/{{appAdminPassword}}/g, params.appAdminPassword)
       .replace(/{{readmeUrl}}/g, params.readmeUrl);
 
     try {
@@ -268,7 +274,9 @@ export const CapstoneSubmit: React.FC = () => {
         capstoneId: params.capstoneId,
         capstoneTitle: params.capstoneTitle,
         githubUrl: params.githubUrl,
-        firebaseUrl: params.firebaseUrl
+        firebaseUrl: params.firebaseUrl,
+        appAdminUserId: params.appAdminUserId,
+        appAdminPassword: params.appAdminPassword
       }, { publicKey });
       return { sent: true };
     } catch (err: any) {
@@ -289,6 +297,8 @@ export const CapstoneSubmit: React.FC = () => {
     const e: Record<string, string> = {};
     const ge = validateGitHubUrl(githubUrl); if (ge) e.githubUrl = ge;
     const fe = validateUrl(firebaseUrl, 'Firebase live URL'); if (fe) e.firebaseUrl = fe;
+    if (!appAdminUserId.trim()) e.appAdminUserId = 'Application Admin User ID is required';
+    if (!appAdminPassword.trim()) e.appAdminPassword = 'Application Admin Password is required';
     const re = validateUrl(readmeUrl, 'README URL'); if (re) e.readmeUrl = re;
     const we = validateUrl(workflowDiagramUrl, 'Workflow diagram URL', false); if (we) e.workflowDiagramUrl = we;
     setErrors(e);
@@ -323,6 +333,8 @@ export const CapstoneSubmit: React.FC = () => {
       capstoneDomain: capstone.domain,
       githubUrl: githubUrl.trim(),
       firebaseUrl: firebaseUrl.trim(),
+      appAdminUserId: appAdminUserId.trim(),
+      appAdminPassword: appAdminPassword.trim(),
       readmeUrl: readmeUrl.trim(),
       workflowDiagramUrl: workflowDiagramUrl.trim() || '',
       supportingDocs,
@@ -396,6 +408,8 @@ export const CapstoneSubmit: React.FC = () => {
       submittedAt: submittedAtIso,
       githubUrl: githubUrl.trim(),
       firebaseUrl: firebaseUrl.trim(),
+      appAdminUserId: appAdminUserId.trim(),
+      appAdminPassword: appAdminPassword.trim(),
       readmeUrl: readmeUrl.trim(),
       workflowDiagramUrl: workflowDiagramUrl.trim() || '',
       supportingDocsCount: supportingDocs.length
@@ -478,6 +492,8 @@ export const CapstoneSubmit: React.FC = () => {
             <Field label="Reviewer Email">{existingSubmission.assignedReviewerEmail || '—'}</Field>
             <Field label="GitHub"><a href={existingSubmission.githubUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline break-all">{existingSubmission.githubUrl}</a></Field>
             <Field label="Firebase Live"><a href={existingSubmission.firebaseUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline break-all">{existingSubmission.firebaseUrl}</a></Field>
+            <Field label="App Admin User ID">{existingSubmission.appAdminUserId || '—'}</Field>
+            <Field label="App Admin Password">{existingSubmission.appAdminPassword || '—'}</Field>
             <Field label="README"><a href={existingSubmission.readmeUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline break-all">{existingSubmission.readmeUrl}</a></Field>
             <Field label="Supporting Docs">{(existingSubmission.supportingDocs || []).length} file(s)</Field>
           </div>
@@ -487,7 +503,7 @@ export const CapstoneSubmit: React.FC = () => {
           <div className="mt-4 flex items-center gap-3">
             <button onClick={() => navigate('/capstone')} className="px-4 py-2 rounded-lg border border-[var(--border-color)] text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--surface-sunken)]">Back to Library</button>
             <button
-              onClick={() => { setExistingSubmission(null); setGithubUrl(existingSubmission.githubUrl); setFirebaseUrl(existingSubmission.firebaseUrl); setReadmeUrl(existingSubmission.readmeUrl); setWorkflowDiagramUrl(existingSubmission.workflowDiagramUrl || ''); setSupportingDocs(existingSubmission.supportingDocs || []); }}
+              onClick={() => { setExistingSubmission(null); setGithubUrl(existingSubmission.githubUrl); setFirebaseUrl(existingSubmission.firebaseUrl); setAppAdminUserId(existingSubmission.appAdminUserId || ''); setAppAdminPassword(existingSubmission.appAdminPassword || ''); setReadmeUrl(existingSubmission.readmeUrl); setWorkflowDiagramUrl(existingSubmission.workflowDiagramUrl || ''); setSupportingDocs(existingSubmission.supportingDocs || []); }}
               className="px-4 py-2 rounded-lg border border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-400 text-xs font-bold"
             >
               Resubmit / Update
@@ -547,15 +563,67 @@ export const CapstoneSubmit: React.FC = () => {
           icon={<Code2 className="h-4 w-4" />}
           help="Public repository. The reviewer reads the code, README, commits, and DESIGN.md."
         />
-        <UrlField
-          label="Firebase Live URL"
-          placeholder="https://your-capstone.web.app"
-          value={firebaseUrl}
-          onChange={setFirebaseUrl}
-          error={errors.firebaseUrl}
-          icon={<ExternalLink className="h-4 w-4" />}
-          help="Your deployed app. The reviewer opens it, signs in, walks through the workflow."
-        />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="md:col-span-1">
+            <UrlField
+              label="Firebase Live URL"
+              placeholder="https://your-capstone.web.app"
+              value={firebaseUrl}
+              onChange={setFirebaseUrl}
+              error={errors.firebaseUrl}
+              icon={<ExternalLink className="h-4 w-4" />}
+              help="Your deployed app. The reviewer opens it, signs in, walks through the workflow."
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5 font-sans">
+              App Admin User ID <span className="text-rose-400">*</span>
+            </label>
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]">
+                <User className="h-4 w-4" />
+              </div>
+              <input
+                type="text"
+                value={appAdminUserId}
+                onChange={(e) => setAppAdminUserId(e.target.value)}
+                placeholder="Admin<your capstone number>"
+                className={`w-full pl-10 pr-3 py-2 rounded-lg border bg-[var(--surface-sunken)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-none transition-all ${
+                  errors.appAdminUserId ? 'border-rose-500/40 focus:border-rose-500/60' : 'border-[var(--border-color)] focus:border-indigo-500/40'
+                }`}
+              />
+            </div>
+            {errors.appAdminUserId ? (
+              <p className="text-[10px] text-rose-400 mt-1 font-bold">{errors.appAdminUserId}</p>
+            ) : (
+              <p className="text-[10px] text-[var(--text-secondary)] mt-1 leading-relaxed">Admin username. Suggested: <code className="text-indigo-400 font-mono">Admin&lt;your capstone number&gt;</code></p>
+            )}
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5 font-sans">
+              App Admin Password <span className="text-rose-400">*</span>
+            </label>
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]">
+                <Lock className="h-4 w-4" />
+              </div>
+              <input
+                type="text"
+                value={appAdminPassword}
+                onChange={(e) => setAppAdminPassword(e.target.value)}
+                placeholder="e.g. Admin@123"
+                className={`w-full pl-10 pr-3 py-2 rounded-lg border bg-[var(--surface-sunken)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-none transition-all ${
+                  errors.appAdminPassword ? 'border-rose-500/40 focus:border-rose-500/60' : 'border-[var(--border-color)] focus:border-indigo-500/40'
+                }`}
+              />
+            </div>
+            {errors.appAdminPassword ? (
+              <p className="text-[10px] text-rose-400 mt-1 font-bold">{errors.appAdminPassword}</p>
+            ) : (
+              <p className="text-[10px] text-[var(--text-secondary)] mt-1 leading-relaxed">Admin password. Suggested: <code className="text-indigo-400 font-mono">Admin@123</code></p>
+            )}
+          </div>
+        </div>
         <UrlField
           label="README URL"
           placeholder="https://github.com/yourname/your-capstone-repo/blob/main/README.md"

@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, get, set } from 'firebase/database';
 import {
-  Award, ArrowLeft, Copy, Check, Download, ListChecks, FileText, Sparkles,
-  Calendar, Target, BookOpen, Hammer, Send, ChevronRight, CheckCircle2, Workflow as WorkflowIcon
+  Award, ArrowLeft, Copy, Check, ListChecks, FileText, Sparkles,
+  Calendar, Target, BookOpen, Hammer, Send, ChevronRight, CheckCircle2, Workflow as WorkflowIcon,
+  AlertCircle
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { getFirebaseDb } from '../firebase';
@@ -123,284 +124,28 @@ Decision thresholds:
 MANDATORY SUBMISSION PACKAGE:
 GitHub repo URL · Firebase live URL · README · Supporting docs · Workflow diagram
 
-START BY PROPOSING THE 5 DESIGN DOCUMENTS for my review BEFORE any code generation begins:
-1. FDD (Functional Design Document) — actors, screens, flows
-2. TDD (Technical Design Document) — components, hooks, state, services
-3. DB Design — RTDB tree structure with sample payloads
-4. UI Specs — wireframes, brand tokens, key interactions
-5. Test Plan — unit + integration + smoke tests per module
+DESIGN DELIVERABLES TARGET:
+At the end of our build, we will create the following 5 design deliverables for client review and audit purposes based on our actual implementation:
+1. FDD (Functional Design Document) — actors, screens, flows as implemented.
+2. TDD (Technical Design Document) — components, hooks, state, services as implemented.
+3. DB Design — RTDB tree structure with sample payloads as implemented.
+4. UI Specs — brand tokens, key screens, accessibility as implemented.
+5. Test Plan — unit + integration + smoke tests per module as implemented.
 
-Wait for my approval on each design doc before moving to the next.
+Keep this in mind throughout our engagement, and let's build our application first, ensuring we align with these targets.
 `;
 
-const buildFDD = (cap: CapstoneItem) => `# FDD — Functional Design Document
-## ${cap.id} · ${cap.title}
+const buildDeliverablesPrompt = (cap: CapstoneItem) => `You are my Twin (AI builder) — my AI co-engineer. We have successfully completed the build of our application: ${cap.title} (Capstone ID: ${cap.id}).
 
-**Domain:** ${cap.domain}
-**Author:** [Your name]
-**Last updated:** ${new Date().toISOString().split('T')[0]}
+Now, we need to generate the final deliverables for client review and audit purposes. Based on our completed codebase and implementation, generate the following 5 design documents:
 
----
+1. FDD (Functional Design Document) — describing the business problem, actors, screens, and workflow as built.
+2. TDD (Technical Design Document) — describing the component tree, custom hooks, state strategy, services, and OGE hooks as built.
+3. DB Design — describing the actual Firebase Realtime Database tree structure, indexes, and security rules as built.
+4. UI Specs — detailing the brand tokens, key screens, status pill colors, and accessibility features implemented.
+5. Test Plan — outlining the test strategy, module coverage matrix, workflow transition test cases, RBAC test cases, and smoke test checklist.
 
-## 1 · Business Problem
-${cap.brief}
-
-## 2 · Actors
-${cap.actors.map(a => `- **${a}** — [responsibilities]`).join('\n')}
-
-## 3 · Universal Roles (RBAC)
-${UNIVERSAL_ROLES.map(r => `- **${r}** — [allowed actions]`).join('\n')}
-
-## 4 · Screens (per v6 manual §6)
-1. Login
-2. Dashboard
-3. Masters List (one per master entity)
-4. Masters Create / Edit
-5. Transactions List
-6. Transaction Create / Edit
-7. Transaction Detail (with status timeline + comments + attachments)
-8. Reports
-9. Users
-10. Roles
-11. Settings
-
-## 5 · Workflow
-${cap.workflow.map((w, i, arr) => `${i+1}. **${w}** ${i < arr.length - 1 ? `→ ${arr[i+1]}` : '(terminal)'}`).join('\n')}
-
-## 6 · Functional Acceptance Criteria
-- [ ] Each actor can perform their listed responsibilities and no others
-- [ ] All workflow transitions are enforced server-side (no client-only checks)
-- [ ] Trainer Extension implemented: **${cap.trainerExtension}**
-- [ ] All 3 universal reports generated correctly: ${UNIVERSAL_REPORTS.join(', ')}
-- [ ] Application deployed to Firebase Hosting with public URL
-
-## 7 · Out of Scope (v1)
-- [list anything explicitly deferred]
-`;
-
-const buildTDD = (cap: CapstoneItem) => `# TDD — Technical Design Document
-## ${cap.id} · ${cap.title}
-
----
-
-## 1 · Tech Stack
-- React 19 + RR7 + TypeScript 6
-- Tailwind v4 + Lucide
-- Firebase v12 (Auth + RTDB + Storage + Hosting)
-- Vite 8 (Rolldown)
-
-## 2 · Component Tree
-\`\`\`
-App
-├── AuthProvider
-├── AppShell (Sidebar + Header)
-│   ├── Dashboard
-│   ├── Masters/
-│   │   ${cap.masters.map(m => `├── ${m}List → ${m}Form`).join('\n│   │   ')}
-│   ├── Transactions/
-│   │   ├── ${cap.transactionEntity}List
-│   │   ├── ${cap.transactionEntity}Form
-│   │   └── ${cap.transactionEntity}Detail
-│   ├── Reports/
-│   │   ├── SummaryReport
-│   │   ├── StatusReport
-│   │   └── ActivityReport
-│   └── Admin/ (Users · Roles · Settings)
-\`\`\`
-
-## 3 · Custom Hooks
-- \`useAuth()\` — current user + role
-- \`useRTDB<T>(path)\` — generic RTDB read/write with loading states
-- \`useRBAC(action)\` — gate UI elements
-
-## 4 · State Strategy
-- React Context for current user + role
-- Local component state for forms
-- RTDB as system-of-record; no Redux
-
-## 5 · Services
-- \`authService\` — Firebase Auth wrappers
-- \`storageService\` — attachments upload with type/size guards
-- \`workflowService\` — status transition validation
-- \`reportService\` — Excel + PDF generation
-
-## 6 · OGE Hooks
-- **Observability:** auditLogs/{uid}_{ts} on every write
-- **Guardrails:** workflowService validates every status change
-- **Evaluation:** smoke test script in /scripts runs against deployed URL
-`;
-
-const buildDBDesign = (cap: CapstoneItem) => `# DB Design — Firebase Realtime Database
-## ${cap.id} · ${cap.title}
-
----
-
-## RTDB Tree
-
-\`\`\`
-/users/
-  {uid}/ { email, name, role, createdAt }
-
-/roles/
-  Admin/ { perms: [...] }
-  Manager/ { perms: [...] }
-  User/ { perms: [...] }
-
-/masters/
-${cap.masters.map(m => `  ${m.toLowerCase().replace(/\s+/g, '_')}/
-    {id}/ { name, code, active, createdAt, createdBy }`).join('\n')}
-
-/transactions/
-  ${cap.transactionEntity.toLowerCase().replace(/\s+/g, '_')}/
-    {id}/ {
-      // master FKs:
-${cap.masters.map(m => `      ${m.toLowerCase().replace(/\s+/g, '_')}Id,`).join('\n')}
-      status,             // one of: ${cap.workflow.join(' | ')}
-      assignedTo, createdBy, createdAt, updatedAt
-    }
-
-/comments/
-  {transactionId}/
-    {commentId}/ { text, author, createdAt }
-
-/attachments/
-  {transactionId}/
-    {attachmentId}/ { fileName, storageUrl, size, mimeType, uploadedBy, uploadedAt }
-
-/auditLogs/
-  {entry-id}/ {
-    actor, action, target, beforeStatus, afterStatus, timestamp
-  }
-
-/settings/
-  appName, theme, contactEmail, ...
-\`\`\`
-
-## Indexed Queries
-- \`/transactions/${cap.transactionEntity.toLowerCase().replace(/\s+/g, '_')}\` indexed on \`status\`, \`assignedTo\`, \`createdAt\`
-- \`/auditLogs\` indexed on \`timestamp\` (descending)
-
-## Security Rules (skeleton)
-\`\`\`
-{
-  "rules": {
-    "transactions": {
-      ".read": "auth != null",
-      ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() == 'Admin' || root.child('users').child(auth.uid).child('role').val() == 'Manager')"
-    },
-    "users": { "$uid": { ".write": "auth.uid == $uid" } }
-  }
-}
-\`\`\`
-`;
-
-const buildUISpecs = (cap: CapstoneItem) => `# UI Specs
-## ${cap.id} · ${cap.title}
-
----
-
-## 1 · Brand Tokens
-- Primary: indigo-500 (#6366f1)
-- Accent: purple-600 (#9333ea)
-- Surface: slate-50 (light) · slate-900 (dark)
-- Radius: rounded-xl (12px) for cards, rounded-lg (8px) for inputs
-- Font: Inter (UI), JetBrains Mono (code)
-
-## 2 · Key Screens
-
-### Login
-- Centered card, logo top
-- Email + Password fields
-- "Sign In" CTA + "Forgot password" link
-
-### Dashboard
-- 4 KPI cards top: Total ${cap.transactionEntity}s · Pending · This Week · Closed
-- Recent ${cap.transactionEntity}s table (10 rows, click → detail)
-- Status distribution donut chart
-
-### ${cap.transactionEntity} List
-- Filters: status dropdown · date range · master filters (${cap.masters.join(', ')})
-- Table with: id, key fields, status pill, assigned to, created at
-- Pagination (50/page)
-- "New ${cap.transactionEntity}" CTA top-right (Manager/Admin only)
-
-### ${cap.transactionEntity} Detail
-- Header: id + status pill + actions dropdown (transition status)
-- Tabs: Details · Comments · Attachments · Audit
-- Status timeline visualisation (${cap.workflow.length} states)
-
-### Reports
-- Tabs for each report type
-- Date range + filter controls
-- Export buttons: Excel · PDF
-- Inline preview table
-
-## 3 · Status Pills (color mapping)
-${cap.workflow.map((w, i) => {
-  const colors = ['amber', 'cyan', 'indigo', 'emerald', 'slate'];
-  return `- ${w} → ${colors[i % colors.length]}`;
-}).join('\n')}
-
-## 4 · Accessibility
-- All actions keyboard-reachable
-- aria-labels on icon-only buttons
-- Color contrast ≥ AA on body text
-- Focus rings visible
-`;
-
-const buildTestPlan = (cap: CapstoneItem) => `# Test Plan
-## ${cap.id} · ${cap.title}
-
----
-
-## 1 · Test Strategy
-- **Unit tests** — pure functions (workflow validator, report formatters)
-- **Integration tests** — RTDB read/write paths via Firebase Emulator
-- **Smoke tests** — end-to-end click-through on deployed URL
-
-## 2 · Module Coverage Matrix
-
-| Module | Unit | Integration | Smoke |
-|---|---|---|---|
-| Authentication       | ✓ | ✓ | ✓ |
-| Dashboard            |   | ✓ | ✓ |
-| Master Data          | ✓ | ✓ | ✓ |
-| Transactions         | ✓ | ✓ | ✓ |
-| **Workflow Engine**  | ✓ | ✓ | ✓ |
-| Comments             |   | ✓ | ✓ |
-| Attachments          | ✓ | ✓ | ✓ |
-| Reports              | ✓ | ✓ |   |
-| Administration / RBAC | ✓ | ✓ | ✓ |
-
-## 3 · Workflow Transition Tests (highest-weight category — 20 pts)
-
-For ${cap.transactionEntity}, test every valid + invalid transition:
-
-${cap.workflow.map((from, i) => {
-  const to = cap.workflow[i + 1];
-  return to
-    ? `- ✓ Valid: **${from} → ${to}**`
-    : `- ✓ Terminal: **${from}** (cannot transition further)`;
-}).join('\n')}
-- ✗ Invalid: any non-adjacent transition (e.g. skip a state)
-- ✗ Invalid: backwards transition (unless explicitly allowed)
-
-## 4 · RBAC Tests
-- User role: can create ${cap.transactionEntity}, cannot delete masters
-- Manager role: can approve/transition, cannot manage users
-- Admin role: full access
-
-## 5 · Smoke Test Checklist (run after every deploy)
-1. Sign in as Admin
-2. Create one of each master
-3. Create a ${cap.transactionEntity}
-4. Walk it through all ${cap.workflow.length} workflow states
-5. Add a comment + attach a file
-6. Generate each of the 3 reports
-7. Sign out, sign in as User, confirm RBAC blocks restricted actions
-
-## 6 · Acceptance
-All checks pass = ready to submit for OrchestrAI Lead Certification review.
+Please generate each document fully, without placeholders or summaries, matching the exact implementation we built.
 `;
 
 export const CapstoneWorkspace: React.FC = () => {
@@ -411,7 +156,10 @@ export const CapstoneWorkspace: React.FC = () => {
   const [checklist, setChecklist] = useState<Record<string, boolean>>({});
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('brief');
   const [promptCopied, setPromptCopied] = useState(false);
+  const [deliverablesPromptCopied, setDeliverablesPromptCopied] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const [acknowledged, setAcknowledged] = useState<boolean>(false);
 
   const [meetingRequest, setMeetingRequest] = useState<any | null>(null);
   const [showMeetingModal, setShowMeetingModal] = useState(false);
@@ -464,6 +212,10 @@ export const CapstoneWorkspace: React.FC = () => {
     }
   }, [currentUser?.uid]);
 
+  const handleAcknowledge = () => {
+    setAcknowledged(true);
+  };
+
   useEffect(() => {
     if (!currentUser?.uid || !selection) return;
     const uid = currentUser.uid;
@@ -496,6 +248,7 @@ export const CapstoneWorkspace: React.FC = () => {
   }, [selection]);
 
   const t7Prompt = useMemo(() => capstone ? buildT7Prompt(capstone) : '', [capstone]);
+  const deliverablesPrompt = useMemo(() => capstone ? buildDeliverablesPrompt(capstone) : '', [capstone]);
 
   const totalTasks = BUILD_DAYS.reduce((sum, d) => sum + d.tasks.length, 0);
   const doneTasks = Object.values(checklist).filter(Boolean).length;
@@ -538,17 +291,18 @@ export const CapstoneWorkspace: React.FC = () => {
     }
   };
 
-  const downloadMd = (filename: string, content: string) => {
-    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const copyDeliverablesPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(deliverablesPrompt);
+      setDeliverablesPromptCopied(true);
+      addToast('Deliverables Generation Prompt copied!', 'success');
+      setTimeout(() => setDeliverablesPromptCopied(false), 2400);
+    } catch {
+      addToast('Could not copy automatically. Select the text and copy manually.', 'warning');
+    }
   };
+
+
 
   // ─── No user ───────────────────────────────────────────────────────────────
   if (!currentUser) {
@@ -602,6 +356,12 @@ export const CapstoneWorkspace: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
+
+      {/* Learning Discipline Acknowledgement Pop-up */}
+      <WorkspaceAcknowledgementModal
+        isOpen={!acknowledged}
+        onAcknowledge={handleAcknowledge}
+      />
 
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
@@ -757,44 +517,91 @@ export const CapstoneWorkspace: React.FC = () => {
       )}
 
       {activeTab === 'docs' && (
-        <div className="glass-card rounded-2xl p-6">
-          <h2 className="text-lg font-extrabold flex items-center gap-2 mb-2">
-            <FileText className="h-4 w-4 text-indigo-400" /> 5 Design Document Templates
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] max-w-2xl leading-relaxed mb-5">
-            Each template is pre-filled with your locked capstone's specifics (actors, masters, workflow). Download, complete, get them reviewed (by you or your Twin — your AI builder) BEFORE writing any code — exactly the discipline taught in Module 3.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <DocCard
-              icon={<Target className="h-4 w-4" />}
-              title="FDD · Functional Design Document"
-              subtitle="Actors · Screens · Workflow · Acceptance Criteria"
-              onDownload={() => downloadMd(`${capstone.id}_FDD.md`, buildFDD(capstone))}
-            />
-            <DocCard
-              icon={<Hammer className="h-4 w-4" />}
-              title="TDD · Technical Design Document"
-              subtitle="Components · Hooks · Services · OGE Hooks"
-              onDownload={() => downloadMd(`${capstone.id}_TDD.md`, buildTDD(capstone))}
-            />
-            <DocCard
-              icon={<WorkflowIcon className="h-4 w-4" />}
-              title="DB Design · Firebase RTDB Tree"
-              subtitle="Schema · Indexes · Security Rules"
-              onDownload={() => downloadMd(`${capstone.id}_DB_Design.md`, buildDBDesign(capstone))}
-            />
-            <DocCard
-              icon={<BookOpen className="h-4 w-4" />}
-              title="UI Specs · Brand & Screens"
-              subtitle="Tokens · Key Screens · Status Pills · Accessibility"
-              onDownload={() => downloadMd(`${capstone.id}_UI_Specs.md`, buildUISpecs(capstone))}
-            />
-            <DocCard
-              icon={<CheckCircle2 className="h-4 w-4" />}
-              title="Test Plan · Unit · Integration · Smoke"
-              subtitle={`Workflow tests for ${capstone.workflow.length} states · RBAC tests · Smoke checklist`}
-              onDownload={() => downloadMd(`${capstone.id}_Test_Plan.md`, buildTestPlan(capstone))}
-            />
+        <div className="glass-card rounded-2xl p-6 text-left">
+          <div className="flex items-center gap-2 mb-3 text-amber-400">
+            <AlertCircle className="h-5 w-5 shrink-0" />
+            <h2 className="text-base font-extrabold text-[var(--text-primary)]">
+              Deliverables Generation Process
+            </h2>
+          </div>
+          
+          <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 mb-6 text-xs text-indigo-300 leading-relaxed space-y-2">
+            <p>
+              <strong>IMPORTANT:</strong> Learners are <strong>not</strong> supposed to download pre-defined deliverables before writing code. Instead, you must build the application first.
+            </p>
+            <p>
+              After the successful build of your application, use the prompt below to generate these final 5 deliverables from your Twin (AI builder) for client review and audit purposes. These generated documents should be attached in the final <strong>Submit your Capstone</strong> screen.
+            </p>
+          </div>
+
+          <div className="flex items-start justify-between gap-4 mb-3 border-t border-[var(--border-color)] pt-5">
+            <div>
+              <h3 className="text-sm font-bold flex items-center gap-2 mb-1">
+                <Sparkles className="h-4 w-4 text-indigo-400" /> Deliverables Generation Prompt
+              </h3>
+              <p className="text-[11px] text-[var(--text-secondary)] max-w-2xl leading-relaxed">
+                Copy and run this prompt against your Twin (AI builder) once the application is fully built to generate the final audit-ready design documentation.
+              </p>
+            </div>
+            <button
+              onClick={copyDeliverablesPrompt}
+              className={`shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-extrabold shadow-md transition-all ${
+                deliverablesPromptCopied
+                  ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400'
+                  : 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:brightness-110'
+              }`}
+            >
+              {deliverablesPromptCopied ? <><Check className="h-3.5 w-3.5" /> Copied</> : <><Copy className="h-3.5 w-3.5" /> Copy Prompt</>}
+            </button>
+          </div>
+          
+          <pre className="mt-2 mb-6 rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)] p-4 text-[11px] text-[var(--text-primary)] whitespace-pre-wrap leading-relaxed max-h-[300px] overflow-auto font-mono">
+{deliverablesPrompt}
+          </pre>
+
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-3">
+            5 Required Deliverables to Generate
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-4">
+              <div className="flex items-center gap-2 text-indigo-400 mb-1">
+                <Target className="h-4 w-4 animate-pulse" />
+                <span className="text-xs font-extrabold text-[var(--text-primary)]">FDD · Functional Design Document</span>
+              </div>
+              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">Describes business problems, system actors, detailed screen paths, application workflows, and functional acceptance criteria.</p>
+            </div>
+            
+            <div className="rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-4">
+              <div className="flex items-center gap-2 text-indigo-400 mb-1">
+                <Hammer className="h-4 w-4" />
+                <span className="text-xs font-extrabold text-[var(--text-primary)]">TDD · Technical Design Document</span>
+              </div>
+              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">Specifies component hierarchy, custom hooks, global &amp; local state strategy, backend service wrappers, and OGE validation hooks.</p>
+            </div>
+
+            <div className="rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-4">
+              <div className="flex items-center gap-2 text-indigo-400 mb-1">
+                <WorkflowIcon className="h-4 w-4" />
+                <span className="text-xs font-extrabold text-[var(--text-primary)]">DB Design · Firebase RTDB Tree</span>
+              </div>
+              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">Defines the database schema tree, data structures for transaction entities, indexed query paths, and Firebase security rules.</p>
+            </div>
+
+            <div className="rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-4">
+              <div className="flex items-center gap-2 text-indigo-400 mb-1">
+                <BookOpen className="h-4 w-4" />
+                <span className="text-xs font-extrabold text-[var(--text-primary)]">UI Specs · Brand &amp; Screens</span>
+              </div>
+              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">Details color palette brand tokens, key user interface designs, dynamic status pills styling, and accessibility standards.</p>
+            </div>
+
+            <div className="rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-4 md:col-span-2">
+              <div className="flex items-center gap-2 text-indigo-400 mb-1">
+                <CheckCircle2 className="h-4 w-4 animate-pulse" />
+                <span className="text-xs font-extrabold text-[var(--text-primary)]">Test Plan · Unit, Integration &amp; Smoke</span>
+              </div>
+              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">Contains unit test strategies, Firebase Emulator integration tests, role-based access control (RBAC) tests, and a manual smoke test checklist for deployment validation.</p>
+            </div>
           </div>
         </div>
       )}
@@ -868,6 +675,98 @@ export const CapstoneWorkspace: React.FC = () => {
   );
 };
 
+// ─── WorkspaceAcknowledgementModal ───────────────────────────────────────────
+const WorkspaceAcknowledgementModal: React.FC<{
+  isOpen: boolean;
+  onAcknowledge: () => void;
+}> = ({ isOpen, onAcknowledge }) => {
+  const [pledgeChecked, setPledgeChecked] = useState(false);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-300">
+      <div className="relative w-full max-w-xl border border-indigo-500/30 rounded-2xl bg-[var(--bg-card)] p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200 overflow-y-auto max-h-[90vh]">
+        
+        {/* Punchline Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-4">
+            <Sparkles className="h-7 w-7" />
+          </div>
+          <span className="block text-[10px] font-bold uppercase tracking-wider text-indigo-400 mb-1">
+            OrchestrAI Academy Lead Certification
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-rose-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent">
+            Don't outsource your learning.
+          </h1>
+        </div>
+
+        {/* Philosophy Core */}
+        <div className="space-y-4 text-xs leading-relaxed text-[var(--text-secondary)] text-left">
+          <p>
+            The whole objective of this <strong>OrchestrAI</strong> approach is to learn from your Twin (AI builder) and build in parallel. As the OrchestrAI Lead, you must actively evaluate, guide, and take full ownership and accountability of the application.
+          </p>
+          <div className="p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-300 font-sans">
+            <strong>Warning:</strong> It is not about simply giving a prompt to your Twin and spending time on social media or other distractions. True engineering requires active co-creation, validation, and deep focus.
+          </div>
+          
+          <p>
+            You must brainstorm and align with the AI <strong>before</strong> building anything. Make sure you understand exactly what the AI built, why it built it that way, and how you can evaluate and repeat the OrchestrAI framework process.
+          </p>
+          
+          {/* Key Tips */}
+          <div className="border-t border-[var(--border-color)] pt-4 mt-4">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] mb-3">
+              Key Tips for Success:
+            </h3>
+            <ul className="space-y-2.5 text-xs text-[var(--text-secondary)]">
+              <li className="flex items-start gap-2">
+                <span className="text-indigo-400 font-bold">💡</span>
+                <span><strong>Challenge the Twin:</strong> Ask your Twin to explain its architectural decisions, security rules, and choice of hooks. Never copy-paste blindly.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-indigo-400 font-bold">📂</span>
+                <span><strong>Commit per Validated Component:</strong> Keep commits clean and atomic. Test each component before staging or pushing.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-indigo-400 font-bold">🛡️</span>
+                <span><strong>Enforce OGE:</strong> Verify that Observability (audit logs), Guardrails (validators), and Evaluation (tests) are actively implemented in every component.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-indigo-400 font-bold">⚡</span>
+                <span><strong>Local Emulators:</strong> Always test changes locally in the Firebase Emulator environment before deploying. You are the Lead Architect; you own the code.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Action Checkbox & Button */}
+        <div className="border-t border-[var(--border-color)] pt-6 mt-6 text-left">
+          <label className="flex items-start gap-3 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={pledgeChecked}
+              onChange={(e) => setPledgeChecked(e.target.checked)}
+              className="mt-0.5 h-4.5 w-4.5 rounded border-[var(--border-color)] text-indigo-500 focus:ring-indigo-500/30 cursor-pointer"
+            />
+            <span className="text-xs text-[var(--text-primary)] font-semibold select-none group-hover:text-indigo-400 transition-colors">
+              I agree to take ownership of my learning, brainstorm actively with the AI, and follow the build discipline.
+            </span>
+          </label>
+
+          <button
+            onClick={onAcknowledge}
+            disabled={!pledgeChecked}
+            className="mt-5 w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-xs font-extrabold shadow-md transition-all cursor-pointer text-center animate-in duration-200"
+          >
+            Acknowledge &amp; Proceed to Workspace
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ─── Subcomponents ──────────────────────────────────────────────────────────
 
 const BriefTab: React.FC<{ cap: CapstoneItem }> = ({ cap }) => (
@@ -923,25 +822,7 @@ const PanelBox: React.FC<{ icon: React.ReactNode; title: string; children: React
   </div>
 );
 
-const DocCard: React.FC<{ icon: React.ReactNode; title: string; subtitle: string; onDownload: () => void }> = ({ icon, title, subtitle, onDownload }) => (
-  <button
-    onClick={onDownload}
-    className="text-left rounded-xl border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-4 hover:border-indigo-500/30 hover:bg-[var(--surface-sunken)]/60 transition-all group"
-  >
-    <div className="flex items-start justify-between gap-3">
-      <div className="flex-1">
-        <div className="flex items-center gap-2 text-indigo-400 mb-1">
-          {icon}
-          <span className="text-xs font-extrabold text-[var(--text-primary)]">{title}</span>
-        </div>
-        <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{subtitle}</p>
-      </div>
-      <div className="text-[var(--text-secondary)] group-hover:text-indigo-400 transition-colors">
-        <Download className="h-4 w-4" />
-      </div>
-    </div>
-  </button>
-);
+
 
 const NextStep: React.FC<{ n: number; title: string; body: string; actionLabel?: string; onAction?: () => void }> = ({ n, title, body, actionLabel, onAction }) => (
   <li className="flex items-start gap-3">

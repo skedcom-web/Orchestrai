@@ -2246,6 +2246,8 @@ export const Admin: React.FC = () => {
                           "Submission Date": s.submittedAt ? new Date(s.submittedAt).toLocaleDateString() : 'N/A',
                           "GitHub Repo URL": s.githubUrl || 'N/A',
                           "Firebase Deployed URL": s.firebaseUrl || 'N/A',
+                          "Admin User ID": s.appAdminUserId || 'N/A',
+                          "Admin Password": s.appAdminPassword || 'N/A',
                           "SME Reviewer": s.reviewerName || 'N/A',
                           "Submission Status": s.status,
                           "Final Score": s.automatedTotal !== undefined ? s.automatedTotal : 'N/A'
@@ -2286,6 +2288,8 @@ export const Admin: React.FC = () => {
                           "Submission Date": s.submittedAt ? new Date(s.submittedAt).toLocaleDateString() : 'N/A',
                           "GitHub Repo URL": s.githubUrl || 'N/A',
                           "Firebase Deployed URL": s.firebaseUrl || 'N/A',
+                          "Admin User ID": s.appAdminUserId || 'N/A',
+                          "Admin Password": s.appAdminPassword || 'N/A',
                           "SME Reviewer": s.reviewerName || 'N/A',
                           "Submission Status": s.status,
                           "Final Score": s.automatedTotal !== undefined ? s.automatedTotal : 'N/A'

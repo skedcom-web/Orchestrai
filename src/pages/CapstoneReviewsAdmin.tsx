@@ -75,6 +75,8 @@ interface SubmissionFlat {
   capstoneDomain: CapstoneDomain;
   githubUrl: string;
   firebaseUrl: string;
+  appAdminUserId?: string;
+  appAdminPassword?: string;
   readmeUrl: string;
   workflowDiagramUrl?: string;
   supportingDocs?: Array<{ name: string; storageUrl: string; size: number }>;
@@ -1067,6 +1069,8 @@ const ReviewDetail: React.FC<{
       .replace(/{{submittedAt}}/g, new Date(submission.submittedAt).toLocaleString())
       .replace(/{{githubUrl}}/g, submission.githubUrl)
       .replace(/{{firebaseUrl}}/g, submission.firebaseUrl)
+      .replace(/{{appAdminUserId}}/g, submission.appAdminUserId || '')
+      .replace(/{{appAdminPassword}}/g, submission.appAdminPassword || '')
       .replace(/{{readmeUrl}}/g, submission.readmeUrl);
 
     let emailStatus = 'sent';
@@ -1088,7 +1092,9 @@ const ReviewDetail: React.FC<{
         capstoneId: submission.capstoneId,
         capstoneTitle: submission.capstoneTitle,
         githubUrl: submission.githubUrl,
-        firebaseUrl: submission.firebaseUrl
+        firebaseUrl: submission.firebaseUrl,
+        appAdminUserId: submission.appAdminUserId || '',
+        appAdminPassword: submission.appAdminPassword || ''
       }, { publicKey });
     } catch (e: any) {
       emailStatus = 'failed';
@@ -1593,6 +1599,22 @@ const ReviewDetail: React.FC<{
             <div className="space-y-2 text-xs">
               <LinkRow icon={<ExternalLink className="h-3.5 w-3.5" />} label="GitHub Repo" url={submission.githubUrl} />
               <LinkRow icon={<ExternalLink className="h-3.5 w-3.5" />} label="Firebase Live" url={submission.firebaseUrl} />
+              {(submission.appAdminUserId || submission.appAdminPassword) && (
+                <div className="mt-2 p-2 rounded-lg border border-indigo-500/10 bg-indigo-500/5 space-y-1">
+                  {submission.appAdminUserId && (
+                    <div className="flex items-center justify-between text-[11px] gap-2">
+                      <span className="text-[10px] font-bold text-[var(--text-secondary)] whitespace-nowrap">ADMIN USER:</span>
+                      <code className="text-indigo-300 font-mono select-all bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded truncate" title={submission.appAdminUserId}>{submission.appAdminUserId}</code>
+                    </div>
+                  )}
+                  {submission.appAdminPassword && (
+                    <div className="flex items-center justify-between text-[11px] gap-2">
+                      <span className="text-[10px] font-bold text-[var(--text-secondary)] whitespace-nowrap">ADMIN PASS:</span>
+                      <code className="text-indigo-300 font-mono select-all bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded truncate" title={submission.appAdminPassword}>{submission.appAdminPassword}</code>
+                    </div>
+                  )}
+                </div>
+              )}
               <LinkRow icon={<FileText className="h-3.5 w-3.5" />} label="README" url={submission.readmeUrl} />
               {submission.workflowDiagramUrl && (
                 <LinkRow icon={<WorkflowIcon className="h-3.5 w-3.5" />} label="Workflow Diagram" url={submission.workflowDiagramUrl} />

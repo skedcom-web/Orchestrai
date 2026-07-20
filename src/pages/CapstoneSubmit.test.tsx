@@ -91,6 +91,8 @@ describe('CapstoneSubmit', () => {
 
     fireEvent.change(screen.getByPlaceholderText('https://github.com/yourname/your-capstone-repo'), { target: { value: 'https://github.com/me/repo' } });
     fireEvent.change(screen.getByPlaceholderText('https://your-capstone.web.app'), { target: { value: 'https://my-app.web.app' } });
+    fireEvent.change(screen.getByPlaceholderText('Admin<your capstone number>'), { target: { value: 'admin@test.com' } });
+    fireEvent.change(screen.getByPlaceholderText('e.g. Admin@123'), { target: { value: 'password123' } });
     fireEvent.change(screen.getByPlaceholderText('https://github.com/yourname/your-capstone-repo/blob/main/README.md'), { target: { value: 'https://github.com/me/repo/blob/main/README.md' } });
     fireEvent.click(screen.getByRole('button', { name: /Submit for Review/i }));
 
