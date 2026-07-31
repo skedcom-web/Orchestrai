@@ -5,7 +5,7 @@ import {
   Award, ArrowLeft, Lock, CheckCircle2, Filter,
   Users, Database, Workflow as WorkflowIcon, Wrench, X,
   GraduationCap, ServerCog, Sprout, HeartPulse, Briefcase, Search,
-  BookOpen, FolderOpen
+  BookOpen, FolderOpen, Sparkles, Lightbulb
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { getFirebaseDb } from '../firebase';
@@ -20,7 +20,9 @@ const DOMAIN_ICON: Record<CapstoneDomain, React.ComponentType<{ className?: stri
   'IT Operations': ServerCog,
   'Agriculture': Sprout,
   'Healthcare': HeartPulse,
-  'Operations': Briefcase
+  'Operations': Briefcase,
+  'Spiritual & Community': Sparkles,
+  'Open Innovation': Lightbulb
 };
 
 type SelectionStatus = 'in_progress' | 'submitted' | 'passed' | 'rework';
@@ -147,7 +149,7 @@ export const Capstone: React.FC = () => {
           </div>
           <h1 className="text-2xl font-extrabold mb-2">Sign in to browse the Capstone Library</h1>
           <p className="text-sm text-[var(--text-secondary)] max-w-md mx-auto mb-6">
-            Module 7 — Practical Demo — is the capstone stage of the OrchestrAI Lead Certification. Sign in with your candidate account to view all 30 capstones and lock one for your build.
+            Module 7 — Practical Demo — is the capstone stage of the OrchestrAI Lead Certification. Sign in with your candidate account to view all {CAPSTONES.length} capstones and lock one for your build.
           </p>
           <button
             onClick={() => navigate('/')}
@@ -222,7 +224,7 @@ export const Capstone: React.FC = () => {
         </div>
         <h1 className="text-3xl font-extrabold tracking-tight mb-2">Capstone Library</h1>
         <p className="text-sm text-[var(--text-secondary)] max-w-2xl">
-          Choose ONE capstone from 30 real-world business problems. Build it in 5 days using everything from Modules 1–6. Submit your GitHub + Firebase URL for certification review.
+          Choose ONE capstone from {CAPSTONES.length} real-world business problems across 8 enterprise domains. Build it in 5 days using everything from Modules 1–6. Submit your GitHub + Firebase URL for certification review.
         </p>
       </div>
 
@@ -397,6 +399,7 @@ export const Capstone: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">{cap.id} · {cap.domain}</div>
+                <h3 className="text-sm font-extrabold text-[var(--text-primary)] mb-3 leading-snug line-clamp-2">{cap.title}</h3>
             <div className="flex items-center justify-between text-[10px] text-[var(--text-secondary)] pt-3 border-t border-[var(--border-color)]">
                   <span className="inline-flex items-center gap-1"><WorkflowIcon className="h-3 w-3" /> {cap.workflow.length} states</span>
                   <span className="inline-flex items-center gap-1"><Database className="h-3 w-3" /> {cap.masters.length} masters</span>

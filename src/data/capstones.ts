@@ -6,7 +6,9 @@ export type CapstoneDomain =
   | 'IT Operations'
   | 'Agriculture'
   | 'Healthcare'
-  | 'Operations';
+  | 'Operations'
+  | 'Spiritual & Community'
+  | 'Open Innovation';
 
 export interface Capstone {
   id: string;
@@ -61,19 +63,43 @@ export const CAPSTONES: Capstone[] = [
   { id: 'CAP-27', domain: 'Operations', complexity: 'intermediate', title: 'Purchase Request Management', brief: 'Govern purchase requests with budget validation and multi-level approval.', actors: ['Requester', 'Finance Approver', 'Procurement Admin'], masters: ['Cost Center', 'Vendor', 'Item Category'], transactionEntity: 'Purchase Request', workflow: ['Draft', 'Submitted', 'Approved', 'Purchased', 'Closed'], trainerExtension: 'Budget Validation' },
   { id: 'CAP-28', domain: 'Operations', complexity: 'beginner', title: 'Visitor Management System', brief: 'Manage visitor check-in/out with QR pass generation.', actors: ['Visitor', 'Host', 'Security Admin'], masters: ['Visit Purpose', 'Location', 'Host Department'], transactionEntity: 'Visitor Request', workflow: ['Requested', 'Approved', 'Checked-In', 'Checked-Out', 'Closed'], trainerExtension: 'QR Pass' },
   { id: 'CAP-29', domain: 'Operations', complexity: 'intermediate', title: 'Meeting Action Tracker', brief: 'Capture meeting action items and track to completion with reminders.', actors: ['Owner', 'Assignee', 'Admin'], masters: ['Meeting Type', 'Priority', 'Department'], transactionEntity: 'Action Item', workflow: ['Created', 'Assigned', 'In Progress', 'Completed', 'Verified'], trainerExtension: 'Reminder Engine' },
-  { id: 'CAP-30', domain: 'Operations', complexity: 'advanced', title: 'Internal Audit Finding Tracker', brief: 'Track audit findings through investigation, resolution, and compliance closure.', actors: ['Auditor', 'Process Owner', 'Admin'], masters: ['Audit Type', 'Risk Category', 'Business Unit'], transactionEntity: 'Audit Finding', workflow: ['Open', 'Assigned', 'Investigating', 'Resolved', 'Closed'], trainerExtension: 'Compliance Dashboard' }
+  { id: 'CAP-30', domain: 'Operations', complexity: 'advanced', title: 'Internal Audit Finding Tracker', brief: 'Track audit findings through investigation, resolution, and compliance closure.', actors: ['Auditor', 'Process Owner', 'Admin'], masters: ['Audit Type', 'Risk Category', 'Business Unit'], transactionEntity: 'Audit Finding', workflow: ['Open', 'Assigned', 'Investigating', 'Resolved', 'Closed'], trainerExtension: 'Compliance Dashboard' },
+  // Category 7 – Spiritual & Community Systems
+  { id: 'CAP-31', domain: 'Spiritual & Community', complexity: 'intermediate', title: 'Temple Discovery & Darshan Management System', brief: 'Devotees discover temples, view timings, locate special poojas, and plan darshan visits with online bookings and festival tracking.', actors: ['Devotee', 'Temple Admin', 'Super Admin'], masters: ['Temple Directory', 'Pooja Catalog', 'Festival Calendar'], transactionEntity: 'Darshan Booking', workflow: ['Submitted', 'Verified', 'Approved', 'Confirmed', 'Completed'], trainerExtension: 'Temple Visitor & Revenue Analytics' },
+  { id: 'CAP-32', domain: 'Spiritual & Community', complexity: 'intermediate', title: 'Spiritual Event & Pilgrimage Planner', brief: 'Organize multi-temple journeys, festival visits, group travel, accommodation, and automated itinerary generation.', actors: ['Pilgrim', 'Tour Coordinator', 'Admin'], masters: ['Temple Route', 'Festival Master', 'Accommodation'], transactionEntity: 'Pilgrimage Itinerary', workflow: ['Draft', 'Temples Selected', 'Itinerary Generated', 'Registered', 'Completed'], trainerExtension: 'Route Optimization & Group Tracking' },
+  { id: 'CAP-33', domain: 'Spiritual & Community', complexity: 'beginner', title: 'Temple Volunteer & Seva Management', brief: 'Structure temple volunteer registration, seva assignment, attendance tracking, and certificate issuance.', actors: ['Volunteer', 'Seva Coordinator', 'Temple Admin'], masters: ['Seva Category', 'Event Shift', 'Location'], transactionEntity: 'Volunteer Assignment', workflow: ['Registered', 'Verified', 'Assigned', 'Attended', 'Completed'], trainerExtension: 'Seva Attendance & Certification Engine' },
+  { id: 'CAP-34', domain: 'Spiritual & Community', complexity: 'intermediate', title: 'Digital Annadhanam & Donation Platform', brief: 'Transparent donation tracking, Annadhanam and festival sponsorship management, receipt generation, and utilization tracking.', actors: ['Devotee', 'Finance Officer', 'Temple Admin'], masters: ['Donation Scheme', 'Sponsorship Category', 'Fund'], transactionEntity: 'Donation Transaction', workflow: ['Initiated', 'Payment Completed', 'Approved', 'Utilized', 'Receipt Issued'], trainerExtension: 'Fund Utilization Dashboard' },
+  { id: 'CAP-35', domain: 'Spiritual & Community', complexity: 'advanced', title: 'Spiritual Learning & Discourses Portal', brief: 'Structured spiritual learning, video discourses, sloka audio learning, assessments, and digital certification.', actors: ['Learner', 'Guru/Tutor', 'Admin'], masters: ['Course', 'Discourse', 'Sloka Catalog'], transactionEntity: 'Course Enrollment', workflow: ['Registered', 'Enrolled', 'In Learning', 'Assessed', 'Certified'], trainerExtension: 'Sloka Recitation & Assessment Analytics' },
+  // Category 8 – Open Innovation Capstones
+  { id: 'CAP-36', domain: 'Open Innovation', complexity: 'advanced', title: 'Build Your Own Enterprise Application', brief: 'Learner chooses a custom business domain following strict OrchestrAI certification standards (Authentication, Dashboard, Masters, Transactions, RBAC, Reports, AI Capability).', actors: ['Admin', 'Manager', 'End User'], masters: ['Domain Master A', 'Domain Master B', 'Configuration'], transactionEntity: 'Business Transaction', workflow: ['Draft', 'Submitted', 'In Review', 'Approved', 'Closed'], trainerExtension: 'AI Assistant Integration' },
+  { id: 'CAP-37', domain: 'Open Innovation', complexity: 'advanced', title: 'Build Your Own AI Product', brief: 'Build a custom AI-driven product (e.g. AI Assistant, Knowledge Bot, Recommendation Engine, AI Review System) complying with OrchestrAI standards.', actors: ['User', 'AI Agent', 'Admin'], masters: ['Knowledge Base', 'Prompt Template', 'Model Config'], transactionEntity: 'AI Session Logs', workflow: ['Prompted', 'Orchestrated', 'Generated', 'Validated', 'Completed'], trainerExtension: 'Prompt Performance & Token Analytics' },
+  { id: 'CAP-38', domain: 'Open Innovation', complexity: 'intermediate', title: 'Build Your Own Community Platform', brief: 'Develop a specialized community platform (Resident Portal, NGO Platform, Alumni Network, or Religious Community Portal) with multi-role governance.', actors: ['Member', 'Moderator', 'Community Admin'], masters: ['Group Category', 'Event Type', 'Resource Master'], transactionEntity: 'Community Activity Request', workflow: ['Submitted', 'Moderated', 'Active', 'Resolved', 'Archived'], trainerExtension: 'Engagement & Event Analytics' },
+  { id: 'CAP-39', domain: 'Open Innovation', complexity: 'intermediate', title: 'Build Your Own Marketplace', brief: 'Create a dynamic two-sided marketplace (Local Services, Product, or Freelancer Marketplace) with ratings, bookings, and transactions.', actors: ['Provider/Seller', 'Consumer/Buyer', 'Marketplace Admin'], masters: ['Service Category', 'Pricing Tier', 'Region'], transactionEntity: 'Marketplace Order', workflow: ['Listed', 'Booked', 'In Progress', 'Fulfilled', 'Completed'], trainerExtension: 'Trust & Rating Analytics' },
+  { id: 'CAP-40', domain: 'Open Innovation', complexity: 'advanced', title: 'Build Your Own Workflow Automation Platform', brief: 'Build a versatile workflow automation system (Approval System, Ticketing Platform, or Internal Operations Engine) with state machine transitions.', actors: ['Requester', 'Approver/Operator', 'System Admin'], masters: ['Workflow Template', 'Approval Matrix', 'SLA Policy'], transactionEntity: 'Workflow Ticket', workflow: ['Initiated', 'Assigned', 'Pending Approval', 'Executed', 'Closed'], trainerExtension: 'SLA & Bottleneck Heatmap' }
 ];
 
-export const DOMAINS: CapstoneDomain[] = ['Education', 'HR', 'IT Operations', 'Agriculture', 'Healthcare', 'Operations'];
+export const DOMAINS: CapstoneDomain[] = [
+  'Education',
+  'HR',
+  'IT Operations',
+  'Agriculture',
+  'Healthcare',
+  'Operations',
+  'Spiritual & Community',
+  'Open Innovation'
+];
+
 export const COMPLEXITIES: CapstoneComplexity[] = ['beginner', 'intermediate', 'advanced'];
 
 export const DOMAIN_COLORS: Record<CapstoneDomain, { bg: string; border: string; text: string; icon: string }> = {
-  'Education':     { bg: 'bg-indigo-500/10',   border: 'border-indigo-500/25',  text: 'text-indigo-400',  icon: 'GraduationCap' },
-  'HR':            { bg: 'bg-purple-500/10',   border: 'border-purple-500/25',  text: 'text-purple-400',  icon: 'Users' },
-  'IT Operations': { bg: 'bg-cyan-500/10',     border: 'border-cyan-500/25',    text: 'text-cyan-400',    icon: 'ServerCog' },
-  'Agriculture':   { bg: 'bg-emerald-500/10',  border: 'border-emerald-500/25', text: 'text-emerald-400', icon: 'Sprout' },
-  'Healthcare':    { bg: 'bg-rose-500/10',     border: 'border-rose-500/25',    text: 'text-rose-400',    icon: 'HeartPulse' },
-  'Operations':    { bg: 'bg-amber-500/10',    border: 'border-amber-500/25',   text: 'text-amber-400',   icon: 'Briefcase' }
+  'Education':             { bg: 'bg-indigo-500/10',   border: 'border-indigo-500/25',  text: 'text-indigo-400',  icon: 'GraduationCap' },
+  'HR':                    { bg: 'bg-purple-500/10',   border: 'border-purple-500/25',  text: 'text-purple-400',  icon: 'Users' },
+  'IT Operations':         { bg: 'bg-cyan-500/10',     border: 'border-cyan-500/25',    text: 'text-cyan-400',    icon: 'ServerCog' },
+  'Agriculture':           { bg: 'bg-emerald-500/10',  border: 'border-emerald-500/25', text: 'text-emerald-400', icon: 'Sprout' },
+  'Healthcare':            { bg: 'bg-rose-500/10',     border: 'border-rose-500/25',    text: 'text-rose-400',    icon: 'HeartPulse' },
+  'Operations':            { bg: 'bg-amber-500/10',    border: 'border-amber-500/25',   text: 'text-amber-400',   icon: 'Briefcase' },
+  'Spiritual & Community': { bg: 'bg-orange-500/10',   border: 'border-orange-500/25', text: 'text-orange-400', icon: 'Sparkles' },
+  'Open Innovation':       { bg: 'bg-teal-500/10',     border: 'border-teal-500/25',   text: 'text-teal-400',   icon: 'Lightbulb' }
 };
 
 export const COMPLEXITY_COLORS: Record<CapstoneComplexity, { bg: string; text: string; label: string }> = {
@@ -81,3 +107,4 @@ export const COMPLEXITY_COLORS: Record<CapstoneComplexity, { bg: string; text: s
   'intermediate': { bg: 'bg-amber-500/10 border border-amber-500/25',     text: 'text-amber-400',   label: 'Intermediate' },
   'advanced':     { bg: 'bg-rose-500/10 border border-rose-500/25',       text: 'text-rose-400',    label: 'Advanced' }
 };
+

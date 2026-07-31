@@ -68,6 +68,8 @@ const SYNONYM_MAP: Record<string, string[]> = {
   'paid user': ['certified user', 'program access', 'approved user', 'paid candidate'],
   'approval history': ['past approvals', 'who approved', 'approved list', 'previous approvals'],
   'filter': ['search', 'sort', 'find', 'narrow', 'refine', 'look up'],
+  'spiritual': ['temple', 'darshan', 'annadhanam', 'seva', 'pilgrimage', 'discourse', 'sloka', 'category 7'],
+  'open innovation': ['custom capstone', 'build your own', 'category 8', 'custom enterprise', 'custom ai', 'marketplace capstone'],
 };
 
 export const QuickHelp: React.FC = () => {
@@ -386,7 +388,7 @@ export const QuickHelp: React.FC = () => {
       {
         id: 'cap-1',
         question: 'How many capstone projects can I choose from?',
-        answer: 'There are **30 enterprise capstone projects** across **6 domains**:\n\n📚 **Education** (CAP-01 to CAP-05)\n👔 **HR** (CAP-06 to CAP-10)\n💻 **IT Operations** (CAP-11 to CAP-15)\n🌾 **Agriculture** (CAP-16 to CAP-20)\n🏥 **Healthcare** (CAP-21 to CAP-25)\n⚙️ **Operations** (CAP-26 to CAP-30)\n\nEach project has Beginner, Intermediate, or Advanced complexity levels.',
+        answer: 'There are **40 enterprise capstone projects** across **8 domains**:\n\n📚 **Education** (CAP-01 to CAP-05)\n👔 **HR** (CAP-06 to CAP-10)\n💻 **IT Operations** (CAP-11 to CAP-15)\n🌾 **Agriculture** (CAP-16 to CAP-20)\n🏥 **Healthcare** (CAP-21 to CAP-25)\n⚙️ **Operations** (CAP-26 to CAP-30)\n🛕 **Spiritual & Community** (CAP-31 to CAP-35)\n🚀 **Open Innovation** (CAP-36 to CAP-40)\n\nEach project has Beginner, Intermediate, or Advanced complexity levels.',
         keywords: ['capstone projects', 'how many', 'domains', 'choose', 'selection', 'options', 'list', 'available projects']
       },
       {
@@ -410,7 +412,7 @@ export const QuickHelp: React.FC = () => {
       {
         id: 'cap-5',
         question: 'How do I choose a capstone project?',
-        answer: 'To choose your capstone:\n\n1. Go to the **Capstone** page (/capstone)\n2. Browse the 30 projects across 6 domains\n3. Filter by domain or complexity (Beginner/Intermediate/Advanced)\n4. Read the project brief, actors, and workflow steps\n5. Click **"Lock Selection"** to confirm your choice\n\n⚠️ Once locked, your selection cannot be changed! Choose wisely based on your interests and experience level.',
+        answer: 'To choose your capstone:\n\n1. Go to the **Capstone** page (/capstone)\n2. Browse the 40 projects across 8 domains\n3. Filter by domain or complexity (Beginner/Intermediate/Advanced)\n4. Read the project brief, actors, and workflow steps\n5. Click **"Lock Selection"** to confirm your choice\n\n⚠️ Once locked, your selection can be changed by clicking "Lock This Capstone" on any new project or contacting the admin.',
         keywords: ['choose capstone', 'select project', 'lock', 'pick project', 'which capstone', 'how to choose']
       },
       {
@@ -422,7 +424,7 @@ export const QuickHelp: React.FC = () => {
       {
         id: 'cap-7',
         question: 'Can I change my capstone project after locking?',
-        answer: `By default, **locked capstone selections cannot be changed** by the candidate.\n\nHowever, the **admin** has the ability to override capstone selections via the **Capstone Progress Editor** in the Admin panel. Contact the admin if you need to change your selection:\n\n📧 **${contactEmail}**`,
+        answer: `Candidates can swap capstones anytime from the Capstone Library, or the **admin** can override capstone selections via the **Capstone Progress Editor** in the Admin panel. Contact the admin if you need assistance:\n\n📧 **${contactEmail}**`,
         keywords: ['change capstone', 'switch project', 'different project', 'unlock selection', 'wrong capstone']
       },
       {
@@ -439,9 +441,21 @@ export const QuickHelp: React.FC = () => {
       },
       {
         id: 'cap-10',
-        question: 'What are the 6 capstone domains?',
-        answer: 'The 6 capstone domains with example projects:\n\n📚 **Education**: Student Management, Course Tracker, Exam Portal\n👔 **HR**: HRIMS, Recruitment Tracker, Payroll System\n💻 **IT Operations**: Sprint Tracker, Bug Tracker, Asset Management\n🌾 **Agriculture**: Crop Monitor, Farm Inventory, Supply Chain\n🏥 **Healthcare**: Patient Records, Appointment System, Pharmacy\n⚙️ **Operations**: Warehouse Management, Fleet Tracker, Quality Control\n\nEach domain has 5 projects at varying complexity levels.',
-        keywords: ['domains', 'categories', 'types of projects', 'education', 'hr', 'it', 'agriculture', 'healthcare', 'operations']
+        question: 'What are the 8 capstone domains?',
+        answer: 'The 8 capstone domains with example projects:\n\n📚 **Education**: Student Management, Placement Drive, Internship Tracker\n👔 **HR**: Leave Management, Recruitment Pipeline, Onboarding\n💻 **IT Operations**: Change Request, Asset Management, Service Desk\n🌾 **Agriculture**: Farmer Advisory, Equipment Booking, Produce Marketplace\n🏥 **Healthcare**: Patient Appointments, Lab Sample Tracker, Blood Donation\n⚙️ **Operations**: Vendor Registration, Purchase Request, Visitor Management\n🛕 **Spiritual & Community**: Temple Discovery, Pilgrimage Planner, Volunteer Seva, Digital Annadhanam, Spiritual Learning\n🚀 **Open Innovation**: Build Your Own Enterprise App, AI Product, Community Platform, Marketplace, Workflow Automation',
+        keywords: ['domains', 'categories', 'types of projects', 'education', 'hr', 'it', 'agriculture', 'healthcare', 'operations', 'spiritual', 'open innovation']
+      },
+      {
+        id: 'cap-11',
+        question: 'Tell me about Category 7 — Spiritual & Community Systems capstones',
+        answer: 'Category 7 includes 5 specialized capstone projects for spiritual and community systems:\n\n1. **CAP-31**: Temple Discovery & Darshan Management System (Devotee discovery, pooja catalog, darshan booking)\n2. **CAP-32**: Spiritual Event & Pilgrimage Planner (Multi-temple route planner, festival calendar, itineraries)\n3. **CAP-33**: Temple Volunteer & Seva Management (Volunteer registration, shift assignments, seva certificates)\n4. **CAP-34**: Digital Annadhanam & Donation Platform (Transparent donations, fund utilization tracking, receipts)\n5. **CAP-35**: Spiritual Learning & Discourses Portal (Courses, video discourses, sloka audio assessments)\n\nThese projects comply with all standard 9-category certification rubric requirements.',
+        keywords: ['spiritual', 'temple', 'darshan', 'annadhanam', 'seva', 'pilgrimage', 'discourse', 'sloka', 'category 7', 'category 7 capstones', 'cap-31', 'cap-32', 'cap-33', 'cap-34', 'cap-35']
+      },
+      {
+        id: 'cap-12',
+        question: 'Tell me about Category 8 — Open Innovation Capstones',
+        answer: 'Category 8 allows learners to choose their own project domain while complying with strict OrchestrAI certification standards:\n\n1. **CAP-36**: Build Your Own Enterprise Application\n2. **CAP-37**: Build Your Own AI Product (AI Assistant, Knowledge Bot, Recommendation Engine)\n3. **CAP-38**: Build Your Own Community Platform (Resident Portal, NGO Platform, Alumni Network)\n4. **CAP-39**: Build Your Own Marketplace (Local Services, Product, Freelancer Marketplace)\n5. **CAP-40**: Build Your Own Workflow Automation Platform (Approval System, Ticketing, Operations)\n\nMandatory Standards for Category 8:\n• 7 Mandatory Screens (Login, Dashboard, User Mgmt, Masters, Transactions, Reports, Settings)\n• Minimum 3 RBAC roles & 3 workflows\n• Minimum 3 reports & at least 1 AI-powered capability\n• Complete GitHub repo + Firebase deployment',
+        keywords: ['open innovation', 'custom capstone', 'build your own', 'category 8', 'custom enterprise', 'custom ai', 'marketplace capstone', 'category 8 capstones', 'cap-36', 'cap-37', 'cap-38', 'cap-39', 'cap-40']
       },
     ],
 
