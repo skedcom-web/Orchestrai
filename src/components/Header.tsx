@@ -1264,20 +1264,32 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Responsive Navigation Menu for Mobile Devices */}
-        <div className="flex md:hidden items-center justify-around border-t border-[var(--border-color)] py-2 bg-slate-500/5">
-          <Link to="/modules" className={`text-xs font-semibold ${isActive('/modules') ? 'text-indigo-500' : 'text-[var(--text-secondary)]'}`}>
+        <div className="scroll-rail flex md:hidden items-center justify-around gap-1 overflow-x-auto border-t border-[var(--border-color)] px-2 py-1.5 bg-slate-500/5">
+          <Link
+            to="/modules"
+            className={`min-h-[44px] flex items-center justify-center whitespace-nowrap rounded-lg px-3 text-xs font-semibold transition-colors ${isActive('/modules') ? 'text-indigo-500 bg-indigo-500/10' : 'text-[var(--text-secondary)] active:bg-slate-500/10'}`}
+          >
             Modules
           </Link>
-          <Link to="/resources" className={`text-xs font-semibold ${isActive('/resources') ? 'text-indigo-500' : 'text-[var(--text-secondary)]'}`}>
+          <Link
+            to="/resources"
+            className={`min-h-[44px] flex items-center justify-center whitespace-nowrap rounded-lg px-3 text-xs font-semibold transition-colors ${isActive('/resources') ? 'text-indigo-500 bg-indigo-500/10' : 'text-[var(--text-secondary)] active:bg-slate-500/10'}`}
+          >
             Vault
           </Link>
           {currentUser && (
-            <Link to="/certification" className={`text-xs font-semibold ${isActive('/certification') ? 'text-indigo-500' : 'text-[var(--text-secondary)]'}`}>
+            <Link
+              to="/certification"
+              className={`min-h-[44px] flex items-center justify-center whitespace-nowrap rounded-lg px-3 text-xs font-semibold transition-colors ${isActive('/certification') ? 'text-indigo-500 bg-indigo-500/10' : 'text-[var(--text-secondary)] active:bg-slate-500/10'}`}
+            >
               Certification
             </Link>
           )}
           {(currentUser?.role === 'ADMIN' || currentUser?.role === 'SME' || currentUser?.isReviewer) && (
-            <Link to="/admin" className={`text-xs font-semibold ${isActive('/admin') ? 'text-purple-500' : 'text-[var(--text-secondary)]'}`}>
+            <Link
+              to="/admin"
+              className={`min-h-[44px] flex items-center justify-center whitespace-nowrap rounded-lg px-3 text-xs font-semibold transition-colors ${isActive('/admin') ? 'text-purple-500 bg-purple-500/10' : 'text-[var(--text-secondary)] active:bg-slate-500/10'}`}
+            >
               Admin Settings
             </Link>
           )}
@@ -1285,7 +1297,7 @@ export const Header: React.FC = () => {
             <button
               id="mobile-logout-btn"
               onClick={handleLogoutActionDirect}
-              className="text-xs font-semibold text-red-500 hover:text-red-400 transition-colors flex items-center gap-1 cursor-pointer bg-transparent border-none outline-none"
+              className="min-h-[44px] whitespace-nowrap rounded-lg px-3 text-xs font-semibold text-red-500 hover:text-red-400 active:bg-red-500/10 transition-colors flex items-center gap-1 cursor-pointer bg-transparent border-none outline-none"
             >
               <LogOut className="h-3.5 w-3.5" />
               <span>Logout</span>

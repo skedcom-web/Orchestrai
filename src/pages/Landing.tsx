@@ -8,19 +8,35 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { HeroAurora } from '../components/landing/HeroAurora';
+import { AnimatedHeadline } from '../components/landing/AnimatedHeadline';
+import { AIFlowNetwork } from '../components/landing/AIFlowNetwork';
+import { AudienceSection } from '../components/landing/AudienceSection';
+import { WhyOrchestrAI } from '../components/landing/WhyOrchestrAI';
+import { SignatureStatement } from '../components/landing/SignatureStatement';
+import { CeremoniesJourney } from '../components/landing/CeremoniesJourney';
+import { BusinessOutcomes } from '../components/landing/BusinessOutcomes';
+import { Reveal } from '../components/landing/Reveal';
+import { observeOnce } from '../components/landing/useReveal';
 
 /* ─── Animated counter hook ─────────────────── */
 const useCounter = (target: number, duration = 1800) => {
   const [count, setCount] = React.useState(0);
   const ref = useRef<HTMLDivElement>(null);
+  const canAnimate = typeof IntersectionObserver !== 'undefined';
+
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
+    if (!canAnimate) return;
+    const node = ref.current;
+    if (!node) return;
+
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const stopObserving = observeOnce(
+      node,
+      () => {
         let start = 0;
         const step = target / (duration / 16);
-        const timer = setInterval(() => {
+        timer = setInterval(() => {
           start += step;
           if (start >= target) { setCount(target); clearInterval(timer); }
           else setCount(Math.floor(start));
@@ -28,10 +44,14 @@ const useCounter = (target: number, duration = 1800) => {
       },
       { threshold: 0.4 }
     );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, duration]);
-  return { count, ref };
+
+    return () => {
+      stopObserving();
+      if (timer) clearInterval(timer);
+    };
+  }, [target, duration, canAnimate]);
+
+  return { count: canAnimate ? count : target, ref };
 };
 
 const StatCard: React.FC<{ value: number; suffix: string; label: string; colorClass: string }> =
@@ -192,27 +212,24 @@ export const Landing: React.FC = () => {
       </div>
 
       {/* ═══ HERO ════════════════════════════════════════ */}
-      <section className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
 
-        {/* Dot-grid texture */}
-        <div
-          className="absolute inset-0 z-0 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(99,102,241,0.06) 1px, transparent 0)',
-            backgroundSize: '36px 36px',
-          }}
-        />
+        {/* Premium animated backdrop — aurora + gradient mesh + dot grid */}
+        <HeroAurora />
 
         <div className="relative z-10 mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* Left */}
           <div className="flex flex-col items-start">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-indigo-400 text-sm font-bold uppercase tracking-widest mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-indigo-400 text-sm font-bold uppercase tracking-widest mb-5">
               <Zap className="h-3.5 w-3.5 text-cyan-400" />
               OrchestrAI Lead Certification
             </div>
 
-            <h1 className="text-5xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.05] mb-5">
+            {/* Rotating brand headlines */}
+            <AnimatedHeadline />
+
+            <h1 className="hero-title font-extrabold tracking-tight mb-5">
               <span className="text-[var(--text-primary)]">Get Hired by</span>
               <br />
               <span className="gradient-text">Top IT Companies</span>
@@ -244,11 +261,11 @@ export const Landing: React.FC = () => {
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               <button
                 id="hero-cta-start"
                 onClick={handleStartLearning}
-                className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm hover:brightness-110 hover:scale-[1.03] transition-all"
+                className="tap-target w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm hover:brightness-110 hover:scale-[1.03] transition-all"
                 style={{ boxShadow: 'var(--btn-shadow)' }}
               >
                 <BookOpen className="h-4 w-4" />
@@ -257,7 +274,7 @@ export const Landing: React.FC = () => {
               <button
                 id="hero-cta-journey"
                 onClick={() => document.getElementById('journey')?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] font-semibold text-sm hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all"
+                className="tap-target w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] font-semibold text-sm hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all"
               >
                 <Play className="h-4 w-4" />
                 See the Journey
@@ -267,7 +284,7 @@ export const Landing: React.FC = () => {
 
           {/* Right — differentiation cards */}
           <div className="flex flex-col gap-4">
-            <div className="glass-card rounded-2xl p-5 relative overflow-hidden">
+            <div className="glass-card hover-lift rounded-2xl p-5 relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600" />
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 h-11 w-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
@@ -283,7 +300,7 @@ export const Landing: React.FC = () => {
               </div>
             </div>
 
-            <div className="glass-card rounded-2xl p-5">
+            <div className="glass-card hover-lift rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Briefcase className="h-4 w-4 text-indigo-400" />
                 <h3 className="text-sm font-bold text-[var(--text-primary)]">Why You'll Stand Out to Hirers</h3>
@@ -316,6 +333,16 @@ export const Landing: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* ── AI DELIVERY NETWORK — the loop, visualised ── */}
+        <div className="relative z-10 mx-auto max-w-5xl w-full mt-12 sm:mt-14">
+          <Reveal className="glass-card rounded-2xl px-4 py-6 sm:px-8 sm:py-7">
+            <p className="text-center text-xs font-bold uppercase tracking-[0.25em] text-[var(--text-secondary)] mb-6">
+              The OrchestrAI Delivery Loop
+            </p>
+            <AIFlowNetwork />
+          </Reveal>
+        </div>
       </section>
 
       {/* ═══ STATS ROW ═══════════════════════════════════ */}
@@ -328,30 +355,39 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
+      {/* ═══ WHO IS ORCHESTRAI FOR? ══════════════════════ */}
+      <AudienceSection />
+
+      {/* ═══ WHY ORCHESTRAI? ═════════════════════════════ */}
+      <WhyOrchestrAI />
+
+      {/* ═══ SIGNATURE BRAND STATEMENT ═══════════════════ */}
+      <SignatureStatement />
+
       {/* ═══ CAREER JOURNEY ══════════════════════════════ */}
       <section id="journey" className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
 
-          <div className="text-center mb-10">
+          <Reveal className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/6 text-indigo-400 text-xs font-bold uppercase tracking-widest mb-4">
               <Rocket className="h-3.5 w-3.5" />
               Your Career Elevation Journey
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+            <h2 className="section-title font-extrabold tracking-tight leading-tight">
               From Learner to <span className="gradient-text">Hired Professional</span>
             </h2>
             <p className="mt-3 text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
               Six clear steps from zero to a certified <strong className="text-[var(--text-primary)]">OrchestrAI Lead</strong> — with a live enterprise portfolio that impresses every recruiter and opens doors to top IT companies.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <Reveal stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {journeySteps.map((s) => {
               const Icon = s.icon;
               return (
-                <div key={s.step} className="glass-card rounded-2xl p-5 flex flex-col gap-3 hover:scale-[1.02] hover:border-[var(--card-hover-border)] transition-all duration-300">
+                <div key={s.step} className="group glass-card hover-lift rounded-2xl p-5 flex flex-col gap-3 hover:border-[var(--card-hover-border)]">
                   <div className="flex items-center justify-between">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--bg-primary)]/50 border border-[var(--border-color)] ${s.color}`}>
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--bg-primary)]/50 border border-[var(--border-color)] ${s.color} transition-transform duration-300 group-hover:scale-110`}>
                       <Icon className="h-5 w-5" />
                     </div>
                     <span className={`px-2.5 py-1 rounded-full border text-xs font-extrabold tracking-wider uppercase ${s.badgeColor}`}>
@@ -366,7 +402,7 @@ export const Landing: React.FC = () => {
                 </div>
               );
             })}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -374,62 +410,71 @@ export const Landing: React.FC = () => {
       <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-7xl">
 
-          <div className="text-center mb-10">
+          <Reveal className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-rose-500/20 bg-rose-500/6 text-rose-400 text-xs font-bold uppercase tracking-widest mb-4">
               Our Strategic Difference
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            <h2 className="section-title font-extrabold tracking-tight">
               Recruiter-Ready in <span className="gradient-text">Weeks, Not Years</span>
             </h2>
             <p className="mt-3 text-sm text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
-              Traditional certifications prove you memorised documentation. OrchestrAI proves you can 
+              Traditional certifications prove you memorised documentation. OrchestrAI proves you can
               <strong className="text-[var(--text-primary)]"> build, ship, and demo</strong> — which is what IT companies actually hire for.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="glass-card rounded-2xl p-7 space-y-4">
-              <div className="inline-block px-3 py-1 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-400 text-[10px] font-extrabold uppercase tracking-widest">
-                ❌ Every Other Certification
-              </div>
-              <ul className="space-y-3">
-                {[
-                  'Watch pre-recorded videos, click Next',
-                  'MCQ exam with questions from a question bank',
-                  'PDF certificate that every recruiter ignores',
-                  'Cannot explain what you built or how',
-                  'Ten thousand identical candidates',
-                ].map(item => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--text-secondary)]">
-                    <span className="text-rose-400 mt-0.5 flex-shrink-0">✕</span> {item}
-                  </li>
-                ))}
-              </ul>
+          <div className="relative">
+            {/* VS pivot — sits between the two comparison cards on desktop */}
+            <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 h-12 w-12 items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--surface-raised)] text-xs font-extrabold uppercase tracking-widest text-[var(--text-secondary)] shadow-lg glow-soft" aria-hidden="true">
+              VS
             </div>
 
-            <div className="glass-card rounded-2xl p-7 space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-400 to-indigo-500" />
-              <div className="inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">
-                ✅ The OrchestrAI Certification
+            <Reveal stagger className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="group glass-card hover-lift rounded-2xl p-7 space-y-4 relative overflow-hidden lg:grayscale-[0.25] lg:hover:grayscale-0 transition-[filter] duration-500">
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-rose-500/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true" />
+                <div className="inline-block px-3 py-1 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-400 text-[10px] font-extrabold uppercase tracking-widest">
+                  ❌ Every Other Certification
+                </div>
+                <ul className="space-y-3">
+                  {[
+                    'Watch pre-recorded videos, click Next',
+                    'MCQ exam with questions from a question bank',
+                    'PDF certificate that every recruiter ignores',
+                    'Cannot explain what you built or how',
+                    'Ten thousand identical candidates',
+                  ].map(item => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--text-secondary)] rounded-lg px-2 py-1 -mx-2 transition-all duration-300 hover:bg-rose-500/5 hover:translate-x-1">
+                      <span className="text-rose-400 mt-0.5 flex-shrink-0">✕</span> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-3">
-                {[
-                  'Build a real enterprise-grade application from the ground up',
-                  'Live GitHub repo — open it during any interview',
-                  'Explain every architectural decision, prompt, and tradeoff',
-                  'Production-ready code that passes corporate security checks',
-                  'Unique, recruiter-memorable candidate profile',
-                ].map(item => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--text-secondary)]">
-                    <Check className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" /> {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+
+              <div className="group glass-card hover-lift rounded-2xl p-7 space-y-4 relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-400 to-indigo-500" />
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/8 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" aria-hidden="true" />
+                <div className="relative inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">
+                  ✅ The OrchestrAI Certification
+                </div>
+                <ul className="relative space-y-3">
+                  {[
+                    'Build a real enterprise-grade application from the ground up',
+                    'Live GitHub repo — open it during any interview',
+                    'Explain every architectural decision, prompt, and tradeoff',
+                    'Production-ready code that passes corporate security checks',
+                    'Unique, recruiter-memorable candidate profile',
+                  ].map(item => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-[var(--text-secondary)] rounded-lg px-2 py-1 -mx-2 transition-all duration-300 hover:bg-emerald-500/8 hover:translate-x-1">
+                      <Check className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" /> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
           </div>
 
           {/* Commitment fee transparency */}
-          <div className="mt-6 glass-card rounded-xl p-6 flex flex-col sm:flex-row items-start gap-4">
+          <div className="mt-6 glass-card hover-lift rounded-xl p-6 flex flex-col sm:flex-row items-start gap-4">
             <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mt-0.5">
               <Sparkles className="h-5 w-5 text-amber-400" />
             </div>
@@ -453,23 +498,23 @@ export const Landing: React.FC = () => {
       <section id="curriculum" className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-7xl">
 
-          <div className="text-center mb-10">
+          <Reveal className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/20 bg-purple-500/6 text-purple-400 text-sm font-bold uppercase tracking-widest mb-4">
               Core Framework
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            <h2 className="section-title font-extrabold tracking-tight">
               The 6-Stage <span className="gradient-text">OrchestrAI Loop</span>
             </h2>
             <p className="mt-3 text-base text-[var(--text-secondary)] max-w-xl mx-auto leading-relaxed">
               The continuous delivery lifecycle taught and practiced in every module — the same method used to build production systems in days.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Reveal stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {stages.map((stage) => (
               <div
                 key={stage.num}
-                className="glass-card rounded-2xl p-5 hover:scale-[1.02] hover:border-[var(--card-hover-border)] transition-all duration-300"
+                className="glass-card hover-lift rounded-2xl p-5 hover:border-[var(--card-hover-border)]"
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className={`text-xs font-extrabold tracking-widest ${stage.color}`}>STAGE {stage.num}</span>
@@ -480,14 +525,20 @@ export const Landing: React.FC = () => {
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{stage.desc}</p>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
+
+      {/* ═══ HIGH-LEVEL ORCHESTRAI CEREMONIES ════════════ */}
+      <CeremoniesJourney />
+
+      {/* ═══ BUSINESS OUTCOMES ═══════════════════════════ */}
+      <BusinessOutcomes />
 
       {/* ═══ PRODUCT OWNER ═══════════════════════════════ */}
       <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-5xl">
-          <div className="glass-card rounded-2xl p-7 sm:p-10 relative overflow-hidden">
+          <Reveal className="glass-card rounded-2xl p-7 sm:p-10 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600" />
             <div className="absolute top-4 right-4 opacity-[0.04] pointer-events-none">
               <Award className="h-40 w-40 text-indigo-400" />
@@ -527,7 +578,7 @@ export const Landing: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -535,24 +586,24 @@ export const Landing: React.FC = () => {
       <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-7xl">
 
-          <div className="text-center mb-10">
+          <Reveal className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/6 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-4">
               <Shield className="h-3.5 w-3.5" />
               Proved in Practice (PIP)
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            <h2 className="section-title font-extrabold tracking-tight">
               Real Apps. <span className="gradient-text">Real Speed.</span>
             </h2>
             <p className="mt-3 text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
               These are production-ready enterprise systems built entirely through the OrchestrAI Lead methodology — demoed to real clients and available for you to explore live.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+          <Reveal stagger className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
             {pipDemos.map((demo) => (
               <div
                 key={demo.title}
-                className="glass-card rounded-xl p-5 hover:scale-[1.015] hover:border-[var(--card-hover-border)] transition-all duration-300 flex flex-col gap-3"
+                className="glass-card hover-lift rounded-xl p-5 hover:border-[var(--card-hover-border)] flex flex-col gap-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <h4 className="text-base font-bold text-[var(--text-primary)] leading-tight">{demo.title}</h4>
@@ -578,29 +629,29 @@ export const Landing: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </Reveal>
 
           {/* Bottom CTA */}
-          <div className="glass-card rounded-2xl p-8 text-center relative overflow-hidden">
+          <Reveal className="glass-card rounded-2xl p-8 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
-            <GraduationCap className="h-10 w-10 mx-auto mb-3 text-indigo-400 opacity-80" />
+            <GraduationCap className="h-10 w-10 mx-auto mb-3 text-indigo-400 opacity-80 icon-breath" />
             <h3 className="text-xl sm:text-2xl font-extrabold mb-2">
               Your Career Starts Here
             </h3>
             <p className="text-base text-[var(--text-secondary)] mb-6 max-w-xl mx-auto leading-relaxed">
-              Build your own enterprise application. Earn your <strong className="text-[var(--text-primary)]">OrchestrAI Lead</strong> certification. 
+              Build your own enterprise application. Earn your <strong className="text-[var(--text-primary)]">OrchestrAI Lead</strong> certification.
               Walk into every interview with working proof — not just promises.
             </p>
             <button
               id="bottom-cta-start"
               onClick={handleStartLearning}
-              className="inline-flex items-center gap-2 px-10 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm hover:brightness-110 hover:scale-[1.03] transition-all"
+              className="tap-target inline-flex w-full sm:w-auto items-center justify-center gap-2 px-10 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm hover:brightness-110 hover:scale-[1.03] transition-all"
               style={{ boxShadow: 'var(--btn-shadow)' }}
             >
               Begin Your Journey — Free
               <ArrowRight className="h-4 w-4" />
             </button>
-          </div>
+          </Reveal>
 
         </div>
       </section>

@@ -60,9 +60,9 @@ export const TimelineRoadmap: React.FC = () => {
   ];
 
   return (
-    <div className="w-full py-8 border-b border-[var(--border-color)] bg-slate-500/5 mb-8">
+    <div className="w-full py-6 sm:py-8 border-b border-[var(--border-color)] bg-slate-500/5 mb-6 sm:mb-8">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        
+
         {/* Timeline Header */}
         <div className="flex flex-col items-center mb-6 text-center">
           <h3 className="text-sm font-semibold tracking-wider text-indigo-500 uppercase">
@@ -74,7 +74,7 @@ export const TimelineRoadmap: React.FC = () => {
         </div>
 
         {/* Steps container */}
-        <div className="relative flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0 md:space-x-4">
+        <div className="relative flex flex-col md:flex-row justify-between items-center md:items-start gap-5 md:gap-0 md:space-x-4">
           
           {/* Horizontal line for desktop view */}
           <div className="absolute top-6 left-8 right-8 h-0.5 bg-[var(--border-color)] hidden md:block z-0">
@@ -95,7 +95,7 @@ export const TimelineRoadmap: React.FC = () => {
                 key={step.id}
                 onClick={() => !isLocked && navigate(step.path)}
                 disabled={isLocked}
-                className="relative flex flex-row md:flex-col items-center z-10 w-full md:w-auto text-left md:text-center focus:outline-none group disabled:cursor-not-allowed"
+                className="relative flex flex-row md:flex-col items-center z-10 w-full md:w-auto min-h-[56px] md:min-h-0 rounded-xl px-1 py-1 md:p-0 text-left md:text-center focus:outline-none group disabled:cursor-not-allowed active:bg-slate-500/10 md:active:bg-transparent transition-colors"
               >
                 {/* Visual indicator node */}
                 <div 

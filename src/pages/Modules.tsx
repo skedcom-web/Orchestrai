@@ -224,20 +224,52 @@ export const Modules: React.FC = () => {
     }
   ];
 
+  // Academy progress — derived from existing progress data, purely informational
+  const completedModuleIds = currentUser?.progress?.modulesCompleted ?? [];
+  const completedCount = modulesData.filter((m) => completedModuleIds.includes(m.id)).length;
+  const progressPercent = Math.round((completedCount / modulesData.length) * 100);
+
   return (
-    <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
-      
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
       {/* Page Header */}
-      <div className="flex flex-col items-center text-center mb-10">
+      <div className="flex flex-col items-center text-center mb-8 sm:mb-10">
         <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 text-xs font-semibold mb-4">
           <Award className="h-4 w-4" />
           <span>7 Certification Modules</span>
         </div>
-        <h2 className="text-3xl font-extrabold tracking-tight mb-2">Training Content & Syllabus</h2>
+        <h2 className="section-title font-extrabold tracking-tight mb-2">Training Content &amp; Syllabus</h2>
         <p className="text-sm text-[var(--text-secondary)] max-w-xl">
           Expand the headers to read. Modules beyond your access level are gated by quiz score, fee payment, and admin approval.
         </p>
       </div>
+
+      {/* Academy progress indicator */}
+      {currentUser && (
+        <div className="glass-card rounded-2xl px-5 py-4 mb-6 sm:mb-8">
+          <div className="flex items-center justify-between gap-3 mb-2.5">
+            <span className="text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)]">
+              Your Academy Progress
+            </span>
+            <span className="text-xs font-extrabold text-indigo-400">
+              {completedCount} / {modulesData.length} modules · {progressPercent}%
+            </span>
+          </div>
+          <div
+            className="h-2 w-full rounded-full bg-[var(--surface-sunken)] border border-[var(--border-color)] overflow-hidden"
+            role="progressbar"
+            aria-valuenow={progressPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Modules completed"
+          >
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 transition-[width] duration-700 ease-out"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Accordion List */}
       <div className="space-y-4">
@@ -251,19 +283,20 @@ export const Modules: React.FC = () => {
             mod.id === 2 ? !hasCompletedMod1 :
             mod.id > freeLimit ? !isUserApproved : false;
           const isExpanded = expandedModule === mod.id;
+          const isModuleCompleted = completedModuleIds.includes(mod.id);
 
           return (
-            <div 
-              key={mod.id} 
-              className={`glass-card rounded-xl overflow-hidden transition-all ${
-                isModuleLocked 
-                  ? 'opacity-75 border-slate-500/10' 
-                  : isExpanded 
-                    ? 'border-indigo-500/20 shadow-md shadow-indigo-500/5' 
-                    : 'hover:border-slate-500/20'
+            <div
+              key={mod.id}
+              className={`glass-card rounded-2xl overflow-hidden transition-all ${!isExpanded ? 'hover-lift' : ''} ${
+                isModuleLocked
+                  ? 'opacity-75 border-slate-500/10'
+                  : isExpanded
+                    ? 'border-indigo-500/20 shadow-md shadow-indigo-500/5'
+                    : 'hover:border-[var(--card-hover-border)]'
               }`}
             >
-              
+
               {/* Module Accordion Header */}
               <button
                 onClick={() => {
@@ -273,33 +306,43 @@ export const Modules: React.FC = () => {
                     setExpandedModule(isExpanded ? null : mod.id);
                   }
                 }}
-                className="w-full flex items-center justify-between p-5 text-left focus:outline-none"
+                aria-expanded={isExpanded}
+                className="group w-full min-h-[64px] flex items-center justify-between gap-3 p-4 sm:p-5 text-left focus:outline-none"
               >
-                <div className="flex items-center space-x-3.5 pr-4">
-                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${
-                    isModuleLocked 
-                      ? 'bg-slate-500/5 border-[var(--border-color)] text-[var(--text-secondary)]' 
-                      : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500'
+                <div className="flex items-center gap-3.5 min-w-0">
+                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:scale-105 ${
+                    isModuleLocked
+                      ? 'bg-slate-500/5 border-[var(--border-color)] text-[var(--text-secondary)]'
+                      : isModuleCompleted
+                        ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'
+                        : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-500'
                   }`}>
                     {isModuleLocked ? (
                       <Lock className="h-4 w-4" />
+                    ) : isModuleCompleted ? (
+                      <CheckCircle2 className="h-4.5 w-4.5" />
                     ) : (
                       <Unlock className="h-4 w-4" />
                     )}
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold tracking-tight text-[var(--text-primary)]">{mod.title}</h3>
-                    <p className="text-[11px] text-[var(--text-secondary)] font-semibold uppercase tracking-wider">{mod.duration}</p>
+                  <div className="min-w-0">
+                    <h3 className="text-sm sm:text-base font-bold tracking-tight text-[var(--text-primary)] leading-snug">{mod.title}</h3>
+                    <p className="text-[11px] text-[var(--text-secondary)] font-semibold uppercase tracking-wider mt-0.5">{mod.duration}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2 shrink-0">
+                  {isModuleCompleted && !isModuleLocked && (
+                    <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 text-emerald-400 text-[10px] font-bold uppercase tracking-wider">
+                      Completed
+                    </span>
+                  )}
                   {isModuleLocked && (
                     <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full border border-yellow-500/20 bg-yellow-500/5 text-yellow-500 text-[10px] font-bold uppercase tracking-wider">
                       Gated Access
                     </span>
                   )}
-                  {isExpanded ? <ChevronUp className="h-5 w-5 text-[var(--text-secondary)]" /> : <ChevronDown className="h-5 w-5 text-[var(--text-secondary)]" />}
+                  {isExpanded ? <ChevronUp className="h-5 w-5 text-[var(--text-secondary)]" /> : <ChevronDown className="h-5 w-5 text-[var(--text-secondary)] transition-transform duration-300 group-hover:translate-y-0.5" />}
                 </div>
               </button>
 

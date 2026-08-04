@@ -578,3 +578,261 @@ button:disabled {
   animation: avatarSpeak 0.22s ease-in-out infinite;
 }
 
+/* =====================================================
+   EXPERIENCE LAYER — Website & mobile modernisation
+   Premium motion primitives used by the marketing sections.
+   Everything here is opacity/transform only (GPU-friendly)
+   and fully disabled under prefers-reduced-motion.
+   ===================================================== */
+
+/* ── Reveal on scroll ───────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Stagger children of a revealed container: the wrapper stays put and each
+   child fades up in sequence. */
+.reveal.reveal-stagger {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-stagger.is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-stagger > *              { transition-delay: 0ms; }
+.reveal-stagger > *:nth-child(2) { transition-delay: 70ms; }
+.reveal-stagger > *:nth-child(3) { transition-delay: 140ms; }
+.reveal-stagger > *:nth-child(4) { transition-delay: 210ms; }
+.reveal-stagger > *:nth-child(5) { transition-delay: 280ms; }
+.reveal-stagger > *:nth-child(6) { transition-delay: 350ms; }
+.reveal-stagger > *:nth-child(7) { transition-delay: 420ms; }
+.reveal-stagger > *:nth-child(8) { transition-delay: 490ms; }
+
+/* ── Hover lift (cards) ─────────────────────────────── */
+.hover-lift {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
+    border-color 0.3s ease;
+}
+@media (hover: hover) {
+  .hover-lift:hover { transform: translateY(-5px); }
+}
+/* Touch feedback — phones/tablets get a press response instead of hover */
+.hover-lift:active { transform: scale(0.985); }
+
+/* ── Aurora / gradient-mesh premium background ──────── */
+.aurora-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.aurora-band {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  will-change: transform;
+}
+@keyframes auroraDriftA {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33%      { transform: translate3d(6%, -4%, 0) scale(1.10); }
+  66%      { transform: translate3d(-5%, 5%, 0) scale(0.94); }
+}
+@keyframes auroraDriftB {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.04); }
+  50%      { transform: translate3d(-7%, 6%, 0) scale(0.92); }
+}
+.aurora-drift-a { animation: auroraDriftA 26s ease-in-out infinite; }
+.aurora-drift-b { animation: auroraDriftB 32s ease-in-out infinite; }
+
+/* Light theme keeps the aurora as a whisper; dark/glass let it sing */
+.light .aurora-band { opacity: 0.40; }
+.dark  .aurora-band { opacity: 0.55; }
+.glass .aurora-band { opacity: 0.65; }
+
+/* Slow-moving sheen that travels across premium surfaces */
+@keyframes auroraSheen {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+.aurora-sheen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.06) 55%, transparent 100%);
+  animation: auroraSheen 9s ease-in-out infinite;
+  pointer-events: none;
+}
+.light .aurora-sheen { background: linear-gradient(100deg, transparent 0%, rgba(99,102,241,0.05) 50%, transparent 100%); }
+
+/* ── Animated hero headline rotator ─────────────────── */
+.headline-rotator {
+  display: block;
+  position: relative;
+}
+@keyframes headlineIn {
+  from { opacity: 0; transform: translateY(0.45em); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);      filter: blur(0); }
+}
+.headline-line {
+  display: inline-block;
+  animation: headlineIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── AI network visualisation ───────────────────────── */
+@keyframes networkFlow  { to { stroke-dashoffset: -220; } }
+@keyframes networkPulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.14); }
+}
+.network-line {
+  stroke-dasharray: 7 9;
+  animation: networkFlow 3.4s linear infinite;
+}
+.network-halo {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: networkPulse 3s ease-in-out infinite;
+}
+/* Marching-dash connector between network nodes (HTML, fully responsive) */
+@keyframes flowLine { from { background-position: 0 0; } to { background-position: 18px 0; } }
+.flow-line {
+  height: 2px;
+  border-radius: 2px;
+  background-image: linear-gradient(90deg, currentColor 0 9px, transparent 9px 18px);
+  background-size: 18px 2px;
+  background-repeat: repeat-x;
+  animation: flowLine 1.4s linear infinite;
+  opacity: 0.55;
+}
+/* Node halo breathing (HTML variant) */
+@keyframes haloBreath {
+  0%, 100% { transform: scale(1);    opacity: 0.45; }
+  50%      { transform: scale(1.18); opacity: 0.85; }
+}
+.node-halo { animation: haloBreath 3.2s ease-in-out infinite; }
+
+/* ── Journey / roadmap connector draw-in ────────────── */
+@keyframes roadmapDraw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.roadmap-track {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.is-visible .roadmap-track {
+  animation: roadmapDraw 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+@keyframes roadmapDrawY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.roadmap-track-y {
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+.is-visible .roadmap-track-y {
+  animation: roadmapDrawY 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+/* ── Signature statement typography ─────────────────── */
+.signature-line {
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  font-size: clamp(2.1rem, 8.5vw, 5.25rem);
+}
+
+/* Responsive hero typography — no overflow on 320px phones */
+.hero-title {
+  font-size: clamp(2.35rem, 7.4vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.section-title {
+  font-size: clamp(1.7rem, 4.4vw, 3rem);
+  line-height: 1.12;
+}
+
+/* ── Soft ambient glow on featured elements ─────────── */
+@keyframes softGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.0); }
+  50%      { box-shadow: 0 0 28px 2px rgba(99, 102, 241, 0.18); }
+}
+.glow-soft { animation: softGlow 4.5s ease-in-out infinite; }
+
+/* =====================================================
+   MOBILE EXPERIENCE — spacing, touch targets, scrolling
+   ===================================================== */
+html {
+  scroll-behavior: smooth;
+  /* Sticky header shouldn't cover anchored sections */
+  scroll-padding-top: 96px;
+}
+
+/* Comfortable minimum hit area for primary tap targets on touch devices */
+@media (max-width: 767px) {
+  .tap-target {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Horizontally scrollable rails feel native on touch */
+.scroll-rail {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scroll-rail::-webkit-scrollbar { display: none; }
+
+/* =====================================================
+   REDUCED MOTION — respect the OS setting everywhere
+   ===================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .aurora-drift-a,
+  .aurora-drift-b,
+  .aurora-sheen,
+  .headline-line,
+  .network-line,
+  .network-halo,
+  .glow-soft,
+  .animate-float-up,
+  .animate-float-down,
+  .animate-float-spin,
+  .icon-breath,
+  .hero-halo::before {
+    animation: none !important;
+  }
+  .roadmap-track,
+  .roadmap-track-y {
+    transform: none !important;
+    animation: none !important;
+  }
+  .hover-lift:hover,
+  .hover-lift:active { transform: none !important; }
+  html { scroll-behavior: auto; }
+}
+
