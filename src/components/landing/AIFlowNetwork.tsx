@@ -82,15 +82,16 @@ const ODF_STAGES = [
  */
 export const AIFlowNetwork: React.FC = () => {
   return (
-    <div className="w-full space-y-4" aria-label="OrchestrAI Delivery Framework 6-Stage Workflow">
-      {/* ── Desktop & Tablet Grid Layout (2 col on sm, 3 col on lg) ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="w-full space-y-3" aria-label="OrchestrAI Delivery Framework 6-Stage Workflow">
+      {/* ── Phones: a swipeable rail so the hero stays one screen, not six.
+             Tablet/desktop: the full grid (2 col on md, 3 col on lg). ── */}
+      <div className="scroll-rail flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory -mx-1 px-1 pb-2 md:mx-0 md:px-0 md:pb-0">
         {ODF_STAGES.map((stage, index) => {
           const Icon = stage.icon;
           return (
             <div
               key={stage.num}
-              className={`relative glass-card rounded-2xl p-5 border ${stage.border} ${stage.bg} hover:border-[var(--card-hover-border)] transition-all duration-300 hover:scale-[1.02] flex flex-col justify-between group shadow-lg`}
+              className={`relative glass-card rounded-2xl p-5 border ${stage.border} ${stage.bg} hover:border-[var(--card-hover-border)] transition-all duration-300 hover:scale-[1.02] flex flex-col justify-between group shadow-lg snap-start shrink-0 w-[82vw] max-w-[330px] md:w-auto md:max-w-none md:shrink`}
               style={{ boxShadow: `0 4px 20px ${stage.glow}` }}
             >
               {/* Header Badge Row */}
@@ -137,6 +138,11 @@ export const AIFlowNetwork: React.FC = () => {
           );
         })}
       </div>
+
+      {/* Swipe affordance — phones only, where the rail is in play */}
+      <p className="md:hidden text-center text-[11px] font-semibold text-[var(--text-muted)]">
+        Swipe to move through all six stages →
+      </p>
     </div>
   );
 };

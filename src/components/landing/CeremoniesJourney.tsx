@@ -81,7 +81,9 @@ export const CeremoniesJourney: React.FC = () => {
         <div ref={ref} className={visible ? 'is-visible' : ''}>
 
           {/* ── Desktop: horizontal animated roadmap ── */}
-          <div className="hidden lg:block relative">
+          {/* Six across only from xl — at 1024px the columns squeeze to ~148px,
+              so tablets get the vertical spine below instead. */}
+          <div className="hidden xl:block relative">
             {/* Base rail + drawn progress rail */}
             <div className="absolute top-7 left-[8%] right-[8%] h-0.5 bg-[var(--border-color)]" aria-hidden="true">
               <div className="roadmap-track h-full w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-rose-400" />
@@ -115,7 +117,7 @@ export const CeremoniesJourney: React.FC = () => {
           </div>
 
           {/* ── Mobile / tablet: vertical spine ── */}
-          <div className="lg:hidden relative pl-12">
+          <div className="xl:hidden relative pl-12">
             <div className="absolute left-[26px] top-3 bottom-3 w-0.5 bg-[var(--border-color)]" aria-hidden="true">
               <div className="roadmap-track-y h-full w-full bg-gradient-to-b from-indigo-500 via-purple-500 to-amber-400" />
             </div>

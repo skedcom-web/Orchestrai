@@ -186,7 +186,7 @@ export const QuickHelp: React.FC = () => {
       {
         id: 'mod-7',
         question: 'Tell me about Module 7 (Capstone Project)',
-        answer: 'Module 7: "Your Capstone Build" (Self-Paced, 5 Days)\n\nThe ultimate hands-on module:\n• Choose from 30 enterprise projects across 6 domains\n• Build the complete app using the OrchestrAI Loop in 5 days\n• Deploy to Firebase Hosting\n• Submit GitHub URL + deployed app URL\n• Get reviewed by an SME evaluator\n\nThis is the most challenging module!',
+        answer: 'Module 7: "Your Capstone Build" (Self-Paced, 5 Days)\n\nThe ultimate hands-on module:\n• Choose from 30 enterprise projects across 6 domains\n• Build the complete app using the OrchestrAI Delivery Framework (ODF) in 5 days\n• Deploy to Firebase Hosting\n• Submit GitHub URL + deployed app URL\n• Get reviewed by an SME evaluator\n\nThis is the most challenging module!',
         keywords: ['module 7', 'm7', 'capstone', 'final', 'build', 'project']
       },
       {

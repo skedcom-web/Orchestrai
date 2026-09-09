@@ -273,7 +273,7 @@ const AppContent: React.FC = () => {
                 <span className="text-[var(--text-secondary)]">Chief OrchestrAI Architect</span>
               </p>
               <p className="text-[10px] text-indigo-400 italic">
-                "Human Orchestrates. AI Builds. Value Delivers."
+                "Human Orchestrates. AI Builds. Value Delivered."
               </p>
             </div>
           </div>

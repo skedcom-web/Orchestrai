@@ -153,7 +153,7 @@ export const Landing: React.FC = () => {
       step: '04',
       icon: Layers,
       title: 'Build. Ship. Demo.',
-      desc: 'Apply the 6-stage OrchestrAI Loop to engineer a complete, production-ready enterprise application. You own the code. You own the portfolio.',
+      desc: 'Apply the 6-stage OrchestrAI Delivery Framework (ODF) to engineer a complete, production-ready enterprise application. You own the code. You own the portfolio.',
       badge: 'BUILD',
       badgeColor: 'bg-cyan-500/15 border-cyan-500/25 text-cyan-400',
       color: 'text-cyan-400',
@@ -236,7 +236,7 @@ export const Landing: React.FC = () => {
           </h1>
 
           <p className="text-base sm:text-lg lg:text-xl text-[var(--text-secondary)] leading-relaxed max-w-3xl mb-8">
-            <strong className="text-[var(--text-primary)]">OrchestrAI</strong> is the <strong className="text-[var(--text-primary)]">OrchestrAI Delivery Framework (ODF)</strong> that enables
+            The <strong className="text-[var(--text-primary)]">OrchestrAI Delivery Framework (ODF)</strong> is the enterprise AI delivery framework that enables
             Developers, Architects, SMEs, QA Engineers, IT Engineers and Technology Leaders to deliver
             business value faster through <strong className="text-[var(--text-primary)]">AI-Orchestrated Delivery</strong>.
           </p>
@@ -318,9 +318,9 @@ export const Landing: React.FC = () => {
             </div>
 
             <h2 className="hero-title font-extrabold tracking-tight mb-5">
-              <span className="text-[var(--text-primary)]">Get Hired by</span>
+              <span className="text-[var(--text-primary)]">Build a</span>
               <br />
-              <span className="gradient-text">Top IT Companies</span>
+              <span className="gradient-text">Recruiter-Ready Portfolio</span>
               <br />
               <span className="text-[var(--text-primary)]">Faster.</span>
             </h2>
@@ -331,7 +331,7 @@ export const Landing: React.FC = () => {
             </p>
 
             <p className="text-sm font-bold tracking-[0.15em] text-indigo-400 uppercase mb-7">
-              "Human Orchestrates. AI Builds. Value Delivers."
+              "Human Orchestrates. AI Builds. Value Delivered."
             </p>
             <div className="flex flex-col gap-3 mb-8">
               {[
@@ -572,7 +572,7 @@ export const Landing: React.FC = () => {
               Core Framework
             </div>
             <h2 className="section-title font-extrabold tracking-tight">
-              The 6-Stage <span className="gradient-text">OrchestrAI Loop</span>
+              The 6-Stage <span className="gradient-text">OrchestrAI Delivery Framework</span>
             </h2>
             <p className="mt-3 text-base text-[var(--text-secondary)] max-w-xl mx-auto leading-relaxed">
               The continuous delivery lifecycle taught and practiced in every module — the same method used to build production systems in days.

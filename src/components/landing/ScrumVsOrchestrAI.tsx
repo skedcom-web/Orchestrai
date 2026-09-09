@@ -32,9 +32,9 @@ const COMPARISONS: Comparison[] = [
     orchestrai: 'Plain-English intent with actors, rules and edge cases',
   },
   {
-    dimension: 'Ceremonies',
+    dimension: 'Operating Cadence',
     scrum: 'Planning · Daily Standup · Review · Retrospective',
-    orchestrai: 'Intent Workshop · Micro Sprint · AI Review · Demo Review · Continuous Evolution',
+    orchestrai: 'Six ODF stages — Intent & Outcome Definition through Deployment & Improvement',
   },
   {
     dimension: 'Feedback Loop',
