@@ -344,30 +344,30 @@ genzData.slides.push(
     reflection_prompt: "You now know the six rules of the game. But rules don't build software — processes do. Ready to see the actual engine?",
     bullets: [
       "Six principles = the rules of the road",
-      "Six stages = the GPS that gets you there",
-      "INTENT → ORCHESTRATE → GENERATE → VALIDATE → EVOLVE → DEPLOY",
-      "Not a waterfall. Not a sprint. A loop."
+      "Six ODF stages = the delivery GPS that gets you there",
+      "01 Intent & Outcome → 02 Requirements & Context → 03 AI-Assisted Design → 04 AI-Generated Development → 05 Testing & QA → 06 Deployment & Improvement",
+      "Not a waterfall. Not a sprint. A delivery loop."
     ],
-    closing_thread: "Stage 1: Intent. The foundation of literally everything.",
-    memory_hook: "Principles = rules. Lifecycle = GPS. Both required.",
-    narration: "So, the principles tell you the what. But the lifecycle is the how. Think of it as: principles are the rules of the road, and the lifecycle is your GPS. We go from Intent, to Orchestrate, to Generate, to Validate, to Evolve, and finally Deploy. This is not a straight line, it's a loop. Ready to see the actual engine? Let's dive in.",
+    closing_thread: "ODF Stage 01: Intent & Outcome Definition. The foundation of literally everything.",
+    memory_hook: "Principles = rules. ODF Stages = delivery GPS. Both required.",
+    narration: "So, the principles tell you the what. But the six ODF stages are the how. Think of it as: principles are the rules of the road, and the ODF delivery stages are your GPS. We go through Intent and Outcome Definition, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and Quality Assurance, and finally Deployment and Improvement. Not a straight line — a delivery loop. Ready to see the actual engine? Let's dive in.",
     estimated_duration_seconds: 75,
     narration_script: [
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "upbeat",
-        text: "So, the principles tell you the what. But the lifecycle is the how. Think of it as: principles are the rules of the road, and the lifecycle is your GPS.",
-        text_ssml: "<speak>So, the principles tell you the what. But the lifecycle is the <emphasis level=\"moderate\">how</emphasis>. Think of it as: principles are the rules of the road, and the lifecycle is your GPS.</speak>",
-        text_expressive: "So, the principles tell you the what. But the lifecycle is the how. Think of it as: principles are the rules of the road, and the lifecycle is your GPS."
+        text: "So, the principles tell you the what. But the six ODF stages are the how. Think of it: principles are the rules of the road, and the ODF delivery stages are your GPS.",
+        text_ssml: "<speak>So, the principles tell you the what. But the six ODF stages are the <emphasis level=\"moderate\">how</emphasis>. Think of it: principles are the rules of the road, and the ODF delivery stages are your GPS.</speak>",
+        text_expressive: "So, the principles tell you the what. But the six ODF stages are the how. Think of it: principles are the rules of the road, and the ODF delivery stages are your GPS."
       },
       {
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "confident",
-        text: "We go from Intent, to Orchestrate, to Generate, to Validate, to Evolve, and finally Deploy. This is not a straight line, it's a loop.",
-        text_ssml: "<speak>We go from Intent, to Orchestrate, to Generate, to Validate, to Evolve, and finally Deploy. This is <emphasis level=\"moderate\">not</emphasis> a straight line, it's a loop.</speak>",
-        text_expressive: "We go from Intent, to Orchestrate, to Generate, to Validate, to Evolve, and finally Deploy. This is not a straight line, it's a loop."
+        text: "We go through Intent and Outcome Definition, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and QA, and finally Deployment and Improvement. Not a straight line — a delivery loop.",
+        text_ssml: "<speak>We go through <emphasis level=\"moderate\">Intent and Outcome</emphasis>, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and Q A, and finally Deployment and Improvement. Not a straight line — a delivery loop.</speak>",
+        text_expressive: "We go through Intent and Outcome Definition, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and QA, and finally Deployment and Improvement. Not a straight line — a delivery loop."
       },
       {
         speaker: "Sara",
@@ -382,108 +382,109 @@ genzData.slides.push(
   {
     slide_id: "slide_06",
     type: "competencies",
-    title: "The Six-Stage Lifecycle",
-    subtitle: "Your GPS for every feature, every engagement, every day",
+    title: "The ODF — Six Delivery Stages",
+    subtitle: "The OrchestrAI Delivery Framework: your GPS for every project, every feature, every day",
     icon: "route",
-    visual_cue: "circular_lifecycle_loop_with_arrows",
+    visual_cue: "odf_six_stage_delivery_loop",
     analogy: {
       title: "GPS Navigation, Not a Printed Map",
-      text: "A printed map gives you the route once and hopes you don't miss a turn. A GPS recalculates in real time. The OrchestrAI lifecycle is a GPS — it loops, it adapts, and it's always recalculating based on where you actually are, not where the plan said you'd be."
+      text: "A printed map gives you the route once and hopes you don't miss a turn. A GPS recalculates in real time based on where you actually are. The ODF works exactly like that — it loops, adapts, and always recalculates based on real delivery progress, not where a plan said you'd be."
     },
     list: [
-      { name: "INTENT", icon: "target", desc: "Define what you're building with surgical precision. This is where P.R.O.M.P.T. from Module 1 meets enterprise requirements." },
-      { name: "ORCHESTRATE", icon: "git-branch", desc: "Map the dependency graph. What needs to exist first? Which components, in what order, with what API contracts?" },
-      { name: "GENERATE", icon: "wand-2", desc: "AI builds. You direct. One focused prompt per component — not one giant prompt for the whole system." },
-      { name: "VALIDATE", icon: "shield-check", desc: "Systematic check against acceptance criteria. Not a vibe check — a checklist." },
-      { name: "EVOLVE", icon: "repeat", desc: "Stakeholder feedback → new intent → re-generate → re-validate. Same session, not next sprint." },
-      { name: "DEPLOY", icon: "rocket", desc: "Continuous, governed, documented, reversible. Not a 'project-end event' — a daily activity." }
+      { name: "01 — Intent & Outcome Definition", icon: "target", desc: "Define the business goal in one clear sentence. Identify stakeholders, success metrics, and the specific problem being solved. Precision here prevents all downstream drift." },
+      { name: "02 — Requirements & Context", icon: "file-text", desc: "Capture all business needs, constraints, technical context, and boundaries. AI cannot design well without full context — this stage makes that context explicit and complete." },
+      { name: "03 — AI-Assisted Design", icon: "cpu", desc: "AI generates the architecture, solution designs, data models, and API contracts. The Lead reviews and approves. AI doesn't just code — it designs the blueprint first." },
+      { name: "04 — AI-Generated Development", icon: "wand-2", desc: "AI accelerates the actual coding — frontend, backend, APIs, integrations. One focused prompt per component, validated before the next one begins." },
+      { name: "05 — Testing & Quality Assurance", icon: "shield-check", desc: "AI-assisted and human-led validation. Every acceptance criterion tested. Security, data isolation, edge cases, and error handling — all verified systematically. Not a vibe check — a gate." },
+      { name: "06 — Deployment & Improvement", icon: "rocket", desc: "Deliver rapidly and continuously evolve. Deploy to staging then production. Every release is documented, tested, and reversible. Stakeholder feedback triggers the next improvement loop." }
     ],
-    memory_hook: "I-O-G-V-E-D. Intent, Orchestrate, Generate, Validate, Evolve, Deploy. Loop it.",
-    narration: "Here's the full loop: I-O-G-V-E-D. Intent, Orchestrate, Generate, Validate, Evolve, Deploy. It starts with Intent: defining requirements with surgical precision. Next is Orchestrate: mapping the dependency order. Then Generate: writing one prompt per component. Validate is where we check it against a hard checklist. Evolve is the same-session loop where we iterate on stakeholder feedback. And Deploy is the daily shipping. It is recalculating in real-time, just like a GPS.",
-    estimated_duration_seconds: 115,
+    memory_hook: "ODF: Intent → Requirements → AI Design → AI Dev → Testing & QA → Deploy & Improve. Six stages, one delivery loop.",
+    narration: "Here's the full ODF — six stages, one delivery loop. Stage One: Intent and Outcome Definition — define the goal with precision. Stage Two: Requirements and Context — capture everything AI needs to design well. Stage Three: AI-Assisted Design — AI generates the architecture before a single line of code is written. Stage Four: AI-Generated Development — AI builds the feature, component by component. Stage Five: Testing and Quality Assurance — AI-plus-human validation against a hard checklist. Stage Six: Deployment and Improvement — ship fast, document everything, and use feedback to start the next loop.",
+    estimated_duration_seconds: 120,
     narration_script: [
       {
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "explaining",
-        text: "Here's the full loop: I-O-G-V-E-D. Intent, Orchestrate, Generate, Validate, Evolve, Deploy.",
-        text_ssml: "<speak>Here's the full loop: <emphasis level=\"strong\">I O G V E D</emphasis>. Intent, Orchestrate, Generate, Validate, Evolve, Deploy.</speak>",
-        text_expressive: "Here's the full loop: I-O-G-V-E-D. Intent, Orchestrate, Generate, Validate, Evolve, Deploy."
+        text: "Here's the full ODF — six delivery stages, one continuous loop. Let's break them down.",
+        text_ssml: "<speak>Here's the full <emphasis level=\"strong\">ODF</emphasis> — six delivery stages, one continuous loop. Let's break them down.</speak>",
+        text_expressive: "Here's the full ODF — six delivery stages, one continuous loop. Let's break them down."
       },
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "confident",
-        text: "It starts with Intent: defining requirements with surgical precision. Next is Orchestrate: mapping the dependency order.",
-        text_ssml: "<speak>It starts with <emphasis level=\"moderate\">Intent</emphasis>: defining requirements with surgical precision. Next is <emphasis level=\"moderate\">Orchestrate</emphasis>: mapping the dependency order.</speak>",
-        text_expressive: "It starts with Intent: defining requirements with surgical precision. Next is Orchestrate: mapping the dependency order."
+        text: "Stage One: Intent and Outcome Definition — define the goal with precision. Stage Two: Requirements and Context — capture everything AI needs to design well.",
+        text_ssml: "<speak>Stage One: <emphasis level=\"moderate\">Intent and Outcome Definition</emphasis> — define the goal with precision. Stage Two: <emphasis level=\"moderate\">Requirements and Context</emphasis> — capture everything AI needs to design well.</speak>",
+        text_expressive: "Stage One: Intent and Outcome Definition — define the goal with precision. Stage Two: Requirements and Context — capture everything AI needs to design well."
       },
       {
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "casual",
-        text: "Then Generate: writing one prompt per component. Validate is where we check it against a hard checklist.",
-        text_ssml: "<speak>Then <emphasis level=\"moderate\">Generate</emphasis>: writing one prompt per component. <emphasis level=\"moderate\">Validate</emphasis> is where we check it against a hard checklist.</speak>",
-        text_expressive: "Then Generate: writing one prompt per component. Validate is where we check it against a hard checklist."
+        text: "Stage Three: AI-Assisted Design — AI generates the architecture before a single line of code is written. Stage Four: AI-Generated Development — AI builds the feature, component by component.",
+        text_ssml: "<speak>Stage Three: <emphasis level=\"moderate\">AI-Assisted Design</emphasis> — AI generates the architecture before a single line of code is written. Stage Four: <emphasis level=\"moderate\">AI-Generated Development</emphasis> — AI builds the feature, component by component.</speak>",
+        text_expressive: "Stage Three: AI-Assisted Design — AI generates the architecture before a single line of code is written. Stage Four: AI-Generated Development — AI builds the feature, component by component."
       },
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "upbeat",
-        text: "Evolve is the same-session loop where we iterate on stakeholder feedback. And Deploy is the daily shipping. It is recalculating in real-time, just like a GPS.",
-        text_ssml: "<speak>Evolve is the same-session loop where we iterate on stakeholder feedback. And <emphasis level=\"moderate\">Deploy</emphasis> is the daily shipping. It is recalculating in real-time, just like a GPS.</speak>",
-        text_expressive: "Evolve is the same-session loop where we iterate on stakeholder feedback. And Deploy is the daily shipping. It is recalculating in real-time, just like a GPS."
+        text: "Stage Five: Testing and Quality Assurance — AI-plus-human validation against a hard checklist. Stage Six: Deployment and Improvement — ship fast, document everything, and loop back for the next cycle.",
+        text_ssml: "<speak>Stage Five: <emphasis level=\"moderate\">Testing and Quality Assurance</emphasis> — AI-plus-human validation against a hard checklist. Stage Six: <emphasis level=\"moderate\">Deployment and Improvement</emphasis> — ship fast, document everything, and loop back for the next cycle.</speak>",
+        text_expressive: "Stage Five: Testing and Quality Assurance — AI-plus-human validation against a hard checklist. Stage Six: Deployment and Improvement — ship fast, document everything, and loop back for the next cycle."
       }
     ]
   },
   {
     slide_id: "slide_07",
     type: "welcome",
-    title: "Stage 1: INTENT — The Foundation of Everything",
-    subtitle: "Poorly defined intent = drifted AI output. Every time.",
+    title: "ODF Stage 01: Intent & Outcome Definition",
+    subtitle: "Define goals, success metrics, and stakeholders — before AI touches anything",
     icon: "target",
     visual_cue: "blueprint_foundation_animation",
     analogy: {
       title: "Foundation of a Building",
-      text: "Nobody sees the foundation of a skyscraper. But every millimeter it's off at the base becomes a meter off at the top. Intent is your foundation — get it wrong, and everything generated on top of it drifts."
+      text: "Nobody sees the foundation of a skyscraper. But every millimeter it's off at the base becomes a meter off at the top. Intent and Outcome Definition is your foundation — get it wrong, and everything AI generates on top of it drifts."
     },
     bullets: [
-      "Capture the outcome in ONE clear sentence — what working behaviour should exist that doesn't exist today?",
-      "List ALL user roles and what each can and can't do",
-      "Enumerate EVERY validation rule — what makes input valid or invalid?",
+      "Define the business GOAL in ONE clear sentence — what outcome should exist that doesn't exist today?",
+      "Identify ALL stakeholders — who is affected, who needs access, who approves?",
+      "Define SUCCESS METRICS — how will you know when it's done and working correctly?",
+      "List ALL validation rules — what makes input valid or invalid?",
       "State ALL security constraints — who accesses what, enforced where?",
-      "Define acceptance signals — how will you KNOW it's correct?",
-      "List known edge cases — what happens at boundaries, on errors, on empty states?",
-      "Specify technology context — Stack & Patterns"
+      "Define acceptance signals — explicit, testable criteria for each goal",
+      "List known edge cases — boundary conditions, error states, empty states",
+      "Specify technology context — Stack & Patterns the AI must follow"
     ],
-    closing_thread: "And yeah — that list? Those are the eight components of a perfect intent statement. Remember P.R.O.M.P.T. from Module 1? This is P.R.O.M.P.T.'s big sibling.",
-    memory_hook: "Vague intent = drifted output. Precise intent = precise output. Every. Single. Time.",
-    narration: "Let's zoom into Stage 1: Intent. If the intent is off by even a millimeter, the generated output drifts by a mile. You have to specify the outcome in one sentence, define the roles, validation rules, security constraints, acceptance signals, and edge cases. In other words, you need structured intent. Think of this as the eight-component framework — it's basically the big sibling of the P.R.O.M.P.T. formula we learned last module.",
+    closing_thread: "This is Stage 01 done right. It feeds directly into Stage 02: Requirements & Context.",
+    memory_hook: "Vague intent = drifted AI output. Precise intent & outcome definition = precise delivery. Every. Single. Time.",
+    narration: "Let's zoom into ODF Stage One: Intent and Outcome Definition. If you define the goal poorly, everything AI generates will drift from what the business actually needed. You must define the goal in one sentence, identify stakeholders and their roles, set success metrics, list validation rules, state security constraints, and enumerate edge cases. This structured intent is the eight-component framework — it's the big sibling of the P.R.O.M.P.T. formula from Module 1, scaled for real delivery.",
     estimated_duration_seconds: 110,
     narration_script: [
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "earnest",
-        text: "Let's zoom into Stage 1: Intent. If the intent is off by even a millimeter, the generated output drifts by a mile.",
-        text_ssml: "<speak>Let's zoom into Stage 1: Intent. If the intent is off by <emphasis level=\"moderate\">even a millimeter</emphasis>, the generated output drifts by a mile.</speak>",
-        text_expressive: "Let's zoom into Stage 1: Intent. If the intent is off by even a millimeter, the generated output drifts by a mile."
+        text: "ODF Stage One: Intent and Outcome Definition. Get this wrong, and everything AI generates will drift — by a lot.",
+        text_ssml: "<speak>ODF Stage One: <emphasis level=\"moderate\">Intent and Outcome Definition</emphasis>. Get this wrong, and everything AI generates will drift — by a lot.</speak>",
+        text_expressive: "ODF Stage One: Intent and Outcome Definition. Get this wrong, and everything AI generates will drift — by a lot."
       },
       {
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "explaining",
-        text: "You have to specify the outcome in one sentence, define the roles, validation rules, security constraints, acceptance signals, and edge cases.",
-        text_ssml: "<speak>You have to specify the outcome in one sentence, define the roles, validation rules, security constraints, acceptance signals, and edge cases.</speak>",
-        text_expressive: "You have to specify the outcome in one sentence, define the roles, validation rules, security constraints, acceptance signals, and edge cases."
+        text: "Define the goal in one sentence. Identify stakeholders and their roles. Set success metrics. List validation rules, security constraints, and edge cases. All of it — before AI starts.",
+        text_ssml: "<speak>Define the goal in one sentence. Identify stakeholders and their roles. Set success metrics. List validation rules, security constraints, and edge cases. <emphasis level=\"moderate\">All of it</emphasis> — before AI starts.</speak>",
+        text_expressive: "Define the goal in one sentence. Identify stakeholders and their roles. Set success metrics. List validation rules, security constraints, and edge cases. All of it — before AI starts."
       },
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "upbeat",
-        text: "In other words, you need structured intent. Think of this as the eight-component framework — it's basically the big sibling of the P.R.O.M.P.T. formula we learned last module.",
-        text_ssml: "<speak>In other words, you need <emphasis level=\"moderate\">structured intent</emphasis>. Think of this as the eight-component framework — it's basically the big sibling of the P.R.O.M.P.T. formula we learned last module.</speak>",
-        text_expressive: "In other words, you need structured intent. Think of this as the eight-component framework — it's basically the big sibling of the P.R.O.M.P.T. formula we learned last module."
+        text: "This is the eight-component structured intent framework — P.R.O.M.P.T.'s big sibling, scaled for real delivery.",
+        text_ssml: "<speak>This is the <emphasis level=\"moderate\">eight-component structured intent framework</emphasis> — P.R.O.M.P.T.'s big sibling, scaled for real delivery.</speak>",
+        text_expressive: "This is the eight-component structured intent framework — P.R.O.M.P.T.'s big sibling, scaled for real delivery."
       }
     ]
   },
@@ -547,97 +548,98 @@ genzData.slides.push(
   {
     slide_id: "slide_09",
     type: "competencies",
-    title: "Stage 2: ORCHESTRATE — Mapping the Build Order",
-    subtitle: "What depends on what, in what order",
-    icon: "git-branch",
-    visual_cue: "dependency_critical_path",
+    title: "ODF Stage 02: Requirements & Context",
+    subtitle: "Capture everything AI needs — before design begins",
+    icon: "file-text",
+    visual_cue: "requirements_context_capture_animation",
     analogy: {
-      title: "IKEA Assembly, Not Freeform Art",
-      text: "You don't start IKEA furniture with the door handles. You start with the frame, because everything attaches to it. Orchestration is figuring out the assembly order before you open the first packet."
+      title: "Briefing the Architect",
+      text: "An architect doesn't start drawing walls before understanding the full client brief. You don't just say 'build me a house.' You describe the family's needs, the budget, the land constraints, local regulations. Stage 02 is that full brief — so AI can design accurately, not approximately."
     },
     list: [
-      { name: "Dependency Graph", icon: "network", desc: "What must exist before this feature can be built? Auth before user profiles. Database before API. API before UI." },
-      { name: "Reusable Components", icon: "copy", desc: "What already exists in the codebase? Don't regenerate what works — assemble from proven patterns." },
-      { name: "API Contract", icon: "file-json", desc: "What endpoints? What request/response shapes? What auth guards? Define before generation, not after." },
-      { name: "Data Model", icon: "database", desc: "New tables, columns, relationships, indices, constraints — all mapped before a single prompt fires." },
-      { name: "Cross-Cutting Concerns", icon: "layers", desc: "Logging, error handling patterns, naming conventions. These apply everywhere — specify once, enforce always." }
+      { name: "Business Needs", icon: "briefcase", desc: "What problem is the business actually solving? Document it from the stakeholder's perspective — not in tech jargon, but in business outcomes." },
+      { name: "Constraints & Boundaries", icon: "shield-alert", desc: "Budget, timeline, regulatory limits, existing system constraints — what limits the solution? Document every boundary AI must work within." },
+      { name: "Technical Context", icon: "code-2", desc: "Current tech stack, existing systems, APIs to integrate with, data sources available. This is what enables AI to design inside your real environment." },
+      { name: "Acceptance Criteria", icon: "check-circle", desc: "How will success be measured? These become the test cases in Stage 05. If you can't test it, it's not a real requirement." },
+      { name: "Non-Functional Requirements", icon: "layers", desc: "Performance targets, security standards, accessibility, scalability expectations — all documented before AI designs a single component." }
     ],
-    memory_hook: "Orchestrate = assembly instructions before generation. IKEA, not abstract art.",
-    narration: "Stage 2 is Orchestrate. Before you touch AI, you map out the assembly plan. Like IKEA furniture, you don't start with the door handles — you need the frame. We map the dependency graph: database schema first, then service layer, then API, then UI. We reuse existing components, lock in the API contracts, define the data model, and set cross-cutting concerns like logging. It is all about planning the build order.",
+    memory_hook: "Requirements & Context = everything AI needs to design accurately. Incomplete context = wrong design.",
+    narration: "ODF Stage Two is Requirements and Context. Before AI can design anything, it needs complete context. Think of it like briefing an architect — you don't say 'build me a house' and walk away. You describe every constraint: the budget, the site, the family's needs, local regulations. In ODF, we document the full business problem, all constraints, the current tech landscape, and the acceptance criteria that define done. This is what enables AI to design accurately in Stage Three.",
     estimated_duration_seconds: 105,
     narration_script: [
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "explaining",
-        text: "Stage 2 is Orchestrate. Before you touch AI, you map out the assembly plan. Like IKEA furniture, you don't start with the door handles — you need the frame.",
-        text_ssml: "<speak>Stage 2 is <emphasis level=\"moderate\">Orchestrate</emphasis>. Before you touch A I, you map out the assembly plan. Like I K E A furniture, you don't start with the door handles — you need the frame.</speak>",
-        text_expressive: "Stage 2 is Orchestrate. Before you touch AI, you map out the assembly plan. Like IKEA furniture, you don't start with the door handles — you need the frame."
+        text: "ODF Stage Two: Requirements and Context. Before AI designs anything, it needs complete context. Think of briefing an architect — you don't just say 'build me a house' and walk away.",
+        text_ssml: "<speak>ODF Stage Two: <emphasis level=\"moderate\">Requirements and Context</emphasis>. Before AI designs anything, it needs complete context. Think of briefing an architect — you don't just say 'build me a house' and walk away.</speak>",
+        text_expressive: "ODF Stage Two: Requirements and Context. Before AI designs anything, it needs complete context. Think of briefing an architect — you don't just say 'build me a house' and walk away."
       },
       {
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "confident",
-        text: "We map the dependency graph: database schema first, then service layer, then API, then UI. We reuse existing components, lock in the API contracts, define the data model, and set cross-cutting concerns.",
-        text_ssml: "<speak>We map the dependency graph: database schema first, then service layer, then A P I, then U I. We reuse existing components, lock in the A P I contracts, define the data model, and set cross-cutting concerns.</speak>",
-        text_expressive: "We map the dependency graph: database schema first, then service layer, then API, then UI. We reuse existing components, lock in the API contracts, define the data model, and set cross-cutting concerns."
+        text: "We document the full business problem, all constraints, the current tech landscape, and the acceptance criteria that define done.",
+        text_ssml: "<speak>We document the full business problem, all constraints, the current tech landscape, and the <emphasis level=\"moderate\">acceptance criteria</emphasis> that define done.</speak>",
+        text_expressive: "We document the full business problem, all constraints, the current tech landscape, and the acceptance criteria that define done."
       },
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "upbeat",
-        text: "It is all about planning the build order.",
-        text_ssml: "<speak>It is all about <emphasis level=\"moderate\">planning</emphasis> the build order.</speak>",
-        text_expressive: "It is all about planning the build order."
+        text: "This is what enables AI to design accurately in Stage Three. Incomplete context equals wrong design. Every time.",
+        text_ssml: "<speak>This is what enables AI to design accurately in Stage Three. <emphasis level=\"moderate\">Incomplete context equals wrong design.</emphasis> Every time.</speak>",
+        text_expressive: "This is what enables AI to design accurately in Stage Three. Incomplete context equals wrong design. Every time."
       }
     ]
   },
   {
     slide_id: "slide_10",
     type: "welcome",
-    title: "Stage 3: GENERATE — AI Builds, You Direct",
-    subtitle: "Active direction, not passive waiting",
-    icon: "wand-2",
-    visual_cue: "ai_generation_with_human_directing",
+    title: "ODF Stage 03: AI-Assisted Design",
+    subtitle: "AI generates the architecture before a single line of code is written",
+    icon: "cpu",
+    visual_cue: "ai_architecture_design_blueprint",
     analogy: {
-      title: "Air Traffic Controller, Not Passenger",
-      text: "A passenger sits back and trusts the system. An air traffic controller watches every approach, intervenes when needed, and never assumes everything's fine just because nothing's blinking red. During generation, you're the controller."
+      title: "Lead Architect, Not Just a Contractor",
+      text: "A contractor executes construction from blueprints. An architect creates the blueprints. In ODF Stage 03, AI acts as the lead architect — generating system architecture, data models, API contracts, and the solution design blueprint. The Lead reviews and approves before any development begins."
     },
     bullets: [
-      "One focused prompt per component. NOT one mega-prompt for the entire system.",
-      "Always include context: existing code patterns, naming conventions, stack version.",
-      "Review output IMMEDIATELY — don't queue multiple generations before validating the first.",
-      "If AI deviates, correct with a targeted constraint prompt. Never accept and fix manually.",
-      "Never accept code you can't explain. If you can't explain it, you can't validate it."
+      "AI generates the SYSTEM ARCHITECTURE — component structure, services, dependency map",
+      "AI designs DATA MODELS: tables, relationships, constraints, indexes — before any coding",
+      "AI defines API CONTRACTS: endpoints, request/response shapes, authentication guards",
+      "Lead REVIEWS and APPROVES the design blueprint before Stage 04 begins",
+      "Design decisions are DOCUMENTED — why this architecture, why this data model",
+      "NEVER skip this stage: code built without a reviewed design requires expensive refactoring"
     ],
-    closing_thread: "Generated? Great. Now comes the real job — validation.",
-    memory_hook: "Generate = one prompt, one component, one validation. Never batch.",
-    narration: "Stage 3 is Generate. You are the air traffic controller, not the passenger. You watch the AI build and intervene immediately if it drifts. We write one focused prompt per component — never a mega-prompt. We review the output immediately, and if the AI deviates, we prompt again. We never, ever write manual fixes or accept code we can't explain.",
-    estimated_duration_seconds: 105,
+    closing_thread: "Design approved? Now we build. Stage 04: AI-Generated Development.",
+    memory_hook: "AI Designs First. Lead Approves. Then development begins. Not the other way around.",
+    narration: "ODF Stage Three is AI-Assisted Design. And this is where ODF changes the game. Before writing a single line of code, AI generates the architecture. It designs the component structure, the data model, the API contracts — all from your Stage Two requirements. You review it. You approve it. You refine it. Only then does development begin. This is what separates ODF from just using AI as a faster typist — AI doesn't just code. It designs first.",
+    estimated_duration_seconds: 110,
     narration_script: [
       {
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "explaining",
-        text: "Stage 3 is Generate. You are the air traffic controller, not the passenger. You watch the AI build and intervene immediately if it drifts.",
-        text_ssml: "<speak>Stage 3 is <emphasis level=\"moderate\">Generate</emphasis>. You are the air traffic controller, not the passenger. You watch the A I build and intervene immediately if it drifts.</speak>",
-        text_expressive: "Stage 3 is Generate. You are the air traffic controller, not the passenger. You watch the AI build and intervene immediately if it drifts."
+        text: "ODF Stage Three: AI-Assisted Design. Before a single line of code is written, AI designs the architecture. That's right — AI is the lead architect here.",
+        text_ssml: "<speak>ODF Stage Three: <emphasis level=\"strong\">AI-Assisted Design</emphasis>. Before a single line of code is written, AI designs the architecture. That's right — AI is the lead architect here.</speak>",
+        text_expressive: "ODF Stage Three: AI-Assisted Design. Before a single line of code is written, AI designs the architecture. That's right — AI is the lead architect here."
       },
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "earnest",
-        text: "We write one focused prompt per component — never a mega-prompt. We review the output immediately, and if the AI deviates, we prompt again.",
-        text_ssml: "<speak>We write <emphasis level=\"moderate\">one focused prompt</emphasis> per component — never a mega-prompt. We review the output immediately, and if the A I deviates, we prompt again.</speak>",
-        text_expressive: "We write one focused prompt per component — never a mega-prompt. We review the output immediately, and if the AI deviates, we prompt again."
+        text: "AI generates the component structure, the data model, the API contracts — all from your Stage Two requirements. You review it, approve it, and refine it.",
+        text_ssml: "<speak>AI generates the component structure, the data model, the A P I contracts — all from your Stage Two requirements. You <emphasis level=\"moderate\">review it, approve it</emphasis>, and refine it.</speak>",
+        text_expressive: "AI generates the component structure, the data model, the API contracts — all from your Stage Two requirements. You review it, approve it, and refine it."
       },
       {
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "confident",
-        text: "We never, ever write manual fixes or accept code we can't explain.",
-        text_ssml: "<speak>We <emphasis level=\"strong\">never, ever</emphasis> write manual fixes or accept code we can't explain.</speak>",
-        text_expressive: "[emphatic] We never, ever write manual fixes or accept code we can't explain."
+        text: "This is what separates ODF from just using AI as a faster typist. AI doesn't just code. It designs first.",
+        text_ssml: "<speak>This is what separates ODF from just using A I as a faster typist. A I doesn't just code. It <emphasis level=\"strong\">designs first</emphasis>.</speak>",
+        text_expressive: "[emphatic] This is what separates ODF from just using AI as a faster typist. AI doesn't just code. It designs first."
       }
     ]
   },
@@ -671,54 +673,46 @@ genzData.slides.push(
   {
     slide_id: "slide_11",
     type: "competencies",
-    title: "Validate → Evolve → Deploy",
-    subtitle: "The back half of the loop — where quality gets proven",
+    title: "ODF Stages 04-05-06: Build, Test & Deploy",
+    subtitle: "AI builds it, humans verify it, the team ships it — and the loop continues",
     icon: "check-circle",
-    visual_cue: "validate_evolve_deploy_stages",
+    visual_cue: "odf_stages_04_05_06_pipeline",
     analogy: {
-      title: "Test Drive, Tune-Up, Road Trip",
-      text: "Validate = the test drive (does it actually work?). Evolve = the tune-up (stakeholder says 'this is great, but can we also...?'). Deploy = the road trip (it's live, governed, and has a U-turn option if needed)."
+      title: "Formula One Pit Stop",
+      text: "A Formula One pit stop has mechanics who each play a precise role. Stage 04: AI generates the code at speed. Stage 05: QA engineers check every bolt systematically. Stage 06: the car returns to track — and the team uses what they learned to improve the next lap."
     },
     list: [
-      { name: "VALIDATE — The Checklist, Not the Vibe", icon: "clipboard-check", desc: "Check every acceptance criterion explicitly. Functional, security, data isolation, error handling, edge cases, documentation. If it's not on the checklist, it's not validated." },
-      { name: "EVOLVE — Same-Session Enhancement", icon: "repeat", desc: "Stakeholder sees it in the demo → gives feedback → you reshape intent → AI regenerates → you revalidate. Hours, not sprints." },
-      { name: "DEPLOY — Continuous, Not Ceremonial", icon: "rocket", desc: "Deploy to staging when validated. Deploy to production when quality threshold met. Every deployment documented, tested, reversible." }
+      { name: "04 — AI-Generated Development", icon: "wand-2", desc: "AI accelerates actual coding — frontend, backend, APIs, integrations — under active Lead supervision. One focused prompt per component, reviewed before the next begins. Never accept code you cannot fully explain." },
+      { name: "05 — Testing & Quality Assurance", icon: "clipboard-check", desc: "AI-assisted and human-led validation against a systematic checklist. Functional correctness, security, data isolation, error handling, edge cases — all verified. Not a vibe check — a hard gate before deployment." },
+      { name: "06 — Deployment & Improvement", icon: "rocket", desc: "Rapid, continuous delivery to staging then production. Every deployment is documented, tested, and reversible. Stakeholder feedback captured here triggers the next improvement loop — back to Stage 01." }
     ],
-    memory_hook: "Validate = checklist. Evolve = same-day fix. Deploy = governed go-live.",
-    narration: "Now for the back half of the loop: Validate, Evolve, Deploy. Validate is a hard checklist, not a vibe check. We check security, data isolation, and edge cases. Evolve is where we modify the intent based on feedback and re-generate. And Deploy is continuous and reversible — we deploy as a daily activity, not a project-end event. Think of it as: test drive, tune-up, and finally, the road trip.",
-    estimated_duration_seconds: 110,
+    memory_hook: "Build with AI. Test with precision. Deploy fast. Loop back. That's Stages 04-05-06.",
+    narration: "The final three ODF stages bring it home. Stage Four: AI-Generated Development. AI writes the actual code — backend, frontend, integrations — under your active supervision. One component, one prompt, one validation before the next begins. Stage Five: Testing and Quality Assurance. AI-plus-human validation against a hard checklist — security, data isolation, edge cases, all of it. Stage Six: Deployment and Improvement. Ship fast, document everything, and use stakeholder feedback to kick off the next improvement loop. That is the ODF in action.",
+    estimated_duration_seconds: 115,
     narration_script: [
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "explaining",
-        text: "Now for the back half of the loop: Validate, Evolve, Deploy.",
-        text_ssml: "<speak>Now for the back half of the loop: Validate, Evolve, Deploy.</speak>",
-        text_expressive: "Now for the back half of the loop: Validate, Evolve, Deploy."
+        text: "The final three ODF stages. Stage Four: AI-Generated Development. AI writes the actual code under your active supervision.",
+        text_ssml: "<speak>The final three ODF stages. Stage Four: <emphasis level=\"moderate\">AI-Generated Development</emphasis>. AI writes the actual code under your active supervision.</speak>",
+        text_expressive: "The final three ODF stages. Stage Four: AI-Generated Development. AI writes the actual code under your active supervision."
       },
       {
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "earnest",
-        text: "Validate is a hard checklist, not a vibe check. We check security, data isolation, and edge cases.",
-        text_ssml: "<speak>Validate is a <emphasis level=\"moderate\">hard checklist</emphasis>, not a vibe check. We check security, data isolation, and edge cases.</speak>",
-        text_expressive: "Validate is a hard checklist, not a vibe check. We check security, data isolation, and edge cases."
+        text: "Stage Five: Testing and Quality Assurance. AI-plus-human validation against a hard checklist. Security, data isolation, edge cases — all verified. Not a vibe check — a hard gate.",
+        text_ssml: "<speak>Stage Five: <emphasis level=\"moderate\">Testing and Quality Assurance</emphasis>. A I-plus-human validation against a hard checklist. Security, data isolation, edge cases — all verified. Not a vibe check — a <emphasis level=\"strong\">hard gate</emphasis>.</speak>",
+        text_expressive: "Stage Five: Testing and Quality Assurance. AI-plus-human validation against a hard checklist. Security, data isolation, edge cases — all verified. Not a vibe check — a hard gate."
       },
       {
         speaker: "Sara",
         voice: "female_genz",
-        emotion: "confident",
-        text: "Evolve is where we modify the intent based on feedback and re-generate. And Deploy is continuous and reversible.",
-        text_ssml: "<speak>Evolve is where we modify the intent based on feedback and re-generate. And Deploy is <emphasis level=\"moderate\">continuous and reversible</emphasis>.</speak>",
-        text_expressive: "Evolve is where we modify the intent based on feedback and re-generate. And Deploy is continuous and reversible."
-      },
-      {
-        speaker: "Arjun",
-        voice: "male_genz",
         emotion: "upbeat",
-        text: "We deploy as a daily activity, not a project-end event. Think of it as: test drive, tune-up, and finally, the road trip.",
-        text_ssml: "<speak>We deploy as a daily activity, not a project-end event. Think of it as: <emphasis level=\"moderate\">test drive, tune-up, and the road trip</emphasis>.</speak>",
-        text_expressive: "We deploy as a daily activity, not a project-end event. Think of it as: test drive, tune-up, and finally, the road trip."
+        text: "Stage Six: Deployment and Improvement. Ship fast, document everything, and use stakeholder feedback to kick off the next improvement loop. That is the ODF in action.",
+        text_ssml: "<speak>Stage Six: <emphasis level=\"moderate\">Deployment and Improvement</emphasis>. Ship fast, document everything, and use stakeholder feedback to kick off the next improvement loop. That is the ODF in action.</speak>",
+        text_expressive: "Stage Six: Deployment and Improvement. Ship fast, document everything, and use stakeholder feedback to kick off the next improvement loop. That is the ODF in action."
       }
     ]
   },
@@ -1030,12 +1024,12 @@ genzData.slides.push(
       text: "Cooking shows don't show you the recipe and say 'figure it out.' They show you the chef doing it — step by step, with commentary. That's what this slide is. One feature, full lifecycle, play by play."
     },
     timeline: [
-      { time: "09:00 AM", icon: "target", phase: "INTENT", desc: "Stakeholder says: 'We need employees to submit expenses.' You turn that into a full 8-component intent with 6 validation rules, 3 roles, and server-side enforcement." },
-      { time: "10:00 AM", icon: "git-branch", phase: "ORCHESTRATE", desc: "Expense table needs Employee table (exists). Approval workflow needs Manager role mapping (exists). Email service needs notification template (new)." },
-      { time: "10:30 AM", icon: "wand-2", phase: "GENERATE", desc: "Prompt 1: database migration. Prompt 2: service layer with business rules. Prompt 3: API endpoints with guards. Prompt 4: React form with validation. Each validated before next." },
-      { time: "11:30 AM", icon: "shield-check", phase: "VALIDATE", desc: "All 6 validation rules tested. Server-side enforcement confirmed. Manager can't see other teams' expenses. Error messages are clean. Edge cases covered." },
-      { time: "02:00 PM", icon: "repeat", phase: "EVOLVE", desc: "Demo at 11:30. Stakeholder: 'Can we add receipt photo upload?' → New intent item → generate → validate → done by 2 PM." },
-      { time: "04:30 PM", icon: "rocket", phase: "DEPLOY", desc: "Code committed with structured message. Docs auto-updated. Feature in client's QA by 4:30. Rollback plan documented." }
+      { time: "09:00 AM", icon: "target", phase: "INTENT & OUTCOME", desc: "Stakeholder says: 'We need employees to submit expenses.' You define the outcome in one sentence, identify 3 stakeholder roles, and list success metrics and acceptance criteria before AI touches anything." },
+      { time: "09:30 AM", icon: "file-text", phase: "REQUIREMENTS & CONTEXT", desc: "Document all business needs: 6 validation rules, expense categories, approval workflow, tech stack constraints. Full context captured so AI can design accurately." },
+      { time: "10:00 AM", icon: "cpu", phase: "AI-ASSISTED DESIGN", desc: "AI generates: ExpenseReport data model, API contracts for 4 endpoints, component architecture blueprint. Lead reviews and approves the design before development begins." },
+      { time: "10:30 AM", icon: "wand-2", phase: "AI-GENERATED DEV", desc: "Prompt 1: DB migrations. Prompt 2: service layer with business rules. Prompt 3: API endpoints with guards. Prompt 4: React form with validation. Each validated before next." },
+      { time: "11:30 AM", icon: "shield-check", phase: "TESTING & QA", desc: "All 6 validation rules tested. Server-side enforcement confirmed. Manager can't see other teams' expenses. Error messages clean. Edge cases covered. Gate passed." },
+      { time: "04:30 PM", icon: "rocket", phase: "DEPLOY & IMPROVE", desc: "Deployed to staging. Demo at 2PM — stakeholder requests receipt upload. New requirement captured, loop restarts at Stage 01. Feature live by 4:30 with improvement queued." }
     ],
     memory_hook: "One feature, six stages, one day. That's the loop in action.",
     narration: "Let's watch a day in the life of a feature. At nine AM, we capture the Intent for an expense submission feature. At ten AM, we Orchestrate: checking dependencies and planning migrations. At ten-thirty, we Generate the code step-by-step. By eleven-thirty, we Validate: running our checklist and isolation tests. At two PM, we Evolve the feature after stakeholder feedback (adding receipt uploads). And by four-thirty, we Deploy to staging with auto-generated docs. That is the loop in action.",
@@ -1133,14 +1127,14 @@ genzData.slides.push(
     visual_cue: "recap_board_summary",
     bullets: [
       "Six principles govern every engagement. Break one, it's not OrchestrAI.",
-      "The lifecycle is a loop, not a line: Intent → Orchestrate → Generate → Validate → Evolve → Deploy.",
-      "Intent is the foundation — eight components, all eight, every time.",
-      "Validation is a systematic checklist, not a vibe check.",
+      "The ODF is a loop, not a line: Intent & Outcome → Requirements & Context → AI-Assisted Design → AI-Generated Development → Testing & QA → Deployment & Improvement.",
+      "Intent & Outcome Definition is the foundation — eight components, all eight, every time.",
+      "Testing & Quality Assurance is a systematic checklist, not a vibe check.",
       "Documentation lives alongside the code — generated, not written after."
     ],
     closing_thread: "Quiz time. Ten questions, 80% to pass, Module 3 unlocks.",
-    memory_hook: "Principles. Loop. Intent. Checklist. Living docs. Five words, whole module.",
-    narration: "Time to recap. If you remember nothing else from this module, remember these five. First: six principles govern everything. Break one? It's not OrchestrAI. Second: the lifecycle is a loop: I-O-G-V-E-D. Third: intent is the foundation — eight components, all eight, every time. Fourth: validation is a checklist, not a vibe. Fifth: documentation lives alongside code. Quiz time. Ten questions, eighty percent to pass. Let's do it.",
+    memory_hook: "Principles. ODF Loop. Intent & Outcome. Checklist. Living docs. Five things, whole module.",
+    narration: "Time to recap. If you remember nothing else from this module, remember these five. First: six principles govern everything. Break one? It's not OrchestrAI. Second: the ODF is a loop — Intent and Outcome, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and QA, Deployment and Improvement. Third: Intent and Outcome Definition is the foundation — eight components, all eight, every time. Fourth: Testing and QA is a checklist, not a vibe. Fifth: documentation lives alongside code. Quiz time. Ten questions, eighty percent to pass. Let's do it.",
     estimated_duration_seconds: 90,
     narration_script: [
       {
@@ -1155,17 +1149,17 @@ genzData.slides.push(
         speaker: "Arjun",
         voice: "male_genz",
         emotion: "confident",
-        text: "First: six principles govern everything. Break one? It's not OrchestrAI. Second: the lifecycle is a loop: I-O-G-V-E-D.",
-        text_ssml: "<speak>First: six principles govern everything. Break one? It's not OrchestrAI. Second: the lifecycle is a loop: <emphasis level=\"moderate\">I O G V E D</emphasis>.</speak>",
-        text_expressive: "First: six principles govern everything. Break one? It's not OrchestrAI. Second: the lifecycle is a loop: I-O-G-V-E-D."
+        text: "First: six principles govern everything. Break one? It's not OrchestrAI. Second: the ODF is a loop — Intent and Outcome, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and QA, Deployment and Improvement.",
+        text_ssml: "<speak>First: six principles govern everything. Break one? It's not OrchestrAI. Second: the <emphasis level=\"moderate\">ODF is a loop</emphasis> — Intent and Outcome, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and QA, Deployment and Improvement.</speak>",
+        text_expressive: "First: six principles govern everything. Break one? It's not OrchestrAI. Second: the ODF is a loop — Intent and Outcome, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and QA, Deployment and Improvement."
       },
       {
         speaker: "Sara",
         voice: "female_genz",
         emotion: "upbeat",
-        text: "Third: intent is the foundation — eight components, all eight, every time. Fourth: validation is a checklist, not a vibe. Fifth: documentation lives alongside code.",
-        text_ssml: "<speak>Third: intent is the foundation — <emphasis level=\"moderate\">eight components</emphasis>, all eight, every time. Fourth: validation is a checklist, not a vibe. Fifth: documentation lives alongside code.</speak>",
-        text_expressive: "Third: intent is the foundation — eight components, all eight, every time. Fourth: validation is a checklist, not a vibe. Fifth: documentation lives alongside code."
+        text: "Third: Intent and Outcome Definition is the foundation — eight components, all eight, every time. Fourth: Testing and QA is a checklist, not a vibe. Fifth: documentation lives alongside code.",
+        text_ssml: "<speak>Third: <emphasis level=\"moderate\">Intent and Outcome Definition</emphasis> is the foundation — eight components, all eight, every time. Fourth: Testing and QA is a checklist, not a vibe. Fifth: documentation lives alongside code.</speak>",
+        text_expressive: "Third: Intent and Outcome Definition is the foundation — eight components, all eight, every time. Fourth: Testing and QA is a checklist, not a vibe. Fifth: documentation lives alongside code."
       },
       {
         speaker: "Arjun",
@@ -1237,31 +1231,31 @@ genzData.slides.push(
       },
       {
         id: "q4",
-        category: "Lifecycle",
+        category: "ODF Stages",
         icon: "route",
-        question: "What is the correct order of the six lifecycle stages?",
+        question: "What is the correct order of the six ODF (OrchestrAI Delivery Framework) stages?",
         choices: [
-          "Intent -> Orchestrate -> Generate -> Validate -> Evolve -> Deploy",
-          "Orchestrate -> Intent -> Generate -> Validate -> Evolve -> Deploy",
-          "Intent -> Generate -> Orchestrate -> Validate -> Evolve -> Deploy",
-          "Intent -> Orchestrate -> Generate -> Evolve -> Validate -> Deploy"
+          "Intent & Outcome → Requirements & Context → AI-Assisted Design → AI-Generated Development → Testing & QA → Deployment & Improvement",
+          "Requirements & Context → Intent & Outcome → AI-Assisted Design → Testing & QA → AI-Generated Development → Deployment & Improvement",
+          "Intent & Outcome → AI-Assisted Design → Requirements & Context → AI-Generated Development → Testing & QA → Deployment & Improvement",
+          "Intent & Outcome → Requirements & Context → AI-Generated Development → AI-Assisted Design → Testing & QA → Deployment & Improvement"
         ],
-        correct_answer: "Intent -> Orchestrate -> Generate -> Validate -> Evolve -> Deploy",
-        explanation: "The lifecycle always starts with Intent, maps dependencies in Orchestrate, generates with AI, validates against checklist, evolves from feedback, and deploys daily."
+        correct_answer: "Intent & Outcome → Requirements & Context → AI-Assisted Design → AI-Generated Development → Testing & QA → Deployment & Improvement",
+        explanation: "The ODF always starts with Intent & Outcome Definition to set the goal, then Requirements & Context to inform AI, then AI-Assisted Design, AI-Generated Development, Testing & QA, and finally Deployment & Improvement — a continuous loop."
       },
       {
         id: "q5",
-        category: "Lifecycle",
-        icon: "git-branch",
-        question: "During the ORCHESTRATE stage, the Lead's primary job is to:",
+        category: "ODF Stages",
+        icon: "cpu",
+        question: "What does ODF Stage 03 (AI-Assisted Design) produce BEFORE any code is written?",
         choices: [
-          "Map the dependency graph and define the component build order",
-          "Write the code using AI",
-          "Test the UI for CSS bugs",
-          "Capture the initial business intent"
+          "System architecture, data models, and API contracts reviewed and approved by the Lead",
+          "The first working version of the frontend UI",
+          "A list of sprint tasks for the development team",
+          "A completed codebase ready for testing"
         ],
-        correct_answer: "Map the dependency graph and define the component build order",
-        explanation: "Orchestration is about laying out the dependency analysis and assembly sequence (database before service before API before UI)."
+        correct_answer: "System architecture, data models, and API contracts reviewed and approved by the Lead",
+        explanation: "In Stage 03 (AI-Assisted Design), AI generates the architecture blueprint — component structure, data models, API contracts — before a single line of code is written. The Lead reviews and approves before Stage 04 begins."
       },
       {
         id: "q6",
@@ -1782,33 +1776,33 @@ const formalAdaptations = {
     ]
   },
   slide_05: {
-    title: "Operationalizing the Principles: The Lifecycle",
-    subtitle: "Transitioning from rules to workflow execution",
-    reflection_prompt: "We have established the six core principles. However, principles require a process framework to execute. Are you ready to review the delivery lifecycle?",
+    title: "Operationalizing the Principles: The ODF Delivery Stages",
+    subtitle: "Transitioning from governance principles to the ODF execution workflow",
+    reflection_prompt: "We have established the six core principles. However, principles require a process framework to execute. Are you ready to review the OrchestrAI Delivery Framework stages?",
     bullets: [
       "Core Principles establish the governing constraints",
-      "The Lifecycle provides the execution framework",
-      "Process flow: INTENT -> ORCHESTRATE -> GENERATE -> VALIDATE -> EVOLVE -> DEPLOY",
-      "A continuous loop replacing linear agile methodologies"
+      "The ODF provides the execution process framework",
+      "Stage flow: 01 Intent & Outcome → 02 Requirements & Context → 03 AI-Assisted Design → 04 AI-Generated Development → 05 Testing & QA → 06 Deployment & Improvement",
+      "A continuous delivery loop replacing linear agile methodologies"
     ],
-    memory_hook: "Principles define the boundaries. The lifecycle defines the workflow.",
-    narration: "While principles define the operational boundaries, the lifecycle defines the execution process. Think of principles as the rules of the road, and the lifecycle as the navigation system. The process flows through six stages: Intent, Orchestrate, Generate, Validate, Evolve, and Deploy. This is a continuous loop, not a linear sequence. We will now examine each stage.",
+    memory_hook: "Principles define the boundaries. The ODF stages define the workflow.",
+    narration: "While principles define the operational boundaries, the ODF delivery stages define the execution process. Think of principles as the rules of the road, and the six ODF stages as the navigation system. The process flows through: Intent and Outcome Definition, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and Quality Assurance, and Deployment and Improvement. This is a continuous loop, not a linear sequence. We will now examine each stage.",
     narration_script: [
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "instructive",
-        text: "While principles define the operational boundaries, the lifecycle defines the execution process.",
-        text_ssml: "<speak>While principles define the operational boundaries, the lifecycle defines the <emphasis level=\"moderate\">execution process</emphasis>.</speak>",
-        text_expressive: "While principles define the operational boundaries, the lifecycle defines the execution process."
+        text: "While principles define the operational boundaries, the ODF delivery stages define the execution process.",
+        text_ssml: "<speak>While principles define the operational boundaries, the <emphasis level=\"moderate\">ODF delivery stages</emphasis> define the execution process.</speak>",
+        text_expressive: "While principles define the operational boundaries, the ODF delivery stages define the execution process."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Think of principles as the rules of the road, and the lifecycle as the navigation system. The process flows through six stages: Intent, Orchestrate, Generate, Validate, Evolve, and Deploy.",
-        text_ssml: "<speak>Think of principles as the rules of the road, and the lifecycle as the navigation system. The process flows through <emphasis level=\"moderate\">six stages</emphasis>: Intent, Orchestrate, Generate, Validate, Evolve, and Deploy.</speak>",
-        text_expressive: "Think of principles as the rules of the road, and the lifecycle as the navigation system. The process flows through six stages: Intent, Orchestrate, Generate, Validate, Evolve, and Deploy."
+        text: "The process flows through six stages: Intent and Outcome Definition, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and Quality Assurance, and Deployment and Improvement.",
+        text_ssml: "<speak>The process flows through <emphasis level=\"moderate\">six stages</emphasis>: Intent and Outcome Definition, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and Quality Assurance, and Deployment and Improvement.</speak>",
+        text_expressive: "The process flows through six stages: Intent and Outcome Definition, Requirements and Context, AI-Assisted Design, AI-Generated Development, Testing and Quality Assurance, and Deployment and Improvement."
       },
       {
         speaker: "Narrator",
@@ -1821,92 +1815,93 @@ const formalAdaptations = {
     ]
   },
   slide_06: {
-    title: "The Six-Stage Lifecycle",
-    subtitle: "The operating sequence for OrchestrAI engagements",
+    title: "The ODF — Six Delivery Stages",
+    subtitle: "The OrchestrAI Delivery Framework: the operating sequence for all engagements",
     analogy: {
       title: "Dynamic Process Models",
-      text: "A static delivery model follows a rigid sequence regardless of outcomes. A dynamic model, like a modern workflow router, shifts execution based on real-time feedback. The OrchestrAI lifecycle loops constantly to integrate feedback immediately."
+      text: "A static delivery model follows a rigid sequence regardless of outcomes. The ODF is dynamic — it loops constantly to integrate feedback and improve with every cycle. This is what enables AI-powered teams to outperform traditional project-based delivery."
     },
-    memory_hook: "I-O-G-V-E-D: Intent, Orchestrate, Generate, Validate, Evolve, Deploy. The engine of delivery.",
-    narration: "The delivery lifecycle contains six distinct stages. Stage one: Intent. This defines what is being built with high precision. Stage two: Orchestrate. This maps the dependency graph and API contracts. Stage three: Generate. The AI implements code under the Lead's supervision. Stage four: Validate. The code is tested against strict criteria. Stage five: Evolve. Feedback is rapidly integrated in the same session. Stage six: Deploy. Code is released continuously in a governed, auditable manner.",
+    memory_hook: "ODF: Intent & Outcome → Requirements & Context → AI-Assisted Design → AI-Generated Development → Testing & QA → Deployment & Improvement. The engine of delivery.",
+    narration: "The OrchestrAI Delivery Framework contains six distinct stages. Stage one: Intent and Outcome Definition. Define the business goal, stakeholders, and success metrics with precision. Stage two: Requirements and Context. Capture all business needs, constraints, and technical context so AI can design accurately. Stage three: AI-Assisted Design. AI generates the system architecture, data models, and API contracts for Lead review. Stage four: AI-Generated Development. AI accelerates coding under active supervision. Stage five: Testing and Quality Assurance. AI-assisted and human-led validation against a systematic checklist. Stage six: Deployment and Improvement. Rapid, governed deployment with continuous improvement loops.",
     narration_script: [
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "instructive",
-        text: "The delivery lifecycle contains six distinct stages.",
-        text_ssml: "<speak>The delivery lifecycle contains <emphasis level=\"moderate\">six distinct stages</emphasis>.</speak>",
-        text_expressive: "The delivery lifecycle contains six distinct stages."
+        text: "The OrchestrAI Delivery Framework contains six distinct stages.",
+        text_ssml: "<speak>The OrchestrAI Delivery Framework contains <emphasis level=\"moderate\">six distinct stages</emphasis>.</speak>",
+        text_expressive: "The OrchestrAI Delivery Framework contains six distinct stages."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Stage one: Intent. This defines what is being built with high precision. Stage two: Orchestrate. This maps the dependency graph and API contracts.",
-        text_ssml: "<speak>Stage one: <emphasis level=\"moderate\">Intent</emphasis>. This defines what is being built with high precision. Stage two: <emphasis level=\"moderate\">Orchestrate</emphasis>. This maps the dependency graph and API contracts.</speak>",
-        text_expressive: "Stage one: Intent. This defines what is being built with high precision. Stage two: Orchestrate. This maps the dependency graph and API contracts."
+        text: "Stage one: Intent and Outcome Definition. Define the business goal, stakeholders, and success metrics with precision. Stage two: Requirements and Context. Capture all business needs, constraints, and technical context so AI can design accurately.",
+        text_ssml: "<speak>Stage one: <emphasis level=\"moderate\">Intent and Outcome Definition</emphasis>. Define the business goal, stakeholders, and success metrics with precision. Stage two: <emphasis level=\"moderate\">Requirements and Context</emphasis>. Capture all business needs, constraints, and technical context so AI can design accurately.</speak>",
+        text_expressive: "Stage one: Intent and Outcome Definition. Define the business goal, stakeholders, and success metrics with precision. Stage two: Requirements and Context. Capture all business needs, constraints, and technical context so AI can design accurately."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Stage three: Generate. The AI implements code under the Lead's supervision. Stage four: Validate. The code is tested against strict criteria.",
-        text_ssml: "<speak>Stage three: <emphasis level=\"moderate\">Generate</emphasis>. The AI implements code under the Lead's supervision. Stage four: <emphasis level=\"moderate\">Validate</emphasis>. The code is tested against strict criteria.</speak>",
-        text_expressive: "Stage three: Generate. The AI implements code under the Lead's supervision. Stage four: Validate. The code is tested against strict criteria."
+        text: "Stage three: AI-Assisted Design. AI generates the system architecture, data models, and API contracts for Lead review. Stage four: AI-Generated Development. AI accelerates coding under active supervision.",
+        text_ssml: "<speak>Stage three: <emphasis level=\"moderate\">AI-Assisted Design</emphasis>. AI generates the system architecture, data models, and A P I contracts for Lead review. Stage four: <emphasis level=\"moderate\">AI-Generated Development</emphasis>. AI accelerates coding under active supervision.</speak>",
+        text_expressive: "Stage three: AI-Assisted Design. AI generates the system architecture, data models, and API contracts for Lead review. Stage four: AI-Generated Development. AI accelerates coding under active supervision."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Stage five: Evolve. Feedback is rapidly integrated in the same session. Stage six: Deploy. Code is released continuously in a governed, auditable manner.",
-        text_ssml: "<speak>Stage five: <emphasis level=\"moderate\">Evolve</emphasis>. Feedback is rapidly integrated in the same session. Stage six: <emphasis level=\"moderate\">Deploy</emphasis>. Code is released continuously in a governed, auditable manner.</speak>",
-        text_expressive: "Stage five: Evolve. Feedback is rapidly integrated in the same session. Stage six: Deploy. Code is released continuously in a governed, auditable manner."
+        text: "Stage five: Testing and Quality Assurance. AI-assisted and human-led validation against a systematic checklist. Stage six: Deployment and Improvement. Rapid, governed deployment with continuous improvement loops.",
+        text_ssml: "<speak>Stage five: <emphasis level=\"moderate\">Testing and Quality Assurance</emphasis>. AI-assisted and human-led validation against a systematic checklist. Stage six: <emphasis level=\"moderate\">Deployment and Improvement</emphasis>. Rapid, governed deployment with continuous improvement loops.</speak>",
+        text_expressive: "Stage five: Testing and Quality Assurance. AI-assisted and human-led validation against a systematic checklist. Stage six: Deployment and Improvement. Rapid, governed deployment with continuous improvement loops."
       }
     ]
   },
   slide_07: {
-    title: "Stage 1: INTENT — Architectural Foundations",
-    subtitle: "Precision in requirements prevents drift in generated artifacts",
+    title: "ODF Stage 01: Intent & Outcome Definition — Architectural Foundations",
+    subtitle: "Precision in goal definition, stakeholder mapping, and success metrics",
     analogy: {
       title: "Foundation Engineering",
-      text: "In civil engineering, minor alignment deviations at the foundation level compound into structural failures at higher stories. In AI delivery, an incomplete intent brief guarantees drift in the generated code."
+      text: "In civil engineering, minor alignment deviations at the foundation level compound into structural failures at higher stories. In ODF, an incomplete Intent and Outcome Definition guarantees drift in all AI-generated artifacts."
     },
     bullets: [
-      "Outcome: Specify the desired runtime behavior in a single sentence",
-      "Actor & Role: Enumerate access privileges and constraints",
+      "Business Goal: Specify the desired business outcome in a single sentence",
+      "Stakeholder Mapping: Enumerate all stakeholders, access privileges, and constraints",
+      "Success Metrics: Define measurable criteria for what 'done' looks like",
       "Validation Rules: Define explicit conditions for input correctness",
       "Security Constraints: Establish client and server-side enforcement",
-      "Acceptance Signals: Define measurable criteria for success verification",
+      "Acceptance Signals: Define testable criteria for each goal",
       "Edge Cases: Map boundary conditions and error state expectations",
-      "Stack & Patterns: Provide structural technology constraints"
+      "Stack & Patterns: Provide structural technology constraints for AI"
     ],
-    closing_thread: "These components compose the structured intent framework, scaling Module 1's P.R.O.M.P.T. method.",
-    memory_hook: "Precise intent structures guarantee predictable generated code. Define constraints upfront.",
-    narration: "In Stage one: Intent, precision is paramount. A minor requirements omission compounds into severe code drift. We capture the core business outcome in one sentence, define actor roles, specify numbered validation rules, and establish security constraints on both client and server. Additionally, we list testable acceptance signals and map out boundary edge cases. This structured approach builds on the P.R.O.M.P.T. method to deliver enterprise-grade software.",
+    closing_thread: "These components compose the structured intent framework, feeding directly into Stage 02: Requirements & Context.",
+    memory_hook: "Precise intent and outcome definition guarantees predictable AI output. Define goals, stakeholders, and metrics upfront.",
+    narration: "In ODF Stage one: Intent and Outcome Definition, precision is paramount. A minor goal specification omission compounds into severe AI output drift. We define the business goal in one sentence, identify all stakeholders and their access rights, set measurable success metrics, specify numbered validation rules, and establish security constraints on both client and server. We also list testable acceptance signals and map boundary edge cases. This structured approach builds on the P.R.O.M.P.T. method to enable accurate AI-generated delivery.",
     narration_script: [
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "instructive",
-        text: "In Stage one: Intent, precision is paramount. A minor requirements omission compounds into severe code drift.",
-        text_ssml: "<speak>In Stage one: Intent, precision is <emphasis level=\"moderate\">paramount</emphasis>. A minor requirements omission compounds into severe code drift.</speak>",
-        text_expressive: "In Stage one: Intent, precision is paramount. A minor requirements omission compounds into severe code drift."
+        text: "In ODF Stage one: Intent and Outcome Definition, precision is paramount. A minor goal specification omission compounds into severe AI output drift.",
+        text_ssml: "<speak>In ODF Stage one: Intent and Outcome Definition, precision is <emphasis level=\"moderate\">paramount</emphasis>. A minor goal specification omission compounds into severe AI output drift.</speak>",
+        text_expressive: "In ODF Stage one: Intent and Outcome Definition, precision is paramount. A minor goal specification omission compounds into severe AI output drift."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "We capture the core business outcome in one sentence, define actor roles, specify numbered validation rules, and establish security constraints on both client and server.",
-        text_ssml: "<speak>We capture the core business outcome in one sentence, define actor roles, specify numbered validation rules, and establish security constraints on <emphasis level=\"moderate\">both client and server</emphasis>.</speak>",
-        text_expressive: "We capture the core business outcome in one sentence, define actor roles, specify numbered validation rules, and establish security constraints on both client and server."
+        text: "We define the business goal in one sentence, identify all stakeholders and their access rights, set measurable success metrics, and specify numbered validation rules and security constraints.",
+        text_ssml: "<speak>We define the business goal in one sentence, identify all stakeholders and their access rights, set measurable success metrics, and specify numbered validation rules and <emphasis level=\"moderate\">security constraints</emphasis>.</speak>",
+        text_expressive: "We define the business goal in one sentence, identify all stakeholders and their access rights, set measurable success metrics, and specify numbered validation rules and security constraints."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Additionally, we list testable acceptance signals and map out boundary edge cases. This structured approach builds on the P.R.O.M.P.T. method to deliver enterprise-grade software.",
-        text_ssml: "<speak>Additionally, we list testable acceptance signals and map out boundary edge cases. This structured approach <emphasis level=\"moderate\">builds on the P.R.O.M.P.T. method</emphasis> to deliver enterprise-grade software.</speak>",
-        text_expressive: "Additionally, we list testable acceptance signals and map out boundary edge cases. This structured approach builds on the P.R.O.M.P.T. method to deliver enterprise-grade software."
+        text: "Additionally, we list testable acceptance signals and map boundary edge cases. This structured approach builds on the P.R.O.M.P.T. method to enable accurate AI-generated delivery.",
+        text_ssml: "<speak>Additionally, we list testable acceptance signals and map boundary edge cases. This structured approach <emphasis level=\"moderate\">builds on the P.R.O.M.P.T. method</emphasis> to enable accurate AI-generated delivery.</speak>",
+        text_expressive: "Additionally, we list testable acceptance signals and map boundary edge cases. This structured approach builds on the P.R.O.M.P.T. method to enable accurate AI-generated delivery."
       }
     ]
   },
@@ -1942,74 +1937,74 @@ const formalAdaptations = {
     ]
   },
   slide_09: {
-    title: "Stage 2: ORCHESTRATE — Dependency Architecture",
-    subtitle: "Structuring the compilation sequence",
+    title: "ODF Stage 02: Requirements & Context — Dependency Architecture",
+    subtitle: "Capturing all business needs and context before AI-Assisted Design begins",
     analogy: {
-      title: "Critical Path Analysis",
-      text: "A project manager does not schedule UI design ahead of core systems architecture. We must identify the critical path. In OrchestrAI, this means establishing data schemas and API structures before generating consumer components."
+      title: "Critical Client Brief Analysis",
+      text: "A consultant does not begin designing solutions before fully understanding the client's constraints, environment, and objectives. Stage 02 is the complete client brief that enables AI to design accurately in Stage 03, not approximately."
     },
-    memory_hook: "Dependency analysis precedes code generation. Plan the sequence.",
-    narration: "Stage two is Orchestrate. Before beginning generation, the Lead maps the dependency sequence. Database schemas must be generated first, followed by services, API endpoints, and finally, frontend components. We identify reusable logic in the codebase, document API contracts, design data schemas, and define cross-cutting concerns like security logging. This structure prevents refactoring loops.",
+    memory_hook: "Requirements & Context precedes AI design. Document all needs, constraints, and technical context first.",
+    narration: "Stage two of the ODF is Requirements and Context. Before AI can design the architecture, it needs complete information about the business problem, constraints, and technical environment. We document the full business need from the stakeholder perspective, all boundaries and regulatory constraints, the existing tech stack and integration points, and the acceptance criteria that will be used to validate the solution in Stage 05. This prevents AI from designing into the wrong environment.",
     narration_script: [
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "instructive",
-        text: "Stage two is Orchestrate. Before beginning generation, the Lead maps the dependency sequence.",
-        text_ssml: "<speak>Stage two is <emphasis level=\"moderate\">Orchestrate</emphasis>. Before beginning generation, the Lead maps the dependency sequence.</speak>",
-        text_expressive: "Stage two is Orchestrate. Before beginning generation, the Lead maps the dependency sequence."
+        text: "Stage two of the ODF is Requirements and Context. Before AI can design the architecture, it needs complete information.",
+        text_ssml: "<speak>Stage two of the ODF is <emphasis level=\"moderate\">Requirements and Context</emphasis>. Before AI can design the architecture, it needs complete information.</speak>",
+        text_expressive: "Stage two of the ODF is Requirements and Context. Before AI can design the architecture, it needs complete information."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Database schemas must be generated first, followed by services, API endpoints, and finally, frontend components.",
-        text_ssml: "<speak>Database schemas must be generated first, followed by services, <emphasis level=\"moderate\">A P I endpoints</emphasis>, and finally, frontend components.</speak>",
-        text_expressive: "Database schemas must be generated first, followed by services, API endpoints, and finally, frontend components."
+        text: "We document the full business need, all boundaries and regulatory constraints, the existing tech stack and integration points, and the acceptance criteria that will validate the solution.",
+        text_ssml: "<speak>We document the full business need, all boundaries and regulatory constraints, the existing tech stack and <emphasis level=\"moderate\">integration points</emphasis>, and the acceptance criteria that will validate the solution.</speak>",
+        text_expressive: "We document the full business need, all boundaries and regulatory constraints, the existing tech stack and integration points, and the acceptance criteria that will validate the solution."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "We identify reusable logic in the codebase, document API contracts, design data schemas, and define cross-cutting concerns like security logging. This structure prevents refactoring loops.",
-        text_ssml: "<speak>We identify reusable logic in the codebase, document A P I contracts, design data schemas, and define cross-cutting concerns like security logging. This structure <emphasis level=\"moderate\">prevents refactoring loops</emphasis>.</speak>",
-        text_expressive: "We identify reusable logic in the codebase, document API contracts, design data schemas, and define cross-cutting concerns like security logging. This structure prevents refactoring loops."
+        text: "This prevents AI from designing into the wrong environment, and ensures Stage 03 AI-Assisted Design produces accurate, deployable blueprints.",
+        text_ssml: "<speak>This prevents AI from designing into the wrong environment, and ensures Stage 03 AI-Assisted Design produces <emphasis level=\"moderate\">accurate, deployable blueprints</emphasis>.</speak>",
+        text_expressive: "This prevents AI from designing into the wrong environment, and ensures Stage 03 AI-Assisted Design produces accurate, deployable blueprints."
       }
     ]
   },
   slide_10: {
-    title: "Stage 3: GENERATE — Supervising Code Construction",
-    subtitle: "Maintaining control through granular prompting and real-time oversight",
+    title: "ODF Stage 03: AI-Assisted Design — Architecture Generation",
+    subtitle: "AI generates the system design blueprint before development begins",
     analogy: {
-      title: "Control Room Operations",
-      text: "A reactor supervisor does not step away while automated systems execute adjustments. They monitor indicators in real-time, intervening at the first variance. The Lead operates with identical oversight during AI code generation."
+      title: "Chief Architect Engagement",
+      text: "A chief architect does not begin construction without reviewed blueprints. In ODF Stage 03, AI operates as chief architect — generating system architecture, data models, and API contracts from the requirements captured in Stage 02. The Lead reviews and approves before a single line of code is generated."
     },
-    memory_hook: "Granular prompts. Real-time review. No batch generations.",
-    narration: "Stage three is Generate. The Lead acts as an active supervisor rather than a passive observer. Code is generated incrementally: one component, one prompt, and one validation step at a time. We avoid massive prompts that cover multiple components. We review output immediately, and if the AI engine deviates, we apply targeted constraint corrections. Under no circumstances do we accept code we cannot fully explain.",
+    memory_hook: "AI generates the architecture first. Lead reviews and approves. Then development begins.",
+    narration: "Stage three of the ODF is AI-Assisted Design. This is where the OrchestrAI Delivery Framework fundamentally diverges from using AI as a code generator. Before any development begins, AI generates the complete system architecture: component structure, data models, API contracts, and the dependency map. The Lead reviews this design output, validates it against the requirements from Stage 02, and approves it before Stage 04 begins. Under no circumstances does code generation precede an approved design.",
     narration_script: [
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "instructive",
-        text: "Stage three is Generate. The Lead acts as an active supervisor rather than a passive observer.",
-        text_ssml: "<speak>Stage three is <emphasis level=\"moderate\">Generate</emphasis>. The Lead acts as an active supervisor rather than a passive observer.</speak>",
-        text_expressive: "Stage three is Generate. The Lead acts as an active supervisor rather than a passive observer."
+        text: "Stage three of the ODF is AI-Assisted Design. This is where the OrchestrAI Delivery Framework fundamentally diverges from using AI as a code generator.",
+        text_ssml: "<speak>Stage three of the ODF is <emphasis level=\"moderate\">AI-Assisted Design</emphasis>. This is where the OrchestrAI Delivery Framework fundamentally diverges from using AI as a code generator.</speak>",
+        text_expressive: "Stage three of the ODF is AI-Assisted Design. This is where the OrchestrAI Delivery Framework fundamentally diverges from using AI as a code generator."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Code is generated incrementally: one component, one prompt, and one validation step at a time. We avoid massive prompts that cover multiple components.",
-        text_ssml: "<speak>Code is generated incrementally: <emphasis level=\"moderate\">one component, one prompt</emphasis>, and one validation step at a time. We avoid massive prompts that cover multiple components.</speak>",
-        text_expressive: "Code is generated incrementally: one component, one prompt, and one validation step at a time. We avoid massive prompts that cover multiple components."
+        text: "Before any development begins, AI generates the complete system architecture: component structure, data models, API contracts, and the dependency map.",
+        text_ssml: "<speak>Before any development begins, AI generates the complete system architecture: component structure, data models, A P I contracts, and the <emphasis level=\"moderate\">dependency map</emphasis>.</speak>",
+        text_expressive: "Before any development begins, AI generates the complete system architecture: component structure, data models, API contracts, and the dependency map."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "We review output immediately, and if the AI engine deviates, we apply targeted constraint corrections. Under no circumstances do we accept code we cannot fully explain.",
-        text_ssml: "<speak>We review output immediately, and if the A I engine deviates, we apply targeted constraint corrections. Under no circumstances do we <emphasis level=\"strong\">ever</emphasis> accept code we cannot fully explain.</speak>",
-        text_expressive: "[authoritative] We review output immediately, and if the AI engine deviates, we apply targeted constraint corrections. Under no circumstances do we accept code we cannot fully explain."
+        text: "The Lead reviews this design, validates it against Stage 02 requirements, and approves it. Under no circumstances does code generation precede an approved design.",
+        text_ssml: "<speak>The Lead reviews this design, validates it against Stage 02 requirements, and approves it. Under no circumstances does code generation precede an <emphasis level=\"strong\">approved design</emphasis>.</speak>",
+        text_expressive: "[authoritative] The Lead reviews this design, validates it against Stage 02 requirements, and approves it. Under no circumstances does code generation precede an approved design."
       }
     ]
   },
@@ -2029,46 +2024,46 @@ const formalAdaptations = {
     ]
   },
   slide_11: {
-    title: "Validate, Evolve, and Deploy",
-    subtitle: "Quality assurance, rapid iteration, and rollout governance",
+    title: "ODF Stages 04-05-06: AI Development, Testing & Deployment",
+    subtitle: "Governed AI-powered development, systematic quality assurance, and continuous deployment",
     analogy: {
-      title: "Quality Audit and Release Operations",
-      text: "Validate acts as the pre-delivery audit. Evolve represents final adjustments based on stakeholder reviews. Deploy operates as the controlled rollout. Each step must adhere to governance standards before code is certified for release."
+      title: "Quality-Controlled Production and Release",
+      text: "Stage 04 is the production line: AI generates components at speed under supervised quality controls. Stage 05 is the quality assurance gate: systematic inspection before any item ships. Stage 06 is the controlled release: governed deployment with continuous improvement feeding back into the next production cycle."
     },
-    memory_hook: "Validate systematically. Evolve in-session. Deploy continuously with rollbacks.",
-    narration: "We now review the final stages of the lifecycle. Validation requires testing against a systematic checklist covering functionality, security, data isolation, and error states. In the Evolve stage, client feedback is addressed in the same session by updating the intent statement and regenerating the component. Deployment occurs continuously to staging and production, governed by version control, automated tests, and rollback procedures.",
+    memory_hook: "AI-Generated Development under supervision. Systematic Testing & QA gate. Governed Deployment with improvement loops.",
+    narration: "We now review the final three ODF stages. Stage four, AI-Generated Development: code is produced incrementally under active Lead supervision. One prompt, one component, validated before the next begins. Stage five, Testing and Quality Assurance: AI-assisted and human-led validation against the systematic checklist covering functionality, security, data isolation, and error states. Stage six, Deployment and Improvement: code is released continuously to staging and production in a governed manner, with stakeholder feedback captured to initiate the next improvement cycle.",
     narration_script: [
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "instructive",
-        text: "We now review the final stages of the lifecycle.",
-        text_ssml: "<speak>We now review the <emphasis level=\"moderate\">final stages</emphasis> of the lifecycle.</speak>",
-        text_expressive: "We now review the final stages of the lifecycle."
+        text: "We now review the final three ODF stages.",
+        text_ssml: "<speak>We now review the <emphasis level=\"moderate\">final three ODF stages</emphasis>.</speak>",
+        text_expressive: "We now review the final three ODF stages."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Validation requires testing against a systematic checklist covering functionality, security, data isolation, and error states.",
-        text_ssml: "<speak>Validation requires testing against a <emphasis level=\"moderate\">systematic checklist</emphasis> covering functionality, security, data isolation, and error states.</speak>",
-        text_expressive: "Validation requires testing against a systematic checklist covering functionality, security, data isolation, and error states."
+        text: "Stage four, AI-Generated Development: code is produced incrementally under active Lead supervision. One prompt, one component, validated before the next begins.",
+        text_ssml: "<speak>Stage four, <emphasis level=\"moderate\">AI-Generated Development</emphasis>: code is produced incrementally under active Lead supervision. One prompt, one component, validated before the next begins.</speak>",
+        text_expressive: "Stage four, AI-Generated Development: code is produced incrementally under active Lead supervision. One prompt, one component, validated before the next begins."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "In the Evolve stage, client feedback is addressed in the same session by updating the intent statement and regenerating the component.",
-        text_ssml: "<speak>In the Evolve stage, client feedback is addressed <emphasis level=\"moderate\">in the same session</emphasis> by updating the intent statement and regenerating the component.</speak>",
-        text_expressive: "In the Evolve stage, client feedback is addressed in the same session by updating the intent statement and regenerating the component."
+        text: "Stage five, Testing and Quality Assurance: AI-assisted and human-led validation against the systematic checklist covering functionality, security, data isolation, and error states.",
+        text_ssml: "<speak>Stage five, <emphasis level=\"moderate\">Testing and Quality Assurance</emphasis>: AI-assisted and human-led validation against the systematic checklist covering functionality, security, data isolation, and error states.</speak>",
+        text_expressive: "Stage five, Testing and Quality Assurance: AI-assisted and human-led validation against the systematic checklist covering functionality, security, data isolation, and error states."
       },
       {
         speaker: "Narrator",
         voice: "professional_narrator",
         emotion: "measured",
-        text: "Deployment occurs continuously to staging and production, governed by version control, automated tests, and rollback procedures.",
-        text_ssml: "<speak>Deployment occurs continuously to staging and production, governed by version control, automated tests, and <emphasis level=\"moderate\">rollback procedures</emphasis>.</speak>",
-        text_expressive: "Deployment occurs continuously to staging and production, governed by version control, automated tests, and rollback procedures."
+        text: "Stage six, Deployment and Improvement: code is released continuously in a governed manner, with stakeholder feedback captured to initiate the next improvement cycle.",
+        text_ssml: "<speak>Stage six, <emphasis level=\"moderate\">Deployment and Improvement</emphasis>: code is released continuously in a governed manner, with stakeholder feedback captured to initiate the next improvement cycle.</speak>",
+        text_expressive: "Stage six, Deployment and Improvement: code is released continuously in a governed manner, with stakeholder feedback captured to initiate the next improvement cycle."
       }
     ]
   },

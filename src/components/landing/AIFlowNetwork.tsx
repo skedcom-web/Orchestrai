@@ -1,55 +1,142 @@
 import React from 'react';
-import { Target, Network, Cpu, ShieldCheck, RefreshCw, Rocket } from 'lucide-react';
+import { Target, FileText, Cpu, Code, ShieldCheck, Rocket, ChevronRight, Sparkles } from 'lucide-react';
 
-const NODES = [
-  { label: 'Intent',      icon: Target,      color: 'text-indigo-400',  ring: 'rgba(99,102,241,0.55)'  },
-  { label: 'Orchestrate', icon: Network,     color: 'text-cyan-400',    ring: 'rgba(34,211,238,0.55)'  },
-  { label: 'Generate',    icon: Cpu,         color: 'text-purple-400',  ring: 'rgba(168,85,247,0.55)'  },
-  { label: 'Validate',    icon: ShieldCheck, color: 'text-emerald-400', ring: 'rgba(52,211,153,0.55)'  },
-  { label: 'Evolve',      icon: RefreshCw,   color: 'text-amber-400',   ring: 'rgba(251,191,36,0.55)'  },
-  { label: 'Deploy',      icon: Rocket,      color: 'text-rose-400',    ring: 'rgba(251,113,133,0.55)' },
+const ODF_STAGES = [
+  {
+    num: '01',
+    title: 'Intent & Outcome Definition',
+    desc: 'Define goals, success metrics, and stakeholders.',
+    icon: Target,
+    aiBadge: 'Human Orchestrated',
+    aiBadgeColor: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+    color: 'text-indigo-400',
+    bg: 'bg-indigo-500/5',
+    border: 'border-indigo-500/20',
+    glow: 'rgba(99,102,241,0.2)'
+  },
+  {
+    num: '02',
+    title: 'Requirements & Context',
+    desc: 'Capture business needs, constraints, and requirements.',
+    icon: FileText,
+    aiBadge: 'Human + AI Context',
+    aiBadgeColor: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+    color: 'text-cyan-400',
+    bg: 'bg-cyan-500/5',
+    border: 'border-cyan-500/20',
+    glow: 'rgba(34,211,238,0.2)'
+  },
+  {
+    num: '03',
+    title: 'AI-Assisted Design',
+    desc: 'AI generates architecture and solution designs.',
+    icon: Cpu,
+    aiBadge: '🤖 AI Design Engine',
+    aiBadgeColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+    color: 'text-purple-400',
+    bg: 'bg-purple-500/5',
+    border: 'border-purple-500/20',
+    glow: 'rgba(168,85,247,0.25)'
+  },
+  {
+    num: '04',
+    title: 'AI-Generated Development',
+    desc: 'AI accelerates coding, APIs, and integrations.',
+    icon: Code,
+    aiBadge: '🤖 AI Code Engine',
+    aiBadgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/5',
+    border: 'border-emerald-500/20',
+    glow: 'rgba(52,211,153,0.25)'
+  },
+  {
+    num: '05',
+    title: 'Testing & Quality Assurance',
+    desc: 'AI + Human validation for quality and security.',
+    icon: ShieldCheck,
+    aiBadge: 'AI + Human QA',
+    aiBadgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+    color: 'text-amber-400',
+    bg: 'bg-amber-500/5',
+    border: 'border-amber-500/20',
+    glow: 'rgba(251,191,36,0.2)'
+  },
+  {
+    num: '06',
+    title: 'Deployment & Improvement',
+    desc: 'Deliver rapidly and continuously evolve.',
+    icon: Rocket,
+    aiBadge: 'Continuous Evolution',
+    aiBadgeColor: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+    color: 'text-rose-400',
+    bg: 'bg-rose-500/5',
+    border: 'border-rose-500/20',
+    glow: 'rgba(251,113,133,0.2)'
+  }
 ];
 
 /**
- * AIFlowNetwork — the OrchestrAI delivery loop as an animated node network.
- *
- * Intent → Orchestrate → Generate → Validate → Evolve → Deploy, connected by
- * marching-dash lines with breathing halos on each node. Built in HTML (not a
- * fixed-viewBox SVG) so the labels stay readable at every width; on phones the
- * row becomes a swipeable rail instead of shrinking to unreadable text.
+ * AIFlowNetwork — Executive 6-Stage OrchestrAI Delivery Framework (ODF) Workflow.
+ * Prominently displays the full stage title, complete description, and AI involvement breakdown.
  */
-export const AIFlowNetwork: React.FC = () => (
-  <div className="w-full" aria-label="OrchestrAI delivery loop: Intent, Orchestrate, Generate, Validate, Evolve, Deploy">
-    <div className="scroll-rail overflow-x-auto pb-1">
-      <div className="flex items-start justify-start sm:justify-center gap-1 sm:gap-2 min-w-max mx-auto px-1">
-        {NODES.map(({ label, icon: Icon, color, ring }, i) => (
-          <React.Fragment key={label}>
-            {i > 0 && (
-              <div
-                className={`flow-line mt-6 w-8 sm:w-10 lg:w-16 shrink-0 ${color}`}
-                style={{ animationDelay: `${i * -0.18}s` }}
-                aria-hidden="true"
-              />
-            )}
-            <div className="flex flex-col items-center gap-2 shrink-0 w-[76px] sm:w-[92px]">
-              <div className="relative flex items-center justify-center h-12 w-12">
-                {/* Breathing halo */}
-                <span
-                  className="node-halo absolute inset-0 rounded-full"
-                  style={{ background: `radial-gradient(circle, ${ring} 0%, transparent 70%)`, animationDelay: `${i * -0.4}s` }}
-                  aria-hidden="true"
-                />
-                <span className={`relative flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border-color)] bg-[var(--surface-raised)] ${color}`}>
-                  <Icon className="h-5 w-5" />
-                </span>
+export const AIFlowNetwork: React.FC = () => {
+  return (
+    <div className="w-full space-y-4" aria-label="OrchestrAI Delivery Framework 6-Stage Workflow">
+      {/* ── Desktop & Tablet Grid Layout (2 col on sm, 3 col on lg) ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {ODF_STAGES.map((stage, index) => {
+          const Icon = stage.icon;
+          return (
+            <div
+              key={stage.num}
+              className={`relative glass-card rounded-2xl p-5 border ${stage.border} ${stage.bg} hover:border-[var(--card-hover-border)] transition-all duration-300 hover:scale-[1.02] flex flex-col justify-between group shadow-lg`}
+              style={{ boxShadow: `0 4px 20px ${stage.glow}` }}
+            >
+              {/* Header Badge Row */}
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-xl border ${stage.border} bg-[var(--surface-raised)] ${stage.color} shrink-0`}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <span className={`text-xs font-black tracking-widest ${stage.color}`}>
+                      STAGE {stage.num}
+                    </span>
+                  </div>
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border ${stage.aiBadgeColor} shrink-0`}>
+                    {stage.aiBadge}
+                  </span>
+                </div>
+
+                {/* Stage Title */}
+                <h3 className="text-base font-extrabold text-[var(--text-primary)] mb-2 leading-snug group-hover:text-indigo-400 transition-colors">
+                  {stage.num} — {stage.title}
+                </h3>
+
+                {/* Full Stage Description */}
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed font-medium">
+                  {stage.desc}
+                </p>
               </div>
-              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] text-center leading-tight">
-                {label}
-              </span>
+
+              {/* Footer Connector Indicator */}
+              <div className="mt-4 pt-3 border-t border-[var(--border-color)]/50 flex items-center justify-between text-[11px] text-[var(--text-muted)] font-semibold">
+                <span>Phase {stage.num} of 06</span>
+                {index < ODF_STAGES.length - 1 ? (
+                  <span className={`inline-flex items-center gap-1 font-bold ${stage.color}`}>
+                    Next Stage <ChevronRight className="h-3.5 w-3.5" />
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 font-bold text-rose-400">
+                    Continuous Loop <Sparkles className="h-3.5 w-3.5" />
+                  </span>
+                )}
+              </div>
             </div>
-          </React.Fragment>
-        ))}
+          );
+        })}
       </div>
     </div>
-  </div>
-);
+  );
+};

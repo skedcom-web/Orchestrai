@@ -4,6 +4,7 @@ import { useApp } from '../context/AppContext';
 import { Sun, Moon, Sparkles, LogOut, Shield, Award, BookOpen, LogIn, Mail, ArrowRight, X, Phone, CheckCircle2, AlertCircle, RefreshCw, Eye, EyeOff, Folder } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { XPWidget } from './XPWidget';
+import { OrchestrAIBrandHeader } from './OrchestrAILogo';
 import { getFirebaseAuth, getFirebaseDb } from '../firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { ref, get, update, set } from 'firebase/database';
@@ -1039,20 +1040,8 @@ export const Header: React.FC = () => {
         <div className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-4 sm:px-6 lg:px-8">
           
           {/* Logo Section */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            {/* Icon badge */}
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-shadow">
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
-            {/* Brand name */}
-            <div className="flex flex-col leading-none">
-              <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-                OrchestrAI
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)] mt-0.5">
-                Lead Academy
-              </span>
-            </div>
+          <Link to="/" className="group hover:opacity-95 transition-opacity">
+            <OrchestrAIBrandHeader />
           </Link>
 
           {/* Navigation Section */}

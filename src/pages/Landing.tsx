@@ -4,7 +4,7 @@ import {
   ArrowRight, Zap, Shield, Check, Code, Award,
   TrendingUp, Users, Star, ChevronRight, Play, Briefcase,
   BookOpen, Target, Trophy, Rocket, Layers, GitBranch,
-  GraduationCap, Building2, Sparkles, X
+  GraduationCap, Building2, Sparkles, X, ChevronDown
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
@@ -13,7 +13,8 @@ import { AnimatedHeadline } from '../components/landing/AnimatedHeadline';
 import { AIFlowNetwork } from '../components/landing/AIFlowNetwork';
 import { AudienceSection } from '../components/landing/AudienceSection';
 import { WhyOrchestrAI } from '../components/landing/WhyOrchestrAI';
-import { SignatureStatement } from '../components/landing/SignatureStatement';
+import { ScrumVsOrchestrAI } from '../components/landing/ScrumVsOrchestrAI';
+import { OdfProofNarrative } from '../components/landing/OdfProofNarrative';
 import { CeremoniesJourney } from '../components/landing/CeremoniesJourney';
 import { BusinessOutcomes } from '../components/landing/BusinessOutcomes';
 import { Reveal } from '../components/landing/Reveal';
@@ -178,12 +179,12 @@ export const Landing: React.FC = () => {
   ];
 
   const stages = [
-    { num: '01', label: 'Intent', color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/20', desc: 'Translate stakeholder needs into structured, constraint-rich natural language intent with actors, rules & edge cases.' },
-    { num: '02', label: 'Orchestrate', color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20', desc: 'Determine dependency graphs, map data model changes and establish API request/response contracts.' },
-    { num: '03', label: 'Generate', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20', desc: 'Direct AI to build components sequentially — migrations first, controllers second, UI forms last.' },
-    { num: '04', label: 'Validate', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', desc: 'Verify functional logic, server-side data isolation, security boundaries and OWASP compliance.' },
-    { num: '05', label: 'Evolve', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', desc: 'Take real feedback and execute targeted enhancements. Re-prompt changes immediately in the same session.' },
-    { num: '06', label: 'Deploy', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20', desc: 'Promote validated and production grade codes to QA' },
+    { num: '01', label: 'Intent & Outcome Definition', color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/20', desc: 'Define goals, success metrics, and stakeholders.' },
+    { num: '02', label: 'Requirements & Context', color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20', desc: 'Capture business needs, constraints, and requirements.' },
+    { num: '03', label: 'AI-Assisted Design', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20', desc: 'AI generates architecture and solution designs.' },
+    { num: '04', label: 'AI-Generated Development', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', desc: 'AI accelerates coding, APIs, and integrations.' },
+    { num: '05', label: 'Testing & Quality Assurance', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', desc: 'AI + Human validation for quality and security.' },
+    { num: '06', label: 'Deployment & Improvement', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20', desc: 'Deliver rapidly and continuously evolve.' },
   ];
 
   const pipDemos = [
@@ -211,31 +212,118 @@ export const Landing: React.FC = () => {
         </button>
       </div>
 
-      {/* ═══ HERO ════════════════════════════════════════ */}
-      <section className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* ═══ HERO — full-screen framework statement ══════ */}
+      <section className="relative flex flex-col justify-center min-h-[calc(100svh-5rem)] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
 
         {/* Premium animated backdrop — aurora + gradient mesh + dot grid */}
         <HeroAurora />
 
+        <div className="relative z-10 mx-auto max-w-5xl w-full flex flex-col items-center text-center">
+
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-indigo-400 text-xs sm:text-sm font-bold uppercase tracking-widest mb-5">
+            <Zap className="h-3.5 w-3.5 text-cyan-400" />
+            OrchestrAI Delivery Framework (ODF)
+          </div>
+
+          {/* Rotating brand headlines */}
+          <AnimatedHeadline centered />
+
+          {/* The one message a visitor cannot miss */}
+          <h1 className="mb-6">
+            <span className="hero-statement block text-[var(--text-primary)]">Human Orchestrates.</span>
+            <span className="hero-statement block gradient-text">AI Builds.</span>
+            <span className="hero-statement block text-[var(--text-primary)]">Value Delivered.</span>
+          </h1>
+
+          <p className="text-base sm:text-lg lg:text-xl text-[var(--text-secondary)] leading-relaxed max-w-3xl mb-8">
+            <strong className="text-[var(--text-primary)]">OrchestrAI</strong> is the <strong className="text-[var(--text-primary)]">OrchestrAI Delivery Framework (ODF)</strong> that enables
+            Developers, Architects, SMEs, QA Engineers, IT Engineers and Technology Leaders to deliver
+            business value faster through <strong className="text-[var(--text-primary)]">AI-Orchestrated Delivery</strong>.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center">
+            <button
+              id="hero-cta-start"
+              onClick={handleStartLearning}
+              className="tap-target w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm sm:text-base hover:brightness-110 hover:scale-[1.03] transition-all"
+              style={{ boxShadow: 'var(--btn-shadow)' }}
+            >
+              <BookOpen className="h-4 w-4" />
+              Start Free — Modules 1 &amp; 2
+            </button>
+            <button
+              id="hero-cta-journey"
+              onClick={() => document.getElementById('audience')?.scrollIntoView({ behavior: 'smooth' })}
+              className="tap-target w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] font-semibold text-sm sm:text-base hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all"
+            >
+              <Play className="h-4 w-4" />
+              See How It Works
+            </button>
+          </div>
+        </div>
+
+        {/* ── AI DELIVERY NETWORK — the 6 ODF stages workflow ── */}
+        <div className="relative z-10 mx-auto max-w-6xl w-full mt-10 sm:mt-12">
+          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-indigo-500/20 bg-gradient-to-b from-[var(--bg-card)] to-indigo-500/5 shadow-2xl">
+            <div className="text-center mb-6">
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                Core Delivery Architecture
+              </span>
+              <h3 className="text-xl sm:text-2xl font-extrabold text-[var(--text-primary)] mt-2 mb-1">
+                The OrchestrAI Delivery Framework (ODF) — 6-Stage Workflow
+              </h3>
+              <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
+                A continuous, AI-Orchestrated operating model from Intent Definition to Automated Delivery and Evolution.
+              </p>
+            </div>
+            <AIFlowNetwork />
+          </div>
+        </div>
+
+        {/* Scroll cue */}
+        <button
+          onClick={() => document.getElementById('audience')?.scrollIntoView({ behavior: 'smooth' })}
+          className="relative z-10 mx-auto mt-8 flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-indigo-400 transition-colors"
+          aria-label="Scroll to who OrchestrAI is for"
+        >
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Who it's for</span>
+          <ChevronDown className="h-4 w-4 scroll-cue" />
+        </button>
+      </section>
+
+      {/* ═══ WHO IS ORCHESTRAI FOR? ══════════════════════ */}
+      <AudienceSection />
+
+      {/* ═══ WHY ORCHESTRAI? ═════════════════════════════ */}
+      <WhyOrchestrAI />
+
+      {/* ═══ SCRUM VS ORCHESTRAI ═════════════════════════ */}
+      <ScrumVsOrchestrAI />
+
+      {/* ═══ HIGH-LEVEL ORCHESTRAI CEREMONIES ════════════ */}
+      <CeremoniesJourney />
+
+      {/* ═══ BUSINESS OUTCOMES ═══════════════════════════ */}
+      <BusinessOutcomes />
+
+      {/* ═══ WHY PROFESSIONALS LEARN IT ══════════════════ */}
+      <section className="relative py-14 sm:py-16 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)] overflow-hidden">
         <div className="relative z-10 mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* Left */}
-          <div className="flex flex-col items-start">
+          <Reveal className="flex flex-col items-start">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-indigo-400 text-sm font-bold uppercase tracking-widest mb-5">
               <Zap className="h-3.5 w-3.5 text-cyan-400" />
               OrchestrAI Lead Certification
             </div>
 
-            {/* Rotating brand headlines */}
-            <AnimatedHeadline />
-
-            <h1 className="hero-title font-extrabold tracking-tight mb-5">
+            <h2 className="hero-title font-extrabold tracking-tight mb-5">
               <span className="text-[var(--text-primary)]">Get Hired by</span>
               <br />
               <span className="gradient-text">Top IT Companies</span>
               <br />
               <span className="text-[var(--text-primary)]">Faster.</span>
-            </h1>
+            </h2>
 
             <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed mb-4 max-w-lg">
               The <strong className="text-[var(--text-primary)]">OrchestrAI Lead Certification</strong> doesn't just teach AI — it gets you to
@@ -263,7 +351,7 @@ export const Landing: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               <button
-                id="hero-cta-start"
+                id="career-cta-start"
                 onClick={handleStartLearning}
                 className="tap-target w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm hover:brightness-110 hover:scale-[1.03] transition-all"
                 style={{ boxShadow: 'var(--btn-shadow)' }}
@@ -272,7 +360,7 @@ export const Landing: React.FC = () => {
                 Start Free — Modules 1 &amp; 2
               </button>
               <button
-                id="hero-cta-journey"
+                id="career-cta-journey"
                 onClick={() => document.getElementById('journey')?.scrollIntoView({ behavior: 'smooth' })}
                 className="tap-target w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] font-semibold text-sm hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all"
               >
@@ -280,10 +368,10 @@ export const Landing: React.FC = () => {
                 See the Journey
               </button>
             </div>
-          </div>
+          </Reveal>
 
           {/* Right — differentiation cards */}
-          <div className="flex flex-col gap-4">
+          <Reveal stagger className="flex flex-col gap-4">
             <div className="glass-card hover-lift rounded-2xl p-5 relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600" />
               <div className="flex items-start gap-4">
@@ -331,16 +419,6 @@ export const Landing: React.FC = () => {
                 💡 <strong className="text-[var(--text-primary)]">This portal itself is the proof.</strong> Built in just 10 days as an 80-90% production-ready application using the OrchestrAI framework. The remaining enhancements and features represent Customer QA, which we refine collaboratively with your team.
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* ── AI DELIVERY NETWORK — the loop, visualised ── */}
-        <div className="relative z-10 mx-auto max-w-5xl w-full mt-12 sm:mt-14">
-          <Reveal className="glass-card rounded-2xl px-4 py-6 sm:px-8 sm:py-7">
-            <p className="text-center text-xs font-bold uppercase tracking-[0.25em] text-[var(--text-secondary)] mb-6">
-              The OrchestrAI Delivery Loop
-            </p>
-            <AIFlowNetwork />
           </Reveal>
         </div>
       </section>
@@ -354,15 +432,6 @@ export const Landing: React.FC = () => {
           <StatCard value={90} suffix="%" label="Score → Hiring Referral" colorClass="text-indigo-400" />
         </div>
       </section>
-
-      {/* ═══ WHO IS ORCHESTRAI FOR? ══════════════════════ */}
-      <AudienceSection />
-
-      {/* ═══ WHY ORCHESTRAI? ═════════════════════════════ */}
-      <WhyOrchestrAI />
-
-      {/* ═══ SIGNATURE BRAND STATEMENT ═══════════════════ */}
-      <SignatureStatement />
 
       {/* ═══ CAREER JOURNEY ══════════════════════════════ */}
       <section id="journey" className="py-16 px-4 sm:px-6 lg:px-8">
@@ -529,12 +598,6 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* ═══ HIGH-LEVEL ORCHESTRAI CEREMONIES ════════════ */}
-      <CeremoniesJourney />
-
-      {/* ═══ BUSINESS OUTCOMES ═══════════════════════════ */}
-      <BusinessOutcomes />
-
       {/* ═══ PRODUCT OWNER ═══════════════════════════════ */}
       <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-5xl">
@@ -582,6 +645,9 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
+      {/* ═══ ODF PROOF NARRATIVE ═════════════════════════ */}
+      <OdfProofNarrative />
+
       {/* ═══ PIP DEMOS ═══════════════════════════════════ */}
       <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-7xl">
@@ -595,7 +661,8 @@ export const Landing: React.FC = () => {
               Real Apps. <span className="gradient-text">Real Speed.</span>
             </h2>
             <p className="mt-3 text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
-              These are production-ready enterprise systems built entirely through the OrchestrAI Lead methodology — demoed to real clients and available for you to explore live.
+              <strong className="text-[var(--text-primary)]">Evidence, not a catalogue.</strong> Each one started as an idea,
+              went through ODF, and came out as a production-ready enterprise system — demoed to real clients and available for you to explore live.
             </p>
           </Reveal>
 

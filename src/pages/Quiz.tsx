@@ -50,15 +50,15 @@ const QUESTIONS: Question[] = [
   },
   {
     id: 4,
-    text: "Which of the following describes the Six-Stage Lifecycle Loop in the correct sequence?",
+    text: "Which of the following describes the OrchestrAI Delivery Framework (ODF) Six-Stage Lifecycle Loop in the correct sequence?",
     options: [
-      "Intent → Orchestrate → Generate → Validate → Evolve → Deploy",
-      "Orchestrate → Intent → Generate → Validate → Deploy → Evolve",
-      "Intent → Generate → Orchestrate → Evolve → Validate → Deploy",
-      "Orchestrate → Generate → Intent → Validate → Deploy → Evolve"
+      "01 Intent & Outcome → 02 Requirements & Context → 03 AI-Assisted Design → 04 AI-Generated Development → 05 Testing & QA → 06 Deployment & Improvement",
+      "01 Requirements & Context → 02 Intent & Outcome → 03 AI-Assisted Design → 04 AI-Generated Development → 05 Deployment & Improvement → 06 Testing & QA",
+      "01 Intent & Outcome → 02 AI-Generated Development → 03 Requirements & Context → 04 AI-Assisted Design → 05 Testing & QA → 06 Deployment & Improvement",
+      "01 AI-Assisted Design → 02 Intent & Outcome → 03 Requirements & Context → 04 Testing & QA → 05 AI-Generated Development → 06 Deployment & Improvement"
     ],
     correctIndex: 0,
-    studyTip: "Re-read Module 2.2 (The Six-Stage Lifecycle Loop): The lifecycle loop moves continuously from Intent to Orchestrate, Generate, Validate, Evolve, and Deploy."
+    studyTip: "Re-read Module 2.2 (The Six-Stage ODF Lifecycle Loop): ODF moves from 01 Intent & Outcome Definition to 02 Requirements & Context, 03 AI-Assisted Design, 04 AI-Generated Development, 05 Testing & QA, and 06 Deployment & Improvement."
   },
   {
     id: 5,

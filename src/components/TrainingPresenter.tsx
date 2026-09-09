@@ -14,6 +14,9 @@ import {
   Frown, Music2, Headphones, Wand2, MonitorPlay, GitMerge,
   Compass, Languages, ArrowLeftRight, Eye, EyeOff
 } from 'lucide-react';
+import { mapItemsToSegments, resolveReveal, revealClass, type RevealState } from './presenter/narrationSync';
+import module2Formal from '../../module2/module2_formal.json';
+import module2Genz from '../../module2/module2_genz.json';
 
 interface TrainingPresenterProps {
   moduleId: number;
@@ -433,12 +436,7 @@ const DEFAULT_SLIDES_MAP: Record<number, any[]> = {
       narration: 'Excellent work completing the lesson slides. The Interactive Exam Engine will now validate your understanding across ten multiple-choice questions — each one tying back to the analogies from this module. After the MCQ section, the Applied Engineering Lab challenges you to write a production-grade prompt that enforces enterprise security constraints. Go through each question carefully and click Submit Answers when you\'re ready.'
     }
   ],
-  2: [
-    { type: 'hero_welcome', icon: 'rocket', title: 'OrchestrAI Framework Architecture', tagline: '"Principles that make AI-accelerated delivery robust and secure."', subtitle: 'Module 2 · Framework & Lifecycle', hero_stat: { value: '6 Stages', label: 'The complete delivery lifecycle loop', note: 'Intent → Deploy, repeated.' }, promises: [{ icon: 'layers', color: PILLAR_GRAD[0], title: 'Principles', desc: 'The six core rules of OrchestrAI delivery' }, { icon: 'refresh-cw', color: PILLAR_GRAD[2], title: 'Lifecycle', desc: 'The six-stage loop from Intent to Deploy' }, { icon: 'shield', color: PILLAR_GRAD[3], title: 'Security', desc: 'Guardrails and governance built in from day one' }], analogy: 'Module 2 builds the structural skeleton. Module 1 gave you the mindset. Now we build the architecture around it.', narration: 'Welcome to Module 2: The OrchestrAI Framework Architecture. Here we establish the structural principles of our delivery model.' },
-    { type: 'competencies', icon: 'gauge', title: '2.1 The Six Core Principles', subtitle: 'The guiding rules that govern every OrchestrAI delivery pipeline', list: [{ name: 'AI as Primary Builder', icon: 'brain', grad: PILLAR_GRAD[0], desc: 'The AI engine writes all code, schemas, and tests. The Lead never codes directly.' }, { name: 'Human as Orchestrator', icon: 'users', grad: PILLAR_GRAD[1], desc: 'Humans make all strategic decisions, define all boundaries, and approve all outputs.' }, { name: 'Plain-English Driven', icon: 'message-square-text', grad: PILLAR_GRAD[2], desc: 'Precision statements specify constraints instead of manual coding sessions.' }, { name: 'Continuous Delivery', icon: 'zap', grad: PILLAR_GRAD[3], desc: 'Continuous code baselining replaces long release sprint intervals.' }], narration: 'Our architecture relies on six core principles, primarily positioning AI as the builder while the human acts as the orchestrator.' },
-    { type: 'day_in_life', icon: 'refresh-cw', title: '2.2 The Six-Stage Lifecycle Loop', subtitle: 'The continuous product iteration engine — Intent to Deploy', visual_chart: { chart_type: 'timeline_gantt', title: 'Lifecycle Stages', groups: [{ label: 'Intent → Generate', pct: 50, color: 'from-indigo-600 to-cyan-600' }, { label: 'Validate → Evolve', pct: 35, color: 'from-violet-600 to-pink-600' }, { label: 'Deploy', pct: 15, color: 'from-emerald-600 to-teal-500' }] }, schedule: [{ time: 'Stage 1', icon: 'target', task: 'Intent: Express business needs, constraints, and acceptance criteria clearly.' }, { time: 'Stage 2', icon: 'edit-3', task: 'Orchestrate: Formulate P.R.O.M.P.T. sets and direct AI resources.' }, { time: 'Stage 3', icon: 'brain', task: 'Generate: Trigger the AI code generator engine with your complete brief.' }, { time: 'Stage 4', icon: 'check-circle', task: 'Validate: Review correctness, security logs, test results, and edge cases.' }, { time: 'Stage 5', icon: 'refresh-cw', task: 'Evolve: Incorporate feedback and refine prompts for the next iteration.' }, { time: 'Stage 6', icon: 'git-commit', task: 'Deploy: Publish validated features to production checkins with documentation.' }], narration: 'The lifecycle loop moves continuously from Intent to Orchestrate, Generate, Validate, Evolve, and Deploy.' },
-    { type: 'key_takeaways', icon: 'clipboard-check', title: 'Module 2 Knowledge Check', subtitle: 'Self-Assessment Gate — reflect before proceeding', takeaways: [{ num: '01', color: 'indigo', title: 'The Six Core Principles', desc: 'Can you name all six core principles of the OrchestrAI architecture from memory?' }, { num: '02', color: 'violet', title: 'The Lifecycle Loop', desc: 'What are the six stages of the lifecycle loop, and what is the primary output of each stage?' }, { num: '03', color: 'emerald', title: 'Why No Manual Code?', desc: 'Why does the Lead never write code manually, even when a quick fix seems obvious?' }], cta: 'Launch the Module 2 Quiz Challenge when ready to validate and unlock Module 3.', narration: 'Reflect on these check questions before completing the module.' }
-  ]
+  2: module2Formal.slides
 };
 
 export const getSlidesForModule = (moduleId: number, customSlides?: any[]) => {
@@ -532,6 +530,16 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
   const audioUnlockedRef = useRef<boolean>(false);
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
 
+  /**
+   * Index of the narration segment being spoken right now, or null when
+   * narration is not driving the slide. This is what keeps the visuals in step
+   * with the voiceover: it feeds progressive reveal on the slide body, the live
+   * caption, and the transcript highlight. Null always means "show everything".
+   */
+  const [activeSegment, setActiveSegment] = useState<number | null>(null);
+  // Transcript scroll container — used to keep the spoken line in view
+  const transcriptPanelRef = useRef<HTMLDivElement | null>(null);
+
   // Unlock browser audio context — must be called from a user gesture (click/tap).
   // Plays a silent buffer so that subsequent programmatic audio.play() calls in
   // useEffects are not blocked by the browser autoplay policy.
@@ -617,7 +625,10 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
 
   const totalSlides = useMemo(() => {
     let slidesForSelectedTone: any[] = [];
-    if (customSlides) {
+    if (moduleId === 2) {
+      const toneKey = selectedTone || defaultTone;
+      slidesForSelectedTone = toneKey === 'genz' ? module2Genz.slides : module2Formal.slides;
+    } else if (customSlides) {
       if (Array.isArray(customSlides)) {
         slidesForSelectedTone = customSlides;
       } else {
@@ -866,6 +877,9 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     setIsPausedAudio(false);
     setCurrentSpeaker(null);
     setAudioProgress(0);
+    // Narration is no longer driving the slide — release the progressive reveal
+    // so the learner keeps the full slide in front of them.
+    setActiveSegment(null);
     activeAudioSlideRef.current = null;
     currentSegmentIndexRef.current = 0;
     isPausedAudioRef.current = false;
@@ -1031,6 +1045,8 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
         }
 
         currentSegmentIndexRef.current = index;
+        // Drives progressive reveal + transcript highlighting for this slide
+        setActiveSegment(index);
         const segment = slide.narration_script[index];
         const text = segment.text;
         const voiceKey = segment.voice || 'female_genz';
@@ -1359,6 +1375,9 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     setMatchCorrect(false);
     setMatchAttempts(0);
 
+    // New slide → drop the previous slide's narration-sync position
+    setActiveSegment(null);
+
     const s = totalSlides[currentSlide];
     if (s?.type === 'day_in_life' && s.schedule?.length > 0) setActiveHour(s.schedule[0].time);
     else setActiveHour(null);
@@ -1388,6 +1407,13 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
     return () => window.speechSynthesis?.cancel();
   }, []);
 
+  // Keep the spoken transcript line in view as narration advances
+  useEffect(() => {
+    if (activeSegment === null) return;
+    const line = transcriptPanelRef.current?.querySelector(`[data-segment="${activeSegment}"]`);
+    line?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [activeSegment]);
+
   // Resume from where the learner left off (furthest slide seen for this module).
   useEffect(() => {
     const seen = currentUser?.progress?.slidesViewed?.[moduleId];
@@ -1403,13 +1429,35 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
 
   // Modules 2-6 are 2-preset (Formal + Gen-Z only). Module 1 + others are 4-tone.
   // Match the same list used by the tone-selector filter below to keep behavior consistent.
+  /**
+   * Item → narration-segment maps for the current slide, built once per slide.
+   * Null when the slide carries no narration script to sync against.
+   * Declared above the early return below so hook order never changes.
+   */
+  const activeSlideData = totalSlides[currentSlide];
+  const syncMaps = useMemo(() => {
+    const segments = activeSlideData?.narration_script;
+    if (!Array.isArray(segments) || segments.length === 0) return null;
+    const build = (items: unknown[] | undefined) =>
+      Array.isArray(items) && items.length > 0 ? mapItemsToSegments(segments, items) : null;
+
+    return {
+      bullets: build(activeSlideData.bullets || activeSlideData.items),
+      preview: build(activeSlideData.items || activeSlideData.bullets),
+      competencies: build(activeSlideData.list),
+      comparison: build(activeSlideData.table),
+      timeline: build(activeSlideData.timeline || activeSlideData.schedule),
+    };
+  }, [activeSlideData]);
+
   const hasUploadedSlides = !!(
-    customSlides &&
-    (Array.isArray(customSlides)
-      ? customSlides.length > 0
-      : isTwoPresetModule
-      ? !!((customSlides.formal && customSlides.formal.length > 0) || (customSlides.genz && customSlides.genz.length > 0))
-      : !!(customSlides.conversational && customSlides.conversational.length > 0))
+    moduleId === 2 ||
+    (customSlides &&
+      (Array.isArray(customSlides)
+        ? customSlides.length > 0
+        : isTwoPresetModule
+        ? !!((customSlides.formal && customSlides.formal.length > 0) || (customSlides.genz && customSlides.genz.length > 0))
+        : !!(customSlides.conversational && customSlides.conversational.length > 0)))
   );
 
   if (!hasUploadedSlides) {
@@ -1456,6 +1504,40 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
   );
 
 
+
+  /**
+   * Narration-synced reveal for a list of slide items.
+   *
+   * Returns null (→ render everything normally) unless the slide has a
+   * narration script AND narration is currently driving the slide, so a learner
+   * who never presses play still sees the complete slide.
+   */
+  const revealFor = (
+    items: unknown[] | undefined,
+    key: 'bullets' | 'preview' | 'competencies' | 'comparison'
+  ): RevealState | null => {
+    const map = syncMaps?.[key];
+    if (!map || !Array.isArray(items) || map.length !== items.length) return null;
+    return resolveReveal(map, activeSegment);
+  };
+
+  /**
+   * The narration line playing right now, for the live caption strip.
+   * Null unless a segmented narration is actually mid-playback.
+   */
+  const activeCaption = (() => {
+    const segments = slide?.narration_script;
+    if (!Array.isArray(segments) || segments.length === 0) return null;
+    if (activeSegment === null || activeSegment < 0 || activeSegment >= segments.length) return null;
+    if (!isPlayingAudio) return null;
+    const segment = segments[activeSegment];
+    if (!segment?.text) return null;
+    return {
+      text: segment.text as string,
+      speaker: segment.speaker as string | undefined,
+      position: `${activeSegment + 1} / ${segments.length}`,
+    };
+  })();
 
   // ── MAIN SLIDE RENDERERS ──
   const renderSlide = () => {
@@ -1583,14 +1665,17 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mt-1">{slide.title}</h2>
             </div>
 
-            {((slide.items && slide.items.length > 0) || (slide.bullets && slide.bullets.length > 0)) && (
+            {((slide.items && slide.items.length > 0) || (slide.bullets && slide.bullets.length > 0)) && (() => {
+              const points = slide.items || slide.bullets;
+              const reveal = revealFor(points, 'preview');
+              return (
               <div className="grid grid-cols-1 gap-2.5 my-2">
-                {(slide.items || slide.bullets).map((item: string, i: number) => {
+                {points.map((item: string, i: number) => {
                   const isSpecial = item.startsWith('+') || item.includes('ALWAYS');
                   return (
                     <div
                       key={i}
-                      className={`rounded-xl border p-3 flex gap-3 items-center hover:scale-[1.01] transition-all duration-200 ${
+                      className={`rounded-xl border p-3 flex gap-3 items-center hover:scale-[1.01] transition-all duration-200 ${revealClass(reveal, i)} ${
                         isSpecial
                           ? 'border-violet-500/30 bg-violet-500/5 shadow-sm shadow-violet-500/5'
                           : 'border-[var(--border-color)] bg-[var(--bg-card)]'
@@ -1608,7 +1693,8 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                   );
                 })}
               </div>
-            )}
+              );
+            })()}
 
             {slide.memory_hook && (
               <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-4 py-2.5 flex items-center gap-2 mt-auto">
@@ -1726,16 +1812,20 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
               </div>
             )}
 
-            {((slide.bullets && slide.bullets.length > 0) || (slide.items && slide.items.length > 0)) && (
-              <div className="grid grid-cols-1 gap-2">
-                {(slide.bullets || slide.items).map((b: string, i: number) => (
-                  <div key={i} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-3 flex gap-3 items-center hover:border-indigo-500/25 transition-all">
-                    <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
-                    <span className="text-xs text-[var(--text-secondary)] leading-relaxed">{b}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+            {((slide.bullets && slide.bullets.length > 0) || (slide.items && slide.items.length > 0)) && (() => {
+              const points = slide.bullets || slide.items;
+              const reveal = revealFor(points, 'bullets');
+              return (
+                <div className="grid grid-cols-1 gap-2">
+                  {points.map((b: string, i: number) => (
+                    <div key={i} className={`rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-3 flex gap-3 items-center hover:border-indigo-500/25 transition-all ${revealClass(reveal, i)}`}>
+                      <CheckCircle2 className="h-4 w-4 text-indigo-400 shrink-0" />
+                      <span className="text-xs text-[var(--text-secondary)] leading-relaxed">{b}</span>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
 
             {slide.reflection_prompt && (
               <div className="rounded-xl border border-cyan-500/25 bg-cyan-500/5 p-4 flex gap-3 items-start">
@@ -2172,46 +2262,51 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
               </div>
             )}
 
-            {/* Comparison Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-              <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4 space-y-3">
-                <h4 className="text-sm font-bold text-red-400 flex items-center gap-1.5">
-                  <XCircle className="h-4 w-4" /> Traditional / Old Way
-                </h4>
-                <div className="space-y-2">
-                  {slide.table?.map((r: any, i: number) => (
-                    <div key={i} className="border-t border-red-500/10 pt-2 flex gap-2.5 items-start">
-                      <span className="text-red-400/60 mt-0.5 shrink-0">{RI(r.icon, 'h-3.5 w-3.5')}</span>
-                      <div>
-                        {r.pain && <div className="text-[10px] font-extrabold text-red-300 uppercase tracking-wide">{r.pain}</div>}
-                        <div className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                          {isOldNew ? r.old : r.trad}
+            {/* Comparison Grid — both columns reveal row by row, in step with the narration */}
+            {(() => {
+              const rowReveal = revealFor(slide.table, 'comparison');
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+                  <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4 space-y-3">
+                    <h4 className="text-sm font-bold text-red-400 flex items-center gap-1.5">
+                      <XCircle className="h-4 w-4" /> Traditional / Old Way
+                    </h4>
+                    <div className="space-y-2">
+                      {slide.table?.map((r: any, i: number) => (
+                        <div key={i} className={`border-t border-red-500/10 pt-2 flex gap-2.5 items-start ${revealClass(rowReveal, i)}`}>
+                          <span className="text-red-400/60 mt-0.5 shrink-0">{RI(r.icon, 'h-3.5 w-3.5')}</span>
+                          <div>
+                            {r.pain && <div className="text-[10px] font-extrabold text-red-300 uppercase tracking-wide">{r.pain}</div>}
+                            <div className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                              {isOldNew ? r.old : r.trad}
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
 
-              <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4 space-y-3">
-                <h4 className="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4" /> OrchestrAI / New Way
-                </h4>
-                <div className="space-y-2">
-                  {slide.table?.map((r: any, i: number) => (
-                    <div key={i} className="border-t border-emerald-500/10 pt-2 flex gap-2.5 items-start">
-                      <span className="text-emerald-400/60 mt-0.5 shrink-0">{RI(r.icon, 'h-3.5 w-3.5')}</span>
-                      <div>
-                        {r.pain && <div className="text-[10px] font-extrabold text-emerald-300 uppercase tracking-wide">{r.pain}</div>}
-                        <div className="text-xs text-[var(--text-primary)] font-semibold leading-relaxed">
-                          {isOldNew ? r.new : r.orch}
+                  <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4 space-y-3">
+                    <h4 className="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4" /> OrchestrAI / New Way
+                    </h4>
+                    <div className="space-y-2">
+                      {slide.table?.map((r: any, i: number) => (
+                        <div key={i} className={`border-t border-emerald-500/10 pt-2 flex gap-2.5 items-start ${revealClass(rowReveal, i)}`}>
+                          <span className="text-emerald-400/60 mt-0.5 shrink-0">{RI(r.icon, 'h-3.5 w-3.5')}</span>
+                          <div>
+                            {r.pain && <div className="text-[10px] font-extrabold text-emerald-300 uppercase tracking-wide">{r.pain}</div>}
+                            <div className="text-xs text-[var(--text-primary)] font-semibold leading-relaxed">
+                              {isOldNew ? r.new : r.orch}
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </div>
+              );
+            })()}
 
             {slide.memory_hook && (
               <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-4 py-2.5 flex items-center gap-2">
@@ -2702,20 +2797,23 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-              {/* Left Column: List of Competencies */}
+              {/* Left Column: List of Competencies — revealed as the narrator reaches each one */}
               <div className="space-y-2.5">
-                {slide.list?.map((item: any, i: number) => (
-                  <div key={i} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-3 flex gap-3 items-start hover:border-indigo-500/30 transition-all duration-200">
-                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${item.grad || PILLAR_GRAD[i % 6]} flex items-center justify-center text-white shrink-0`}>
-                      {RI(item.icon, 'h-4 w-4')}
+                {(() => {
+                  const reveal = revealFor(slide.list, 'competencies');
+                  return slide.list?.map((item: any, i: number) => (
+                    <div key={i} className={`rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-3 flex gap-3 items-start hover:border-indigo-500/30 transition-all duration-200 ${revealClass(reveal, i)}`}>
+                      <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${item.grad || PILLAR_GRAD[i % 6]} flex items-center justify-center text-white shrink-0`}>
+                        {RI(item.icon, 'h-4 w-4')}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-[var(--text-primary)]">{item.name}</p>
+                        <p className="text-[10px] text-[var(--text-secondary)] leading-relaxed mt-0.5">{item.desc}</p>
+                        {item.gate && <p className="text-[10px] text-indigo-400 mt-1 italic font-medium">🔍 Gate check: {item.gate}</p>}
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-[var(--text-primary)]">{item.name}</p>
-                      <p className="text-[10px] text-[var(--text-secondary)] leading-relaxed mt-0.5">{item.desc}</p>
-                      {item.gate && <p className="text-[10px] text-indigo-400 mt-1 italic font-medium">🔍 Gate check: {item.gate}</p>}
-                    </div>
-                  </div>
-                ))}
+                  ));
+                })()}
               </div>
 
               {/* Right Column: Visual Cockpit / Skill Calibrator */}
@@ -3529,9 +3627,37 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
               {/* ── Left: Slide Panel ── */}
               <div className="flex flex-col min-h-0 lg:border-r border-[var(--border-color)]">
                 {/* Slide Content — fills available space, designed to fit */}
-                <div key={animKey} className={`flex-1 min-h-0 px-4 sm:px-6 py-4 flex flex-col ${slideDirection === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
+                <div key={animKey} className={`presenter-body flex-1 min-h-0 px-4 sm:px-6 py-4 flex flex-col ${slideDirection === 'right' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
                   {renderSlide()}
                 </div>
+
+                {/* ── LIVE NARRATION CAPTION ──
+                    Shows the exact sentence being spoken, so a learner can always
+                    see where the voiceover is in the slide. Only rendered while a
+                    segmented narration is actually playing. */}
+                {activeCaption && (
+                  <div className="shrink-0 border-t border-[var(--border-color)] bg-indigo-500/5 px-4 sm:px-6 py-2.5">
+                    <div className="max-w-4xl mx-auto flex items-start gap-2.5">
+                      <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center" aria-hidden="true">
+                        <span className="flex h-1.5 w-1.5 relative">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-500" />
+                        </span>
+                      </span>
+                      <div className="min-w-0">
+                        <span className="text-[9px] font-extrabold uppercase tracking-widest text-indigo-400 mr-2">
+                          {activeCaption.speaker || currentSpeaker || 'Narrating'}
+                        </span>
+                        <span className="text-[9px] text-[var(--text-secondary)] font-semibold">
+                          {activeCaption.position}
+                        </span>
+                        <p key={activeSegment} className="caption-line text-xs text-[var(--text-primary)] leading-relaxed mt-0.5">
+                          {activeCaption.text}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Mobile Audio Guide Controller (Visible on mobile/tablet, hidden on desktop) */}
                 <div className="lg:hidden shrink-0 border-t border-[var(--border-color)] px-4 py-2.5 bg-[var(--bg-card)]/40 flex items-center justify-between gap-3 text-xs">
@@ -3613,17 +3739,30 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
                 </div>
 
                 {/* Narration */}
-                <div className="flex-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/50 p-3 overflow-y-auto space-y-2.5">
+                <div ref={transcriptPanelRef} className="flex-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/50 p-3 overflow-y-auto space-y-2.5">
                   {Array.isArray(slide.narration_script) && slide.narration_script.length > 0 ? (
                     slide.narration_script.map((seg: any, i: number) => {
-                      const isTalking = isPlayingAudio && currentSpeaker === seg.speaker;
+                      // Highlight the exact line being spoken — not every line by the
+                      // same speaker, which used to light up the whole transcript.
+                      const isTalking = isPlayingAudio && activeSegment === i;
+                      const isSpoken = activeSegment !== null && i < activeSegment;
                       return (
-                        <div key={i} className={`p-2 rounded-lg border transition-all ${isTalking ? 'bg-indigo-500/10 border-indigo-500/30' : 'bg-transparent border-transparent opacity-80'}`}>
+                        <div
+                          key={i}
+                          data-segment={i}
+                          className={`p-2 rounded-lg border transition-all ${
+                            isTalking
+                              ? 'bg-indigo-500/10 border-indigo-500/30'
+                              : isSpoken
+                                ? 'bg-transparent border-transparent opacity-55'
+                                : 'bg-transparent border-transparent opacity-80'
+                          }`}
+                        >
                           <div className="flex items-center justify-between mb-0.5">
                             <span className={`text-[9px] uppercase tracking-widest font-extrabold ${isTalking ? 'text-indigo-400 font-bold' : 'text-[var(--text-secondary)]'}`}>{seg.speaker} ({seg.voice})</span>
                             {isTalking && <span className="flex h-1.5 w-1.5 relative"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-500"></span></span>}
                           </div>
-                          <p className="text-[10px] text-[var(--text-secondary)] leading-relaxed italic">"{seg.text}"</p>
+                          <p className={`text-[10px] leading-relaxed italic ${isTalking ? 'text-[var(--text-primary)] not-italic font-medium' : 'text-[var(--text-secondary)]'}`}>"{seg.text}"</p>
                         </div>
                       );
                     })

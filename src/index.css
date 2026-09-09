@@ -623,6 +623,7 @@ button:disabled {
 .reveal-stagger > *:nth-child(6) { transition-delay: 350ms; }
 .reveal-stagger > *:nth-child(7) { transition-delay: 420ms; }
 .reveal-stagger > *:nth-child(8) { transition-delay: 490ms; }
+.reveal-stagger > *:nth-child(9) { transition-delay: 560ms; }
 
 /* ── Hover lift (cards) ─────────────────────────────── */
 .hover-lift {
@@ -764,6 +765,29 @@ button:disabled {
   line-height: 1.05;
   letter-spacing: -0.03em;
 }
+
+/* The hero brand statement — the one message a visitor cannot miss */
+.hero-statement {
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  font-size: clamp(2rem, 6.4vw, 4.4rem);
+}
+
+/* Gentle float for the AI delivery network */
+@keyframes floatSoft {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+.float-soft { animation: floatSoft 7s ease-in-out infinite; }
+
+/* Scroll cue at the foot of the full-screen hero */
+@keyframes scrollCue {
+  0%, 100% { transform: translateY(0);   opacity: 0.55; }
+  50%      { transform: translateY(6px); opacity: 1; }
+}
+.scroll-cue { animation: scrollCue 2.2s ease-in-out infinite; }
 .section-title {
   font-size: clamp(1.7rem, 4.4vw, 3rem);
   line-height: 1.12;
@@ -803,6 +827,69 @@ html {
 .scroll-rail::-webkit-scrollbar { display: none; }
 
 /* =====================================================
+   PRESENTER — narration/visual synchronisation
+   Items the narrator has not reached yet stay on screen but recede;
+   the point being explained right now is lifted and highlighted.
+   ===================================================== */
+.sync-item {
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.sync-item--ahead {
+  opacity: 0.34;
+  transform: translateY(5px);
+}
+.sync-item--seen {
+  opacity: 1;
+  transform: translateY(0);
+}
+.sync-item--active {
+  opacity: 1;
+  transform: translateY(0);
+  border-color: rgba(99, 102, 241, 0.55) !important;
+  box-shadow:
+    0 0 0 1px rgba(99, 102, 241, 0.35),
+    0 6px 22px -6px rgba(99, 102, 241, 0.35);
+}
+/* Accent bar on the item currently being narrated */
+.sync-item--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12%;
+  bottom: 12%;
+  width: 3px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #6366f1, #22d3ee);
+}
+.sync-item { position: relative; }
+
+/* Live narration caption */
+.caption-line {
+  animation: captionIn 0.35s ease both;
+}
+@keyframes captionIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================================================
+   PRESENTER — mobile learning readability
+   The deck is authored at desktop density; on phones the smallest
+   type is nudged up so learners are not squinting at 9–10px.
+   ===================================================== */
+@media (max-width: 639px) {
+  .presenter-body .text-\[9px\]  { font-size: 10.5px; line-height: 1.5; }
+  .presenter-body .text-\[10px\] { font-size: 11.5px; line-height: 1.55; }
+  .presenter-body .text-\[11px\] { font-size: 12px;   line-height: 1.55; }
+  .presenter-body .text-xs       { font-size: 13px;   line-height: 1.6; }
+  .presenter-body .text-sm       { font-size: 14.5px; line-height: 1.6; }
+}
+
+/* =====================================================
    REDUCED MOTION — respect the OS setting everywhere
    ===================================================== */
 @media (prefers-reduced-motion: reduce) {
@@ -818,6 +905,10 @@ html {
   .headline-line,
   .network-line,
   .network-halo,
+  .flow-line,
+  .node-halo,
+  .float-soft,
+  .scroll-cue,
   .glow-soft,
   .animate-float-up,
   .animate-float-down,
@@ -831,6 +922,13 @@ html {
     transform: none !important;
     animation: none !important;
   }
+  /* Keep the dim/highlight (it is focus, not motion) but drop the movement */
+  .sync-item {
+    transition: opacity 0.2s linear !important;
+    transform: none !important;
+  }
+  .sync-item--ahead { transform: none !important; }
+  .caption-line { animation: none !important; }
   .hover-lift:hover,
   .hover-lift:active { transform: none !important; }
   html { scroll-behavior: auto; }

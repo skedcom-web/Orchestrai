@@ -101,13 +101,13 @@ export const Modules: React.FC = () => {
       id: 2,
       title: 'Module 2: The OrchestrAI Framework Architecture',
       duration: '5 hours',
-      desc: 'Dive into the 6 Core Principles and map the 6-stage lifecycle loop (Intent, Orchestrate, Generate, Validate, Evolve, Deploy).',
+      desc: 'Dive into the 6 Core Principles and map the 6-stage OrchestrAI Delivery Framework (ODF) lifecycle loop (Intent & Outcome, Requirements & Context, AI-Assisted Design, AI-Generated Dev, Testing & QA, Deployment & Improvement).',
       content: (
         <div className="space-y-6 text-sm text-[var(--text-secondary)] leading-relaxed">
           <div>
             <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">2.1 The Six Core Principles</h4>
             <p className="mb-3">
-              These six principles govern all OrchestrAI projects:
+              These six principles govern all OrchestrAI Delivery Framework (ODF) projects:
             </p>
             <ol className="list-decimal list-inside space-y-2.5 ml-2 font-medium">
               <li><strong className="text-[var(--text-primary)]">AI as Primary Builder:</strong> The AI engine writes all code, schemas, and tests. The Lead never codes.</li>
@@ -120,22 +120,22 @@ export const Modules: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">2.2 The Six-Stage Lifecycle Loop</h4>
-            <div className="flex justify-center my-4 font-bold text-xs bg-slate-500/5 py-3 rounded-lg border border-[var(--border-color)]">
-              <span className="text-indigo-400">INTENT</span>
-              <span className="mx-2 text-[var(--text-secondary)]">→</span>
-              <span className="text-cyan-400">ORCHESTRATE</span>
-              <span className="mx-2 text-[var(--text-secondary)]">→</span>
-              <span className="text-purple-400">GENERATE</span>
-              <span className="mx-2 text-[var(--text-secondary)]">→</span>
-              <span className="text-emerald-400">VALIDATE</span>
-              <span className="mx-2 text-[var(--text-secondary)]">→</span>
-              <span className="text-indigo-400">EVOLVE</span>
-              <span className="mx-2 text-[var(--text-secondary)]">→</span>
-              <span className="text-cyan-400">DEPLOY</span>
+            <h4 className="text-base font-bold text-[var(--text-primary)] mb-2">2.2 The Six-Stage ODF Lifecycle Loop</h4>
+            <div className="flex flex-wrap justify-center items-center gap-1.5 my-4 font-bold text-xs bg-slate-500/5 py-3 px-2 rounded-lg border border-[var(--border-color)]">
+              <span className="text-indigo-400">01 INTENT &amp; OUTCOME</span>
+              <span className="text-[var(--text-secondary)]">→</span>
+              <span className="text-cyan-400">02 REQUIREMENTS &amp; CONTEXT</span>
+              <span className="text-[var(--text-secondary)]">→</span>
+              <span className="text-purple-400">03 AI DESIGN</span>
+              <span className="text-[var(--text-secondary)]">→</span>
+              <span className="text-emerald-400">04 AI DEVELOPMENT</span>
+              <span className="text-[var(--text-secondary)]">→</span>
+              <span className="text-amber-400">05 TESTING &amp; QA</span>
+              <span className="text-[var(--text-secondary)]">→</span>
+              <span className="text-rose-400">06 DEPLOY &amp; IMPROVE</span>
             </div>
             <p className="mb-2">
-              The loop is continuous. After deploying, user feedback immediately re-enters as new Intent.
+              The ODF loop is continuous. After deployment, real user outcomes and feedback immediately re-enter as Stage 01 Intent &amp; Outcome Definition.
             </p>
           </div>
 

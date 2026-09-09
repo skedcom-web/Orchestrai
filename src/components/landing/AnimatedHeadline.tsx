@@ -19,7 +19,7 @@ const ROTATE_MS = 2600;
  * motion" on, the phrases still rotate but without the transition, and the
  * live region is polite so screen readers are not interrupted.
  */
-export const AnimatedHeadline: React.FC = () => {
+export const AnimatedHeadline: React.FC<{ centered?: boolean }> = ({ centered }) => {
   const [index, setIndex] = useState(0);
   const reducedMotion = usePrefersReducedMotion();
 
@@ -31,7 +31,7 @@ export const AnimatedHeadline: React.FC = () => {
   }, []);
 
   return (
-    <div className="headline-rotator min-h-[1.9rem] sm:min-h-[2.1rem] mb-3 flex items-center">
+    <div className={`headline-rotator min-h-[1.9rem] sm:min-h-[2.1rem] mb-3 flex items-center ${centered ? 'justify-center' : ''}`}>
       <span
         key={reducedMotion ? 'static' : index}
         aria-hidden="true"

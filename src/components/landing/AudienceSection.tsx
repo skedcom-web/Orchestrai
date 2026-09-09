@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Code, Building, UserCog, FlaskConical, ServerCog,
+  Code, Building, UserCog, FlaskConical, Bug, ServerCog,
   ClipboardList, Users2, Briefcase, Users,
 } from 'lucide-react';
 import { Reveal } from './Reveal';
@@ -29,10 +29,17 @@ const AUDIENCES = [
   },
   {
     icon: FlaskConical,
-    title: 'QA Engineers & Testers',
+    title: 'QA Engineers',
     desc: 'Validate AI-generated applications and outcomes.',
     accent: 'text-emerald-400',
     glow: 'rgba(52,211,153,0.35)',
+  },
+  {
+    icon: Bug,
+    title: 'Testers',
+    desc: 'Prove quality against real business intent, not just tickets.',
+    accent: 'text-lime-400',
+    glow: 'rgba(163,230,53,0.35)',
   },
   {
     icon: ServerCog,
@@ -58,7 +65,7 @@ const AUDIENCES = [
   {
     icon: Briefcase,
     title: 'CTOs / CIOs / Technology Leaders',
-    desc: 'Drive enterprise AI adoption safely and effectively.',
+    desc: 'Drive OrchestrAI Delivery Framework (ODF) adoption safely and effectively.',
     accent: 'text-fuchsia-400',
     glow: 'rgba(232,121,249,0.35)',
   },
@@ -89,7 +96,7 @@ export const AudienceSection: React.FC = () => (
         </p>
       </Reveal>
 
-      <Reveal stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <Reveal stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         {AUDIENCES.map(({ icon: Icon, title, desc, accent, glow }) => (
           <div
             key={title}

@@ -61,10 +61,11 @@ export const WhyOrchestrAI: React.FC = () => (
           Why It Exists
         </div>
         <h2 className="section-title font-extrabold tracking-tight">
-          Why <span className="gradient-text">OrchestrAI</span>?
+          Why was <span className="gradient-text">OrchestrAI</span> created?
         </h2>
         <p className="mt-3 text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
-          Six reasons enterprises adopt it — and six reasons professionals learn it.
+          Enterprise delivery was too slow, and AI alone was too unaccountable. Six reasons enterprises
+          adopt OrchestrAI — and six reasons professionals learn it.
         </p>
       </Reveal>
 

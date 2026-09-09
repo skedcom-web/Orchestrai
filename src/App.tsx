@@ -20,7 +20,8 @@ import { Resources } from './pages/Resources';
 import { useApp } from './context/AppContext';
 import { CelebrationOverlay } from './components/CelebrationOverlay';
 import { QuickHelp } from './components/QuickHelp';
-import { Sparkles, BookOpen, Shield, Award, X, CheckCircle2, AlertTriangle, XCircle, Info, Folder } from 'lucide-react';
+import { OrchestrAIBrandHeader } from './components/OrchestrAILogo';
+import { BookOpen, Shield, Award, X, CheckCircle2, AlertTriangle, XCircle, Info, Folder } from 'lucide-react';
 import { getFirebaseDb } from './firebase';
 import { ref, set } from 'firebase/database';
 import './App.css';
@@ -69,9 +70,15 @@ const AppContent: React.FC = () => {
     };
   }, []);
 
-  // Roadmap is shown on non-admin pages, only when a user is logged in
-  // (on the landing page it shows for everyone to understand the journey)
-  const showRoadmap = !isAdminRoute && !(currentUser?.isReviewer || currentUser?.role === 'SME' || currentUser?.role === 'ADMIN');
+  // Roadmap is shown on non-admin pages for candidates.
+  // On the landing page it is held back for signed-out visitors so the homepage
+  // opens on the OrchestrAI story rather than a progress tracker they have no
+  // progress in yet; signed-in candidates still see it everywhere.
+  const isLandingRoute = location.pathname === '/';
+  const showRoadmap =
+    !isAdminRoute &&
+    !(currentUser?.isReviewer || currentUser?.role === 'SME' || currentUser?.role === 'ADMIN') &&
+    !(isLandingRoute && !currentUser);
 
   return (
     <>
@@ -227,13 +234,8 @@ const AppContent: React.FC = () => {
             
             {/* Brand column */}
             <div className="space-y-3">
-              <div className="flex items-center gap-2.5">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                  <Sparkles className="h-4 w-4 text-white" />
-                </div>
-                <span className="text-base font-extrabold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
-                  OrchestrAI
-                </span>
+              <div>
+                <OrchestrAIBrandHeader />
               </div>
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-[220px]">
                 AI-powered <strong className="text-[var(--text-primary)]">OrchestrAI Lead</strong> Certification that gets you hired by top IT companies.

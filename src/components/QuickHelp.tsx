@@ -139,9 +139,9 @@ export const QuickHelp: React.FC = () => {
       },
       {
         id: 'gs-8',
-        question: 'What is the OrchestrAI Lifecycle Loop?',
-        answer: 'The OrchestrAI Lifecycle Loop has 6 stages:\n\n1. **Intent**: Frame needs into specifications\n2. **Orchestrate**: Map dependencies & design API contracts\n3. **Generate**: Orchestrate AI code generation (no manual code!)\n4. **Validate**: Test security (OWASP), data integrity\n5. **Evolve**: Prompt iterative feedback\n6. **Deploy**: Publish to production\n\nThis loop is taught in Module 2 and applied throughout the entire curriculum.',
-        keywords: ['loop', 'lifecycle', 'stages', '6-stage', 'intent', 'orchestrate', 'generate', 'validate', 'evolve', 'deploy']
+        question: 'What is the OrchestrAI Delivery Framework (ODF) Lifecycle Loop?',
+        answer: 'The OrchestrAI Delivery Framework (ODF) has 6 stages:\n\n1. **01 — Intent & Outcome Definition**: Define goals, success metrics, and stakeholders.\n2. **02 — Requirements & Context**: Capture business needs, constraints, and requirements.\n3. **03 — AI-Assisted Design**: AI generates architecture and solution designs.\n4. **04 — AI-Generated Development**: AI accelerates coding, APIs, and integrations.\n5. **05 — Testing & Quality Assurance**: AI + Human validation for quality and security.\n6. **06 — Deployment & Improvement**: Deliver rapidly and continuously evolve.\n\nThis loop is taught in Module 2 and applied throughout the entire curriculum.',
+        keywords: ['loop', 'lifecycle', 'stages', '6-stage', 'odf', 'intent', 'requirements', 'design', 'development', 'testing', 'deployment']
       },
     ],
 
@@ -155,9 +155,9 @@ export const QuickHelp: React.FC = () => {
       },
       {
         id: 'mod-2',
-        question: 'Tell me about Module 2 (Architecture)',
-        answer: 'Module 2: "OrchestrAI Framework Architecture" (6 Hours)\n\nDeep dive into the framework\'s core principles:\n• The 6 Core Principles of AI orchestration\n• The 6-Stage Lifecycle Loop (Intent → Orchestrate → Generate → Validate → Evolve → Deploy)\n• Constraint-based prompt engineering\n• Quality by design approach\n\n⚠️ Ends with the **Quiz Gate** — you must score ≥80% (5/6 correct) to proceed!',
-        keywords: ['module 2', 'm2', 'architecture', 'principles', 'lifecycle', 'framework']
+        question: 'Tell me about Module 2 (Architecture & ODF)',
+        answer: 'Module 2: "OrchestrAI Framework Architecture" (6 Hours)\n\nDeep dive into the framework\'s core principles:\n• The 6 Core Principles of AI orchestration\n• The 6-Stage ODF Lifecycle Loop (Intent & Outcome → Requirements → AI Design → AI Dev → Testing & QA → Deployment & Improvement)\n• Constraint-based prompt engineering\n• Quality by design approach\n\n⚠️ Ends with the **Quiz Gate** — you must score ≥80% (5/6 correct) to proceed!',
+        keywords: ['module 2', 'm2', 'architecture', 'principles', 'lifecycle', 'framework', 'odf']
       },
       {
         id: 'mod-3',
