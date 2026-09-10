@@ -781,7 +781,13 @@ export const TrainingPresenter: React.FC<TrainingPresenterProps> = ({ moduleId, 
               }
             }, interval);
           }).catch(err => {
-            console.error("Failed to play background music:", err);
+            // AbortError fires when a fast slide/track change calls .pause() on this
+            // element before its own play() promise has settled — expected and benign
+            // (the next track starts cleanly right after). Only genuine playback
+            // failures (blocked autoplay, network errors, etc.) are worth logging.
+            if (err?.name !== 'AbortError') {
+              console.error("Failed to play background music:", err);
+            }
           });
         }
       } else {
