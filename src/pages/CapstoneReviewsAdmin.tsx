@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { ref, get, set, update } from 'firebase/database';
 import emailjs from '@emailjs/browser';
 import {
@@ -1024,6 +1024,10 @@ const ReviewDetail: React.FC<{
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiResult, setAiResult] = useState<TierBSuggestion | null>(existingReview?.tierBSuggestion || null);
   const [autoChecks, setAutoChecks] = useState<AutoChecks | null>(existingReview?.autoChecks || null);
+  const [aiModalOpen, setAiModalOpen] = useState(false);
+  const [aiProgressStep, setAiProgressStep] = useState<number>(1);
+  const aiPanelRef = useRef<HTMLDivElement>(null);
+  const rubricRef = useRef<HTMLDivElement>(null);
 
   const cap = useMemo(() => CAPSTONES.find(c => c.id === submission.capstoneId), [submission.capstoneId]);
 
@@ -1184,8 +1188,15 @@ const ReviewDetail: React.FC<{
     }
     setAiError(null);
     setRunningAi(true);
+    setAiModalOpen(true);
+    setAiProgressStep(1);
+
+    // Progressive step simulation while async request is active
+    const timer1 = setTimeout(() => setAiProgressStep(2), 1800);
+    const timer2 = setTimeout(() => setAiProgressStep(3), 4200);
 
     const provider = systemConfig.aiReviewProvider || 'render';
+    const subId = submission.submissionId || `${submission.learnerUid}_${submission.capstoneId}`;
 
     try {
       let responseData: any;
@@ -1202,13 +1213,13 @@ const ReviewDetail: React.FC<{
           method: 'POST',
           headers,
           body: JSON.stringify({
-            submissionId: submission.submissionId,
+            submissionId: subId,
             modelOverride: systemConfig.aiReviewModel,
           }),
         });
         if (!res.ok) {
           const errText = await res.text().catch(() => '');
-          throw new Error(`Render service error ${res.status}: ${errText.slice(0, 400)}`);
+          throw new Error(`Render service error ${res.status}: ${errText.slice(0, 400) || 'Service unreachable'}`);
         }
         responseData = await res.json();
 
@@ -1221,7 +1232,7 @@ const ReviewDetail: React.FC<{
         const fnName = systemConfig.aiReviewFunctionName || 'scoreCapstoneTierB';
         const fn = httpsCallable(functions, fnName);
         const res: any = await fn({
-          submissionId: submission.submissionId,
+          submissionId: subId,
           modelOverride: systemConfig.aiReviewModel
         });
         responseData = res?.data;
@@ -1229,6 +1240,7 @@ const ReviewDetail: React.FC<{
 
       const suggestion = responseData?.tierBSuggestion as TierBSuggestion | undefined;
       if (!suggestion) throw new Error('Service returned no tierBSuggestion. Check service logs.');
+      
       setAiResult(suggestion);
       if (suggestion.autoChecks) setAutoChecks(suggestion.autoChecks);
 
@@ -1239,6 +1251,7 @@ const ReviewDetail: React.FC<{
           reviewMode: 'auto', aiReviewedAt: Date.now()
         });
       }
+      setAiProgressStep(4);
       addToast(`AI Review complete — ${suggestion.total}/100 from ${suggestion.model}.`, 'success');
       onSaved();
     } catch (err: any) {
@@ -1250,10 +1263,14 @@ const ReviewDetail: React.FC<{
         friendly = err?.message || 'OPENROUTER_API_KEY secret is not set on the function.';
       } else if (code === 'functions/internal') {
         friendly = err?.message || 'AI scoring threw an error — check service logs.';
+      } else if (/failed to fetch|network/i.test(friendly)) {
+        friendly = `Cannot connect to ${systemConfig.aiReviewServiceUrl || 'Render service'}. If using free tier, service might be waking up — please retry in 15 seconds.`;
       }
       setAiError(friendly);
-      addToast('AI Review failed — see panel for details.', 'error');
+      addToast('AI Review failed — see popup for details.', 'error');
     } finally {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
       setRunningAi(false);
     }
   };
@@ -1261,7 +1278,14 @@ const ReviewDetail: React.FC<{
   const adoptAllAiScores = () => {
     if (!aiResult) return;
     setScores({ ...scores, ...aiResult.perCategory });
-    addToast('Adopted all AI-suggested scores. Review + override per category before notifying.', 'info');
+    if (!strengths.trim() && aiResult.overallObservations) {
+      setStrengths(`AI Review Summary (${aiResult.model}):\n${aiResult.overallObservations}`);
+    }
+    setAiModalOpen(false);
+    addToast('Adopted all AI-suggested scores! Form updated.', 'success');
+    setTimeout(() => {
+      rubricRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
   };
   const adoptCategoryScore = (key: string) => {
     if (!aiResult?.perCategory?.[key] && aiResult?.perCategory?.[key] !== 0) return;
@@ -1731,19 +1755,24 @@ const ReviewDetail: React.FC<{
         <div className="space-y-4 lg:col-span-2">
           {/* Tier B AI Suggestion panel */}
           {(aiResult || autoChecks || aiError || runningAi) && !isSme && (
-            <div className="glass-card rounded-2xl p-5 border border-purple-500/25 bg-gradient-to-br from-purple-500/5 to-transparent">
+            <div ref={aiPanelRef} className="glass-card rounded-2xl p-5 border border-purple-500/25 bg-gradient-to-br from-purple-500/5 to-transparent">
               <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                 <h3 className="text-sm font-bold flex items-center gap-2"><Bot className="h-4 w-4 text-purple-400" /> AI Review (Tier B)</h3>
-                {aiResult && (
-                  <button onClick={adoptAllAiScores} className="px-3 py-1 rounded-md bg-purple-500/15 border border-purple-500/30 hover:bg-purple-500/25 text-purple-300 text-[10px] font-extrabold transition-all">
-                    Adopt All ({aiResult.total}/100)
+                <div className="flex items-center gap-2">
+                  <button onClick={runAiReview} disabled={runningAi} className="px-2.5 py-1 rounded-md border border-purple-500/30 hover:bg-purple-500/15 text-purple-300 text-[10px] font-extrabold transition-all disabled:opacity-50">
+                    {runningAi ? 'Scoring…' : 'Re-run AI'}
                   </button>
-                )}
+                  {aiResult && (
+                    <button onClick={adoptAllAiScores} className="px-3 py-1 rounded-md bg-purple-500/15 border border-purple-500/30 hover:bg-purple-500/25 text-purple-300 text-[10px] font-extrabold transition-all">
+                      Adopt All ({aiResult.total}/100)
+                    </button>
+                  )}
+                </div>
               </div>
 
               {runningAi && (
                 <div className="text-xs text-purple-300 py-3 text-center animate-pulse">
-                  Calling Cloud Function · {systemConfig.aiReviewModel || 'qwen/qwen-2.5-72b-instruct'}…
+                  Calling AI Review Service (Render) · {systemConfig.aiReviewModel || 'qwen/qwen-2.5-72b-instruct'}…
                 </div>
               )}
 
@@ -1806,7 +1835,7 @@ const ReviewDetail: React.FC<{
           )}
 
           {/* 9-category scoring */}
-          <div className="glass-card rounded-2xl p-5">
+          <div ref={rubricRef} className="glass-card rounded-2xl p-5">
             <h3 className="text-sm font-bold mb-3 flex items-center gap-2"><FileSpreadsheet className="h-4 w-4 text-emerald-400" /> 9-Category Rubric Scoring</h3>
             <p className="text-[11px] text-[var(--text-secondary)] mb-4 leading-relaxed">
               Score each category from 0 to its max. Total auto-computes. Workflow carries the highest weight (20 pts) — that's where orchestration discipline shows.
@@ -1977,11 +2006,21 @@ const ReviewDetail: React.FC<{
                   <button
                     onClick={runAiReview}
                     disabled={saving || runningAi || notifying || deploying}
-                    title={!systemConfig.aiReviewEnabled ? 'Enable AI Review in System Settings → AI Review (Tier B) first' : 'Run Tier B AI scoring via Cloud Function'}
+                    title={!systemConfig.aiReviewEnabled ? 'Enable AI Review in System Settings → AI Review (Tier B) first' : 'Run Tier B AI scoring via Render Service'}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-purple-500/30 hover:bg-purple-500/10 text-purple-400 text-xs font-extrabold transition-all disabled:opacity-50"
                   >
                     <Bot className="h-3.5 w-3.5" /> {runningAi ? 'Running AI…' : 'Run AI Review'}
                   </button>
+                  {aiResult && (
+                    <button
+                      onClick={adoptAllAiScores}
+                      disabled={saving || runningAi || notifying || deploying}
+                      title="Copy all AI suggested scores into the rubric form"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:brightness-110 text-white text-xs font-extrabold shadow-md transition-all"
+                    >
+                      ✨ Adopt AI Scores ({aiResult.total}/100)
+                    </button>
+                  )}
                   <button
                     onClick={notifyFeedback}
                     disabled={saving || runningAi || notifying || deploying}
@@ -2011,6 +2050,179 @@ const ReviewDetail: React.FC<{
           </div>
         </div>
       </div>
+
+      {/* ─── AI Review Progress & Completion Modal ─── */}
+      {aiModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-lg glass-card rounded-2xl p-6 border border-purple-500/30 shadow-2xl bg-[var(--surface-sunken)] space-y-4 max-h-[90vh] overflow-y-auto">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border-color)]">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400">
+                  <Bot className={`h-5 w-5 ${runningAi ? 'animate-pulse' : ''}`} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-[var(--text-primary)]">
+                    {runningAi ? 'AI Review in Progress…' : aiError ? 'AI Review Failed' : 'AI Review Complete!'}
+                  </h3>
+                  <div className="text-[11px] text-[var(--text-secondary)]">
+                    {runningAi
+                      ? `Evaluating via Render · ${systemConfig.aiReviewModel || 'qwen/qwen-2.5-72b-instruct'}`
+                      : aiError
+                      ? 'Error communicating with AI service'
+                      : `Evaluated by ${aiResult?.model || 'OpenRouter'}`}
+                  </div>
+                </div>
+              </div>
+              {!runningAi && (
+                <button
+                  onClick={() => setAiModalOpen(false)}
+                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm px-2 py-1 rounded"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Modal Body: RUNNING */}
+            {runningAi && (
+              <div className="py-2 space-y-3">
+                <div className="space-y-2 text-xs">
+                  <div className={`p-2.5 rounded-lg border transition-all flex items-center gap-3 ${
+                    aiProgressStep >= 1 ? 'border-purple-500/40 bg-purple-500/10 text-purple-300' : 'border-transparent text-[var(--text-secondary)]'
+                  }`}>
+                    <span className="text-base">🌐</span>
+                    <div className="flex-1">
+                      <div className="font-bold">1. Connecting to Render AI Service</div>
+                      <div className="text-[10px] opacity-75">Reading submission from database</div>
+                    </div>
+                    {aiProgressStep > 1 && <span className="text-emerald-400 font-bold">✓</span>}
+                  </div>
+
+                  <div className={`p-2.5 rounded-lg border transition-all flex items-center gap-3 ${
+                    aiProgressStep >= 2 ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-300' : 'border-transparent text-[var(--text-secondary)]'
+                  }`}>
+                    <span className="text-base">📦</span>
+                    <div className="flex-1">
+                      <div className="font-bold">2. Inspecting GitHub Repository</div>
+                      <div className="text-[10px] opacity-75">Fetching README, package.json & file tree</div>
+                    </div>
+                    {aiProgressStep > 2 && <span className="text-emerald-400 font-bold">✓</span>}
+                  </div>
+
+                  <div className={`p-2.5 rounded-lg border transition-all flex items-center gap-3 ${
+                    aiProgressStep >= 3 ? 'border-indigo-500/40 bg-indigo-500/10 text-indigo-300' : 'border-transparent text-[var(--text-secondary)]'
+                  }`}>
+                    <span className="text-base">⚡</span>
+                    <div className="flex-1">
+                      <div className="font-bold">3. Verifying Live URL & Structure</div>
+                      <div className="text-[10px] opacity-75">Running deterministic checks</div>
+                    </div>
+                    {aiProgressStep > 3 && <span className="text-emerald-400 font-bold">✓</span>}
+                  </div>
+
+                  <div className={`p-2.5 rounded-lg border transition-all flex items-center gap-3 ${
+                    aiProgressStep >= 4 ? 'border-purple-500/40 bg-purple-500/10 text-purple-300' : 'border-transparent text-[var(--text-secondary)]'
+                  }`}>
+                    <span className="text-base">🧠</span>
+                    <div className="flex-1">
+                      <div className="font-bold">4. Scoring Rubric with Qwen 2.5 72B</div>
+                      <div className="text-[10px] opacity-75">Generating evidence-based score breakdown</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-purple-500/5 border border-purple-500/20 text-[11px] text-purple-300 text-center animate-pulse">
+                  ⏳ Please hold on ~10–20 seconds while the model thoroughly evaluates the code…
+                </div>
+              </div>
+            )}
+
+            {/* Modal Body: SUCCESS */}
+            {!runningAi && aiResult && !aiError && (
+              <div className="py-2 space-y-4">
+                <div className="flex items-center justify-between p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10">
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Total Suggested Score</div>
+                    <div className="text-3xl font-extrabold text-emerald-300">{aiResult.total} <span className="text-sm font-normal text-[var(--text-secondary)]">/ 100</span></div>
+                    <div className="text-xs font-bold text-emerald-400 mt-0.5">Outcome: {decideOutcome(aiResult.total).toUpperCase()}</div>
+                  </div>
+                  <div className="text-right text-[11px] text-[var(--text-secondary)] space-y-1">
+                    <div>Model: <strong className="text-[var(--text-primary)] font-mono text-[10px]">{aiResult.model}</strong></div>
+                    <div>AutoChecks: <strong className="text-cyan-400">{aiResult.autoChecks?.fileCount || 0} files</strong></div>
+                  </div>
+                </div>
+
+                {/* Score breakdown grid */}
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  {RUBRIC.map(r => (
+                    <div key={r.key} className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/60">
+                      <div className="text-[9px] uppercase tracking-wider text-[var(--text-secondary)] truncate">{r.label}</div>
+                      <div className="text-sm font-extrabold text-purple-400 mt-0.5">
+                        {aiResult.perCategory[r.key] ?? 0}<span className="text-[10px] font-normal text-[var(--text-secondary)]">/{r.max}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {aiResult.overallObservations && (
+                  <div className="p-3 rounded-lg border border-purple-500/20 bg-purple-500/5 text-xs text-[var(--text-secondary)] leading-relaxed">
+                    <strong className="text-purple-400 block mb-1">AI Observations:</strong>
+                    {aiResult.overallObservations}
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3 pt-3 border-t border-[var(--border-color)]">
+                  <button
+                    onClick={adoptAllAiScores}
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:brightness-110 text-white text-xs font-extrabold shadow-lg transition-all"
+                  >
+                    ✨ Adopt All AI Scores ({aiResult.total}/100)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setAiModalOpen(false);
+                      setTimeout(() => aiPanelRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+                    }}
+                    className="px-4 py-2.5 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-sunken)] text-xs font-bold text-[var(--text-secondary)]"
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Modal Body: ERROR */}
+            {!runningAi && aiError && (
+              <div className="py-2 space-y-4">
+                <div className="p-4 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 text-xs leading-relaxed space-y-2">
+                  <div className="font-bold text-rose-400 flex items-center gap-1.5">
+                    <span>⚠️</span> Scoring Failed
+                  </div>
+                  <p>{aiError}</p>
+                </div>
+
+                <div className="flex items-center gap-3 pt-3 border-t border-[var(--border-color)]">
+                  <button
+                    onClick={runAiReview}
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:brightness-110 text-white text-xs font-extrabold shadow-md transition-all"
+                  >
+                    🔄 Retry AI Review
+                  </button>
+                  <button
+                    onClick={() => setAiModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-sunken)] text-xs font-bold text-[var(--text-secondary)]"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };
