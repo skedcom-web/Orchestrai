@@ -49,7 +49,7 @@ Stores candidate profiles, system progress, quiz scores, and password parameters
         "badges": ["FIRST_STEP", "QUIZ_MASTER"]
       },
       "department": "Engineering",
-      "organization": "vThink"
+      "organization": "OrchestrAI Academy"
     }
   }
 }
@@ -113,7 +113,7 @@ Holds candidate responses for modules and final certifications.
           },
           "comments": "The OrchestrAI paradigm is mind-opening.",
           "timestamp": "2026-07-02T06:12:00Z",
-          "organization": "vThink",
+          "organization": "OrchestrAI Academy",
           "department": "Engineering"
         }
       }
@@ -166,3 +166,4 @@ Tracks unhandled client exceptions and system events.
 *   **Payload Constraints**: A maximum payload limit of **8MB** is enforced in the Resource Vault client code (`Resources.tsx`) to prevent large binary files from bloating RTDB nodes.
 *   **Indices**: Search filters in the Candidates dashboard sort entries by indexing users by email, optimizing query lookups.
 *   **Draft Nodes**: Module feedback entries check the `isDraft` status, isolating partial responses from final analytics reports.
+

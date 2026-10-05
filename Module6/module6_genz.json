@@ -168,7 +168,7 @@
       "bullets": [
         "OUTCOME: Logged-in Admin/Manager runs a report → previews table → downloads Excel OR PDF.",
         "STACK: NestJS reports module · Prisma aggregation queries · exceljs for .xlsx · pdfkit for .pdf · React Query for caching.",
-        "ACCEPTANCE: Each report < 3s for 10k issues. Excel opens cleanly in MS Excel + Google Sheets + LibreOffice. PDF prints landscape with vThink branding.",
+        "ACCEPTANCE: Each report < 3s for 10k issues. Excel opens cleanly in MS Excel + Google Sheets + LibreOffice. PDF prints landscape with OrchestrAI branding.",
         "EDGE CASES: Empty result set → friendly 'no data' state, NOT a broken empty file. Large dataset → server streams response, no memory bloat.",
         "RBAC: Reporters CANNOT access /reports (route guard + UI hide). Admins + Managers can. Tenant isolation enforced via Prisma where-clauses."
       ],
@@ -178,7 +178,7 @@
       "narration_script": [
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "The reports prompt. One module prompt. Sixty-four total variations come out — eight reports times two formats times four filter combos." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Outcome — Admin or Manager runs a report, previews the table, downloads Excel OR PDF. Stack — NestJS reports module, Prisma aggregation, exceljs for xlsx, pdfkit for PDF, React Query for caching." },
-        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Acceptance — each report under three seconds for ten thousand issues. Excel opens cleanly in MS Excel, Google Sheets, AND LibreOffice. PDF prints landscape with vThink branding." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Acceptance — each report under three seconds for ten thousand issues. Excel opens cleanly in MS Excel, Google Sheets, AND LibreOffice. PDF prints landscape with OrchestrAI branding." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Edge cases — empty result set shows friendly 'no data' state, NOT a broken empty file. Large dataset streams the response, no memory bloat." },
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "RBAC — Reporters CANNOT access slash reports. Route guard plus UI hide. Admins and Managers can. Tenant isolation via Prisma where-clauses. This is AI's leverage at its absolute peak. Sixty-four artifacts from one prompt." }
       ],
@@ -468,8 +468,8 @@
       "icon": "sparkles",
       "estimated_duration_seconds": 130,
       "cards": [
-        { "label": "🔧 Issue Tracker (this entire course's case study)", "reveal": "URL: projectissuetracker.vthinkdeveloper.com  ·  Login: admin@vthink.co.in / Admin@123  ·  What to inspect: workflow transitions, comment audit trail, reports export, admin RBAC. You've seen every prompt that built this." },
-        { "label": "⏱️ Timesheet Management Portal",                     "reveal": "URL: timesheet.vthinkdeveloper.com  ·  Login: admin@vthink.co.in / Admin@123  ·  Different domain, same method. 27 APIs, multi-role RBAC, timesheet validation grids. Built in 7 days using the same OGE-anchored playbook." },
+        { "label": "🔧 Issue Tracker (this entire course's case study)", "reveal": "URL: projectissuetracker.orchestraideveloper.com  ·  Login: admin@orchestrai.academy / Admin@123  ·  What to inspect: workflow transitions, comment audit trail, reports export, admin RBAC. You've seen every prompt that built this." },
+        { "label": "⏱️ Timesheet Management Portal",                     "reveal": "URL: timesheet.orchestraideveloper.com  ·  Login: admin@orchestrai.academy / Admin@123  ·  Different domain, same method. 27 APIs, multi-role RBAC, timesheet validation grids. Built in 7 days using the same OGE-anchored playbook." },
         { "label": "🧬 What both share",                                  "reveal": "FDD/TDD/DB/UI/Test docs generated up front. 8-component prompts. Surgical re-prompts. Commit per validated component. README + DESIGN that name OGE. Smoke checklist passes. These are what 'shipped under OrchestrAI' looks like." },
         { "label": "🎯 Your target",                                       "reveal": "Your capstone repo should look and feel like these. Clean commits. Clear README. Working demo. Reviewable in 10 minutes. If a stranger can clone it and run smoke in 15 min — you've passed the bar." }
       ],
@@ -566,7 +566,7 @@
       "icon": "users",
       "estimated_duration_seconds": 130,
       "list": [
-        { "name": "vThink OrchestrAI team",  "icon": "users",     "desc": "Direct line — info@vthink.co.in. For capstone questions, blocked engagements, or framework clarifications." },
+        { "name": "OrchestrAI Academy team",  "icon": "users",     "desc": "Direct line — info@orchestrai.academy. For capstone questions, blocked engagements, or framework clarifications." },
         { "name": "Reference repos",         "icon": "git-commit","desc": "Issue Tracker + Timesheet codebases are open for inspection. Steal patterns. Steal the README structure. Steal the DESIGN.md format." },
         { "name": "GitHub Docs",             "icon": "book-open", "desc": "https://docs.github.com — for any Git workflow you're unsure about. Bookmarked since Module 5." },
         { "name": "Your own commits",        "icon": "git-commit","desc": "Your repo's commit log IS your training journal. When you get stuck on the next engagement, your commits will show you what worked." },
@@ -574,10 +574,10 @@
       ],
       "memory_hook": "5 channels of support after you graduate. You're never building alone.",
       "closing_thread": "Quick reflection before the credits roll.",
-      "narration": "Where to get help after today. vThink OrchestrAI team direct — info at vthink dot co dot in. Reference repos — Issue Tracker and Timesheet. GitHub Docs for Git workflows. Your own commit log as training journal. Future cohort where you'll peer-review newer learners. Five channels. Never building alone.",
+      "narration": "Where to get help after today. OrchestrAI Academy team direct — info at orchestrai dot academy. Reference repos — Issue Tracker and Timesheet. GitHub Docs for Git workflows. Your own commit log as training journal. Future cohort where you'll peer-review newer learners. Five channels. Never building alone.",
       "narration_script": [
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "You don't graduate alone. Five channels of support after today." },
-        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "vThink OrchestrAI team — direct line, info at vthink dot co dot in. For capstone questions, blocked engagements, or framework clarifications." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "OrchestrAI Academy team — direct line, info at orchestrai dot academy. For capstone questions, blocked engagements, or framework clarifications." },
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Reference repos — Issue Tracker and Timesheet codebases are open for inspection. Steal patterns. Steal the README structure. Steal the DESIGN dot md format." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "GitHub Docs — bookmarked since Module 5. Your own commit log IS your training journal. When you get stuck on the next engagement, your commits show you what worked." },
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Next cohort — future learners will need YOU as peer reviewer. The cycle continues. Once you certify, you can pay forward. Welcome to the bigger thing." }
@@ -618,16 +618,16 @@
         "🎓 All 6 modules complete. You've covered every component of the OrchestrAI playbook.",
         "🛠️  Capstone challenge — pick a domain, run the playbook, push to GitHub, submit the URL.",
         "📩 Submission: certification form link in the course resources. Reviewer feedback in 5 business days.",
-        "🤝 Alumni — info@vthink.co.in for capstone help, blocked engagements, peer-review opportunities.",
+        "🤝 Alumni — info@orchestrai.academy for capstone help, blocked engagements, peer-review opportunities.",
         "🎤 One ask — leave honest feedback on this course. What landed, what didn't, what you'd add. We'll evolve the curriculum with you."
       ],
       "closing_thread": "Quality is not a service. It is a mandate. Go ship.",
-      "narration": "Module 6 complete. You're certified track. All six modules done. Capstone next. Submit your repo URL via the certification form. Five business days for review feedback. Alumni channel info at vthink dot co dot in. One ask — leave honest feedback on this course. Quality is not a service. It is a mandate. Go ship.",
+      "narration": "Module 6 complete. You're certified track. All six modules done. Capstone next. Submit your repo URL via the certification form. Five business days for review feedback. Alumni channel info at orchestrai dot academy. One ask — leave honest feedback on this course. Quality is not a service. It is a mandate. Go ship.",
       "narration_script": [
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Module 6. Complete." },
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "All six modules done. You've covered every component of the OrchestrAI playbook. From the mindset shift in Module 1 all the way to GitHub submission today." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Capstone next. Pick a domain. Run the playbook. Push to GitHub. Submit the URL. Feedback in five business days." },
-        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Alumni — info at vthink dot co dot in. Capstone help. Blocked engagements. Peer review. We're a community now." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Alumni — info at orchestrai dot academy. Capstone help. Blocked engagements. Peer review. We're a community now." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "One ask — leave honest feedback on this course. What landed. What didn't. What you'd add. We evolve the curriculum WITH you." },
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Final line. The one we opened with. Quality is not a service. It is a mandate. Go ship." }
       ],
@@ -635,3 +635,4 @@
     }
   ]
 }
+

@@ -168,7 +168,7 @@
       "bullets": [
         "OUTCOME — authenticated Admin or Manager executes a report → previews table → downloads Excel or PDF.",
         "STACK — NestJS reports module · Prisma aggregation queries · exceljs for xlsx · pdfkit for pdf · React Query for caching.",
-        "ACCEPTANCE — each report completes within 3 seconds for 10,000 issues. Excel opens cleanly in Microsoft Excel, Google Sheets, and LibreOffice. PDF renders landscape with vThink branding.",
+        "ACCEPTANCE — each report completes within 3 seconds for 10,000 issues. Excel opens cleanly in Microsoft Excel, Google Sheets, and LibreOffice. PDF renders landscape with OrchestrAI branding.",
         "EDGE CASES — empty result set yields a friendly 'no data' state, not a corrupt empty file. Large datasets — server streams the response, eliminating memory pressure.",
         "RBAC — Reporters CANNOT access /reports (route guard plus UI concealment). Admins and Managers retain access. Tenant isolation enforced via Prisma where-clauses."
       ],
@@ -178,7 +178,7 @@
       "narration_script": [
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The reports prompt. One module prompt. Sixty-four total variations produced — eight reports times two formats times four filter combinations." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Outcome — Admin or Manager executes a report, previews the table, downloads as Excel or PDF. Stack — NestJS reports module, Prisma aggregation, exceljs for xlsx, pdfkit for PDF, React Query for caching." },
-        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Acceptance — each report completes within three seconds for ten thousand issues. Excel opens cleanly in Microsoft Excel, Google Sheets, AND LibreOffice. PDF renders landscape with vThink branding." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Acceptance — each report completes within three seconds for ten thousand issues. Excel opens cleanly in Microsoft Excel, Google Sheets, AND LibreOffice. PDF renders landscape with OrchestrAI branding." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Edge cases — empty result yields a friendly 'no data' state, not a corrupt empty file. Large datasets stream the response, eliminating memory pressure." },
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "RBAC — Reporters cannot access /reports. Route guard plus UI concealment. Admins and Managers retain access. Tenant isolation via Prisma where-clauses. This is AI leverage at its peak. Sixty-four artefacts from a single prompt." }
       ],
@@ -468,8 +468,8 @@
       "icon": "sparkles",
       "estimated_duration_seconds": 135,
       "cards": [
-        { "label": "🔧 Issue Tracker (this programme's case study)", "reveal": "URL — projectissuetracker.vthinkdeveloper.com  ·  Login — admin@vthink.co.in / Admin@123  ·  Inspection points — workflow transitions, comment audit trail, reports export, admin RBAC. Every prompt that produced this has been examined in this programme." },
-        { "label": "⏱️ Timesheet Management Portal",               "reveal": "URL — timesheet.vthinkdeveloper.com  ·  Login — admin@vthink.co.in / Admin@123  ·  Distinct domain, identical method. 27 APIs, multi-role RBAC, timesheet validation grids. Produced in 7 days via the same OGE-anchored playbook." },
+        { "label": "🔧 Issue Tracker (this programme's case study)", "reveal": "URL — projectissuetracker.orchestraideveloper.com  ·  Login — admin@orchestrai.academy / Admin@123  ·  Inspection points — workflow transitions, comment audit trail, reports export, admin RBAC. Every prompt that produced this has been examined in this programme." },
+        { "label": "⏱️ Timesheet Management Portal",               "reveal": "URL — timesheet.orchestraideveloper.com  ·  Login — admin@orchestrai.academy / Admin@123  ·  Distinct domain, identical method. 27 APIs, multi-role RBAC, timesheet validation grids. Produced in 7 days via the same OGE-anchored playbook." },
         { "label": "🧬 Common characteristics",                     "reveal": "FDD, TDD, DB Design, UI Specs, Test Plan produced upfront. Eight-component prompts. Surgical re-prompts. Commit per validated component. README and DESIGN.md naming OGE explicitly. Smoke checklist passing. These exemplify 'shipped under OrchestrAI'." },
         { "label": "🎯 The capstone target",                         "reveal": "The capstone repository should resemble these examples. Clean commits. Clear README. Operational demo. Reviewable in 10 minutes. If an independent reviewer can clone and execute smoke testing in 15 minutes — the bar has been met." }
       ],
@@ -566,7 +566,7 @@
       "icon": "users",
       "estimated_duration_seconds": 135,
       "list": [
-        { "name": "vThink OrchestrAI team",  "icon": "users",     "desc": "Direct contact — info@vthink.co.in. For capstone enquiries, engagement obstacles, or framework clarifications." },
+        { "name": "OrchestrAI Academy team",  "icon": "users",     "desc": "Direct contact — info@orchestrai.academy. For capstone enquiries, engagement obstacles, or framework clarifications." },
         { "name": "Reference repositories",  "icon": "git-commit","desc": "Issue Tracker and Timesheet codebases remain available for inspection. Adopt patterns. Adopt the README structure. Adopt the DESIGN.md format." },
         { "name": "GitHub documentation",    "icon": "book-open", "desc": "docs.github.com — for Git workflow uncertainty. Bookmarked since Module 5." },
         { "name": "The practitioner's commits","icon": "git-commit","desc": "The repository commit log functions as a training journal. When subsequent engagements present challenges, the commits indicate the prior successful approach." },
@@ -574,10 +574,10 @@
       ],
       "memory_hook": "Five support channels post-graduation. The practitioner does not operate in isolation.",
       "closing_thread": "A brief reflection prior to conclusion follows.",
-      "narration": "Post-graduation support channels. vThink OrchestrAI team direct — info at vthink dot co dot in. Reference repositories — Issue Tracker and Timesheet. GitHub documentation for Git workflows. The practitioner's commit log as training journal. Subsequent cohorts where the practitioner may serve as peer reviewer. Five channels. The practitioner does not operate in isolation.",
+      "narration": "Post-graduation support channels. OrchestrAI Academy team direct — info at orchestrai dot academy. Reference repositories — Issue Tracker and Timesheet. GitHub documentation for Git workflows. The practitioner's commit log as training journal. Subsequent cohorts where the practitioner may serve as peer reviewer. Five channels. The practitioner does not operate in isolation.",
       "narration_script": [
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "The practitioner does not graduate in isolation. Five support channels post-graduation." },
-        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "vThink OrchestrAI team — direct contact, info at vthink dot co dot in. For capstone enquiries, engagement obstacles, or framework clarifications." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "OrchestrAI Academy team — direct contact, info at orchestrai dot academy. For capstone enquiries, engagement obstacles, or framework clarifications." },
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Reference repositories — Issue Tracker and Timesheet codebases remain available for inspection. Adopt patterns. Adopt the README structure. Adopt the DESIGN dot md format." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "GitHub documentation — bookmarked since Module 5. The practitioner's commit log functions as a training journal. When subsequent engagements present challenges, the commits indicate the prior successful approach." },
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Subsequent cohorts — future practitioners will require peer reviewers. The cycle continues. Once certified, the practitioner may serve as reviewer for subsequent cohorts. The community is now extended." }
@@ -618,16 +618,16 @@
         "🎓 All six modules complete. The practitioner has covered every component of the OrchestrAI playbook.",
         "🛠️  Capstone challenge — select a domain, execute the playbook, push to GitHub, submit the URL.",
         "📩 Submission — certification form link located in course resources. Reviewer feedback within five business days.",
-        "🤝 Alumni — info@vthink.co.in for capstone enquiries, engagement obstacles, peer-review opportunities.",
+        "🤝 Alumni — info@orchestrai.academy for capstone enquiries, engagement obstacles, peer-review opportunities.",
         "🎤 Request — provide honest feedback on this programme. What was effective. What was insufficient. What would be added. The curriculum evolves in collaboration with the practitioners."
       ],
       "closing_thread": "Quality is not a service. It is a mandate. Proceed to ship.",
-      "narration": "Module 6 complete. Certification track confirmed. All six modules complete. Capstone follows. Submit repository URL via certification form. Feedback within five business days. Alumni channel info at vthink dot co dot in. Request — provide honest feedback. Quality is not a service. It is a mandate. Proceed to ship.",
+      "narration": "Module 6 complete. Certification track confirmed. All six modules complete. Capstone follows. Submit repository URL via certification form. Feedback within five business days. Alumni channel info at orchestrai dot academy. Request — provide honest feedback. Quality is not a service. It is a mandate. Proceed to ship.",
       "narration_script": [
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Module 6. Complete." },
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "All six modules complete. The practitioner has covered every component of the OrchestrAI playbook. From the mindset shift in Module 1 through to GitHub submission today." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Capstone follows. Select a domain. Execute the playbook. Push to GitHub. Submit the URL. Reviewer feedback within five business days." },
-        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Alumni — info at vthink dot co dot in. Capstone enquiries. Engagement obstacles. Peer review. The practitioner is now part of a community." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Alumni — info at orchestrai dot academy. Capstone enquiries. Engagement obstacles. Peer review. The practitioner is now part of a community." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "One request — provide honest feedback on this programme. What was effective. What was insufficient. What would be added. The curriculum evolves in collaboration with the practitioners." },
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "The closing line. The same one with which we opened. Quality is not a service. It is a mandate. Proceed to ship." }
       ],
@@ -635,3 +635,4 @@
     }
   ]
 }
+

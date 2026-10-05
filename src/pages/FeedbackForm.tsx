@@ -596,7 +596,7 @@ export const ModuleFeedbackModal: React.FC<{
                 value={form.organization}
                 onChange={(e) => setField('organization', e.target.value)}
                 className={inputCls}
-                placeholder="e.g. vThink Global"
+                placeholder="e.g. Acme Corp"
               />
             </div>
           </div>
@@ -1041,7 +1041,7 @@ export const CertFeedbackGate: React.FC<{
                 value={form.organization}
                 onChange={(e) => setField('organization', e.target.value)}
                 className={`${inputCls} pl-8`}
-                placeholder="e.g. vThink Global"
+                placeholder="e.g. Acme Corp"
               />
             </div>
           </div>

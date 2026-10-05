@@ -259,7 +259,7 @@ export const CapstoneSubmit: React.FC = () => {
 
     try {
       await emailjs.send(serviceId, templateId, {
-        name: 'vThink OrchestrAI Admin',
+        name: 'OrchestrAI Academy Admin',
         email: 'vthinkorchestrai@gmail.com',
         to_email: 'vthinkorchestrai@gmail.com',
         adminEmail: 'vthinkorchestrai@gmail.com',
@@ -319,7 +319,7 @@ export const CapstoneSubmit: React.FC = () => {
 
     const reviewer = {
       uid: 'admin-new-uid',
-      name: 'vThink OrchestrAI Admin',
+      name: 'OrchestrAI Academy Admin',
       email: systemConfig.adminEmail || 'vthinkorchestrai@gmail.com'
     };
 

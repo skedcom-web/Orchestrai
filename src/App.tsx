@@ -1,6 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BRANDING } from './config/branding';
 import { AppProvider } from './context/AppContext';
 import { Header } from './components/Header';
 import { TimelineRoadmap } from './components/TimelineRoadmap';
@@ -240,7 +241,7 @@ const AppContent: React.FC = () => {
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-[220px]">
                 AI-powered <strong className="text-[var(--text-primary)]">OrchestrAI Lead</strong> Certification that gets you hired by top IT companies.
               </p>
-              <p className="text-xs text-[var(--text-secondary)] font-medium">A <strong>vThink Global Technologies</strong> initiative.</p>
+              <p className="text-xs text-[var(--text-secondary)] font-medium">Independent Learning &amp; Certification Platform for Human-AI Software Delivery.</p>
             </div>
 
             {/* Quick links */}
@@ -260,27 +261,27 @@ const AppContent: React.FC = () => {
               </div>
             </div>
 
-            {/* Founder */}
+            {/* About the Creator */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)]">Founder</h4>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)]">About the Creator</h4>
               <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                <strong className="text-[var(--text-primary)]">Sithanandham Radhakrishnan</strong>
+                <strong className="text-[var(--text-primary)]">{BRANDING.founderName}</strong>
                 <br />
-                <span className="text-indigo-500 font-semibold">Strategic Advisor &amp; Product Owner</span>
+                <span className="text-indigo-500 font-semibold">{BRANDING.founderTitle}</span>
                 <br />
-                vThink Global Technologies Pvt Ltd
+                <span className="text-[var(--text-primary)] font-medium">{BRANDING.founderRole}</span>
                 <br />
-                <span className="text-[var(--text-secondary)]">Chief OrchestrAI Architect</span>
+                <span className="text-[var(--text-secondary)]">{BRANDING.founderLeadership} · {BRANDING.founderExperience}</span>
               </p>
-              <p className="text-[10px] text-indigo-400 italic">
-                "Human Orchestrates. AI Builds. Value Delivered."
+              <p className="text-[10px] text-indigo-400 font-medium">
+                {BRANDING.footerTagline}
               </p>
             </div>
           </div>
 
           <div className="border-t border-[var(--border-color)] pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-[var(--text-secondary)]">
-            <span>&copy; 2026 OrchestrAI Lead Academy. All rights reserved.</span>
-            <span>Not-for-profit initiative. Training fee covers operational costs only.</span>
+            <span>&copy; 2026 {BRANDING.platformName}. All rights reserved.</span>
+            <span>{BRANDING.footerTagline} · {BRANDING.poweredBy}</span>
           </div>
         </div>
       </footer>

@@ -537,7 +537,7 @@
       "visual_cue": "iceberg_above_below_waterline",
       "analogy": {
         "title": "Above and Below the Waterline",
-        "text": "What the client sees is a single visible deliverable — a QA-ready application in days, not months. What sits beneath the waterline is six layers of orchestration, refined over years of vThink engineering, that make that visible delivery possible. The visible part is small. The hidden part is what makes it small."
+        "text": "What the client sees is a single visible deliverable — a QA-ready application in days, not months. What sits beneath the waterline is six layers of orchestration, refined over years of OrchestrAI engineering, that make that visible delivery possible. The visible part is small. The hidden part is what makes it small."
       },
       "list": [
         {

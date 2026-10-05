@@ -129,4 +129,5 @@ Once you approve the feel, I'll produce the remaining three (Formal two-voice, C
 
 ## 8. Open Question for You
 
-The personas above (Aanya, Dev, Maya, Zo, Kai, Sir Ravi) are my casting suggestion. If you'd rather use vThink-relevant names, real team members' style, or different gender pairings, tell me and I'll recast before writing the other three. Names are trivial to change; the *structure* is the thing to lock now.
+The personas above (Aanya, Dev, Maya, Zo, Kai, Sir Ravi) are my casting suggestion. If you'd rather use OrchestrAI-relevant names, real team members' style, or different gender pairings, tell me and I'll recast before writing the other three. Names are trivial to change; the *structure* is the thing to lock now.
+

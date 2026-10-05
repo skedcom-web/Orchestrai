@@ -258,3 +258,4 @@ Each phase ships → deploys → validates. P1+P2 alone = a usable "browse and s
 **Blueprint v0.2 — LOCKED. Ready to build.**
 
 Approve and I'll lift **Phase 1** (seed + library + selection + lock) immediately — that's the smallest end-to-end slice and should ship + deploy in one focused session.
+

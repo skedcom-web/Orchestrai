@@ -29,15 +29,15 @@
       "bullets": [
         "Five acts. Twenty-three slides. Two days of build effort presented as a structured retrospective.",
         "Coverage — authentication, application shell, dashboard. The three foundations every web application requires.",
-        "The case study remains the vThink Issue Tracker, available at projectissuetracker.vthinkdeveloper.com.",
+        "The case study remains the OrchestrAI Issue Tracker, available at projectissuetracker.orchestraideveloper.com.",
         "Cardinal principle — AI generates code; the practitioner executes installation commands manually. Learning resides in practice."
       ],
       "closing_thread": "We begin with Day 1 — predominantly manual work.",
-      "narration": "Module four. Foundation Build. The first production code commits. Authentication, application shell, dashboard. The vThink Issue Tracker engagement remains our reference. AI generates the code. The practitioner executes the installation commands manually.",
+      "narration": "Module four. Foundation Build. The first production code commits. Authentication, application shell, dashboard. The OrchestrAI Issue Tracker engagement remains our reference. AI generates the code. The practitioner executes the installation commands manually.",
       "narration_script": [
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Welcome to Module 4 of the OrchestrAI Lead Certification." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Module 3 established the discipline. Module 4 produces the first commits — authentication, application shell, and dashboard." },
-        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Two days of build effort, presented as a structured retrospective. We continue with the vThink Issue Tracker as our case study throughout." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Two days of build effort, presented as a structured retrospective. We continue with the OrchestrAI Issue Tracker as our case study throughout." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "The cardinal principle of this module — AI generates the code; the practitioner executes installation commands manually. Learning resides in practice, not in delegation." }
       ],
       "background_music": { "track_key": "intro_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
@@ -259,7 +259,7 @@
       "bullets": [
         "Shell composition — sidebar, main content area, theme toggle, PageHeader pattern.",
         "Every Issue Tracker screen renders within this frame. Construction is non-repeated; every subsequent screen inherits.",
-        "The UI Specifications document from Module 3 constitutes the contract — vThink purple, Sen font family, split-view login, collapsible sidebar.",
+        "The UI Specifications document from Module 3 constitutes the contract — OrchestrAI purple, Sen font family, split-view login, collapsible sidebar.",
         "AI implements per the specifications. The Lead's role is enforcement, not design."
       ],
       "closing_thread": "We examine the shell prompt.",
@@ -267,7 +267,7 @@
       "narration_script": [
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Day 3 morning. Authentication is shipped. We proceed to the application shell — the structural frame containing every subsequent screen." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Shell composition — sidebar, main content area, theme toggle, and PageHeader pattern. Every Issue Tracker screen renders within this frame." },
-        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "playful_intrigue", "text": "Construction is performed once; subsequent screens inherit the structure. The UI Specifications document constitutes the contract — vThink purple, Sen font family, split-view login, collapsible sidebar. The Lead's role is enforcement of these specifications, not design." }
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "playful_intrigue", "text": "Construction is performed once; subsequent screens inherit the structure. The UI Specifications document constitutes the contract — OrchestrAI purple, Sen font family, split-view login, collapsible sidebar. The Lead's role is enforcement of these specifications, not design." }
       ],
       "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
     },
@@ -289,7 +289,7 @@
         "text": "Stage architecture provides structure for performance to occur within. Correct stage construction enables effortless performance; incorrect construction causes every scene to struggle against the structure. The application shell functions identically."
       },
       "bullets": [
-        "Prompt referenced the UI Specifications document explicitly — vThink purple #5A00EE, Sen font family, MUI components, sidebar collapsibility.",
+        "Prompt referenced the UI Specifications document explicitly — OrchestrAI purple #5A00EE, Sen font family, MUI components, sidebar collapsibility.",
         "Required — absence of duplicate page title bar; contextual titles via PageHeader within content area per specification.",
         "Required — light and dark theme toggle in sidebar, persisted to localStorage, applied via MUI ThemeProvider.",
         "Required — RBAC-aware menu visibility — Reporters omit administrative links. Server-side route guard separate.",
@@ -297,10 +297,10 @@
       ],
       "memory_hook": "Reference the UI Specifications document within the prompt. AI honours specifications when explicitly invoked.",
       "closing_thread": "We examine the shell's constituent elements.",
-      "narration": "The shell prompt — one prompt, twelve files generated. Referenced UI Specifications explicitly. vThink purple, Sen font, MUI components, collapsible sidebar. No duplicate title bar. Theme toggle persisted. RBAC-aware menu. AI honoured every specification because the specification was in the kit.",
+      "narration": "The shell prompt — one prompt, twelve files generated. Referenced UI Specifications explicitly. OrchestrAI purple, Sen font, MUI components, collapsible sidebar. No duplicate title bar. Theme toggle persisted. RBAC-aware menu. AI honoured every specification because the specification was in the kit.",
       "narration_script": [
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "One prompt. Approximately twelve files generated. Sidebar, layout, theme provider, PageHeader, navigation hooks — cleanly composable." },
-        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "A critical practice — the prompt referenced the UI Specifications document explicitly. vThink purple, hex five A zero zero E E. Sen font family. MUI components. Sidebar collapsible." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "A critical practice — the prompt referenced the UI Specifications document explicitly. OrchestrAI purple, hex five A zero zero E E. Sen font family. MUI components. Sidebar collapsible." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Required — absence of duplicate page title bar. Contextual titles via the PageHeader pattern per specification. Theme toggle persisted to localStorage. RBAC-aware menu visibility — Reporters omit administrative links." },
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "Reference the UI Specifications document within the prompt. AI honours specifications when explicitly invoked. Omit that reference and AI will invent a complete alternative theme. The lesson — prompts must draw from the kit." }
       ],
@@ -467,17 +467,17 @@
       "estimated_duration_seconds": 95,
       "opening_hook": "Two days of build effort have been observed. The practitioner now interacts with the result directly.",
       "bullets": [
-        "The Issue Tracker is operational at projectissuetracker.vthinkdeveloper.com",
-        "Administrative credentials — admin@vthink.co.in / Admin@123",
+        "The Issue Tracker is operational at projectissuetracker.orchestraideveloper.com",
+        "Administrative credentials — admin@orchestrai.academy / Admin@123",
         "Open the URL in a new browser tab. Authenticate. Land on the dashboard.",
         "The practitioner is now standing within the artefact of everything just examined. Authentication, shell, dashboard — all operational.",
         "The next slide provides a guided tour of significant interactions."
       ],
       "closing_thread": "The guided tour follows.",
-      "narration": "The practitioner now operates the live build. URL — projectissuetracker-dot-vthinkdeveloper-dot-com. Credentials — admin at vthink dot co dot in. Password — Admin at one two three. Authenticate. Land on the dashboard.",
+      "narration": "The practitioner now operates the live build. URL — projectissuetracker-dot-orchestraideveloper-dot-com. Credentials — admin at orchestrai dot academy. Password — Admin at one two three. Authenticate. Land on the dashboard.",
       "narration_script": [
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Observation ends. Operation begins." },
-        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Open in a new browser tab — projectissuetracker dot vthinkdeveloper dot com. Login is admin at vthink dot co dot in. Password — Admin at one two three." },
+        { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Open in a new browser tab — projectissuetracker dot orchestraideveloper dot com. Login is admin at orchestrai dot academy. Password — Admin at one two three." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "playful_intrigue", "text": "Authenticate. Land on the dashboard. The practitioner is now standing within the artefact of everything just examined. Authentication, shell, dashboard — all operational, in production." },
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "teasing", "text": "The next slide provides a guided tour of significant interactions. The exercise is not yet complete." }
       ],
@@ -492,7 +492,7 @@
       "icon": "search",
       "estimated_duration_seconds": 115,
       "cards": [
-        { "label": "Login page — split-view layout",         "reveal": "Note the layout — left hero panel with vThink wordmark, right card with form. This is the result of UI Specifications being present in the kit; AI honoured the split-view rule exactly." },
+        { "label": "Login page — split-view layout",         "reveal": "Note the layout — left hero panel with OrchestrAI wordmark, right card with form. This is the result of UI Specifications being present in the kit; AI honoured the split-view rule exactly." },
         { "label": "Sidebar — exercise the collapse",         "reveal": "Activate the collapse control. Sidebar reduces to icons only with hover tooltips. This is the MUI Drawer mini variant pattern — directly from the shell prompt." },
         { "label": "Theme toggle — exercise the switch",      "reveal": "Located at the foot of the sidebar — Appearance toggle. Transition from light to dark. Every colour transitions in unison via MUI ThemeProvider. The preference persists after reload." },
         { "label": "Dashboard — four cards plus feed",        "reveal": "The four cards displayed are those specified by the prompt — Total Issues, My Open, Closed This Week, Overdue. Activity feed below. No charts in the first version; restraint was honoured." },
@@ -624,3 +624,4 @@
     }
   ]
 }
+

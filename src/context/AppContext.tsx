@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { BRANDING } from '../config/branding';
 import { getFirebaseDb } from '../firebase';
 import { initializeApp, deleteApp } from 'firebase/app';
 import { 
@@ -171,11 +172,14 @@ export interface SystemConfig {
   contactPhone?: string;
   contactAddress?: string;
   academyName?: string;
-  // Tier B AI rubric scoring (Cloud Function → OpenRouter → Qwen)
+  // Tier B AI rubric scoring (Render service → OpenRouter → Qwen)
   aiReviewEnabled?: boolean;
   aiReviewModel?: string;
   aiReviewAutoOnSubmit?: boolean;
-  aiReviewFunctionName?: string;
+  aiReviewFunctionName?: string; // legacy — kept for backward-compat
+  aiReviewProvider?: 'render' | 'firebase'; // 'render' = Render service (A2), 'firebase' = Cloud Function (deprecated)
+  aiReviewServiceUrl?: string;   // e.g. https://orchestrai-ai-review.onrender.com
+  aiReviewApiKey?: string;       // optional x-api-key header for the Render service
   // SME credentials email template — falls back to emailjsTemplateId if blank
   emailjsTemplateIdSmeWelcome?: string;
   emailjsTemplateIdFeedback?: string;
@@ -372,14 +376,17 @@ const DEFAULT_CONFIG: SystemConfig = {
   adminEmail: 'vthinkorchestrai@gmail.com',
   certificationPrice: 199,
   premiumUpgradePrice: 499,
-  contactEmail: 'support@vthinkglobal.com',
+  contactEmail: 'vthinkorchestrai@gmail.com',
   contactPhone: '+91 98765 43210',
-  contactAddress: 'vThink Global Technologies, Chennai, India',
-  academyName: 'OrchestrAI Lead Academy',
+  contactAddress: 'Chennai, India',
+  academyName: BRANDING.platformName,
   aiReviewEnabled: false,
   aiReviewModel: 'qwen/qwen-2.5-72b-instruct',
   aiReviewAutoOnSubmit: false,
   aiReviewFunctionName: 'scoreCapstoneTierB',
+  aiReviewProvider: 'render' as const,
+  aiReviewServiceUrl: '',
+  aiReviewApiKey: '',
   emailjsTemplateIdSmeWelcome: '',
   emailjsTemplateIdFeedback: '',
   emailjsTemplateIdCertification: '',
@@ -400,48 +407,48 @@ const DEFAULT_CONFIG: SystemConfig = {
   certificateTemplateFileName: '',
   templates: {
     payment_pending: {
-      subject: "[OrchestrAI Alert] Payment Pending Manual Approval",
-      body: "Hi Sithanandham,\n\nA student ({{name}}, email: {{email}}) has paid ₹199 INR for the OrchestrAI Lead Certification course.\nRazorpay Payment ID: {{paymentId}}.\n\nPlease review this payment in your Razorpay dashboard and approve their access in the /admin portal."
+      subject: `[${BRANDING.shortName} Alert] Payment Pending Manual Approval`,
+      body: `Hi ${BRANDING.founderName.split(' ')[0]},\n\nA student ({{name}}, email: {{email}}) has paid ₹199 INR for the OrchestrAI Lead Certification course.\nRazorpay Payment ID: {{paymentId}}.\n\nPlease review this payment in your Razorpay dashboard and approve their access in the /admin portal.`
     },
     account_approved: {
-      subject: "[OrchestrAI] Congratulations! Your Access has been Approved",
-      body: "Hi {{name}},\n\nWe have verified your payment of ₹199 INR. Your account has been approved and you now have full access to Modules 3 to 7.\n\nStart learning here: {{loginUrl}}\n\nGood luck,\nOrchestrAI Lead Team"
+      subject: `[${BRANDING.shortName}] Congratulations! Your Access has been Approved`,
+      body: `Hi {{name}},\n\nWe have verified your payment of ₹199 INR. Your account has been approved and you now have full access to Modules 3 to 7.\n\nStart learning here: {{loginUrl}}\n\nGood luck,\n${BRANDING.platformName} Team`
     },
     project_submitted: {
-      subject: "[OrchestrAI Alert] New Portfolio Submission Received",
-      body: "Hi Sithanandham,\n\nStudent {{name}} ({{email}}) has submitted their project for review.\nGitHub Repo: {{githubRepoUrl}}\nPrompt Logs: {{promptLogUrl}}\n\nPlease review their work in the admin dashboard."
+      subject: `[${BRANDING.shortName} Alert] New Portfolio Submission Received`,
+      body: `Hi ${BRANDING.founderName.split(' ')[0]},\n\nStudent {{name}} ({{email}}) has submitted their project for review.\nGitHub Repo: {{githubRepoUrl}}\nPrompt Logs: {{promptLogUrl}}\n\nPlease review their work in the admin dashboard.`
     },
     certified: {
-      subject: "[OrchestrAI] Congratulations on Your Certification!",
-      body: "Hi {{name}},\n\nYour portfolio review is complete. You scored {{score}}% and have been certified as an OrchestrAI Lead!\n\nStatus: {{status}}\n\nKeep up the great work!\nProduct Owner, Sithanandham R."
+      subject: `[${BRANDING.shortName}] Congratulations on Your Certification!`,
+      body: `Hi {{name}},\n\nYour portfolio review is complete. You scored {{score}}% and have been certified as an OrchestrAI Lead!\n\nStatus: {{status}}\n\nKeep up the great work!\n\nRegards,\n${BRANDING.founderName}\n${BRANDING.founderTitle}\n${BRANDING.platformName}`
     },
     sme_welcome: {
-      subject: "[OrchestrAI] You have been added as a Capstone Reviewer",
-      body: "Hi {{name}},\n\nYou have been added to the OrchestrAI Capstone Reviewer pool by the admin.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews. Change your password after first login if the SME portal exposes that option.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
+      subject: `[${BRANDING.shortName}] You have been added as a Capstone Reviewer`,
+      body: `Hi {{name}},\n\nYou have been added to the OrchestrAI Capstone Reviewer pool by the admin.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews. Change your password after first login if the SME portal exposes that option.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— ${BRANDING.platformName}`
     },
     reviewer_reenabled: {
-      subject: "[OrchestrAI] Your reviewer account has been re-activated",
-      body: "Hi {{name}},\n\nYour previously disabled OrchestrAI reviewer account has been re-activated. A fresh password has been generated.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
+      subject: `[${BRANDING.shortName}] Your reviewer account has been re-activated`,
+      body: `Hi {{name}},\n\nYour previously disabled OrchestrAI reviewer account has been re-activated. A fresh password has been generated.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— ${BRANDING.platformName}`
     },
     reviewer_password_reset: {
-      subject: "[OrchestrAI] Your reviewer password has been reset by admin",
-      body: "Hi {{name}},\n\nYour OrchestrAI reviewer password has been reset by the admin. Use the new credentials below.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— OrchestrAI Academy"
+      subject: `[${BRANDING.shortName}] Your reviewer password has been reset by admin`,
+      body: `Hi {{name}},\n\nYour OrchestrAI reviewer password has been reset by the admin. Use the new credentials below.\n\nLOGIN URL:  {{loginUrl}}\nEMAIL:      {{email}}\nPASSWORD:   {{password}}\n\nYou will use these credentials to access your assigned capstone reviews.\n\nIf you did not expect this email, contact {{adminEmail}}.\n\n— ${BRANDING.platformName}`
     },
     decision_feedback: {
-      subject: "[OrchestrAI] Your capstone review — {{decision}} ({{score}}/100)",
-      body: "Hi {{name}},\n\nYour OrchestrAI capstone review is complete.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nSCORE BREAKDOWN\n{{scoreBreakdown}}\n\nSTRENGTHS\n{{strengths}}\n\nGAPS\n{{gaps}}\n\nREWORK CHECKLIST\n{{reworkChecklist}}\n\nNEXT STEPS\n{{nextSteps}}\n\nReviewed by: {{reviewerName}}\nReviewed on: {{reviewedAt}}\n\n— OrchestrAI Academy"
+      subject: `[${BRANDING.shortName}] Your capstone review — {{decision}} ({{score}}/100)`,
+      body: `Hi {{name}},\n\nYour OrchestrAI capstone review is complete.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nSCORE BREAKDOWN\n{{scoreBreakdown}}\n\nSTRENGTHS\n{{strengths}}\n\nGAPS\n{{gaps}}\n\nREWORK CHECKLIST\n{{reworkChecklist}}\n\nNEXT STEPS\n{{nextSteps}}\n\nReviewed by: {{reviewerName}}\nReviewed on: {{reviewedAt}}\n\n— ${BRANDING.platformName}`
     },
     certification_issued: {
-      subject: "🎓 OrchestrAI Lead Certification — {{capstoneTitle}}",
-      body: "Congratulations, {{name}}!\n\nYou have been certified as an OrchestrAI Lead.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nYour certificate is now available in your account:\n  {{certificateUrl}}\n\nFrom the Certification page you can download a printable HTML copy.\n\nCertified on: {{certifiedAt}}\nCertified by: {{certifiedBy}}\n\nWelcome to the OrchestrAI Lead alumni network.\n\n— OrchestrAI Academy"
+      subject: `🎓 OrchestrAI Lead Certification — {{capstoneTitle}}`,
+      body: `Congratulations, {{name}}!\n\nYou have been certified as an OrchestrAI Lead.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nDECISION:    {{decision}}  ·  Score: {{score}}/100\n\nYour certificate is now available in your account:\n  {{certificateUrl}}\n\nFrom the Certification page you can download a printable HTML copy.\n\nCertified on: {{certifiedAt}}\nCertified by: {{certifiedBy}}\n\nWelcome to the OrchestrAI Lead alumni network.\n\n— ${BRANDING.platformName}`
     },
     capstone_submitted_admin: {
-      subject: "[OrchestrAI Alert] Capstone Review Initiated — {{capstoneId}} · {{learnerName}}",
-      body: "Hi Admin,\n\nA new capstone project review has been initiated by {{learnerName}} ({{learnerEmail}}) and is awaiting review or reviewer assignment.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  Admin User:    {{appAdminUserId}}\n  Admin Pass:    {{appAdminPassword}}\n  README: {{readmeUrl}}\n\nPlease visit the Admin Console to assign or review this project.\n\n— OrchestrAI Academy"
+      subject: `[${BRANDING.shortName} Alert] Capstone Review Initiated — {{capstoneId}} · {{learnerName}}`,
+      body: `Hi Admin,\n\nA new capstone project review has been initiated by {{learnerName}} ({{learnerEmail}}) and is awaiting review or reviewer assignment.\n\nCAPSTONE\n  ID:        {{capstoneId}}\n  Title:     {{capstoneTitle}}\n  Domain:    {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  Admin User:    {{appAdminUserId}}\n  Admin Pass:    {{appAdminPassword}}\n  README: {{readmeUrl}}\n\nPlease visit the Admin Console to assign or review this project.\n\n— ${BRANDING.platformName}`
     },
     sme_reassigned: {
-      subject: "[OrchestrAI Review Assigned] {{capstoneId}} · {{capstoneTitle}}",
-      body: "Hi {{name}},\n\nYou have been assigned to review a capstone project.\n\nSTUDENT\n  Name:  {{learnerName}}\n  Email: {{learnerEmail}}\n\nCAPSTONE\n  ID:    {{capstoneId}}\n  Title: {{capstoneTitle}}\n  Domain: {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  Admin User:    {{appAdminUserId}}\n  Admin Pass:    {{appAdminPassword}}\n  README: {{readmeUrl}}\n\nPlease visit the Reviewer Portal to review and score this submission.\n\n— OrchestrAI Academy"
+      subject: `[${BRANDING.shortName} Review Assigned] {{capstoneId}} · {{capstoneTitle}}`,
+      body: `Hi {{name}},\n\nYou have been assigned to review a capstone project.\n\nSTUDENT\n  Name:  {{learnerName}}\n  Email: {{learnerEmail}}\n\nCAPSTONE\n  ID:    {{capstoneId}}\n  Title: {{capstoneTitle}}\n  Domain: {{capstoneDomain}}\n\nSUBMISSION DETAILS\n  Submitted: {{submittedAt}}\n  GitHub Repo: {{githubUrl}}\n  Firebase Live: {{firebaseUrl}}\n  Admin User:    {{appAdminUserId}}\n  Admin Pass:    {{appAdminPassword}}\n  README: {{readmeUrl}}\n\nPlease visit the Reviewer Portal to review and score this submission.\n\n— ${BRANDING.platformName}`
     }
   },
   moduleMedia: {
@@ -832,7 +839,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const adminProfile: UserProfile = {
             uid: 'admin-new-uid',
             email: 'vthinkorchestrai@gmail.com',
-            name: 'vThink OrchestrAI Admin',
+            name: 'OrchestrAI Academy Admin',
             role: 'ADMIN',
             accountStatus: 'APPROVED',
             quizPassed: true,
@@ -888,7 +895,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const adminProfile: UserProfile = {
             uid: 'admin-new-uid',
             email: 'vthinkorchestrai@gmail.com',
-            name: 'vThink OrchestrAI Admin',
+            name: 'OrchestrAI Academy Admin',
             role: 'ADMIN',
             accountStatus: 'APPROVED',
             quizPassed: true,
@@ -912,7 +919,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const adminProfile: UserProfile = {
         uid: 'admin-new-uid',
         email: 'vthinkorchestrai@gmail.com',
-        name: 'vThink OrchestrAI Admin',
+        name: 'OrchestrAI Academy Admin',
         role: 'ADMIN',
         accountStatus: 'APPROVED',
         quizPassed: true,
@@ -1157,7 +1164,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const adminProfile: UserProfile = {
         uid: 'admin-new-uid',
         email: 'vthinkorchestrai@gmail.com',
-        name: 'vThink OrchestrAI Admin',
+        name: 'OrchestrAI Academy Admin',
         role: 'ADMIN',
         accountStatus: 'APPROVED',
         quizPassed: true,
@@ -1712,7 +1719,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       adminProfile = {
         uid: 'admin-new-uid',
         email: adminEmail,
-        name: 'vThink OrchestrAI Admin',
+        name: 'OrchestrAI Academy Admin',
         role: 'ADMIN',
         accountStatus: 'APPROVED',
         quizPassed: true,

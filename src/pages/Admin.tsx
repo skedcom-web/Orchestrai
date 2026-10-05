@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import type { UserProfile } from '../context/AppContext';
+import { BRANDING } from '../config/branding';
 import { getFirebaseApp, getFirebaseDb } from '../firebase';
 import { ref, get, set, push } from 'firebase/database';
 import { CapstoneReviewsAdmin } from './CapstoneReviewsAdmin';
@@ -57,7 +58,7 @@ export const Admin: React.FC = () => {
   const [filterProgressMilestone, setFilterProgressMilestone] = useState<'all' | 'completed_m1' | 'completed_m2' | 'passed_lab' | 'completed_all'>('all');
   const [filterMeetingsStatus, setFilterMeetingsStatus] = useState<'all' | 'PENDING' | 'SCHEDULED'>('all');
   const [filterAuditCategoryReport, setFilterAuditCategoryReport] = useState<'ALL' | 'LOGINS' | 'CONFIG' | 'PROGRESSION' | 'DATABASE'>('ALL');
-  const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'gating' | 'pricing' | 'verification' | 'emailjs' | 'aireview' | 'maintenance'>('connection');
+  const [settingsSubTab, setSettingsSubTab] = useState<'connection' | 'branding' | 'gating' | 'pricing' | 'verification' | 'emailjs' | 'aireview' | 'maintenance'>('branding');
   const [requireEmailVerifVal, setRequireEmailVerifVal] = useState(systemConfig.requireEmailVerification !== false);
   const [requirePhoneVerifVal, setRequirePhoneVerifVal] = useState(!!systemConfig.requirePhoneVerification);
   const [freeModulesLimitVal, setFreeModulesLimitVal] = useState(systemConfig.freeModulesLimit || 2);
@@ -77,9 +78,9 @@ export const Admin: React.FC = () => {
   const [academyNameVal, setAcademyNameVal] = useState(systemConfig.academyName || 'OrchestrAI Lead Academy');
   const [certificationPriceVal, setCertificationPriceVal] = useState(systemConfig.certificationPrice || 99);
   const [premiumUpgradePriceVal, setPremiumUpgradePriceVal] = useState(systemConfig.premiumUpgradePrice || 499);
-  const [contactEmailVal, setContactEmailVal] = useState(systemConfig.contactEmail || 'support@vthinkglobal.com');
+  const [contactEmailVal, setContactEmailVal] = useState(systemConfig.contactEmail || 'vthinkorchestrai@gmail.com');
   const [contactPhoneVal, setContactPhoneVal] = useState(systemConfig.contactPhone || '+91 98765 43210');
-  const [contactAddressVal, setContactAddressVal] = useState(systemConfig.contactAddress || 'vThink Global Technologies, Chennai, India');
+  const [contactAddressVal, setContactAddressVal] = useState(systemConfig.contactAddress || 'Chennai, India');
   const [certTemplateUploading, setCertTemplateUploading] = useState(false);
 
   // Capstone Progress Override Editor States
@@ -359,9 +360,9 @@ export const Admin: React.FC = () => {
     setAcademyNameVal(systemConfig.academyName || 'OrchestrAI Lead Academy');
     setCertificationPriceVal(systemConfig.certificationPrice || 99);
     setPremiumUpgradePriceVal(systemConfig.premiumUpgradePrice || 499);
-    setContactEmailVal(systemConfig.contactEmail || 'support@vthinkglobal.com');
+    setContactEmailVal(systemConfig.contactEmail || 'vthinkorchestrai@gmail.com');
     setContactPhoneVal(systemConfig.contactPhone || '+91 98765 43210');
-    setContactAddressVal(systemConfig.contactAddress || 'vThink Global Technologies, Chennai, India');
+    setContactAddressVal(systemConfig.contactAddress || 'Chennai, India');
   }, [
     systemConfig.emailjsServiceId,
     systemConfig.emailjsTemplateId,
@@ -612,7 +613,7 @@ export const Admin: React.FC = () => {
 <body>
 <div class="cert">
   <div class="ribbon">{{ribbonLabel}}</div>
-  <div class="subtitle">vThink Technologies · OrchestrAI Academy</div>
+  <div class="subtitle">OrchestrAI Academy</div>
   <h1>OrchestrAI Lead Certification</h1>
   <div class="awarded-to">This certifies that</div>
   <div class="name">{{learnerName}}</div>
@@ -626,9 +627,9 @@ export const Admin: React.FC = () => {
   </div>
   <div class="signatures">
     <div class="sig"><div class="sig-line"></div><div class="sig-name">{{certifiedByName}}</div><div class="sig-role">OrchestrAI Academy · Issuing Authority</div></div>
-    <div class="sig"><div class="sig-line"></div><div class="sig-name">Sithanandham R · Founder</div><div class="sig-role">vThink Technologies</div></div>
+    <div class="sig"><div class="sig-line"></div><div class="sig-name">Sithanandham Radhakrishnan · Creator, OrchestrAI</div><div class="sig-role">OrchestrAI Academy</div></div>
   </div>
-  <div class="footer">{{capstoneId}} · Verify at vthinkorchestrai-academy.web.app/certification</div>
+  <div class="footer">{{capstoneId}} · Certified through OrchestrAI Academy · Verify at {{verificationUrl}}</div>
 </div>
 </body>
 </html>`;
@@ -1316,8 +1317,8 @@ export const Admin: React.FC = () => {
             <Shield className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--text-primary)] leading-tight">Admin Control Panel</h2>
-            <p className="text-[11px] text-[var(--text-secondary)] mt-0.5 truncate">System configuration · approvals · talent intelligence</p>
+            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--text-primary)] leading-tight">{BRANDING.adminTitle}</h2>
+            <p className="text-[11px] text-[var(--text-secondary)] mt-0.5 truncate">{BRANDING.platformName} · System configuration · Approvals · Talent Intelligence</p>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -3478,7 +3479,7 @@ export const Admin: React.FC = () => {
               <div className="glass-card rounded-2xl p-6 border border-[var(--border-color)]">
                 {/* Sub-Tab navigation bar */}
                 <div className="flex flex-wrap gap-2 border-b border-[var(--border-color)] pb-4 mb-6">
-                  {(['connection', 'gating', 'pricing', 'verification', 'emailjs', 'aireview', 'maintenance'] as const).map((subTab) => (
+                  {(['branding', 'connection', 'gating', 'pricing', 'verification', 'emailjs', 'aireview', 'maintenance'] as const).map((subTab) => (
                     <button
                       key={subTab}
                       type="button"
@@ -3489,6 +3490,7 @@ export const Admin: React.FC = () => {
                           : 'border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-slate-500/5'
                       }`}
                     >
+                      {subTab === 'branding' && '🎨 Central Branding'}
                       {subTab === 'connection' && '🔌 Database & Auth'}
                       {subTab === 'gating' && '🚪 Access Gating'}
                       {subTab === 'pricing' && '💳 Pricing & Support'}
@@ -3502,6 +3504,66 @@ export const Admin: React.FC = () => {
 
                 {/* Sub-Tab content pane */}
                 <div className="space-y-6">
+
+                  {/* SUB-TAB: CENTRAL BRANDING CONFIGURATION */}
+                  {settingsSubTab === 'branding' && (
+                    <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5 space-y-6 animate-in fade-in duration-200">
+                      <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-lg">🎨</span>
+                          <div>
+                            <h4 className="text-sm font-bold text-[var(--text-primary)]">Central Branding Configuration</h4>
+                            <p className="text-[10px] text-[var(--text-secondary)]">Single source of truth: <code className="bg-slate-500/10 px-1 py-0.5 rounded text-purple-400 font-mono">src/config/branding.ts</code></p>
+                          </div>
+                        </div>
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-bold text-[10px] uppercase tracking-wider">
+                          Centralized · A1 Brand Independence
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                        All platform branding, institutional credentials, founder representation, and certification authority metadata are managed in a single central configuration file. Any updates in <code className="bg-slate-500/10 px-1 py-0.5 rounded text-purple-400 font-mono">branding.ts</code> immediately cascade throughout the entire platform.
+                      </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 space-y-1.5">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-muted)]">Platform Name</span>
+                          <p className="text-sm font-bold text-[var(--text-primary)]">{BRANDING.platformName}</p>
+                          <span className="text-[10px] text-[var(--text-secondary)]">Primary institutional name for portal and certifications</span>
+                        </div>
+
+                        <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 space-y-1.5">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-muted)]">Admin Console Title</span>
+                          <p className="text-sm font-bold text-[var(--text-primary)]">{BRANDING.adminTitle}</p>
+                          <span className="text-[10px] text-[var(--text-secondary)]">Header and title bar in admin workspace</span>
+                        </div>
+
+                        <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 space-y-1.5">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-muted)]">Founder &amp; Creator</span>
+                          <p className="text-sm font-bold text-[var(--text-primary)]">{BRANDING.founderName}</p>
+                          <span className="text-[10px] text-indigo-400 font-semibold">{BRANDING.founderTitle}</span>
+                        </div>
+
+                        <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 space-y-1.5">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-muted)]">Professional Role &amp; Tenure</span>
+                          <p className="text-sm font-bold text-[var(--text-primary)]">{BRANDING.founderRole}</p>
+                          <span className="text-[10px] text-[var(--text-secondary)]">{BRANDING.founderLeadership} · {BRANDING.founderExperience}</span>
+                        </div>
+
+                        <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 space-y-1.5">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-muted)]">Footer Tagline</span>
+                          <p className="text-xs font-semibold text-[var(--text-primary)]">{BRANDING.footerTagline}</p>
+                          <span className="text-[10px] text-[var(--text-secondary)]">{BRANDING.poweredBy}</span>
+                        </div>
+
+                        <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 space-y-1.5">
+                          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-muted)]">Issuing Authority</span>
+                          <p className="text-sm font-bold text-[var(--text-primary)]">{BRANDING.certificationAuthority}</p>
+                          <span className="text-[10px] text-[var(--text-secondary)]">Support: {BRANDING.supportName}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   
                   {/* SUB-TAB: DATABASE & AUTH CONNECTION */}
                   {settingsSubTab === 'connection' && (
@@ -3861,7 +3923,7 @@ export const Admin: React.FC = () => {
                                 value={contactEmailVal}
                                 onChange={(e) => setContactEmailVal(e.target.value)}
                                 className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
-                                placeholder="support@vthinkglobal.com"
+                                placeholder="support@orchestrai.academy"
                               />
                             </div>
 
@@ -3888,7 +3950,7 @@ export const Admin: React.FC = () => {
                               value={contactAddressVal}
                               onChange={(e) => setContactAddressVal(e.target.value)}
                               className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs focus:outline-none"
-                              placeholder="vThink Global Technologies, Chennai, India"
+                              placeholder="Chennai, India"
                             />
                           </div>
                         </div>
@@ -5559,8 +5621,8 @@ export const Admin: React.FC = () => {
                     onClick={async () => {
                       if (!feedbackMessage.trim()) return;
                       setIsSendingFeedback(true);
-                      const emailSubject = `[OrchestrAI] Instructor feedback regarding your progress`;
-                      const emailBody = `Hi ${feedbackCandidate.name},\n\nSithanandham R. has reviewed your certification progress and provided the following feedback:\n\n${feedbackMessage}\n\nKeep learning and building!\nProduct Owner,\nSithanandham R.`;
+                      const emailSubject = `[${BRANDING.shortName}] Instructor feedback regarding your progress`;
+                      const emailBody = `Hi ${feedbackCandidate.name},\n\n${BRANDING.founderName} has reviewed your certification progress and provided the following feedback:\n\n${feedbackMessage}\n\nKeep learning and building!\n\nRegards,\n${BRANDING.founderName}\n${BRANDING.founderTitle}\n${BRANDING.platformName}`;
                       
                       const config = systemConfig;
                       const hasKeys = config.emailjsServiceId && config.emailjsTemplateId && config.emailjsPublicKey;
@@ -5635,9 +5697,9 @@ export const Admin: React.FC = () => {
 
 // ───────────────────────────────────────────────────────────────────────────
 // AI Review (Tier B) Settings Panel
-// Configures the Cloud Function → OpenRouter → Qwen pipeline for capstone scoring.
-// The OPENROUTER_API_KEY is set on the function side (firebase functions:secrets:set),
-// NEVER in the browser. This panel only configures display preferences + tests connectivity.
+// Configures the Render AI Review Service → OpenRouter → Qwen pipeline for capstone scoring.
+// A2 Release: migrated from Firebase Cloud Functions (Blaze required) to Render (free tier capable).
+// OPENROUTER_API_KEY lives only on the Render server side — never in the browser.
 // ───────────────────────────────────────────────────────────────────────────
 const AIReviewPanel: React.FC = () => {
   const { systemConfig, updateSystemConfig, addToast } = useApp();
@@ -5646,22 +5708,32 @@ const AIReviewPanel: React.FC = () => {
   const [model, setModel] = useState(systemConfig.aiReviewModel || 'qwen/qwen-2.5-72b-instruct');
   const [autoOnSubmit, setAutoOnSubmit] = useState(!!systemConfig.aiReviewAutoOnSubmit);
   const [functionName, setFunctionName] = useState(systemConfig.aiReviewFunctionName || 'scoreCapstoneTierB');
+  const [provider, setProvider] = useState<'render' | 'firebase'>(systemConfig.aiReviewProvider || 'render');
+  const [serviceUrl, setServiceUrl] = useState(systemConfig.aiReviewServiceUrl || '');
+  const [apiKey, setApiKey] = useState(systemConfig.aiReviewApiKey || '');
   const [pinging, setPinging] = useState(false);
-  const [pingResult, setPingResult] = useState<{ ok?: boolean; reply?: string; error?: string; model?: string } | null>(null);
+  const [pingResult, setPingResult] = useState<{ ok?: boolean; reply?: string; error?: string; model?: string; latencyMs?: number } | null>(null);
 
   useEffect(() => {
     setEnabled(!!systemConfig.aiReviewEnabled);
     setModel(systemConfig.aiReviewModel || 'qwen/qwen-2.5-72b-instruct');
     setAutoOnSubmit(!!systemConfig.aiReviewAutoOnSubmit);
     setFunctionName(systemConfig.aiReviewFunctionName || 'scoreCapstoneTierB');
-  }, [systemConfig.aiReviewEnabled, systemConfig.aiReviewModel, systemConfig.aiReviewAutoOnSubmit, systemConfig.aiReviewFunctionName]);
+    setProvider(systemConfig.aiReviewProvider || 'render');
+    setServiceUrl(systemConfig.aiReviewServiceUrl || '');
+    setApiKey(systemConfig.aiReviewApiKey || '');
+  }, [systemConfig.aiReviewEnabled, systemConfig.aiReviewModel, systemConfig.aiReviewAutoOnSubmit,
+      systemConfig.aiReviewFunctionName, systemConfig.aiReviewProvider, systemConfig.aiReviewServiceUrl, systemConfig.aiReviewApiKey]);
 
   const save = () => {
     updateSystemConfig({
       aiReviewEnabled: enabled,
       aiReviewModel: model.trim(),
       aiReviewAutoOnSubmit: autoOnSubmit,
-      aiReviewFunctionName: functionName.trim()
+      aiReviewFunctionName: functionName.trim(),
+      aiReviewProvider: provider,
+      aiReviewServiceUrl: serviceUrl.trim(),
+      aiReviewApiKey: apiKey.trim(),
     });
     addToast('AI Review settings saved.', 'success');
   };
@@ -5669,26 +5741,54 @@ const AIReviewPanel: React.FC = () => {
   const testConnection = async () => {
     setPinging(true);
     setPingResult(null);
+    const t0 = Date.now();
     try {
-      const app = getFirebaseApp();
-      if (!app) {
-        setPingResult({ ok: false, error: 'Firebase app not initialized. Check Database & Auth tab.' });
-        return;
+      if (provider === 'render') {
+        const url = serviceUrl.trim();
+        if (!url) {
+          setPingResult({ ok: false, error: 'Service URL is empty. Enter your Render service URL and save settings first.' });
+          return;
+        }
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (apiKey) headers['x-api-key'] = apiKey;
+        const res = await fetch(`${url}/api/ping`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ modelOverride: model.trim() }),
+        });
+        const latencyMs = Date.now() - t0;
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          setPingResult({ ok: false, error: `HTTP ${res.status}: ${errText.slice(0, 300)}`, latencyMs });
+          return;
+        }
+        const data = await res.json();
+        setPingResult({ ...data, latencyMs });
+      } else {
+        // Legacy Firebase Cloud Function path
+        const app = getFirebaseApp();
+        if (!app) {
+          setPingResult({ ok: false, error: 'Firebase app not initialized. Check Database & Auth tab.' });
+          return;
+        }
+        const { getFunctions, httpsCallable } = await import('firebase/functions');
+        const functions = getFunctions(app);
+        const ping = httpsCallable(functions, 'pingTierBProvider');
+        const res = await ping({ modelOverride: model.trim() });
+        const latencyMs = Date.now() - t0;
+        setPingResult({ ...(res.data as any), latencyMs });
       }
-      const { getFunctions, httpsCallable } = await import('firebase/functions');
-      const functions = getFunctions(app);
-      const ping = httpsCallable(functions, 'pingTierBProvider');
-      const res = await ping({ modelOverride: model.trim() });
-      setPingResult(res.data as any);
     } catch (err: any) {
       const code = err?.code || '';
       let friendly = err?.message || String(err);
       if (code === 'functions/not-found' || /not found/i.test(friendly)) {
-        friendly = 'Function "pingTierBProvider" is not deployed yet. Deploy the functions/ directory once your Blaze plan is active (see functions/README.md).';
+        friendly = 'Firebase Cloud Function "pingTierBProvider" is not deployed. Switch to Render provider instead.';
       } else if (code === 'functions/failed-precondition') {
-        friendly = err?.message || 'OPENROUTER_API_KEY secret is not set on the deployed function. See functions/README.md.';
+        friendly = err?.message || 'OPENROUTER_API_KEY secret not set on Cloud Function.';
+      } else if (/failed to fetch|network/i.test(friendly)) {
+        friendly = `Cannot reach ${serviceUrl.trim() || 'service'} — is the Render service running? (It may be sleeping on the free tier — wait ~30 s and retry.)`;
       }
-      setPingResult({ ok: false, error: friendly });
+      setPingResult({ ok: false, error: friendly, latencyMs: Date.now() - t0 });
     } finally {
       setPinging(false);
     }
@@ -5703,11 +5803,13 @@ const AIReviewPanel: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
+
+      {/* ── Main Configuration Panel ── */}
       <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5">
         <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
           <div className="flex items-center gap-2">
             <span className="text-lg">🤖</span>
-            <h3 className="text-sm font-bold text-[var(--text-primary)]">Tier B AI Rubric Scoring (Cloud Function → OpenRouter → Qwen)</h3>
+            <h3 className="text-sm font-bold text-[var(--text-primary)]">Tier B AI Rubric Scoring (Render → OpenRouter → Qwen)</h3>
           </div>
           <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
             systemConfig.aiReviewEnabled
@@ -5717,10 +5819,15 @@ const AIReviewPanel: React.FC = () => {
         </div>
 
         <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 p-3 mb-5 text-[11px] text-indigo-300 leading-relaxed">
-          <strong className="text-indigo-400">How this works:</strong> The browser calls the deployed Cloud Function via Firebase SDK. The function reads the submission from RTDB, fetches the GitHub README + file list, then calls OpenRouter (which routes to your selected model — Qwen by default). The model returns a JSON rubric score that gets written to <code className="font-mono text-indigo-200">/reviews/{'{submissionId}'}/tierBSuggestion</code>. The OpenRouter API key lives ONLY on the function side — never in the browser.
+          <strong className="text-indigo-400">A2 Architecture:</strong> Browser calls the Render REST service
+          (<code className="font-mono text-indigo-200">POST /api/score-capstone</code>). The service reads the
+          submission from RTDB, fetches GitHub README + file list, checks the live deployment URL, then calls
+          OpenRouter. Results are written to <code className="font-mono text-indigo-200">/reviews/{'{submissionId}'}/tierBSuggestion</code>.
+          The OpenRouter API key lives <strong>only on Render</strong> — never in the browser.
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
           {/* Enable toggle */}
           <div className="md:col-span-2 flex items-start gap-3 p-3 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40">
             <input
@@ -5732,7 +5839,7 @@ const AIReviewPanel: React.FC = () => {
             />
             <label htmlFor="aireview-enabled" className="cursor-pointer flex-1">
               <div className="text-xs font-bold text-[var(--text-primary)]">Enable Tier B AI scoring</div>
-              <div className="text-[11px] text-[var(--text-secondary)] mt-0.5 leading-relaxed">When enabled, reviewers see a "Run AI Tier B Scoring" button in Review Detail. Disabled = button is hidden, reviewers score manually only.</div>
+              <div className="text-[11px] text-[var(--text-secondary)] mt-0.5 leading-relaxed">When enabled, reviewers see a "Run AI Review" button in Review Detail. Disabled = button is hidden, reviewers score manually only.</div>
             </label>
           </div>
 
@@ -5748,9 +5855,84 @@ const AIReviewPanel: React.FC = () => {
             />
             <label htmlFor="aireview-auto" className={`cursor-pointer flex-1 ${!enabled ? 'opacity-50' : ''}`}>
               <div className="text-xs font-bold text-[var(--text-primary)]">Auto-run on every new submission</div>
-              <div className="text-[11px] text-[var(--text-secondary)] mt-0.5 leading-relaxed">When ON, each new submission triggers Tier B scoring immediately so the reviewer sees suggestions when they open it. When OFF, reviewers click the button on-demand (saves money during testing).</div>
+              <div className="text-[11px] text-[var(--text-secondary)] mt-0.5 leading-relaxed">When ON, each new submission triggers Tier B scoring immediately. When OFF, reviewers click on-demand (saves cost during testing).</div>
             </label>
           </div>
+
+          {/* Provider selector */}
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2">Backend Provider</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => setProvider('render')}
+                className={`p-3 rounded-lg border text-xs font-bold transition-all ${
+                  provider === 'render'
+                    ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300'
+                    : 'border-[var(--border-color)] text-[var(--text-secondary)] hover:border-emerald-500/30'
+                }`}
+              >
+                🚀 Render Service
+                <div className="text-[9px] font-normal mt-0.5 opacity-80">A2 — Recommended · Free tier</div>
+              </button>
+              <button
+                onClick={() => setProvider('firebase')}
+                className={`p-3 rounded-lg border text-xs font-bold transition-all ${
+                  provider === 'firebase'
+                    ? 'border-amber-500/50 bg-amber-500/15 text-amber-300'
+                    : 'border-[var(--border-color)] text-[var(--text-secondary)] hover:border-amber-500/30'
+                }`}
+              >
+                🔥 Firebase Functions
+                <div className="text-[9px] font-normal mt-0.5 opacity-80">Legacy · Blaze plan required</div>
+              </button>
+            </div>
+          </div>
+
+          {/* Render-specific fields */}
+          {provider === 'render' && (
+            <>
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                  Render Service URL <span className="text-rose-400">*</span>
+                </label>
+                <input
+                  type="url"
+                  value={serviceUrl}
+                  onChange={(e) => setServiceUrl(e.target.value)}
+                  placeholder="https://orchestrai-ai-review.onrender.com"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-purple-500/40"
+                />
+                <p className="text-[10px] text-[var(--text-secondary)] mt-1">The base URL of your Render web service. No trailing slash.</p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">
+                  Service API Key <span className="text-[var(--text-secondary)] font-normal">(optional)</span>
+                </label>
+                <input
+                  type="password"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="Leave blank if REVIEW_SERVICE_API_KEY is not set on Render"
+                  className="w-full px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-purple-500/40"
+                />
+                <p className="text-[10px] text-[var(--text-secondary)] mt-1">Sent as <code className="font-mono">x-api-key</code> header. Set <code className="font-mono">REVIEW_SERVICE_API_KEY</code> env var on Render if you want request authentication.</p>
+              </div>
+            </>
+          )}
+
+          {/* Legacy Firebase Function name (only shown when provider = firebase) */}
+          {provider === 'firebase' && (
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">Cloud Function Name (Legacy)</label>
+              <input
+                type="text"
+                value={functionName}
+                onChange={(e) => setFunctionName(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-amber-500/20 bg-[var(--surface-sunken)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-amber-500/40"
+              />
+              <p className="text-[10px] text-amber-400/70 mt-1">⚠️ Firebase Cloud Functions require a Blaze billing plan. Switch to Render provider to avoid this restriction.</p>
+            </div>
+          )}
 
           {/* Model */}
           <div className="md:col-span-2">
@@ -5774,18 +5956,6 @@ const AIReviewPanel: React.FC = () => {
             />
             <p className="text-[10px] text-[var(--text-secondary)] mt-1">Browse all available models at <a href="https://openrouter.ai/models" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">openrouter.ai/models</a>.</p>
           </div>
-
-          {/* Function name */}
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1.5">Cloud Function Name</label>
-            <input
-              type="text"
-              value={functionName}
-              onChange={(e) => setFunctionName(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-purple-500/40"
-            />
-            <p className="text-[10px] text-[var(--text-secondary)] mt-1">Default: <code className="font-mono">scoreCapstoneTierB</code>. Matches the function exported in <code className="font-mono">functions/src/index.ts</code>.</p>
-          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-3 mt-5 pt-5 border-t border-[var(--border-color)]">
@@ -5800,7 +5970,7 @@ const AIReviewPanel: React.FC = () => {
             disabled={pinging}
             className="px-5 py-2 rounded-lg border border-purple-500/30 hover:bg-purple-500/10 text-purple-400 text-xs font-extrabold transition-all disabled:opacity-50"
           >
-            {pinging ? 'Testing…' : 'Test Connection'}
+            {pinging ? 'Testing…' : `Test Connection (${provider === 'render' ? 'Render' : 'Firebase'})`}
           </button>
         </div>
 
@@ -5812,33 +5982,85 @@ const AIReviewPanel: React.FC = () => {
           }`}>
             {pingResult.ok ? (
               <>
-                <strong className="text-emerald-400">Connected.</strong> Model <code className="font-mono">{pingResult.model}</code> replied: "{pingResult.reply}"
+                <strong className="text-emerald-400">✓ Connected.</strong> Model <code className="font-mono">{pingResult.model}</code> replied: "{pingResult.reply}"
+                {pingResult.latencyMs !== undefined && <span className="ml-2 opacity-60">({pingResult.latencyMs} ms)</span>}
               </>
             ) : (
               <>
-                <strong className="text-rose-400">Not reachable.</strong> {pingResult.error}
+                <strong className="text-rose-400">✗ Not reachable.</strong> {pingResult.error}
+                {pingResult.latencyMs !== undefined && provider === 'render' && (
+                  <div className="mt-1 text-[10px] opacity-70">💡 Render free-tier services sleep after 15 min of inactivity. First ping may take 30–60 s to wake up.</div>
+                )}
               </>
             )}
           </div>
         )}
       </div>
 
-      {/* Deployment checklist */}
+      {/* ── Diagnostics Dashboard ── */}
       <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5">
-        <h3 className="text-sm font-bold mb-3">📋 Deployment Checklist (when you upgrade to Blaze)</h3>
+        <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
+          <span>📊</span> Diagnostics Dashboard
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-[11px]">
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-3">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">Service Status</div>
+            <div className={`font-bold ${systemConfig.aiReviewEnabled ? 'text-emerald-400' : 'text-slate-400'}`}>
+              {systemConfig.aiReviewEnabled ? '● Enabled' : '○ Disabled'}
+            </div>
+          </div>
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-3">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">Provider</div>
+            <div className={`font-bold ${(systemConfig.aiReviewProvider || 'render') === 'render' ? 'text-emerald-400' : 'text-amber-400'}`}>
+              {(systemConfig.aiReviewProvider || 'render') === 'render' ? '🚀 Render' : '🔥 Firebase'}
+            </div>
+          </div>
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-3">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">OpenRouter Status</div>
+            <div className={`font-bold ${pingResult?.ok ? 'text-emerald-400' : pingResult?.ok === false ? 'text-rose-400' : 'text-slate-400'}`}>
+              {pingResult?.ok ? '✓ Connected' : pingResult?.ok === false ? '✗ Failed' : '— Not tested'}
+            </div>
+          </div>
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-3">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">Selected Model</div>
+            <div className="text-[var(--text-primary)] font-mono text-[10px] truncate">{systemConfig.aiReviewModel || 'qwen/qwen-2.5-72b-instruct'}</div>
+          </div>
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-3">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">Service URL</div>
+            <div className="text-[var(--text-primary)] font-mono text-[10px] truncate" title={systemConfig.aiReviewServiceUrl}>
+              {systemConfig.aiReviewServiceUrl ? '✓ Configured' : '⚠ Not set'}
+            </div>
+          </div>
+          <div className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-sunken)]/40 p-3">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1">API Key Auth</div>
+            <div className={`font-bold ${systemConfig.aiReviewApiKey ? 'text-emerald-400' : 'text-slate-400'}`}>
+              {systemConfig.aiReviewApiKey ? '✓ Configured' : '○ Open (no key)'}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Render Deployment Checklist ── */}
+      <div className="border border-[var(--border-color)] rounded-xl p-5 bg-slate-500/5">
+        <h3 className="text-sm font-bold mb-3">📋 Render Deployment Checklist (A2)</h3>
         <ol className="space-y-2 text-xs text-[var(--text-secondary)]">
-          <li><strong className="text-[var(--text-primary)]">1.</strong> Upgrade Firebase project to Blaze plan (required for outbound HTTP calls from Cloud Functions).</li>
-          <li><strong className="text-[var(--text-primary)]">2.</strong> Get your OpenRouter API key from <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">openrouter.ai/keys</a>.</li>
-          <li><strong className="text-[var(--text-primary)]">3.</strong> From repo root: <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">cd functions && npm install && npm run build</code></li>
-          <li><strong className="text-[var(--text-primary)]">4.</strong> Set the OpenRouter secret: <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">firebase functions:secrets:set OPENROUTER_API_KEY</code></li>
-          <li><strong className="text-[var(--text-primary)]">5.</strong> Deploy: <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">firebase deploy --only functions</code></li>
-          <li><strong className="text-[var(--text-primary)]">6.</strong> Come back here, click <strong>Test Connection</strong> — should show ✓ Connected.</li>
-          <li><strong className="text-[var(--text-primary)]">7.</strong> Update Storage rules for capstone uploads (see <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">capstoneSubmissions/&lt;*&gt;/**</code> path in the rules block I provided).</li>
+          <li><strong className="text-[var(--text-primary)]">1.</strong> Build the server: <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">cd server && npm install && npm run build</code></li>
+          <li><strong className="text-[var(--text-primary)]">2.</strong> Create a Render account at <a href="https://render.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">render.com</a> (free tier works).</li>
+          <li><strong className="text-[var(--text-primary)]">3.</strong> Create a new Web Service → connect your GitHub repo → set Root Directory to <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">server</code>.</li>
+          <li><strong className="text-[var(--text-primary)]">4.</strong> Set Environment Variables on Render: <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">OPENROUTER_API_KEY</code>, <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">FIREBASE_DATABASE_URL</code>, <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">FIREBASE_PROJECT_ID</code>, <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">FIREBASE_CLIENT_EMAIL</code>, <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">FIREBASE_PRIVATE_KEY</code></li>
+          <li><strong className="text-[var(--text-primary)]">5.</strong> Get Firebase Service Account JSON from Firebase Console → Project Settings → Service Accounts → Generate new private key.</li>
+          <li><strong className="text-[var(--text-primary)]">6.</strong> Deploy. Render gives you a URL like <code className="font-mono text-[11px] bg-[var(--surface-sunken)] px-1.5 py-0.5 rounded">https://orchestrai-ai-review.onrender.com</code>.</li>
+          <li><strong className="text-[var(--text-primary)]">7.</strong> Paste that URL in <strong>Render Service URL</strong> above, save settings, then click <strong>Test Connection</strong> — should show ✓ Connected.</li>
+          <li><strong className="text-[var(--text-primary)]">8.</strong> Enable AI Review, then open a capstone submission and click <strong>Run AI Review</strong>.</li>
         </ol>
+        <div className="mt-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-2 text-[10px] text-amber-300">
+          💡 Render free-tier services spin down after 15 minutes of inactivity. The first request takes ~30–60 s to wake up. Subsequent requests are instant. Upgrade to a paid Render plan if you need always-on performance.
+        </div>
       </div>
     </div>
   );
 };
+
 
 const MeetingRow: React.FC<{ req: any; onUpdated: () => void }> = ({ req, onUpdated }) => {
   const [link, setLink] = useState(req.meetingLink || '');

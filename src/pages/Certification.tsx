@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, get } from 'firebase/database';
 import { useApp } from '../context/AppContext';
+import { BRANDING } from '../config/branding';
 import { Award, Lock, CheckCircle, Clock, Download, AlertTriangle, ArrowRight } from 'lucide-react';
 import { getFirebaseDb } from '../firebase';
 import { CertFeedbackGate } from './FeedbackForm';
@@ -24,7 +25,7 @@ interface Certification {
 const applyPlaceholders = (template: string, c: Certification): string => {
   const certDate = new Date(c.certifiedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
   const certNumber = `CERT-${c.capstoneId.toUpperCase()}-${c.certifiedAt.toString().slice(-6)}`;
-  const verificationUrl = `https://vthinkorchestrai-academy.web.app/certification`;
+  const verificationUrl = typeof window !== 'undefined' ? `${window.location.origin}/certification` : `https://orchestrai.academy/certification`;
 
   return template
     .replace(/\{\{learnerName\}\}/g, c.learnerName)
@@ -44,7 +45,9 @@ const applyPlaceholders = (template: string, c: Certification): string => {
     .replace(/\{\{verificationUrl\}\}/g, verificationUrl);
 };
 
-const buildCertHtml = (c: Certification) => `<!DOCTYPE html>
+const buildCertHtml = (c: Certification) => {
+  const verificationUrl = typeof window !== 'undefined' ? `${window.location.origin}/certification` : `https://orchestrai.academy/certification`;
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -92,7 +95,7 @@ const buildCertHtml = (c: Certification) => `<!DOCTYPE html>
 <body>
 <div class="cert">
   <div class="ribbon">${c.decision === 'outstanding' ? 'OUTSTANDING' : 'CERTIFIED'}</div>
-  <div class="subtitle">vThink Technologies · OrchestrAI Academy</div>
+  <div class="subtitle">${BRANDING.platformName}</div>
   <h1>OrchestrAI Lead Certification</h1>
   <div class="awarded-to">This certifies that</div>
   <div class="name">${c.learnerName}</div>
@@ -105,13 +108,14 @@ const buildCertHtml = (c: Certification) => `<!DOCTYPE html>
     <div class="stat"><div class="stat-label">Issued</div><div class="stat-value" style="font-size:18px;font-weight:600;">${new Date(c.certifiedAt).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})}</div></div>
   </div>
   <div class="signatures">
-    <div class="sig"><div class="sig-line"></div><div class="sig-name">${c.certifiedByName}</div><div class="sig-role">OrchestrAI Academy · Issuing Authority</div></div>
-    <div class="sig"><div class="sig-line"></div><div class="sig-name">Sithanandham R · Founder</div><div class="sig-role">vThink Technologies</div></div>
+    <div class="sig"><div class="sig-line"></div><div class="sig-name">${c.certifiedByName}</div><div class="sig-role">${BRANDING.certificationAuthority} · Issuing Authority</div></div>
+    <div class="sig"><div class="sig-line"></div><div class="sig-name">${BRANDING.founderName} · ${BRANDING.founderTitle}</div><div class="sig-role">${BRANDING.platformName}</div></div>
   </div>
-  <div class="footer">${c.capstoneId} · Verify at vthinkorchestrai-academy.web.app/certification</div>
+  <div class="footer">${c.capstoneId} · Certified through ${BRANDING.platformName} · Verify at ${verificationUrl}</div>
 </div>
 </body>
 </html>`;
+};
 
 export const Certification: React.FC = () => {
   const { currentUser, systemConfig } = useApp();
@@ -210,7 +214,15 @@ export const Certification: React.FC = () => {
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <Award className="h-12 w-12 text-slate-500/30 mx-auto mb-4" />
         <h3 className="text-xl font-bold mb-2">Access Denied</h3>
-        <p className="text-sm text-[var(--text-secondary)]">Please login first.</p>
+        <p className="text-sm text-[var(--text-secondary)] mb-6">Please login first.</p>
+        <div className="rounded-xl border border-indigo-500/15 bg-indigo-500/5 px-5 py-4 text-left">
+          <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+            This certification program is designed by the <strong className="text-[var(--text-primary)]">creator of the OrchestrAI Framework</strong> —
+            24+ years as a Project Manager, Portfolio Manager, PMO Leader, Delivery Manager, Test Manager, and Certified Scrum Master (Scrum Alliance, 2012)
+            across Banking, Insurance, Telecom, and Capital Markets — and is based on more than two decades of practical experience in enterprise delivery,
+            governance, agile transformation, software quality, program management, and AI-assisted software development.
+          </p>
+        </div>
       </div>
     );
   }
@@ -230,7 +242,15 @@ export const Certification: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
-      
+
+      <div className="mb-8 rounded-xl border border-indigo-500/15 bg-indigo-500/5 px-5 py-4">
+        <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+          This certification program is designed by the <strong className="text-[var(--text-primary)]">creator of the OrchestrAI Framework</strong> and
+          is based on more than two decades of practical experience in enterprise delivery, governance, agile transformation, software quality,
+          program management, and AI-assisted software development.
+        </p>
+      </div>
+
       {!isApproved ? (
         /* Gated Access Block */
         <div className="mx-auto max-w-md py-16 text-center">

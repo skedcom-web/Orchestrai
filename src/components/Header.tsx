@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useApp } from '../context/AppContext';
+import { BRANDING } from '../config/branding';
 import { Sun, Moon, Sparkles, LogOut, Shield, Award, BookOpen, LogIn, Mail, ArrowRight, X, Phone, CheckCircle2, AlertCircle, RefreshCw, Eye, EyeOff, Folder } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { XPWidget } from './XPWidget';
@@ -95,7 +96,7 @@ export const Header: React.FC = () => {
   const [confirmationResult, setConfirmationResult] = useState<any>(null);
 
   const initials = currentUser
-    ? currentUser.name.split(' ').filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase()
+    ? (currentUser.role === 'ADMIN' ? 'OA' : currentUser.name.split(' ').filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase())
     : '';
   const navigate = useNavigate();
   const location = useLocation();
@@ -151,7 +152,7 @@ export const Header: React.FC = () => {
   const triggerSeedAdmin = () => {
     seedAdminAccount();
     // Default to the newly approved admin email
-    login('vthinkorchestrai@gmail.com', 'vThink OrchestrAI Admin', '+919876543210', true, true);
+    login('vthinkorchestrai@gmail.com', BRANDING.adminTitle, '+919876543210', true, true);
     setShowLoginModal(false);
     navigate('/admin');
   };
@@ -473,7 +474,7 @@ export const Header: React.FC = () => {
       setTimeout(() => {
         seedAdminAccount();
         const adminProfile = usersList.find(u => u.email === 'vthinkorchestrai@gmail.com');
-        login('vthinkorchestrai@gmail.com', 'vThink OrchestrAI Admin', '+919876543210', true, true, adminProfile);
+        login('vthinkorchestrai@gmail.com', BRANDING.adminTitle, '+919876543210', true, true, adminProfile);
         setShowLoginModal(false);
         setAdminPasswordInput('');
         navigate('/admin');
@@ -1146,7 +1147,7 @@ export const Header: React.FC = () => {
                 {/* Initials avatar circle */}
                 <span 
                   className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-[10px] font-extrabold shadow ring-1 ring-white/15 cursor-default" 
-                  title={`${currentUser.name} (${currentUser.email}) - Role: ${currentUser.role}`}
+                  title={currentUser.role === 'ADMIN' ? `OA - ${BRANDING.platformName} (ADMIN)` : `${currentUser.name} (${currentUser.email}) - Role: ${currentUser.role}`}
                 >
                   {initials}
                 </span>
@@ -1154,9 +1155,9 @@ export const Header: React.FC = () => {
                 {/* User Name */}
                 <span 
                   className="hidden lg:inline text-xs font-bold text-[var(--text-primary)] max-w-[160px] truncate" 
-                  title={currentUser.name}
+                  title={currentUser.role === 'ADMIN' ? BRANDING.platformName : currentUser.name}
                 >
-                  {currentUser.name.split(' ')[0]}
+                  {currentUser.role === 'ADMIN' ? BRANDING.platformName : currentUser.name.split(' ')[0]}
                 </span>
 
                 {/* Tier indicator badge */}
@@ -1164,7 +1165,7 @@ export const Header: React.FC = () => {
                   if (currentUser.role === 'ADMIN') {
                     return (
                       <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-purple-500/15 border border-purple-500/25 text-purple-400">
-                        Admin
+                        ADMIN
                       </span>
                     );
                   }

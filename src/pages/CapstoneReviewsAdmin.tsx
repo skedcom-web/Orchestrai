@@ -63,7 +63,7 @@ const generateSalt = (): string => {
   return Array.from(bytes).map((b) => b.toString(16).padStart(2, '0')).join('');
 };
 
-const SME_LOGIN_URL = 'https://vthinkorchestrai-academy.web.app/sme-login';
+const SME_LOGIN_URL = typeof window !== 'undefined' ? `${window.location.origin}/sme-login` : 'https://orchestrai.academy/sme-login';
 
 interface SubmissionFlat {
   submissionId: string;        // {uid}_{capstoneId}
@@ -1176,7 +1176,7 @@ const ReviewDetail: React.FC<{
     }
   };
 
-  // ─── P4c · Run AI Review (Tier B via OpenRouter → Qwen) ─────────────────
+  // ─── P4c · Run AI Review (Tier B via Render → OpenRouter → Qwen) ─────────
   const runAiReview = async () => {
     if (!systemConfig.aiReviewEnabled) {
       addToast('AI Review is disabled in System Settings → AI Review (Tier B). Enable it first.', 'warning');
@@ -1184,21 +1184,54 @@ const ReviewDetail: React.FC<{
     }
     setAiError(null);
     setRunningAi(true);
+
+    const provider = systemConfig.aiReviewProvider || 'render';
+
     try {
-      const app = getFirebaseApp();
-      if (!app) throw new Error('Firebase app not initialised.');
-      const { getFunctions, httpsCallable } = await import('firebase/functions');
-      const functions = getFunctions(app);
-      const fnName = systemConfig.aiReviewFunctionName || 'scoreCapstoneTierB';
-      const fn = httpsCallable(functions, fnName);
-      const res: any = await fn({
-        submissionId: submission.submissionId,
-        modelOverride: systemConfig.aiReviewModel
-      });
-      const suggestion = res?.data?.tierBSuggestion as TierBSuggestion | undefined;
-      if (!suggestion) throw new Error('Function returned no tierBSuggestion. Check function logs.');
+      let responseData: any;
+
+      if (provider === 'render') {
+        // ── A2 Path: Render REST service ──────────────────────────────────
+        const serviceUrl = (systemConfig.aiReviewServiceUrl || '').trim();
+        if (!serviceUrl) throw new Error('AI Review Service URL is not configured. Go to System Settings → AI Review (Tier B) and enter your Render service URL.');
+
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (systemConfig.aiReviewApiKey) headers['x-api-key'] = systemConfig.aiReviewApiKey;
+
+        const res = await fetch(`${serviceUrl}/api/score-capstone`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            submissionId: submission.submissionId,
+            modelOverride: systemConfig.aiReviewModel,
+          }),
+        });
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          throw new Error(`Render service error ${res.status}: ${errText.slice(0, 400)}`);
+        }
+        responseData = await res.json();
+
+      } else {
+        // ── Legacy Path: Firebase Cloud Function ──────────────────────────
+        const app = getFirebaseApp();
+        if (!app) throw new Error('Firebase app not initialised.');
+        const { getFunctions, httpsCallable } = await import('firebase/functions');
+        const functions = getFunctions(app);
+        const fnName = systemConfig.aiReviewFunctionName || 'scoreCapstoneTierB';
+        const fn = httpsCallable(functions, fnName);
+        const res: any = await fn({
+          submissionId: submission.submissionId,
+          modelOverride: systemConfig.aiReviewModel
+        });
+        responseData = res?.data;
+      }
+
+      const suggestion = responseData?.tierBSuggestion as TierBSuggestion | undefined;
+      if (!suggestion) throw new Error('Service returned no tierBSuggestion. Check service logs.');
       setAiResult(suggestion);
       if (suggestion.autoChecks) setAutoChecks(suggestion.autoChecks);
+
       // Persist reviewMode = 'auto'
       const db = getFirebaseDb();
       if (db) {
@@ -1212,11 +1245,11 @@ const ReviewDetail: React.FC<{
       const code = err?.code || '';
       let friendly = err?.message || String(err);
       if (code === 'functions/not-found' || /not[- ]found/i.test(friendly)) {
-        friendly = `Function "${systemConfig.aiReviewFunctionName || 'scoreCapstoneTierB'}" is not deployed yet. Deploy with: cd functions && npm install && npm run build && firebase deploy --only functions (see functions/README.md).`;
+        friendly = `Firebase Cloud Function not deployed. Switch provider to "Render" in System Settings → AI Review (Tier B).`;
       } else if (code === 'functions/failed-precondition') {
-        friendly = err?.message || 'OPENROUTER_API_KEY secret is not set on the function. Run: firebase functions:secrets:set OPENROUTER_API_KEY';
+        friendly = err?.message || 'OPENROUTER_API_KEY secret is not set on the function.';
       } else if (code === 'functions/internal') {
-        friendly = err?.message || 'AI scoring threw an error — check Firebase Functions logs.';
+        friendly = err?.message || 'AI scoring threw an error — check service logs.';
       }
       setAiError(friendly);
       addToast('AI Review failed — see panel for details.', 'error');
@@ -1397,7 +1430,7 @@ const ReviewDetail: React.FC<{
 
     setDeploying(true);
     const now = Date.now();
-    const certUrl = `https://vthinkorchestrai-academy.web.app/certification`;
+    const certUrl = typeof window !== 'undefined' ? `${window.location.origin}/certification` : `https://orchestrai.academy/certification`;
     try {
       // 1. Write certification record
       await set(ref(db, `certifications/${submission.learnerUid}/${submission.capstoneId}`), {

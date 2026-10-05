@@ -33,7 +33,7 @@ We have designed, implemented, and deployed a comprehensive learner feedback and
 
 ## Verification
 - **Build Verification**: Ran production build checks ensuring zero TypeScript errors.
-- **Firebase Deploy**: Deployed static assets to Firebase Hosting successfully. Live URL: [https://vthinkorchestrai-academy.web.app](https://vthinkorchestrai-academy.web.app)
+- **Firebase Deploy**: Deployed static assets to Firebase Hosting successfully. Live URL: [https://orchestrai.academy](https://orchestrai.academy)
 - **Manual Verification**:
   1. Completed module slide deck: The custom feedback modal correctly slides into view.
   2. Submitted feedback: Submissions persist to Firebase Realtime Database path `feedback/*`.

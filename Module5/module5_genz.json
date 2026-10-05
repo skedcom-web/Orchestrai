@@ -524,7 +524,7 @@
       ],
       "narration": "Five workflow paths to test in the live demo. Happy path. Closed lock. Reopen dialog. Illegal API. File upload security. Tap each card for the specific steps. Total time — about ten minutes.",
       "narration_script": [
-        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Live demo time. Open projectissuetracker-dot-vthinkdeveloper-dot-com. Login admin at vthink dot co dot in, password Admin one two three." },
+        { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Live demo time. Open projectissuetracker-dot-orchestraideveloper-dot-com. Login admin at orchestrai dot academy, password Admin one two three." },
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Five paths to test. Tap each card to see the steps." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "teasing", "text": "Total time — about ten minutes. Do them in order. The illegal API and file upload tests are the ones that matter most. Don't skip those." }
       ],
@@ -623,3 +623,4 @@
     }
   ]
 }
+

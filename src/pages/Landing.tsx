@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { BRANDING } from '../config/branding';
 import {
   ArrowRight, Zap, Shield, Check, Code, Award,
   TrendingUp, Users, Star, ChevronRight, Play, Briefcase,
@@ -188,8 +189,8 @@ export const Landing: React.FC = () => {
   ];
 
   const pipDemos = [
-    { title: 'Timesheet Management Portal', days: '7 Days', detail: '27 APIs, multi-role RBAC, timesheet validation grids — fully operational.', domain: 'timesheet.vthinkdeveloper.com', link: 'https://timesheet.vthinkdeveloper.com', color: 'text-cyan-400' },
-    { title: 'Project Issue Tracker', days: '5 Days', detail: 'Multi-tenant sprint tracking, sub-items, custom categories and prompt auditing history.', domain: 'projectissuetracker.vthinkdeveloper.com', link: 'https://projectissuetracker.vthinkdeveloper.com', color: 'text-purple-400' },
+    { title: 'Timesheet Management Portal', days: '7 Days', detail: '27 APIs, multi-role RBAC, timesheet validation grids — fully operational.', domain: 'timesheet.orchestraideveloper.com', link: 'https://timesheet.orchestraideveloper.com', color: 'text-cyan-400' },
+    { title: 'Project Issue Tracker', days: '5 Days', detail: 'Multi-tenant sprint tracking, sub-items, custom categories and prompt auditing history.', domain: 'projectissuetracker.orchestraideveloper.com', link: 'https://projectissuetracker.orchestraideveloper.com', color: 'text-purple-400' },
     { title: 'HRIMS Enterprise Suite', days: '20 Days', detail: '18 of 24 complex modules — Leave, Expense, Payroll integration, all UAT-ready.', domain: '18/24 modules ready for QA', link: null, color: 'text-indigo-400' },
     { title: 'HR Calendar Planner', days: '3 Days', detail: 'Drag-drop scheduling, visual team planner views, leave overlays and responsive drag handles.', domain: 'Ready for QA Demo', link: null, color: 'text-emerald-400' },
   ];
@@ -598,7 +599,7 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* ═══ PRODUCT OWNER ═══════════════════════════════ */}
+      {/* ═══ CREATOR CREDIBILITY ═════════════════════════ */}
       <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-5xl">
           <Reveal className="glass-card rounded-2xl p-7 sm:p-10 relative overflow-hidden">
@@ -612,28 +613,33 @@ export const Landing: React.FC = () => {
                 <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-cyan-400 via-indigo-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-2xl shadow-xl shadow-indigo-500/25">
                   SR
                 </div>
-                <div className="text-xs font-bold uppercase tracking-widest text-indigo-400">Product Owner</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-indigo-400 text-center">{BRANDING.founderTitle}</div>
               </div>
 
               <div>
                 <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight mb-0.5">
-                  Sithanandham Radhakrishnan
+                  {BRANDING.founderName}
                 </h2>
-                <p className="text-sm font-bold text-indigo-400 tracking-widest mb-0.5">
-                  STRATEGIC ADVISOR &amp; PRODUCT OWNER — vTHINK GLOBAL TECHNOLOGIES
+                <p className="text-sm font-bold text-indigo-400 tracking-widest mb-0.5 uppercase">
+                  {BRANDING.founderTitle}
                 </p>
-                <p className="text-sm text-[var(--text-secondary)] font-semibold mb-4">
-                  Chief OrchestrAI Architect
+                <p className="text-sm text-[var(--text-primary)] font-semibold mb-0.5">
+                  {BRANDING.founderRole}
+                </p>
+                <p className="text-xs text-[var(--text-secondary)] font-semibold mb-4">
+                  {BRANDING.founderLeadership} · {BRANDING.founderExperience}
                 </p>
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
-                  As <strong className="text-[var(--text-primary)]">Strategic Advisor &amp; Product Owner at vThink Global Technologies Pvt Ltd</strong>, 
-                  Sithanandham conceived and built the OrchestrAI framework — bridging high-level business intent with 
-                  AI-generated production code. The OrchestrAI methodology and all derivative products, including this 
-                  portal, are <strong className="text-amber-400">intellectual property of vThink Global Technologies Pvt Ltd</strong>. 
+                  Created by a technology leader with <strong className="text-[var(--text-primary)]">{BRANDING.founderExperience}</strong> delivering
+                  enterprise software solutions across <strong className="text-[var(--text-primary)]">Banking, Insurance, Telecom, and Capital Markets</strong> —
+                  including <strong className="text-[var(--text-primary)]">Fortune 500 clients</strong> in those industries.
+                  Sithanandham conceived and built the OrchestrAI framework — bridging high-level business intent with
+                  AI-generated production code — drawing on years as a Project Manager, Portfolio Manager, PMO Leader, Delivery Manager,
+                  Test Manager, and Certified Scrum Master (Scrum Alliance, 2012), including governing technology portfolios of 300+ people.
                   He built this very certification platform using the same principles he teaches — an end-to-end proof of the method.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {['Strategic Advisor', 'Product Owner', 'OrchestrAI Architect', 'OrchestrAI Lead'].map(tag => (
+                  {['AI Delivery & Governance', 'Program & Portfolio Leader', 'Project Manager', 'PMO Leader', 'Delivery Manager', 'Test Manager', 'Certified Scrum Master', 'OrchestrAI Architect'].map(tag => (
                     <span key={tag} className="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/15 text-xs font-semibold text-indigo-300 uppercase tracking-wide">
                       {tag}
                     </span>
@@ -641,6 +647,38 @@ export const Landing: React.FC = () => {
                 </div>
               </div>
             </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ═══ WHY LEARN FROM ORCHESTRAI? ═══════════════════ */}
+      <section className="py-14 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-color)]">
+        <div className="mx-auto max-w-5xl">
+          <Reveal className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Why Learn from <span className="gradient-text">OrchestrAI?</span>
+            </h2>
+            <p className="mt-3 text-sm text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
+              OrchestrAI Academy is an independent learning and certification platform built to help professionals
+              effectively collaborate with AI to deliver business solutions, software products, and digital transformation initiatives.
+            </p>
+          </Reveal>
+
+          <Reveal stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: Award, title: '24+ Years Experience', desc: 'Enterprise technology leadership for Fortune 500 clients across Banking, Insurance, Telecom, and Capital Markets.' },
+              { icon: Users, title: 'Leadership Experience', desc: 'Project Manager, Portfolio Manager, PMO Leader, Delivery Manager, Test Manager, Certified Scrum Master, and Technology Leader.' },
+              { icon: Sparkles, title: 'AI Delivery Innovation', desc: 'Creator of the OrchestrAI Framework for Human-AI Collaborative Software Delivery.' },
+              { icon: Target, title: 'Practical Learning', desc: 'Built from real-world delivery experience, governance practices, transformation programs, and enterprise-scale software delivery.' },
+            ].map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="glass-card rounded-2xl p-5 flex flex-col gap-3 hover:scale-[1.02] hover:border-[var(--card-hover-border)] transition-all duration-300">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-sm font-bold text-[var(--text-primary)]">{title}</h3>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </Reveal>
         </div>
       </section>

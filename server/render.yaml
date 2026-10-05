@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: orchestrai-ai-review
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        sync: false
+      - key: OPENROUTER_REFERER
+        sync: false
+      - key: OPENROUTER_APP_NAME
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: FIREBASE_DATABASE_URL
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: REVIEW_SERVICE_API_KEY
+        sync: false
+      - key: PORT
+        value: "3001"
+      - key: ALLOWED_ORIGIN
+        value: "https://vthinkorchestrai-academy.web.app"
+      - key: NODE_ENV
+        value: "production"

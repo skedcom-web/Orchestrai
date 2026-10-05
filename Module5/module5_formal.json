@@ -524,7 +524,7 @@
       ],
       "narration": "Five workflow paths to verify in the live build. Primary path. Closed lock. Reopen dialog. Prohibited API. File upload security. Activate each card for procedure. Total time approximately ten minutes.",
       "narration_script": [
-        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Open projectissuetracker dot vthinkdeveloper dot com. Authenticate as admin at vthink dot co dot in, password Admin at one two three." },
+        { "speaker": "Anjali", "voice": "female_formal", "emotion": "amazed", "text": "Open projectissuetracker dot orchestraideveloper dot com. Authenticate as admin at orchestrai dot academy, password Admin at one two three." },
         { "speaker": "Vikram", "voice": "male_formal",   "emotion": "real_talk", "text": "Five paths to verify. Activate each card for the specific procedure." },
         { "speaker": "Anjali", "voice": "female_formal", "emotion": "teasing", "text": "Total time approximately ten minutes. Execute in order. The prohibited API and file upload tests are the highest-priority verifications. Do not omit them." }
       ],
@@ -623,3 +623,4 @@
     }
   ]
 }
+

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
+import { BRANDING } from '../config/branding';
 import { 
   MessageSquare, 
   Send, 
@@ -98,14 +99,14 @@ export const QuickHelp: React.FC = () => {
       {
         id: 'gs-1',
         question: 'What is OrchestrAI Lead Certification?',
-        answer: 'OrchestrAI Lead is an elite, hands-on certification designed by Sithanandham Radhakrishnan at vThink Global Technologies. It trains engineers in building production-ready enterprise applications using AI orchestration — transitioning developers from manual code-writers to "architects of intent" (Human Orchestrators) who command AI engines to build production-grade systems.',
+        answer: `${BRANDING.platformName} Lead is an elite, hands-on certification designed by ${BRANDING.founderName}, ${BRANDING.founderTitle}. It trains engineers in building production-ready enterprise applications using AI orchestration — transitioning developers from manual code-writers to "architects of intent" (Human Orchestrators) who command AI engines to build production-grade systems.`,
         keywords: ['orchestrai', 'lead', 'certification', 'what is', 'framework', 'about', 'platform', 'academy']
       },
       {
         id: 'gs-2',
-        question: 'Who is the founder Sithanandham Radhakrishnan?',
-        answer: 'Sithanandham Radhakrishnan is the Chief OrchestrAI Architect, Strategic Advisor, and Product Owner of vThink Global Technologies. He has over 24 years of hands-on experience across Banking, Insurance, Telecom, and Capital Markets, with clients including Barclays, Verizon, ING, and Merrill Lynch. He developed the Proved-in-Practice (PIP) OrchestrAI framework to dramatically accelerate software delivery at a fraction of traditional development costs.',
-        keywords: ['founder', 'sithanandham', 'radhakrishnan', 'experience', 'advisor', 'author', 'who', 'creator', 'vthink']
+        question: `Who is the creator, ${BRANDING.founderName}?`,
+        answer: `${BRANDING.founderName} is the ${BRANDING.founderTitle}, with over ${BRANDING.founderExperience} of hands-on enterprise technology leadership across Banking, Insurance, Telecom, and Capital Markets. As an ${BRANDING.founderRole} and ${BRANDING.founderLeadership}, his background spans Project Management, Portfolio Management, PMO Governance, Delivery Leadership, Test Management, and Scrum Mastery — including governing 300+ member technology portfolios and holding a Certified Scrum Master credential (Scrum Alliance, 2012). He developed the Proved-in-Practice (PIP) OrchestrAI framework to dramatically accelerate software delivery at a fraction of traditional development costs.`,
+        keywords: ['founder', 'creator', 'sithanandham', 'radhakrishnan', 'experience', 'author', 'who', 'orchestrai framework']
       },
       {
         id: 'gs-3',

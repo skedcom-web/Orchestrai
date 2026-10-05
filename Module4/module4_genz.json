@@ -29,7 +29,7 @@
       "bullets": [
         "5 acts. 23 slides. Two days of build effort, compressed into 60 minutes of you watching how it actually went down.",
         "Auth, application shell, dashboard — the three foundations every web app needs.",
-        "The Issue Tracker at projectissuetracker.vthinkdeveloper.com is what we're building. You'll log in at the end.",
+        "The Issue Tracker at projectissuetracker.orchestraideveloper.com is what we're building. You'll log in at the end.",
         "Key takeaway: AI generates code, but YOU type the install commands. Learning happens in your hands."
       ],
       "closing_thread": "First thing first — Day 1 is mostly manual. Get used to it.",
@@ -259,7 +259,7 @@
       "bullets": [
         "Shell = sidebar + main content area + theme toggle + page header pattern.",
         "Every Issue Tracker page lives inside this frame. Get it right once, every screen inherits it.",
-        "UI Specs doc (from Module 3) is the contract — vThink purple, Sen font, split-view login, sidebar collapsible.",
+        "UI Specs doc (from Module 3) is the contract — OrchestrAI purple, Sen font, split-view login, sidebar collapsible.",
         "AI builds the shell off those specs. We're not designing — we're enforcing."
       ],
       "closing_thread": "Here's the shell prompt.",
@@ -267,7 +267,7 @@
       "narration_script": [
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Day 3 morning. Auth shipped. Time for the shell — the frame that holds every screen." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Shell equals sidebar plus main content plus theme toggle plus PageHeader. Every Issue Tracker page lives inside this frame." },
-        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "playful_intrigue", "text": "Get it right ONCE, every screen inherits it. UI Specs from Module 3 are the contract — vThink purple, Sen font, split-view login, sidebar collapsible. We're enforcing, not designing." }
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "playful_intrigue", "text": "Get it right ONCE, every screen inherits it. UI Specs from Module 3 are the contract — OrchestrAI purple, Sen font, split-view login, sidebar collapsible. We're enforcing, not designing." }
       ],
       "background_music": { "track_key": "mandate_theme", "fade_in_ms": 1500, "fade_out_ms": 1200, "duck_volume_percent": 10 }
     },
@@ -289,7 +289,7 @@
         "text": "The shell is the stage. It doesn't act — it holds. Get the rigging right and the play looks effortless. Get it wrong and every scene fights the set."
       },
       "bullets": [
-        "Prompt referenced UI Specs doc explicitly: vThink purple #5A00EE, Sen font, MUI components, sidebar collapsible.",
+        "Prompt referenced UI Specs doc explicitly: OrchestrAI purple #5A00EE, Sen font, MUI components, sidebar collapsible.",
         "Required: NO duplicate page title bar — contextual titles via PageHeader inside content (per spec).",
         "Required: light/dark theme toggle in sidebar, persisted to localStorage, applied via MUI ThemeProvider.",
         "Required: RBAC-aware menu — Reporters don't see admin links. Server-side route guard separate.",
@@ -297,10 +297,10 @@
       ],
       "memory_hook": "Reference the UI Specs doc IN the prompt. AI honors it. Skip that line, AI invents a theme.",
       "closing_thread": "What the shell now includes.",
-      "narration": "The shell prompt — one prompt, twelve files. Referenced UI Specs explicitly. vThink purple, Sen font, MUI, sidebar collapsible. No duplicate title bar. Theme toggle persisted. RBAC-aware menu. AI honored every spec because the spec was in the kit.",
+      "narration": "The shell prompt — one prompt, twelve files. Referenced UI Specs explicitly. OrchestrAI purple, Sen font, MUI, sidebar collapsible. No duplicate title bar. Theme toggle persisted. RBAC-aware menu. AI honored every spec because the spec was in the kit.",
       "narration_script": [
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "One prompt. About a dozen files generated. Sidebar, layout, theme provider, PageHeader component, navigation hooks — all cleanly composable." },
-        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Critical move — the prompt referenced the UI Specs doc EXPLICITLY. vThink purple hex five A zero zero E E. Sen font. MUI components. Sidebar collapsible." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Critical move — the prompt referenced the UI Specs doc EXPLICITLY. OrchestrAI purple hex five A zero zero E E. Sen font. MUI components. Sidebar collapsible." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Required no duplicate page title bar — contextual titles via the PageHeader pattern. Theme toggle persisted to localStorage. RBAC-aware menu — Reporters don't see admin links." },
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Reference the UI Specs doc IN the prompt. AI honors it. Skip that one line and AI invents a whole new theme. That's the lesson — your prompts pull from your kit." }
       ],
@@ -467,17 +467,17 @@
       "estimated_duration_seconds": 90,
       "opening_hook": "You just watched two days of build effort. Now you click into it for real.",
       "bullets": [
-        "The Issue Tracker is live at: projectissuetracker.vthinkdeveloper.com",
-        "Admin credentials: admin@vthink.co.in / Admin@123",
+        "The Issue Tracker is live at: projectissuetracker.orchestraideveloper.com",
+        "Admin credentials: admin@orchestrai.academy / Admin@123",
         "Open it in a new tab. Log in. Land on the dashboard.",
         "You're now standing inside the result of everything we just walked. Auth, shell, dashboard — all there.",
         "Next slide: a guided tour of what to click first."
       ],
       "closing_thread": "Tap each card next to see what to explore.",
-      "narration": "Now you open the live build. URL — projectissuetracker dot vthinkdeveloper dot com. Credentials — admin at vthink dot co dot in, password Admin one two three with capital A. Open in a new tab. Log in. Land on the dashboard.",
+      "narration": "Now you open the live build. URL — projectissuetracker dot orchestraideveloper dot com. Credentials — admin at orchestrai dot academy, password Admin one two three with capital A. Open in a new tab. Log in. Land on the dashboard.",
       "narration_script": [
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "amazed", "text": "Spectator mode off. Operator mode on." },
-        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Open in a new browser tab — projectissuetracker dot vthinkdeveloper dot com. Login is admin at vthink dot co dot in. Password — Admin at one two three." },
+        { "speaker": "Arjun", "voice": "male_genz",   "emotion": "real_talk", "text": "Open in a new browser tab — projectissuetracker dot orchestraideveloper dot com. Login is admin at orchestrai dot academy. Password — Admin at one two three." },
         { "speaker": "Sara",  "voice": "female_genz", "emotion": "playful_intrigue", "text": "Log in. You should land on the dashboard. You're now STANDING inside the result of everything we just walked through. Auth, shell, dashboard — all live, in production, for real." },
         { "speaker": "Arjun", "voice": "male_genz",   "emotion": "teasing", "text": "Next slide — a guided tour. Tap each card to see what to explore. We're not done yet." }
       ],
@@ -492,7 +492,7 @@
       "icon": "search",
       "estimated_duration_seconds": 110,
       "cards": [
-        { "label": "Login page — split view",        "reveal": "Look at the layout. Left hero panel with vThink wordmark. Right card with form. THIS is what 'UI Specs in the kit' produces — AI honored the split-view rule exactly." },
+        { "label": "Login page — split view",        "reveal": "Look at the layout. Left hero panel with OrchestrAI wordmark. Right card with form. THIS is what 'UI Specs in the kit' produces — AI honored the split-view rule exactly." },
         { "label": "Sidebar — collapse it",            "reveal": "Click the collapse icon. Sidebar shrinks to icons only. Tooltips appear on hover. That's MUI Drawer with the 'mini variant' pattern — straight out of the shell prompt." },
         { "label": "Theme toggle — switch it",         "reveal": "Bottom of sidebar — Appearance toggle. Light → Dark. Watch every color in the app update at once. That's MUI ThemeProvider doing its job. Refresh — your choice persists." },
         { "label": "Dashboard — 4 cards + feed",       "reveal": "The 4 cards you see are exactly what the prompt specced. Total / My Open / Closed This Week / Overdue. Activity feed below. No charts on the first version — restraint." },
@@ -624,3 +624,4 @@
     }
   ]
 }
+
