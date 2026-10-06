@@ -1820,6 +1820,8 @@ const ReviewDetail: React.FC<{
                 // looks identical to an empty or private repository.
                 const gh = autoChecks.githubCheck;
                 const githubUnknown = !!gh && gh.evidenceAvailable === false;
+                // Listing failed but direct file probes worked: evidence exists, just not the full tree.
+                const githubDegraded = !!gh && gh.status !== 'ok' && gh.evidenceAvailable !== false;
                 const unk = (v?: boolean) => (githubUnknown ? undefined : v);
                 return (
                   <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/5 p-3 mb-3">
@@ -1833,7 +1835,17 @@ const ReviewDetail: React.FC<{
                       <AutoCheck label="Firebase URL" ok={autoChecks.firebaseReachable} />
                     </div>
                     {autoChecks.fileCount !== undefined && !githubUnknown && (
-                      <div className="text-[10px] text-[var(--text-secondary)] mt-2">{autoChecks.fileCount} files in repo</div>
+                      <div className="text-[10px] text-[var(--text-secondary)] mt-2">
+                        {githubDegraded
+                          ? `${autoChecks.fileCount} files confirmed by direct probe (full file listing unavailable)`
+                          : `${autoChecks.fileCount} files in repo`}
+                      </div>
+                    )}
+                    {githubDegraded && (
+                      <div className="mt-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-2 text-[10px] text-amber-300 leading-relaxed">
+                        <strong className="text-amber-400">Limited GitHub evidence ({gh?.status?.replace('_', ' ')}).</strong>{' '}
+                        {gh?.message} The AI reviewed only the files it could fetch directly, so its confidence is reduced.
+                      </div>
                     )}
                     {githubUnknown && (
                       <div className="mt-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-2 text-[10px] text-amber-300 leading-relaxed">
