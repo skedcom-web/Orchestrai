@@ -121,6 +121,17 @@ curl -X POST http://localhost:3001/api/score-capstone \
 
 ---
 
+## Troubleshooting: "GitHub evidence unavailable" / missing repository evidence
+
+The service never scores on evidence it could not retrieve. If GitHub is unreachable it returns `502 GITHUB_EVIDENCE_UNAVAILABLE` with the real reason, calls no model, and leaves earlier results untouched.
+
+1. Open `GET /api/health` in a browser. The `github` block shows `tokenConfigured`, `tokenAccepted` (is the token valid?), and `remaining` / `resetAt` (REST quota).
+2. `remaining: 0` → quota exhausted: set a valid `GITHUB_TOKEN`.
+3. `tokenAccepted: false` → GitHub rejected the token: regenerate it and re-paste without quotes.
+4. Render logs show one `[github] …` line per request (status, quota, latency) and one `[score] …` summary per review.
+
+Evidence is gathered with **one** GitHub REST call (the file tree); all file contents come from `raw.githubusercontent.com`, which does not use the REST quota. Tests live in `src/__tests__` (run from the repo root: `npx vitest run server/src/__tests__`) and are excluded from the production build.
+
 ## Environment Variable Reference
 
 | Variable | Required | Default | Description |
@@ -129,7 +140,7 @@ curl -X POST http://localhost:3001/api/score-capstone \
 | `OPENROUTER_MODEL` | ✅ | `qwen/qwen-2.5-72b-instruct` | Model slug |
 | `OPENROUTER_REFERER` | — | Firebase Hosting URL | `HTTP-Referer` header sent to OpenRouter |
 | `OPENROUTER_APP_NAME` | — | `OrchestrAI Academy` | `X-Title` header sent to OpenRouter |
-| `GITHUB_TOKEN` | — | — | Raises GitHub API rate limit from 60 → 5000 req/hr |
+| `GITHUB_TOKEN` | ⚠️ strongly recommended | — | Raises the GitHub API limit from 60 → 5,000 req/hr. Render's free tier shares egress IPs, so anonymous access is routinely exhausted. A read-only (public repo) token is enough. Paste it **without quotes or trailing newline**. If GitHub rejects it the service falls back to anonymous access and says so. |
 | `FIREBASE_DATABASE_URL` | ✅ | — | RTDB root URL (`https://…firebaseio.com`) |
 | `FIREBASE_PROJECT_ID` | ✅ | — | Firebase project ID |
 | `FIREBASE_CLIENT_EMAIL` | ✅ | — | Service-account email |

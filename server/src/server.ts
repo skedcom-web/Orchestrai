@@ -12,6 +12,7 @@ import cors from 'cors';
 import healthRouter from './routes/health';
 import pingRouter from './routes/ping';
 import scoreRouter from './routes/score';
+import { getGithubToken } from './services/github';
 
 // ── App ───────────────────────────────────────────────────────────────────────
 
@@ -53,6 +54,10 @@ const PORT = parseInt(process.env.PORT || '3001', 10);
 app.listen(PORT, () => {
   console.log(`✅  OrchestrAI AI Review Service listening on port ${PORT}`);
   console.log(`    Allowed origin : ${allowedOrigin}`);
+  const ghToken = getGithubToken();
+  console.log(
+    `    GITHUB_TOKEN   : ${ghToken ? `configured (${ghToken.length} chars, ${ghToken.slice(0, 4)}…)` : 'NOT set — anonymous GitHub access is limited to 60 requests/hour per IP'}`
+  );
   console.log(`    Endpoints:`);
   console.log(`      GET  /api/health`);
   console.log(`      POST /api/ping`);

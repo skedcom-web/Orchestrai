@@ -1,0 +1,358 @@
+{
+ "repo": "Vishakan1807/Vthink-Health",
+ "capturedFrom": "api.github.com git/trees/HEAD?recursive=1",
+ "blobs": [
+  {
+   "path": ".env.example",
+   "size": 582
+  },
+  {
+   "path": ".gitignore",
+   "size": 317
+  },
+  {
+   "path": "README.md",
+   "size": 6190
+  },
+  {
+   "path": "database.rules.json",
+   "size": 2758
+  },
+  {
+   "path": "firebase.json",
+   "size": 176
+  },
+  {
+   "path": "index.html",
+   "size": 540
+  },
+  {
+   "path": "package-lock.json",
+   "size": 130192
+  },
+  {
+   "path": "package.json",
+   "size": 1026
+  },
+  {
+   "path": "public/favicon.svg",
+   "size": 9522
+  },
+  {
+   "path": "public/icons.svg",
+   "size": 5031
+  },
+  {
+   "path": "src/App.tsx",
+   "size": 6127
+  },
+  {
+   "path": "src/assets/hero.png",
+   "size": 13057
+  },
+  {
+   "path": "src/assets/typescript.svg",
+   "size": 1303
+  },
+  {
+   "path": "src/assets/vite.svg",
+   "size": 8709
+  },
+  {
+   "path": "src/components/attachments/AttachmentPanel.tsx",
+   "size": 5154
+  },
+  {
+   "path": "src/components/auth/ProtectedRoute.tsx",
+   "size": 442
+  },
+  {
+   "path": "src/components/auth/RoleGuard.tsx",
+   "size": 766
+  },
+  {
+   "path": "src/components/charts/LabPerformanceChart.tsx",
+   "size": 2008
+  },
+  {
+   "path": "src/components/charts/StatusDistributionChart.tsx",
+   "size": 1669
+  },
+  {
+   "path": "src/components/charts/VolumeTrendChart.tsx",
+   "size": 3047
+  },
+  {
+   "path": "src/components/comments/CommentThread.tsx",
+   "size": 3786
+  },
+  {
+   "path": "src/components/layout/AppShell.tsx",
+   "size": 749
+  },
+  {
+   "path": "src/components/layout/Header.tsx",
+   "size": 6333
+  },
+  {
+   "path": "src/components/layout/Sidebar.tsx",
+   "size": 6713
+  },
+  {
+   "path": "src/components/ui/Badge.tsx",
+   "size": 3634
+  },
+  {
+   "path": "src/components/ui/Button.tsx",
+   "size": 1925
+  },
+  {
+   "path": "src/components/ui/Card.tsx",
+   "size": 2293
+  },
+  {
+   "path": "src/components/ui/Input.tsx",
+   "size": 2289
+  },
+  {
+   "path": "src/components/ui/Modal.tsx",
+   "size": 2604
+  },
+  {
+   "path": "src/components/ui/Select.tsx",
+   "size": 2353
+  },
+  {
+   "path": "src/components/ui/Spinner.tsx",
+   "size": 772
+  },
+  {
+   "path": "src/components/ui/Table.tsx",
+   "size": 2456
+  },
+  {
+   "path": "src/components/ui/Toast.tsx",
+   "size": 1980
+  },
+  {
+   "path": "src/constants/roles.ts",
+   "size": 284
+  },
+  {
+   "path": "src/constants/routes.ts",
+   "size": 1165
+  },
+  {
+   "path": "src/constants/workflowStates.ts",
+   "size": 1176
+  },
+  {
+   "path": "src/counter.ts",
+   "size": 274
+  },
+  {
+   "path": "src/hooks/useAttachments.ts",
+   "size": 1660
+  },
+  {
+   "path": "src/hooks/useComments.ts",
+   "size": 1315
+  },
+  {
+   "path": "src/hooks/useMasters.ts",
+   "size": 3723
+  },
+  {
+   "path": "src/hooks/useReports.ts",
+   "size": 702
+  },
+  {
+   "path": "src/hooks/useSamples.ts",
+   "size": 3714
+  },
+  {
+   "path": "src/index.css",
+   "size": 6633
+  },
+  {
+   "path": "src/main.ts",
+   "size": 2464
+  },
+  {
+   "path": "src/main.tsx",
+   "size": 230
+  },
+  {
+   "path": "src/pages/admin/AuditLogPage.tsx",
+   "size": 4988
+  },
+  {
+   "path": "src/pages/admin/SystemSettingsPage.tsx",
+   "size": 5437
+  },
+  {
+   "path": "src/pages/admin/UserListPage.tsx",
+   "size": 7000
+  },
+  {
+   "path": "src/pages/auth/ForgotPasswordPage.tsx",
+   "size": 4455
+  },
+  {
+   "path": "src/pages/auth/LoginPage.tsx",
+   "size": 5878
+  },
+  {
+   "path": "src/pages/auth/RegisterPage.tsx",
+   "size": 6592
+  },
+  {
+   "path": "src/pages/auth/ResetPasswordPage.tsx",
+   "size": 1743
+  },
+  {
+   "path": "src/pages/dashboard/DashboardPage.tsx",
+   "size": 11171
+  },
+  {
+   "path": "src/pages/masters/labs/LabListPage.tsx",
+   "size": 5891
+  },
+  {
+   "path": "src/pages/masters/sample-types/SampleTypeListPage.tsx",
+   "size": 5914
+  },
+  {
+   "path": "src/pages/masters/tests/TestListPage.tsx",
+   "size": 6796
+  },
+  {
+   "path": "src/pages/reports/ActivityReportPage.tsx",
+   "size": 4173
+  },
+  {
+   "path": "src/pages/reports/AnalyticsPage.tsx",
+   "size": 9824
+  },
+  {
+   "path": "src/pages/reports/StatusReportPage.tsx",
+   "size": 3683
+  },
+  {
+   "path": "src/pages/reports/SummaryReportPage.tsx",
+   "size": 4100
+  },
+  {
+   "path": "src/pages/samples/SampleCreatePage.tsx",
+   "size": 10460
+  },
+  {
+   "path": "src/pages/samples/SampleDetailPage.tsx",
+   "size": 14501
+  },
+  {
+   "path": "src/pages/samples/SampleListPage.tsx",
+   "size": 5786
+  },
+  {
+   "path": "src/services/attachment.service.ts",
+   "size": 1539
+  },
+  {
+   "path": "src/services/audit.service.ts",
+   "size": 1343
+  },
+  {
+   "path": "src/services/auth.service.ts",
+   "size": 2820
+  },
+  {
+   "path": "src/services/comment.service.ts",
+   "size": 1280
+  },
+  {
+   "path": "src/services/email.service.ts",
+   "size": 1991
+  },
+  {
+   "path": "src/services/firebase.ts",
+   "size": 790
+  },
+  {
+   "path": "src/services/master.service.ts",
+   "size": 3848
+  },
+  {
+   "path": "src/services/report.service.ts",
+   "size": 4192
+  },
+  {
+   "path": "src/services/sample.service.ts",
+   "size": 5918
+  },
+  {
+   "path": "src/services/user.service.ts",
+   "size": 883
+  },
+  {
+   "path": "src/store/AppContext.tsx",
+   "size": 840
+  },
+  {
+   "path": "src/store/AuthContext.tsx",
+   "size": 4273
+  },
+  {
+   "path": "src/store/NotificationContext.tsx",
+   "size": 1490
+  },
+  {
+   "path": "src/style.css",
+   "size": 5060
+  },
+  {
+   "path": "src/types/attachment.types.ts",
+   "size": 295
+  },
+  {
+   "path": "src/types/auth.types.ts",
+   "size": 496
+  },
+  {
+   "path": "src/types/comment.types.ts",
+   "size": 227
+  },
+  {
+   "path": "src/types/master.types.ts",
+   "size": 2073
+  },
+  {
+   "path": "src/types/report.types.ts",
+   "size": 694
+  },
+  {
+   "path": "src/types/sample.types.ts",
+   "size": 1469
+  },
+  {
+   "path": "src/types/user.types.ts",
+   "size": 758
+  },
+  {
+   "path": "src/utils/formatters.ts",
+   "size": 3172
+  },
+  {
+   "path": "storage.rules",
+   "size": 886
+  },
+  {
+   "path": "tsconfig.json",
+   "size": 746
+  },
+  {
+   "path": "vite.config.ts",
+   "size": 753
+  }
+ ]
+}

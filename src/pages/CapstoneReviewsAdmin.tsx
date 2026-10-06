@@ -88,6 +88,18 @@ interface SubmissionFlat {
   certifiedAt?: number;
 }
 
+/** Why GitHub evidence could (not) be gathered. Written by the review service. */
+interface GithubCheck {
+  status: string;
+  httpStatus?: number | null;
+  evidenceAvailable?: boolean;
+  message?: string;
+  rateLimitRemaining?: number | null;
+  rateLimitResetAt?: number | null;
+  tokenConfigured?: boolean;
+  tokenRejected?: boolean;
+}
+
 interface AutoChecks {
   githubReachable?: boolean;
   githubPublic?: boolean;
@@ -97,6 +109,17 @@ interface AutoChecks {
   fileCount?: number;
   firebaseReachable?: boolean;
   checkedAt?: number;
+  githubCheck?: GithubCheck;
+  firebaseUrlKind?: 'hosting' | 'console' | 'other' | 'invalid';
+  liveUrlNote?: string;
+}
+
+interface EvidenceSummary {
+  listing?: string;
+  filesListed?: number;
+  sourceFilesSampled?: number;
+  confidence?: 'high' | 'medium' | 'low';
+  gaps?: string[];
 }
 
 interface TierBSuggestion {
@@ -108,6 +131,7 @@ interface TierBSuggestion {
   generatedAt: number;
   tokensUsed?: any;
   autoChecks?: AutoChecks;
+  evidence?: EvidenceSummary;
 }
 
 interface ReviewRecord {
@@ -1219,7 +1243,16 @@ const ReviewDetail: React.FC<{
         });
         if (!res.ok) {
           const errText = await res.text().catch(() => '');
-          throw new Error(`Render service error ${res.status}: ${errText.slice(0, 400) || 'Service unreachable'}`);
+          // The service answers with { error, code, githubCheck } — show the real reason,
+          // not raw JSON, and keep the GitHub diagnosis visible in the Tier A panel.
+          let parsedErr: { error?: string; code?: string; githubCheck?: GithubCheck } | null = null;
+          try { parsedErr = JSON.parse(errText); } catch { /* not JSON */ }
+          const failedCheck = parsedErr?.githubCheck;
+          if (failedCheck) setAutoChecks((prev) => ({ ...(prev || {}), githubCheck: failedCheck }));
+          if (parsedErr?.code === 'GITHUB_EVIDENCE_UNAVAILABLE') {
+            throw new Error(`${parsedErr.error} No score was generated and any previous results are unchanged.`);
+          }
+          throw new Error(parsedErr?.error || `Render service error ${res.status}: ${errText.slice(0, 400) || 'Service unreachable'}`);
         }
         responseData = await res.json();
 
@@ -1782,28 +1815,61 @@ const ReviewDetail: React.FC<{
                 </div>
               )}
 
-              {autoChecks && (
-                <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/5 p-3 mb-3">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 mb-2">Tier A · Deterministic Checks</div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px]">
-                    <AutoCheck label="GitHub URL" ok={autoChecks.githubReachable} />
-                    <AutoCheck label="Repo public" ok={autoChecks.githubPublic} />
-                    <AutoCheck label="README exists" ok={autoChecks.hasReadme} />
-                    <AutoCheck label="DESIGN doc" ok={autoChecks.hasDesignDoc} />
-                    <AutoCheck label="package.json" ok={autoChecks.hasPackageJson} />
-                    <AutoCheck label="Firebase URL" ok={autoChecks.firebaseReachable} />
+              {autoChecks && (() => {
+                // A failed GitHub call is "unknown", not "✗ missing" — otherwise a rate limit
+                // looks identical to an empty or private repository.
+                const gh = autoChecks.githubCheck;
+                const githubUnknown = !!gh && gh.evidenceAvailable === false;
+                const unk = (v?: boolean) => (githubUnknown ? undefined : v);
+                return (
+                  <div className="rounded-lg border border-cyan-500/20 bg-cyan-500/5 p-3 mb-3">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 mb-2">Tier A · Deterministic Checks</div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px]">
+                      <AutoCheck label="GitHub URL" ok={autoChecks.githubReachable} />
+                      <AutoCheck label="Repo public" ok={unk(autoChecks.githubPublic)} />
+                      <AutoCheck label="README exists" ok={unk(autoChecks.hasReadme)} />
+                      <AutoCheck label="DESIGN doc" ok={unk(autoChecks.hasDesignDoc)} />
+                      <AutoCheck label="package.json" ok={unk(autoChecks.hasPackageJson)} />
+                      <AutoCheck label="Firebase URL" ok={autoChecks.firebaseReachable} />
+                    </div>
+                    {autoChecks.fileCount !== undefined && !githubUnknown && (
+                      <div className="text-[10px] text-[var(--text-secondary)] mt-2">{autoChecks.fileCount} files in repo</div>
+                    )}
+                    {githubUnknown && (
+                      <div className="mt-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-2 text-[10px] text-amber-300 leading-relaxed">
+                        <strong className="text-amber-400">GitHub evidence unavailable ({gh?.status?.replace('_', ' ')}).</strong>{' '}
+                        {gh?.message} The "·" marks above mean <em>unknown</em>, not missing.
+                      </div>
+                    )}
+                    {gh?.tokenRejected && (
+                      <div className="mt-2 text-[10px] text-amber-300 leading-relaxed">
+                        The review service's GITHUB_TOKEN was rejected by GitHub; it continued anonymously. Replace the token on Render.
+                      </div>
+                    )}
+                    {autoChecks.firebaseUrlKind === 'console' && (
+                      <div className="mt-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-2 text-[10px] text-amber-300 leading-relaxed">
+                        <strong className="text-amber-400">Live URL is a Firebase console link, not a running app.</strong>{' '}
+                        {autoChecks.liveUrlNote}
+                      </div>
+                    )}
                   </div>
-                  {autoChecks.fileCount !== undefined && (
-                    <div className="text-[10px] text-[var(--text-secondary)] mt-2">{autoChecks.fileCount} files in repo</div>
-                  )}
-                </div>
-              )}
+                );
+              })()}
 
               {aiResult && (
                 <>
                   <div className="text-[10px] text-[var(--text-secondary)] mb-2">
                     Suggested by <strong className="text-purple-400">{aiResult.model}</strong> · {new Date(aiResult.generatedAt).toLocaleString()}
+                    {aiResult.evidence && (
+                      <> · evidence: {aiResult.evidence.filesListed ?? 0} files listed, {aiResult.evidence.sourceFilesSampled ?? 0} source files read</>
+                    )}
                   </div>
+                  {aiResult.evidence?.confidence && aiResult.evidence.confidence !== 'high' && (
+                    <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/5 p-2 text-[10px] text-amber-300 leading-relaxed">
+                      <strong className="text-amber-400">Evidence confidence: {aiResult.evidence.confidence.toUpperCase()}.</strong>{' '}
+                      {(aiResult.evidence.gaps || []).join(' ')} Treat these scores as a starting point and verify against the repository.
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
                     {RUBRIC.map((r) => {
                       const v = aiResult.perCategory[r.key] ?? 0;
